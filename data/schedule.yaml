@@ -2,11 +2,16 @@
 - week: "KW40"
   lecture:
     - topic: "/misc/syllabus"
+      leader: "BC, cagi"
+      notes: "Kick-Off"
+    - topic: "/intro/overview"
+      leader: "cagi"
+    - topic: "/intro/languages"
+      leader: "cagi"
+    - topic: "/intro/applications"
+      leader: "cagi"
   misc:
-    - page: "/misc/resources"
-      notes: "Vortrag Thema I"
-    - notes: "Coden mit Edmonton"
-    - page: "/misc/schedule"
+    - notes: "Kick-Off"
 
 - week: "KW41"
   lecture:
