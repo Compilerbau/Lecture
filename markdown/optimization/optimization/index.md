@@ -1,8 +1,8 @@
 ---
 type: lecture-bc
-title: "Dataflow Analysis"
+title: "Optimierung"
 author: "BC George (FH Bielefeld)"
-weight: 2
+weight: 1
 readings:
   - key: "aho2013compilers"
     comment: "Kapitel 2 und 3"

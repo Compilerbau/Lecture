@@ -77,6 +77,8 @@
 
 - week: "KW47"
   lecture:
+    - topic: "/optimization/optimization"
+      leader: "BC"
     - topic: "/optimization/dataflow"
       leader: "BC"
   assignment:
