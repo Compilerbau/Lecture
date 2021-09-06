@@ -11,7 +11,7 @@
     - topic: "/intro/applications"
       leader: "cagi"
   misc:
-    - notes: "Kick-Off, kein Praktikum"
+    - notes: "Kick-Off"
 
 - week: "KW41"
   lecture:
@@ -32,10 +32,6 @@
       leader: "cagi"
     - topic: "/parsing/ll-advanced"
       leader: "cagi"
-    - topic: "/parsing/recovery"
-      leader: "cagi"
-    - topic: "/parsing/finalwords"
-      leader: "cagi"
   misc:
     - notes: "zweiter Teil der VL in Praktikumszeit"
 
@@ -45,9 +41,13 @@
       leader: "BC"
     - topic: "/parsing/lr-part2"
       leader: "BC"
+    - topic: "/parsing/recovery"
+      leader: "cagi"
+    - topic: "/parsing/finalwords"
+      leader: "cagi"
   misc:
     - notes: "zweiter Teil der VL in Praktikumszeit"
-    - notes: "**ANTLR + Coden (CAN)**"
+    - notes: "COIL: **ANTLR + Coden (CAN)**"
 
 - week: "KW44"
   lecture:
@@ -72,8 +72,8 @@
 
 - week: "KW46"
   misc:
-    - notes: "**mdl. Prüfung II**"
-    - notes: "**Vortrag (2P): Yacc vs. Bison + Coden (DE)**"
+    - notes: "**mdl. Prüfung I**"
+    - notes: "COIL: **Vortrag (2P): Yacc vs. Bison + Coden (DE)**"
 
 - week: "KW47"
   lecture:
@@ -98,7 +98,7 @@
 - week: "KW49"
   misc:
     - notes: "**Vortrag: Sprachen und Parser (manuell/Generator), Parser-Kombinatoren, PEG-Parser, ???**"
-    - notes: "**Optimierung (CAN)**"
+    - notes: "COIL: **Optimierung (CAN)**"
 
 - week: "KW50"
   lecture:
@@ -134,8 +134,15 @@
       leader: "cagi"
     - topic: "/interpretation/vm/garbage"
       leader: "cagi"
+      notes: "TODO: entfällt evtl. -- Vortrag stattdessen?!"
+  misc:
+    - notes: "**Vortrag: JIT, ???**"
 
 - week: "KW02"
+  misc:
+    - notes: "**Vortrag: GC (Varianten, Rust), ???**"
+    - notes: "**Vortrag: Paradigmen und Einfluss auf Strukturen/Laufzeitsystem, ???**"
+    - notes: "**Vortrag: Generierung von Maschinencode, ???**"
   assignment:
     - topic: "sheet05"
       due: "XX.XX."
