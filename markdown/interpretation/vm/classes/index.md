@@ -1,12 +1,13 @@
 ---
-type: lecture-bc
-title: "LLVM als IR"
-author: "BC George (FH Bielefeld)"
-weight: 2
+type: lecture-cg
+title: "Klassen und Vererbung (Skizze)"
+menuTitle: "Klassen und Vererbung"
+author: "Carsten Gips (FH Bielefeld)"
+weight: 5
 readings:
-  - key: "aho2013compilers"
+  - key: "Russell2020"
     comment: "Kapitel 2 und 3"
-  - key: "Mogensen2017"
+  - key: "Ertel2017"
 quizzes:
   - link: XYZ
     name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
@@ -18,33 +19,12 @@ youtube:
     name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
 fhmedia:
   - link: https://www.fh-bielefeld.de/medienportal/m/XYZ
-    name: "Use This As Link Text (Direkt-Link from `'share'`{=markdown}-Button)"
-attachments:
-  - link: https://www.fh-bielefeld.de
-    name: "Extra Material, e.g. annotated slides `...`{=markdown} Use This As Link Text"
+    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
 ---
 
 
-# Wiederholung
-
-## Folie: Frage
-Lorem Ipsum.
-
-
-
-# Motivation
-
-## Folie: Idee/Problem
-Lorem Ipsum.
-
-## Themen für heute
-Lorem Ipsum.
-
-
-
-# Thema I
-
-## Folie 1
+## Motivation
+Lorem Ipsum. Starte mit H2-Level.
 ...
 
 ## Folie 2
@@ -53,24 +33,17 @@ Lorem Ipsum.
 ## Folie 3
 ...
 
-
-
-# Thema II
-
-## Folie 1
+## Folie 4
 ...
 
-## Folie 2
+## Folie 5
 ...
 
-## Folie 3
+## Folie 6
 ...
 
-
-
-# Wrap-Up
 ## Wrap-Up
-Lorem Ipsum.
+...
 
 
 

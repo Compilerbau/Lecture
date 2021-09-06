@@ -87,6 +87,8 @@
 
 - week: "KW48"
   lecture:
+    - topic: "/intermediate/intro"
+      leader: "cagi"
     - topic: "/intermediate/llvm-ir"
       leader: "BC"
   assignment:
@@ -119,6 +121,19 @@
     - notes: "*Neujahr*"
 
 - week: "KW01"
+  lecture:
+    - topic: "/interpretation/vm/bytecode"
+      leader: "cagi"
+    - topic: "/interpretation/vm/consts"
+      leader: "cagi"
+    - topic: "/interpretation/vm/variables"
+      leader: "cagi"
+    - topic: "/interpretation/vm/functions"
+      leader: "cagi"
+    - topic: "/interpretation/vm/classes"
+      leader: "cagi"
+    - topic: "/interpretation/vm/garbage"
+      leader: "cagi"
 
 - week: "KW02"
   assignment:
