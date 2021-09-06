@@ -76,11 +76,17 @@
     - notes: "**Vortrag (2P): Yacc vs. Bison + Coden (DE)**"
 
 - week: "KW47"
+  lecture:
+    - topic: "/optimization/dataflow"
+      leader: "BC"
   assignment:
     - topic: "sheet02"
       due: "XX.XX."
 
 - week: "KW48"
+  lecture:
+    - topic: "/intermediate/llvm-ir"
+      leader: "BC"
   assignment:
     - topic: "sheet03"
       due: "XX.XX."
