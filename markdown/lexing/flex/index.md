@@ -1,7 +1,6 @@
 ---
 type: lecture-cg
 title: "Flex: Lexer generieren"
-menuTitle: "Flex"
 author: "Carsten Gips (FH Bielefeld)"
 weight: 3
 readings:

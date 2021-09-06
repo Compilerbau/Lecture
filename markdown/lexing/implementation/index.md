@@ -1,7 +1,6 @@
 ---
 type: lecture-cg
 title: "Lexer: Implementierungen"
-menuTitle: "Lexer"
 author: "Carsten Gips (FH Bielefeld)"
 weight: 2
 readings:

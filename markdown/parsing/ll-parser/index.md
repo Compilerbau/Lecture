@@ -1,7 +1,7 @@
 ---
 type: lecture-cg
 title: "LL-Parser selbst implementiert"
-menuTitle: "LL-Parser"
+menuTitle: "LL-Parser implementieren"
 author: "Carsten Gips (FH Bielefeld)"
 weight: 2
 readings:

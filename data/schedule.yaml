@@ -3,15 +3,13 @@
   lecture:
     - topic: "/misc/syllabus"
       leader: "BC, cagi"
-      notes: "Kick-Off"
+      notes: "Kick-Off (Zoom)"
     - topic: "/intro/overview"
       leader: "cagi"
     - topic: "/intro/languages"
       leader: "cagi"
     - topic: "/intro/applications"
       leader: "cagi"
-  misc:
-    - notes: "Kick-Off"
 
 - week: "KW41"
   lecture:
