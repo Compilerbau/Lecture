@@ -15,10 +15,12 @@
 
 - week: "KW41"
   lecture:
-    - topic: "/misc/syllabus"
+    - topic: "/lexing/regular"
+      leader: "BC"
+    - topic: "/lexing/implementation"
       leader: "cagi"
-      notes: "Classes go all-virtual"
-    - topic: "/misc/syllabus"
+    - topic: "/lexing/flex"
+      leader: "cagi"
 
 - week: "KW42"
 
