@@ -36,6 +36,13 @@
       leader: "cagi"
 
 - week: "KW43"
+  lecture:
+    - topic: "/parsing/lr-part1"
+      leader: "BC"
+    - topic: "/parsing/lr-part2"
+      leader: "BC"
+ misc:
+    - notes: "**ANTLR + Coden (CAN)**"
 
 - week: "KW44"
 
