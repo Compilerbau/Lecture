@@ -14,7 +14,62 @@
       leader: "cagi"
       notes: "Classes go all-virtual"
     - topic: "/misc/syllabus"
+
+- week: "KW42"
+
+- week: "KW43"
+
+- week: "KW44"
+
+- week: "KW45"
   assignment:
     - topic: "sheet01"
-      due: "14.10."
+      due: "XX.XX."
+
+- week: "KW46"
+  misc:
+    - notes: "**mdl. Prüfung II**"
+
+- week: "KW47"
+  assignment:
+    - topic: "sheet02"
+      due: "XX.XX."
+
+- week: "KW48"
+  assignment:
+    - topic: "sheet03"
+      due: "XX.XX."
+
+- week: "KW49"
+
+- week: "KW50"
+  assignment:
+    - topic: "sheet04"
+      due: "XX.XX."
+
+- week: "KW51"
+  misc:
+    - notes: "*Weihnachten*"
+
+- week: "KW52"
+    - notes: "*Neujahr*"
+
+- week: "KW01"
+
+- week: "KW02"
+  assignment:
+    - topic: "sheet05"
+      due: "XX.XX."
+
+- week: "KW03"
+  misc:
+    - notes: "**mdl. Prüfung II**"
+
+- week: "KW04"
+  misc:
+    - notes: "(Prüfungsphase)"
+
+- week: "KW05"
+  misc:
+    - notes: "(Prüfungsphase)"
 ---

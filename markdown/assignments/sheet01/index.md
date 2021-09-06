@@ -1,6 +1,6 @@
 ---
-title: "Blatt 01: XYZ"
-author: "Carsten Gips (FH Bielefeld)"
+title: "Blatt 01: Scanner und Parser"
+author: "BC George, Carsten Gips (FH Bielefeld)"
 hidden: true
 weight: 1
 ---
