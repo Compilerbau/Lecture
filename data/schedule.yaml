@@ -92,8 +92,18 @@
       due: "XX.XX."
 
 - week: "KW49"
+  misc:
+    - notes: "**Vortrag: Sprachen und Parser (manuell/Generator), Parser-Kombinatoren, PEG-Parser, ???**"
+    - notes: "**Optimierung (CAN)**"
 
 - week: "KW50"
+  lecture:
+    - topic: "/interpretation/syntaxdriven"
+      leader: "cagi"
+    - topic: "/interpretation/astdriven-part1"
+      leader: "cagi"
+    - topic: "/interpretation/astdriven-part2"
+      leader: "cagi"
   assignment:
     - topic: "sheet04"
       due: "XX.XX."
