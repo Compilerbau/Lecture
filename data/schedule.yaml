@@ -11,7 +11,7 @@
     - topic: "/intro/applications"
       leader: "cagi"
   misc:
-    - notes: "Kick-Off"
+    - notes: "Kick-Off, kein Praktikum"
 
 - week: "KW41"
   lecture:
@@ -21,6 +21,8 @@
       leader: "cagi"
     - topic: "/lexing/flex"
       leader: "cagi"
+  misc:
+    - notes: "zweiter Teil der VL in Praktikumszeit"
 
 - week: "KW42"
   lecture:
@@ -34,6 +36,8 @@
       leader: "cagi"
     - topic: "/parsing/finalwords"
       leader: "cagi"
+  misc:
+    - notes: "zweiter Teil der VL in Praktikumszeit"
 
 - week: "KW43"
   lecture:
@@ -42,9 +46,19 @@
     - topic: "/parsing/lr-part2"
       leader: "BC"
  misc:
+    - notes: "zweiter Teil der VL in Praktikumszeit"
     - notes: "**ANTLR + Coden (CAN)**"
 
 - week: "KW44"
+  lecture:
+    - topic: "/semantics/symboltables/intro"
+      leader: "cagi"
+    - topic: "/semantics/symboltables/scopes"
+      leader: "cagi"
+    - topic: "/semantics/symboltables/functions"
+      leader: "cagi"
+    - topic: "/semantics/symboltables/classes"
+      leader: "cagi"
 
 - week: "KW45"
   assignment:
