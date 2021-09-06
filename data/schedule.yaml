@@ -45,7 +45,7 @@
       leader: "BC"
     - topic: "/parsing/lr-part2"
       leader: "BC"
- misc:
+  misc:
     - notes: "zweiter Teil der VL in Praktikumszeit"
     - notes: "**ANTLR + Coden (CAN)**"
 
@@ -61,6 +61,11 @@
       leader: "cagi"
 
 - week: "KW45"
+  lecture:
+    - topic: "/semantics/types"
+      leader: "BC"
+    - topic: "/semantics/attribgrammars"
+      leader: "BC"
   assignment:
     - topic: "sheet01"
       due: "XX.XX."
@@ -68,6 +73,7 @@
 - week: "KW46"
   misc:
     - notes: "**mdl. Prüfung II**"
+    - notes: "**Vortrag (2P): Yacc vs. Bison + Coden (DE)**"
 
 - week: "KW47"
   assignment:
@@ -91,6 +97,7 @@
     - notes: "*Weihnachten*"
 
 - week: "KW52"
+  misc:
     - notes: "*Neujahr*"
 
 - week: "KW01"

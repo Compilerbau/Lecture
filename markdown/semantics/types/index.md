@@ -1,13 +1,12 @@
 ---
-type: lecture-cg
-title: "LL-Parser selbst implementiert"
-menuTitle: "LL-Parser"
-author: "Carsten Gips (FH Bielefeld)"
-weight: 2
+type: lecture-bc
+title: "Typen und Type Checking"
+author: "BC George (FH Bielefeld)"
+weight: 3
 readings:
-  - key: "Russell2020"
+  - key: "aho2013compilers"
     comment: "Kapitel 2 und 3"
-  - key: "Ertel2017"
+  - key: "Mogensen2017"
 quizzes:
   - link: XYZ
     name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
@@ -19,12 +18,33 @@ youtube:
     name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
 fhmedia:
   - link: https://www.fh-bielefeld.de/medienportal/m/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
+    name: "Use This As Link Text (Direkt-Link from `'share'`{=markdown}-Button)"
+attachments:
+  - link: https://www.fh-bielefeld.de
+    name: "Extra Material, e.g. annotated slides `...`{=markdown} Use This As Link Text"
 ---
 
 
-## Motivation
-Lorem Ipsum. Starte mit H2-Level.
+# Wiederholung
+
+## Folie: Frage
+Lorem Ipsum.
+
+
+
+# Motivation
+
+## Folie: Idee/Problem
+Lorem Ipsum.
+
+## Themen für heute
+Lorem Ipsum.
+
+
+
+# Thema I
+
+## Folie 1
 ...
 
 ## Folie 2
@@ -33,17 +53,24 @@ Lorem Ipsum. Starte mit H2-Level.
 ## Folie 3
 ...
 
-## Folie 4
+
+
+# Thema II
+
+## Folie 1
 ...
 
-## Folie 5
+## Folie 2
 ...
 
-## Folie 6
+## Folie 3
 ...
 
+
+
+# Wrap-Up
 ## Wrap-Up
-...
+Lorem Ipsum.
 
 
 
