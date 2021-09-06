@@ -23,6 +23,17 @@
       leader: "cagi"
 
 - week: "KW42"
+  lecture:
+    - topic: "/parsing/cfg"
+      leader: "BC"
+    - topic: "/parsing/ll-parser"
+      leader: "cagi"
+    - topic: "/parsing/ll-advanced"
+      leader: "cagi"
+    - topic: "/parsing/recovery"
+      leader: "cagi"
+    - topic: "/parsing/finalwords"
+      leader: "cagi"
 
 - week: "KW43"
 
