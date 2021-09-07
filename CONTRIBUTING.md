@@ -18,7 +18,9 @@ request there.
 
 You are welcome to contribute via a pull request.
 
-Please open an issue first so that your contribution can be discussed beforehand.
+Please **open an issue first** so that your contribution can be discussed
+beforehand.
+
 Then create a new feature branch starting from the `master` branch and submit
 your contribution to it with a pull request from your feature branch to the
 `master` branch in this repo. Please make sure that your **feature branch starts
