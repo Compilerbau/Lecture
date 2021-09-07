@@ -52,3 +52,20 @@ The workflows can also be triggered manually for team members on any branches.
 Please keep in mind that the GitHub page and thus the material for the students
 is also updated when the web pages are created. It would probably be a good idea
 to run tests in a fork or locally :-)
+
+### Prerequisites (for lokal builds)
+
+You have the choice between the easy route (Docker) or the scenic route
+(native installation of the tools). In both cases you will need
+[GNU Make](https://www.gnu.org/software/make/) and a terminal with a shell.
+
+You also need to clone the repository locally. Please be aware that this
+repository uses some Git submodules that need to be initialised correctly in
+your working copy. The easiest way to clone this repo is to clone recursively,
+i.e. `git clone --recurse-submodules <repo-url> <working copy name>`.
+(You can also initialise the Git submodules in your working copy with
+`git submodule init && git submodule update`.)
+
+You will probably have the best experience if you work with a unixoid operating
+system, even though the Makefile and Docker should also work under Windows.
+
