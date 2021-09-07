@@ -123,3 +123,8 @@ set to/from the variable 'SRC' in the [`Makefile`](Makefile). The
 **lesson `wuppie/fluppie/foo/index.md`** in the folder `markdown/` would become
 **`wuppie/fluppie/foo`** to be added to `SRC` in the [`Makefile`](Makefile).
 
+The slide set for just the `wuppie/fluppie/foo` page can be created with
+**`make wuppie/fluppie/foo`**.
+
+*Note*: Use **`make clean`** to clean up all generated files.
+
