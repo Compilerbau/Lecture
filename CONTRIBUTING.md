@@ -39,13 +39,13 @@ the web pages are automatically generated and the GitHub page is updated when
 changes are made on the `master` branch. The slide sets will be provided as a
 downloadable artefact to team members.
 
-In a pull request, the name of the feature branch is used to determine the
-corresponding slide set and automatically create a PDF file when changes are made
-on this feature branch. This requires the feature branch to be named exactly like
-the page to be compiled as a slide set.
-Example: The lesson `wuppie/fluppie/foo/index.md` in the folder `markdown/` would
-have `wuppie/fluppie/foo` as name for the feature branch. This string must also
-be added to the variable `SRC` in the [Makefile](Makefile).
+In a pull request, the **name of the feature branch** is used to determine the
+**corresponding slide set** and to automatically create a PDF file when changes
+are made on this feature branch. This requires the feature branch to be named
+*exactly* like the page to be compiled as a slide set.
+Example: The **lesson `wuppie/fluppie/foo/index.md`** in the folder `markdown/`
+would have **`wuppie/fluppie/foo` as name** for the feature branch. This string
+must also be added to the variable `SRC` in the [Makefile](Makefile).
 The slide set will be available as a downloadable artefact.
 
 The workflows can also be triggered manually for team members on any branches.
@@ -57,12 +57,12 @@ to run tests in a fork or locally :-)
 
 You have the choice between the easy route (Docker) and the scenic route
 (native installation of the tools). In both cases you will need
-[GNU Make](https://www.gnu.org/software/make/) and a terminal with a shell.
+**[GNU Make](https://www.gnu.org/software/make/)** and a terminal with a shell.
 
 You also need to clone the repository locally. Please be aware that this
 repository uses some Git submodules that need to be initialised correctly in
 your working copy. The easiest way to clone this repo is to clone recursively,
-i.e. `git clone --recurse-submodules <repo-url> <working copy name>`.
+i.e. **`git clone --recurse-submodules <repo-url> <working copy name>`**.
 (You can also initialise the Git submodules in your working copy with
 `git submodule init && git submodule update`.)
 
@@ -71,8 +71,8 @@ system, even though the Makefile and Docker should also work under Windows.
 
 #### Easy Route: Use Docker
 
-Install [Docker] (https://www.docker.com/) and then create the Docker image with
-`make create-docker-image`.
+Install **[Docker] (https://www.docker.com/)** and then create the Docker image
+with **`make create-docker-image`** once.
 
 The image is based on [Pandoc Dockerfiles](https://github.com/pandoc/dockerfiles)
 (specifically `pandoc/latex`), which is downloaded first. So you need an internet
