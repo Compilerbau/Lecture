@@ -14,3 +14,21 @@ Please check first if your request is already addressed in other (open or closed
 issues. Feel free to reopen matching closed issues for this purpose to enter your
 request there.
 
+## Pull Requests
+
+You are welcome to contribute via a pull request.
+
+Please open an issue first so that your contribution can be discussed beforehand.
+Then create a new feature branch starting from the master branch and submit your
+contribution to it with a pull request from your feature branch to the master
+branch in this repo. Please make sure that your feature branch starts from the
+top of the current master branch.
+
+Except for team members who can create a new feature branch directly in this
+repo, you will need to fork the repo and work on your contribution in a feature
+branch there.
+
+Please note that after acceptance (i.e. merging the feature branch into the
+master branch) your contribution is automatically subject to the licence of this
+repository (CC BY-SA 4.0).
+
