@@ -45,7 +45,7 @@ are made on this feature branch. This requires the feature branch to be named
 *exactly* like the page to be compiled as a slide set.
 Example: The **lesson `wuppie/fluppie/foo/index.md`** in the folder `markdown/`
 would have **`wuppie/fluppie/foo` as name** for the feature branch. This string
-must also be added to the variable `SRC` in the [Makefile](Makefile).
+must also be added to the variable `SRC` in the [`Makefile`](Makefile).
 The slide set will be available as a downloadable artefact.
 
 The workflows can also be triggered manually for team members on any branches.
@@ -67,7 +67,8 @@ i.e. **`git clone --recurse-submodules <repo-url> <working copy name>`**.
 `git submodule init && git submodule update`.)
 
 You will probably have the best experience if you work with a unixoid operating
-system, even though the Makefile and Docker should also work under Windows.
+system, even though the [`Makefile`](Makefile) and Docker should also work under
+Windows.
 
 #### Easy Route: Use Docker
 
@@ -106,7 +107,19 @@ line
 Then you can compile the website with **`make web`** and check the result in the
 browser. Just open the file **`docs/index.html`** in your favourite browser ...
 
-*Note*: Please do not commit the file `local.yaml`.  (It is already on `.gitignore`.)
+*Note*: Please do not commit the file `local.yaml`.  (It is already on
+`.gitignore`.)
 
 *Note*: Use **`make clean`** to clean up all generated files.
+
+### Build the slides locally
+
+With **`make slides`** all pages configured as slide source in the
+[`Makefile`](Makefile) are compiled to PDF files. You will find the slides in
+the subfolder `pdf/`.
+
+You can add (or remove) further pages that are to be compiled into a PDF slide
+set to/from the variable 'SRC' in the [`Makefile`](Makefile). The
+**lesson `wuppie/fluppie/foo/index.md`** in the folder `markdown/` would become
+**`wuppie/fluppie/foo`** to be added to `SRC` in the [`Makefile`](Makefile).
 
