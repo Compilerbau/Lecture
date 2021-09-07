@@ -37,7 +37,7 @@ this repository (CC BY-SA 4.0).
 With the GitHub workflows defined in this repo, all slide sets (PDF files) and
 the web pages are automatically generated and the GitHub page is updated when
 changes are made on the `master` branch. The slide sets will be provided as a
-downloadable artefact.
+downloadable artefact to team members.
 
 In a pull request, the name of the feature branch is used to determine the
 corresponding slide set and automatically create a PDF file when changes are made
@@ -55,7 +55,7 @@ to run tests in a fork or locally :-)
 
 ### Prerequisites (for lokal builds)
 
-You have the choice between the easy route (Docker) or the scenic route
+You have the choice between the easy route (Docker) and the scenic route
 (native installation of the tools). In both cases you will need
 [GNU Make](https://www.gnu.org/software/make/) and a terminal with a shell.
 
@@ -68,4 +68,31 @@ i.e. `git clone --recurse-submodules <repo-url> <working copy name>`.
 
 You will probably have the best experience if you work with a unixoid operating
 system, even though the Makefile and Docker should also work under Windows.
+
+#### Easy Route: Use Docker
+
+Install [Docker] (https://www.docker.com/) and then create the Docker image with
+`make create-docker-image`.
+
+The image is based on [Pandoc Dockerfiles](https://github.com/pandoc/dockerfiles)
+(specifically `pandoc/latex`), which is downloaded first. So you need an internet
+connection and several hundred megabytes will be downloaded. The image itself ends
+up being about 800 megabytes.
+
+All Make targets use this Docker image by default.
+
+#### Scenic Route: Install and maintain all tools locally
+
+You will need the following tools in a current version:
+
+*   [Pandoc](https://github.com/jgm/pandoc)
+*   [TeX Live](http://tug.org/texlive/)
+*   [Beamer](https://github.com/josephwright/beamer)
+*   [Metropolis](https://github.com/matze/mtheme)
+*   Several LaTeX packages: See
+    [`.github/actions/alpine-pandoc-hugo/install-packages.sh`](.github/actions/alpine-pandoc-hugo/install-packages.sh)
+*   [Hugo](https://github.com/gohugoio/hugo)
+
+To use these natively installed tools in the Make targets, set the environment
+variable `DOCKER=false`. Example: `export DOCKER=false; make TARGET`.
 
