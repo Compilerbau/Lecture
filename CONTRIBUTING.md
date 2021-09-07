@@ -96,3 +96,17 @@ You will need the following tools in a current version:
 To use these natively installed tools in the Make targets, set the environment
 variable `DOCKER=false`. Example: `export DOCKER=false; make TARGET`.
 
+### Build the Website locally
+
+Create the file **`local.yaml`** in your working copy, which contains a single
+line
+
+    baseURL: "file:///pathToWorkingCopy/docs/"
+
+Then you can compile the website with **`make web`** and check the result in the
+browser. Just open the file **`docs/index.html`** in your favourite browser ...
+
+*Note*: Please do not commit the file `local.yaml`.  (It is already on `.gitignore`.)
+
+*Note*: Use **`make clean`** to clean up all generated files.
+
