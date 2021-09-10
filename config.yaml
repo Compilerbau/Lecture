@@ -8,7 +8,7 @@ contentDir: content
 publishDir: docs
 
 params:
-  editURL: "https://github.com/Compilerbau/Lecture/edit/master/markdown/"
+  editURL: "https://github.com/Compilerbau/Lecture/tree/master/markdown/"
   author: "cagix"
   themeVariant: "green"
   titleSeparator: " "
