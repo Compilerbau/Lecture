@@ -252,8 +252,7 @@ ist dies eine Union, um für verschiedene Token die Lexeme speichern zu können.
 
 [Konsole: token.l (flex, lex.yy.c, gcc)]{.bsp}
 
-## Wrap-Up
-...
+
 
 ## Startregeln (*start states*)
 
