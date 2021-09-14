@@ -4,21 +4,16 @@ disableToc: true
 hidden: true
 ---
 
-
 {{% k1 %}}
--   Wuppie
--   Fluppie
 {{% /k1 %}}
 
 {{% k2 %}}
--   foo
--   bar
 {{% /k2 %}}
 
 {{% k3 %}}
-hammwanich
+*   Lexer-Regeln in Flex formulieren und einsetzen
+*   Zustandsbehaftete Lexer ("Startzustände")
 {{% /k3 %}}
 
 {{% k4 %}}
-gibbetsooch
 {{% /k4 %}}
