@@ -5,7 +5,7 @@ author: "Carsten Gips (FH Bielefeld)"
 weight: 3
 readings:
   - key: "Levine2009"
-    comment: "Kapitel 1,2 und 3"
+    comment: "Kapitel 1, 2 und 5"
 quizzes:
   - link: XYZ
     name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
