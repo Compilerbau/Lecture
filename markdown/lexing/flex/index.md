@@ -22,12 +22,17 @@ sketch: true
 ---
 
 
+# Flex: Lexer-Generator
+
+<!-- 15 Minuten: 5+1 Folien -->
+
+
 ## Motivation
 Lorem Ipsum. Starte mit H2-Level.
 ...
 
-
 ## Hello World
+
 ```lex
 %{
 #include <stdio.h>
@@ -45,10 +50,12 @@ int main(void) {
     yylex();
 }
 ```
+
 [Konsole: hello.l (flex, lex.yy.c, gcc)]{.bsp}
 
 
-## Flex: Fast Lexical Analyzer Generator
+::::::::: notes
+### Flex: Fast Lexical Analyzer Generator
 
 Flex ("*Fast Lexical Analyzer Generator*") ist ein Lexer-Generator für C/C++.
 Der ursprünglich von Google-CEO Eric Schmidt entwickelte Vorgänger *Lex*
@@ -62,7 +69,7 @@ Flex transformiert die regulären Ausdrücke in DFA, die zum Matchen des Eingabe
 benutzt werden.
 
 
-## Aufbau der Eingabedatei
+### Aufbau der Eingabedatei
 
 ```lex
 declarations
@@ -101,11 +108,12 @@ Variable `extern char yytext[]`).
 Vereinfachung: Mit `ECHO` wird `yytext` ausgegeben (damit würde man sich im obigen Beispiel das `printf()` sparen).
 
 
-## Aufruf von Flex
+### Aufruf von Flex
 
 Mit Hilfe von `flex <datei>` erzeugt man eine neue Datei `lex.yy.c` mit dem generierten Scanner.
 Diese Datei kompiliert man mit einem C-Compiler, etwa `gcc lex.yy.c` und erhält das entsprechende
 ausführbare Programm.
+:::::::::
 
 
 ## Word Count
@@ -132,6 +140,7 @@ int main(void) {
 [Konsole: wc.l (flex, lex.yy.c, gcc)]{.bsp}
 
 
+::: notes
 ## Anmerkungen
 
 1.  Wenn mehrere Pattern matchen, bevorzugt Flex den längeren Match.
@@ -179,8 +188,11 @@ int main(void) {
     aufgerufen werden. Danach würde mit `REJECT` der Match zurückgewiesen und die nächstbeste
     Alternative gesucht und entsprechend die Variable `word_count` hochgezählt (wie bei allen
     anderen Wörtern auch).
+:::
 
-## Dateien Scannen
+
+::: notes
+## Dateien scannen
 
 ```lex
 %%
@@ -215,10 +227,10 @@ Falls nach dem Abarbeiten einer Datei auf eine andere Datei gewechselt werden so
 aufgerufen werden. Alternativ kann man `yyin` auf die neue Datei zeigen lassen und das Makro `YY_NEW_FILE` aufrufen.
 
 [Konsole: wc++.l (flex, lex.yy.c, gcc)]{.bsp}
+:::
 
 
 ## Token
-
 
 ```lex
 %{
@@ -240,6 +252,7 @@ int main(void) {
 }
 ```
 
+::: notes
 Die Token werden in Flex/Bison über Integer in der Aufzählung `enum yytokentype` repräsentiert. Diese
 Aufzählung wird normalerweise von Bison erzeugt und in einer `.h`-Datei gespeichert. Die dabei generierten
 Werte starten bei 258. Der Wert 0 entspricht immer dem Dateiende (*EOF*).
@@ -249,9 +262,9 @@ um das nächste Token zu bekommen und die syntaktische Analyse mit Hilfe einer C
 
 Im Beispiel wurde `int yylval` zum Speichern der Tokenwerte des Tokens `NUM` definiert. Normalerweise
 ist dies eine Union, um für verschiedene Token die Lexeme speichern zu können.
+:::
 
 [Konsole: token.l (flex, lex.yy.c, gcc)]{.bsp}
-
 
 
 ## Startregeln (*start states*)
@@ -277,6 +290,7 @@ int line_num = 1;
 
 [Beispiel nach [GNU Flex Manual](ftp://ftp.gnu.org/old-gnu/Manuals/flex-2.5.4/html_mono/flex.html#SEC11)]{.origin}
 
+::: notes
 Regeln, deren Pattern mit "`<sc>`" beginnt, sind nur aktiv, wenn der Scanner im Zustand "`sc`" ist.
 Initial ist der Scanner immer in "`INITIAL`".
 
@@ -289,6 +303,7 @@ Startzustände definiert man im ersten Abschnitt mit `%x zustand` oder `%s zusta
 Form ist ein *exklusiver* Zustand, d.h. wenn der Scanner in diesem Zustand ist, werden nur die
 Regeln aktiv, die explizit mit diesem Zustand markiert sind. Die zweite Form ist ein *inklusiver*
 Zustand, wo zusätzlich alle unmarkierten Regeln aktiv sind. Der Zustand "`INITIAL`" existiert immer.
+:::
 
 
 ## Wrap-Up
@@ -299,8 +314,14 @@ Zustand, wo zusätzlich alle unmarkierten Regeln aktiv sind. Der Zustand "`INITI
     *   `yylex()`, `yytext`, `yylval`, `yytokentype`
     *   Startregeln
 
+
+
+
+
+::: notes
 <!-- DO NOT REMOVE - THIS IS A LAST SLIDE TO INDICATE THE LICENSE AND POSSIBLE EXCEPTIONS (IMAGES, ...). -->
 ::: slides
+
 ## LICENSE
 ![](https://licensebuttons.net/l/by-sa/4.0/88x31.png)
 
