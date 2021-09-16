@@ -5,16 +5,25 @@ hidden: true
 weight: 5
 ---
 
+**TODO: Abnahmedatum eintragen**
 
-Hier kommt der Inhalt für Blatt XYZ hin ... allgemeine einleitende Worte ...
+## A6: Interpreter (Aufgaben zur Abnahme in KW??) {#a6}
 
-## Aufgabe 1: XYZ (2P)
+*   Bauen Sie einen Tree-Walking-Interpreter in Ihr Projekt ein:
+    *   Lesen Sie zunächst den zu interpretierenden Small-C-Code aus einer Datei ein.
+    *   Realisieren Sie die Funktionen aus [A1](#a1) (`scanf`und `printf`) als *native* Funktionen im Interpreter.
 
-tbd
+\smallskip
 
-## Aufgabe 2: XYZ (3P)
+*   Erweitern Sie Ihren Interpreter um Interaktivität:
+    *   Der Interpreter soll einen Prompt in der Konsole anbieten
+    *   Der Interpreter soll Code zeilenweise von der Standard-Eingabe lesen und verarbeiten
+    *   Zur Eingabe mehrzeiliger Konstrukte sehen Sie entweder das Einlesen von
+        Codeblöcken aus Dateien vor oder implementieren Sie entsprechend eine "logische
+        Einrückung" für den Prompt als visuelles Feedback für den User
 
-tbd
+
+Sie können sich hier am [Interpreter für Lox](https://craftinginterpreters.com/a-tree-walk-interpreter.html) orientieren.
 
 
 
