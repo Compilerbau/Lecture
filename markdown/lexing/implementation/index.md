@@ -5,11 +5,11 @@ author: "Carsten Gips (FH Bielefeld)"
 weight: 2
 readings:
   - key: "Aho2008"
-    comment: " Abschnitt 2.6 und Kapitel 3"
+comment: " Abschnitt 2.6 und Kapitel 3"
   - key: "Torczon2012"
- 	comment: "Kapitel 2"
+  comment: "Kapitel 2"
   - key: "Mogensen2017"
- 	comment: "Kapitel 1 (insbesondere Abschnitt 1.8)"
+  comment: "Kapitel 1 (insbesondere Abschnitt 1.8)"
 quizzes:
   - link: XYZ
     name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
