@@ -5,20 +5,18 @@ hidden: true
 ---
 
 
-{{% k1 %}}
--   Wuppie
--   Fluppie
-{{% /k1 %}}
-
 {{% k2 %}}
--   foo
--   bar
+
+*   Varianten der Fehler bei Parsern
+*   Fehlerbehandlung bei LL-Parsern: *single token deletion*, *single token insertion*, *sync-and-return*
+*   Berechnung und Anwendung des *Resynchronization Sets*
+*   
 {{% /k2 %}}
 
 {{% k3 %}}
-hammwanich
-{{% /k3 %}}
 
-{{% k4 %}}
-gibbetsooch
-{{% /k4 %}}
+*   Ändern der Fehlermeldungen bei ANTLR
+*   Eigene Errorhandler in ANTLR-Parser bauen und einbinden
+*   Nutzen von speziellen Fehler-Alternativen in Grammatiken
+*   
+{{% /k3 %}}
