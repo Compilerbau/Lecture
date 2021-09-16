@@ -6,15 +6,14 @@ weight: 2
 ---
 
 
-Hier kommt der Inhalt für Blatt XYZ hin ... allgemeine einleitende Worte ...
+**TODO: Abnahmedatum eintragen**
 
-## Aufgabe 1: XYZ (2P)
+## A2: Semantische Analyse + Symboltabellen, Visualisierung mit DOT (Aufgaben zur Abnahme in KW??) {#a3}
 
-tbd
-
-## Aufgabe 2: XYZ (3P)
-
-tbd
+*   Fügen Sie Symboltabellen in Ihren Compiler ein.
+*   Passen Sie dazu die beim Erkennen von Symbolen und Ableiten von Produktionen durchgeführten Aktionen an.
+*   Attributieren Sie Ihren AST und führen Sie mit Hilfe der Attribute und der Symboltabellen ein *Type Checking* durch.
+*   Visualisieren Sie die Symboltabelle mit DOT.
 
 
 
