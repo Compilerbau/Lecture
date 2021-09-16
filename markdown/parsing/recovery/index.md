@@ -7,7 +7,7 @@ readings:
   - key: "Parr2010"
     comment: "Kapitel 2 und 3"
   - key: "Parr2014"
-  - key: "Parr2010"
+  - key: "Levine2009"
     comment: "Kapitel 7 und 8"
 quizzes:
   - link: XYZ
