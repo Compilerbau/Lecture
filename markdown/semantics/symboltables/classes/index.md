@@ -30,27 +30,7 @@ sketch: true
 Lorem Ipsum. Starte mit H2-Level.
 ...
 
-## Folie 2
-...
-
-## Folie 3
-...
-
-## Folie 4
-...
-
-## Folie 5
-...
-
-## Folie 6
-...
-
-## Wrap-Up
-...
-
-
-
-
+**TODO** 
 
 
 
