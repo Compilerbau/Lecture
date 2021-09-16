@@ -56,3 +56,16 @@ Visualisieren Sie Ihren AST mit DOT:
 
 Analysieren Sie die Grammatik, die dem DOT-System zugrunde liegt und programmieren Sie für Ihren Parser
 eine Ausgabefunktion, die den AST als DOT-Code ausgibt.
+{{% challenges %}}
+## LL-Parser
+
+* Wann braucht man mehr als ein Token Lookahead? Geben Sie ein Beispiel an.
+
+*   Wann würde man Backtracking in einem LL-Parser einsetzen? Inwieweit
+    verbessert "Packrat-Parsing" hier das Laufzeitverhalten?
+
+* Was sind semantische Prädikate? Wozu kann man diese benutzen?
+
+
+
+  {{% /challenges %}}
