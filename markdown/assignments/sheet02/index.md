@@ -23,6 +23,7 @@ Erzeugen Sie mithilfe der Grammatik und ANTLR einen Scanner und Parser, den Sie 
 Aufgaben nutzen.
 
 
+<<<<<<< HEAD
 ## A2.3: Symboltabellen
 
 Fügen Sie Symboltabellen in Ihren Compiler ein.
@@ -38,3 +39,14 @@ durch.
 
 Bestimmen Sie zunächst, wo ein Type Checking möglich und/oder nötig ist. Welche Attribute benötigen Sie,
 wo können Sie Ableitungsregeln geeignet einsetzen/anpassen?
+=======
+{{% challenges %}}
+
+## Symboltabellen
+
+*   Warum kann man im Allgemeinen nicht die Symboltabellen nutzen, um die Werte von Symbolen mit zu speichern?
+*   Es gibt Sprachen, in denen Identifier case-insensitive sind. Wie wirkt sich das auf die Symboltabellen aus?
+
+
+{{% /challenges %}}
+>>>>>>> challenges
