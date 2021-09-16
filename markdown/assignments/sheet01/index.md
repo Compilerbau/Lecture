@@ -56,3 +56,13 @@ Visualisieren Sie Ihren AST mit DOT:
 
 Analysieren Sie die Grammatik, die dem DOT-System zugrunde liegt und programmieren Sie für Ihren Parser
 eine Ausgabefunktion, die den AST als DOT-Code ausgibt.
+{{% challenges %}}
+
+## Fehler-Recovery
+
+*   Erklären Sie, welche Fehler typischerweise beim Parsen auftreten können.
+*   Wie reagiert der von ANTLR4 generierte LL-Parser auf typische Fehler?
+*   Wie ist das Recovery-Verhalten bei einem Bison-Parser?
+*   Was sind "Fehlerproduktionen", wozu sind sie gut?
+
+{{% /challenges %}}
