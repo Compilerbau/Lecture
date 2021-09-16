@@ -4,9 +4,12 @@ title: "Strukturen und Klassen"
 author: "Carsten Gips (FH Bielefeld)"
 weight: 4
 readings:
-  - key: "Russell2020"
-    comment: "Kapitel 2 und 3"
-  - key: "Ertel2017"
+  - key: "Mogensen2017"
+    comment: "Kapitel 3"
+  - key: "Parr2014"
+    comment: "Kapitel 6.4 und 8.4"
+  - key: "Parr2010"
+    comment: "Kapitel 6, 7 und 8"
 quizzes:
   - link: XYZ
     name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
