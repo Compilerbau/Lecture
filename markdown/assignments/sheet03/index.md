@@ -5,18 +5,13 @@ hidden: true
 weight: 3
 ---
 
+**TODO: Abnahmedatum eintragen**
 
-Hier kommt der Inhalt für Blatt XYZ hin ... allgemeine einleitende Worte ...
+## A4: Optimierung, DAG vor/nach (mit DOT) (Aufgaben zur Abnahme in KW??) {#a4}
 
-## Aufgabe 1: XYZ (2P)
-
-tbd
-
-## Aufgabe 2: XYZ (3P)
-
-tbd
-
-
+*   Konstruieren Sie aus Ihrem AST einen DAG.
+*   Führen Sie Optimierungen auf dem DAG durch.
+*   Visualisieren Sie den DAG vor und nach einer Optimierung mittels DOT.
 
 {{% challenges %}}
 ## Bonus: Wuppie (2P)
