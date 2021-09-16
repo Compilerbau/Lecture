@@ -8,7 +8,6 @@ readings:
   - key: "Parr2010"
     comment: "Kapitel 3"
   - key: "Parr2014"
-    comment: ""
   - key: "Mogensen2017"
     comment: "Kapitel 2 (insbesondere Abschnitte 2.3 bis (einschließlich) 2.19)"
   - key: "Aho2008"
