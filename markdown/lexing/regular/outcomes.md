@@ -6,19 +6,18 @@ hidden: true
 
 
 {{% k1 %}}
--   Wuppie
--   Fluppie
+-   DFAs
+-   NFAs
+-   reguläre Ausdrücke
+-   reguläre Grammatiken
 {{% /k1 %}}
 
 {{% k2 %}}
--   foo
--   bar
+-   die Zusammenhänge und Gesetzmäßigkeiten bzgl. der oben genannten Konstrukte
 {{% /k2 %}}
 
 {{% k3 %}}
-hammwanich
+-   DFAs, NFAs, reguläre Ausdrücke, reguläre Grammatiken entwickeln
+-   herausfinden, ob eine Sprache regulär ist
+-   einen DFA entwicklen, der alle Schlüsselwörter, Namen und weitere Symbole einer Programmiersprache akzeptiert
 {{% /k3 %}}
-
-{{% k4 %}}
-gibbetsooch
-{{% /k4 %}}
