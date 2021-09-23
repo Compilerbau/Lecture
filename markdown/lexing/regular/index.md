@@ -144,7 +144,7 @@ Gegeben: Ein NFA $A = (Q, \Sigma, \delta, q_0, F)$
 
 Wir konstruieren einen DFA $A' =  (Q', \Sigma, \delta ', q_0, F')$ wie folgt:
 
-TODO: Algorithmus als Abbildung
+[Konvertierung NFA in DFA](images/nfa2dfa.png)
 
 
 ## Beispiel
@@ -170,7 +170,7 @@ Ist ist der DFA $A$ nicht vollständig, wird ein Fehlerzustand $q_e$, der kein E
 
 Generiere eine untere Dreieckstabelle D, die am Anfang leer ist.
 
-TODO: Algorithmus als Abbildung
+[DFA Minimierung](images/minimize_dfa.png)
 
 # Reguläre Ausdrücke
 

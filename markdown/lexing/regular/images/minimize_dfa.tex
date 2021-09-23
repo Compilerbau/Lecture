@@ -1,0 +1,29 @@
+\documentclass[
+    border=0.2cm,
+    convert={density=600}
+]{standalone}
+
+\usepackage{listings}
+\usepackage{standalone}
+\usepackage{xcolor}
+
+\begin{document}
+
+\begin{lstlisting} [mathescape, backgroundcolor=\color{lightgray},
+basicstyle=\scriptsize\ttfamily]
+for each (p, q); p, q $\in$ Q, p $\neq$ q
+  if (p $\in$ F and q $\notin$ F) or (p $\notin$ F and q $\in$ F)
+    D(p, q) = $\epsilon $
+
+do until there are no changes
+  for each (q, p), p, q $\in$ $Q$, p $\neq$ q
+    for each a $\in$ $\Sigma$
+      if D (p, q) = blank and
+          D($\delta$(p, a), $\delta$(q, a)) is not blank
+        D(p, q) = a
+
+for each entry in D with D(p, q) = blank
+  combine p and q to one state
+\end{lstlisting}
+
+\end{document}
