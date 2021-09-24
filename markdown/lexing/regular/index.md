@@ -66,7 +66,7 @@ $\Sigma^+ = \bigcup\limits_{i \in \mathbb{N}} \Sigma^i$
 
 ## Sprachen über Alphabete
 
-**Def.:** Seien $x = a_1a_2 \ \ldots  \ a_n$ und $y = b_1b_2 \  \ldots  \  b_m$ Wörter. Wir nennen $xy = x \circ y = a_1 \  \ldots \  a_nb_1 \ldots  b_m$ die *Konkatenation* von $x$ und $y$.
+**Def.:** Seien $x = a_1 a_2 \ \ldots  \ a_n$ und $y = b_1b_2 \  \ldots  \  b_m$ Wörter. Wir nennen $xy = x \circ y = a_1 \  \ldots \  a_nb_1 \ \ldots \ b_m$ die *Konkatenation* von $x$ und $y$.
 
 **Def.:** *Eine Sprache $L$ über einem Alphabet $\Sigma$* ist eine Teilmenge von $\Sigma^* :\ L \subseteq\Sigma^*$
 
@@ -86,13 +86,12 @@ $A = (Q, \Sigma, \delta, q_0, F)$ mit
 
 ## Die Übergangsfunktion
 
- **Def.:** Wir definieren  $\delta^*: (Q \times \Sigma ^*) \rightarrow Q$: induktiv wie folgt:
+ **Def.:** Wir definieren  $\delta^{\*}: (Q \times \Sigma^{\*}) \rightarrow Q$: induktiv wie folgt:
 
-* Basis: $\delta ^*(q, \epsilon) = q\ \forall q \in Q$
-* Induktion: $\delta ^*(q, a_1, \ldots, a_n) = \delta(\delta ^*(q,
-    a_1, \ldots , a_{n-1}), a_n)$
+* Basis: $\delta^*(q, \epsilon) = q\ \forall q \in Q$
+* Induktion: $\delta^{\*}(q, a_1, \ldots, a_n) = \delta(\delta^{\*}(q, a_1, \ldots , a_{n-1}), a_n)$
 
- **Def.:** Ein DFA akzeptiert ein Wort $w \in \Sigma^{*}$ genau dann, wenn $\delta^*(q_0, w) \in F.$
+ **Def.:** Ein DFA akzeptiert ein Wort $w \in \Sigma^{\*}$ genau dann, wenn $\delta^{\*}(q_0, w) \in F.$
 
  **Def.:** Die Sprache eines DFA $A\ L(A)$ ist definiert durch:
 
@@ -108,8 +107,7 @@ $L(A) =\{w\ \vert \delta ^*(q_0, w) \in F \}$
 
 * $Q$: eine endliche Menge von Zuständen
 * $\Sigma$: ein Alphabet von Eingabesymbolen
-* $\delta$: die Übergangsfunktion  $(Q \times \Sigma) \rightarrow
-        \mathcal{P}(Q)$
+* $\delta$: die Übergangsfunktion  $(Q \times \Sigma) \rightarrow \mathcal{P}(Q)$
 * $q_0 \in Q$: der Startzustand
 * $F \subseteq Q$: die Menge der Endzustände
 
@@ -120,13 +118,13 @@ $L(A) =\{w\ \vert \delta ^*(q_0, w) \in F \}$
     induktiv wie folgt:
 
 * Basis: $\delta ^*(q, \epsilon) = q\ \forall q \in Q$
-* Induktion: Sei $w \in \Sigma ^*, w = xa, x \in \Sigma ^*, a \in \Sigma$ mit <br>
+* Induktion: Sei $w \in \Sigma^{\*}, w = xa, x \in \Sigma^{\*}, a \in \Sigma$ mit
 
-     $\delta ^*(q, x) =  \{ p_1,\ \ldots,\  p_k \}, p_i \in Q$, sei <br>
+     $\delta^{\*}(q, x) =  \{ p_1,\ \ldots,\  p_k \}, p_i \in Q$, sei
 
-     $A = \bigcup\limits_{i = 1}^k \delta(p_i, a) = \{r_1, \ldots r_m \}, r_j \in Q$. <br>
+     $A = \bigcup\limits_{i = 1}^k \delta(p_i, a) = \{r_1, \ldots r_m \}, r_j \in Q$.
 
-     Dann ist $\delta ^*(q, w) = \{r_1,\  \ldots\ , r_m\}$.
+     Dann ist $\delta^{\*}(q, w) = \{r_1,\  \ldots\ , r_m\}$.
 
 
 ## Wozu NFAs im Compilerbau?
@@ -197,7 +195,7 @@ Generiere eine untere Dreieckstabelle D, die am Anfang leer ist.
 *    Induktion: Seien $E,\ F$ reguläre Ausdrücke. Dann gilt:
      *    $E+F$ ist ein regex und bezeichnet die Vereinigung $L(E + F) = L(E)\cup L(F)$
      *    $EF$ ist ein regex und bezeichnet die Konkatenation $L(EF) = L(E)L(F)$
-     *    $E^{*}$ ist ein regex und bezeichnet die Kleene-Hülle $L(E^{*})=(L(E))^{*}$
+     *    $E^{*}$ ist ein regex und bezeichnet die Kleene-Hülle $L(E^{\*})=(L(E))^{\*}$
      *    $(E)$ ist ein regex mit $L((E)) = L(E)$
 
 Vorrangregeln der Operatoren für reguläre Ausdrücke: *, Konkatenation, +
@@ -234,11 +232,11 @@ $\alpha A \beta \Rightarrow \alpha \gamma \beta$ ($\alpha A \beta$ leitet $\alph
 **Def.:** Wir definieren die Relation $\overset{*}{\Rightarrow}$ induktiv wie folgt:
 
 *    Basis: $\forall \alpha \in (N \cup T)^* \alpha \overset{*}{\Rightarrow} \alpha$ (Jede Zeichenkette leitet sich selbst ab.)
-*    Induktion: Wenn $\alpha \overset{*}{\Rightarrow} \beta$ und
-        $\beta\Rightarrow \gamma$ dann $\alpha \overset{*}{\Rightarrow} \gamma$
+*    Induktion: Wenn $\alpha \overset{\*}{\Rightarrow} \beta$ und
+        $\beta\Rightarrow \gamma$ dann $\alpha \overset{\*}{\Rightarrow} \gamma$
 
 **Def.:** {Sei $G = (N, T ,P, S)$ eine formale Grammatik.
-    Dann ist $L(G) = \{w \in T^* \mid S \overset{*}{\Rightarrow} w\}$ die von $G$ erzeugte Sprache.
+    Dann ist $L(G) = \{w \in T^{\*} \mid S \overset{\*}{\Rightarrow} w\}$ die von $G$ erzeugte Sprache.
 
 
 ## Reguläre Grammatiken
@@ -308,7 +306,7 @@ Was ist zu beachten:
 *   Neben den Schlüsselwörtern und Symbolen wie (,), *, $ldots$ müssen auch Namen für Variablen, Funktionen, Klassen, Methoden, $\ldots$ (sog. Identifier) erkannt werden
 *   Namen haben meist eine gewisse Struktur, die sich mit regulären Ausdrücken beschreiben lassen.
 *   Erlaubte Token sind in der Grammatik des Parsers beschrieben, d. h. für literale Namen, Strings, Zahlen liefert der Scanner  zwei Werte:
-z. B. <ID, "radius">, <Integerzahl, 558>
+	*  z. B. <ID, "radius">, <Integerzahl, 558>
 *   Kommentare und Strings müssen richtig erkannt werden. (Schachtelungen)
 
 Man kann natürlich auch einen Lexer selbst programmieren, d. h. die DFAs für die regulären Ausdrücke implementieren.
