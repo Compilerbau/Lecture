@@ -60,7 +60,7 @@ Die _Länge_ $\vert w \vert$ eines Wortes $w$ ist die Anzahl von Buchstaben, die
 **Def.:**
 $\Sigma^k = \{w\ \text{über}\ \Sigma\ \vert\ \vert w \vert = k \}$
 
-$\Sigma^* = \bigcup\limits_{i \in \mathbb{N}_0} \Sigma^i$ (die Kleene-Hülle von $\Sigma$)
+$\Sigma^{\ast} = \bigcup\limits_{i \in \mathbb{N}_0} \Sigma^i$ (die Kleene-Hülle von $\Sigma$)
 
 $\Sigma^+ = \bigcup\limits_{i \in \mathbb{N}} \Sigma^i$
 
@@ -68,7 +68,7 @@ $\Sigma^+ = \bigcup\limits_{i \in \mathbb{N}} \Sigma^i$
 
 **Def.:** Seien $x = a_1 a_2 \ \ldots  \ a_n$ und $y = b_1b_2 \  \ldots  \  b_m$ Wörter. Wir nennen $xy = x \circ y = a_1 \  \ldots \  a_nb_1 \ \ldots \ b_m$ die *Konkatenation* von $x$ und $y$.
 
-**Def.:** *Eine Sprache $L$ über einem Alphabet $\Sigma$* ist eine Teilmenge von $\Sigma^* :\ L \subseteq\Sigma^*$
+**Def.:** *Eine Sprache $L$ über einem Alphabet $\Sigma$* ist eine Teilmenge von $\Sigma^{\ast} :\ L \subseteq\Sigma^{\ast}$
 
 
 ## Deterministische endliche Automaten
@@ -86,16 +86,16 @@ $A = (Q, \Sigma, \delta, q_0, F)$ mit
 
 ## Die Übergangsfunktion
 
- **Def.:** Wir definieren  $\delta^{\*}: (Q \times \Sigma^{\*}) \rightarrow Q$: induktiv wie folgt:
+ **Def.:** Wir definieren  $\delta^{\ast}: (Q \times \Sigma^{\ast}) \rightarrow Q$: induktiv wie folgt:
 
-* Basis: $\delta^*(q, \epsilon) = q\ \forall q \in Q$
-* Induktion: $\delta^{\*}(q, a_1, \ldots, a_n) = \delta(\delta^{\*}(q, a_1, \ldots , a_{n-1}), a_n)$
+* Basis: $\delta^{\ast}(q, \epsilon) = q\ \forall q \in Q$
+* Induktion: $\delta^{\ast}(q, a_1, \ldots, a_n) = \delta(\delta^{\ast}(q, a_1, \ldots , a_{n-1}), a_n)$
 
- **Def.:** Ein DFA akzeptiert ein Wort $w \in \Sigma^{\*}$ genau dann, wenn $\delta^{\*}(q_0, w) \in F.$
+ **Def.:** Ein DFA akzeptiert ein Wort $w \in \Sigma^{\ast}$ genau dann, wenn $\delta^{\ast}(q_0, w) \in F.$
 
  **Def.:** Die Sprache eines DFA $A\ L(A)$ ist definiert durch:
 
-$L(A) =\{w\ \vert \delta ^*(q_0, w) \in F \}$
+$L(A) =\{w\ \vert \delta^{\ast}(q_0, w) \in F \}$
 
 ## Beispiel
 
@@ -114,17 +114,17 @@ $L(A) =\{w\ \vert \delta ^*(q_0, w) \in F \}$
 
 ## Die Übergangsfunktion eines NFAs
 
- **Def.:** Wir definieren  $\delta ^*: (Q \times \Sigma) \rightarrow \mathcal{P}(Q):$
+ **Def.:** Wir definieren  $\delta^{\ast}: (Q \times \Sigma) \rightarrow \mathcal{P}(Q):$
     induktiv wie folgt:
 
-* Basis: $\delta ^*(q, \epsilon) = q\ \forall q \in Q$
-* Induktion: Sei $w \in \Sigma^{\*}, w = xa, x \in \Sigma^{\*}, a \in \Sigma$ mit
+* Basis: $\delta^{\ast}(q, \epsilon) = q\ \forall q \in Q$
+* Induktion: Sei $w \in \Sigma^{\ast}, w = xa, x \in \Sigma^{\ast}, a \in \Sigma$ mit
 
-     $\delta^{\*}(q, x) =  \{ p_1,\ \ldots,\  p_k \}, p_i \in Q$, sei
+     $\delta^{\ast}(q, x) =  \{ p_1,\ \ldots,\  p_k \}, p_i \in Q$, sei
 
      $A = \bigcup\limits_{i = 1}^k \delta(p_i, a) = \{r_1, \ldots r_m \}, r_j \in Q$.
 
-     Dann ist $\delta^{\*}(q, w) = \{r_1,\  \ldots\ , r_m\}$.
+     Dann ist $\delta^{\ast}(q, w) = \{r_1,\  \ldots\ , r_m\}$.
 
 
 ## Wozu NFAs im Compilerbau?
@@ -181,7 +181,7 @@ Generiere eine untere Dreieckstabelle D, die am Anfang leer ist.
 *    Die Kleene-Hülle einer Sprache:
         *    Basis: $L^0 = \{\epsilon\}$
         *    Induktion: $L^i = \{xw\mid x \in L^{i-1}, w \in L, i >
-             0\}$, \newline $L^* = \bigcup\limits_{i \ge 0}L^i$, \newline $L^+ = \bigcup\limits_{i > 0}L^i$
+             0\}$, \newline $L^{\ast} = \bigcup\limits_{i \ge 0}L^i$, \newline $L^+ = \bigcup\limits_{i > 0}L^i$
 
 
 ## Reguläre Ausdrücke
@@ -195,7 +195,7 @@ Generiere eine untere Dreieckstabelle D, die am Anfang leer ist.
 *    Induktion: Seien $E,\ F$ reguläre Ausdrücke. Dann gilt:
      *    $E+F$ ist ein regex und bezeichnet die Vereinigung $L(E + F) = L(E)\cup L(F)$
      *    $EF$ ist ein regex und bezeichnet die Konkatenation $L(EF) = L(E)L(F)$
-     *    $E^{*}$ ist ein regex und bezeichnet die Kleene-Hülle $L(E^{\*})=(L(E))^{\*}$
+     *    $E^{\ast}$ ist ein regex und bezeichnet die Kleene-Hülle $L(E^{\ast})=(L(E))^{\ast}$
      *    $(E)$ ist ein regex mit $L((E)) = L(E)$
 
 Vorrangregeln der Operatoren für reguläre Ausdrücke: *, Konkatenation, +
@@ -218,25 +218,25 @@ Vorrangregeln der Operatoren für reguläre Ausdrücke: *, Konkatenation, +
 *    $N$: einer endlichen Menge von $Nichtterminalen$
 *    *T*: einer endlichen Menge von *Terminalen*, $N \cap T = \emptyset$
 *    $S \in N$: dem *Startsymbol*
-*    *P*: einer endlichen Menge von *Produktionen* der Form: $X \rightarrow Y$ mit $X \in (N \cup T)^* N  (N \cup T)^*, Y \in (N \cup T)^*$
+*    *P*: einer endlichen Menge von *Produktionen* der Form: $X \rightarrow Y$ mit $X \in (N \cup T)^{\ast} N  (N \cup T)^{\ast}, Y \in (N \cup T)^{\ast}$
 
 
 ## Ableitungen
 
 **Def.:** Sei $G = (N, T, P, S)$ eine Grammatik, sei $\alpha A \beta$ eine Zeichenkette über
-$(N \cup T)^*$ und sei $A$ $\rightarrow \gamma$ eine Produktion von $G$.
+$(N \cup T)^{\ast}$ und sei $A$ $\rightarrow \gamma$ eine Produktion von $G$.
 
 Wir sagen:
 $\alpha A \beta \Rightarrow \alpha \gamma \beta$ ($\alpha A \beta$ leitet $\alpha \gamma \beta$ ab).
 
-**Def.:** Wir definieren die Relation $\overset{*}{\Rightarrow}$ induktiv wie folgt:
+**Def.:** Wir definieren die Relation $\overset{\ast}{\Rightarrow}$ induktiv wie folgt:
 
-*    Basis: $\forall \alpha \in (N \cup T)^* \alpha \overset{*}{\Rightarrow} \alpha$ (Jede Zeichenkette leitet sich selbst ab.)
-*    Induktion: Wenn $\alpha \overset{\*}{\Rightarrow} \beta$ und
-        $\beta\Rightarrow \gamma$ dann $\alpha \overset{\*}{\Rightarrow} \gamma$
+*    Basis: $\forall \alpha \in (N \cup T)^{\ast} \alpha \overset{\ast}{\Rightarrow} \alpha$ (Jede Zeichenkette leitet sich selbst ab.)
+*    Induktion: Wenn $\alpha \overset{\ast}{\Rightarrow} \beta$ und
+        $\beta\Rightarrow \gamma$ dann $\alpha \overset{\ast}{\Rightarrow} \gamma$
 
 **Def.:** {Sei $G = (N, T ,P, S)$ eine formale Grammatik.
-    Dann ist $L(G) = \{w \in T^{\*} \mid S \overset{\*}{\Rightarrow} w\}$ die von $G$ erzeugte Sprache.
+    Dann ist $L(G) = \{w \in T^{\ast} \mid S \overset{\ast}{\Rightarrow} w\}$ die von $G$ erzeugte Sprache.
 
 
 ## Reguläre Grammatiken
@@ -284,7 +284,7 @@ Die Klasse der regulären Sprachen ist abgeschlossen unter
 **Satz:** Es ist entscheidbar,
 
 *    ob eine gegebene reguläre Sprache leer ist
-*    ob $w \in \Sigma^*$ in einer gegebenen regulären Sprache enthalten ist (Das "Wort-Problem")
+*    ob $w \in \Sigma^{\ast}$ in einer gegebenen regulären Sprache enthalten ist (Das "Wort-Problem")
 *    ob zwei reguläre Sprachen äquivalent sind
 
 
