@@ -82,7 +82,7 @@ Ein PDA für $L=\{ww^{R}\mid w\in \{a,b\}^{\ast}\}$:
 
 \bigskip
 
-![PDA](images/BeispielPDA.png){width=400}\
+TODO
 
 
 ## Konfigurationen von PDAs
