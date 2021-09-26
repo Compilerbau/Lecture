@@ -78,7 +78,7 @@ Bei jedem Zustandsübergang wird ein Zeichen (oder $\epsilon$) aus der Eingabe g
 
 ## Beispiel
 
-Ein PDA für $L=\{ww^{R}\mid w\in \{a,b\}^{*}\}$:
+Ein PDA für $L=\{ww^{R}\mid w\in \{a,b\}^{\ast}\}$:
 
 \bigskip
 
@@ -91,8 +91,8 @@ Ein PDA für $L=\{ww^{R}\mid w\in \{a,b\}^{*}\}$:
 mit
 
 * $q$ ist ein Zustand
-* $w$ ist der verbleibende Input, $w\in\Sigma^{*}$
-* $\gamma$ ist der Kellerinhalt $\gamma\in \Gamma^{*}$
+* $w$ ist der verbleibende Input, $w\in\Sigma^{\ast}$
+* $\gamma$ ist der Kellerinhalt $\gamma\in \Gamma^{\ast}$
 
 eines PDAs zu einem gegebenen Zeitpunkt.
 
@@ -101,39 +101,41 @@ eines PDAs zu einem gegebenen Zeitpunkt.
 
 **Def.:** Die Relation $\vdash$ definiert Übergänge von einer Konfiguration zu einer anderen:
 
-Sei $(p, \alpha) \in \delta(q, a, X)$, dann gilt $\forall w\ \epsilon \ \Sigma^{*}$ und
-$\beta \in \Gamma^{*}$:
+Sei $(p, \alpha) \in \delta(q, a, X)$, dann gilt $\forall w\ \epsilon \ \Sigma^{\ast}$ und
+$\beta \in \Gamma^{\ast}$:
 
 $(q, aw, X\beta)\vdash(p, w, \alpha\beta)$.
 
-**Def.:** Wir definieren mit $\overset{*}{\vdash}$ 0 oder endlich viele Schritte des PDAs
+\bigskip
+
+**Def.:** Wir definieren mit $\overset{\ast}{\vdash}$ 0 oder endlich viele Schritte des PDAs
 induktiv wie folgt:
 
-*   Basis: $I\overset{*}{\vdash} I$ für eine ID $I$.
-*   Induktion: $I\overset{*}{\vdash}J$, wenn $\exists$ ID $K$ mit $I\vdash K$ und $K \overset{*}{\vdash}J$.
+*   Basis: $I\overset{\ast}{\vdash} I$ für eine ID $I$.
+*   Induktion: $I\overset{\ast}{\vdash}J$, wenn $\exists$ ID $K$ mit $I\vdash K$ und $K \overset{\ast}{\vdash}J$.
 
 ## Eigenschaften der Konfigurationsübergänge
 
-**Satz:** Sei $P=(Q, \Sigma, \Gamma, \delta, q_{0}, \perp, F)$ ein PDA und $(q, x,\alpha)\overset{*}{\vdash}
-(p, y, \beta)$. Dann gilt für beliebige Strings $w\in\Sigma^{*}$, $\gamma$ in $\Gamma^{*}$:
+**Satz:** Sei $P=(Q, \Sigma, \Gamma, \delta, q_{0}, \perp, F)$ ein PDA und $(q, x,\alpha)\overset{\ast}{\vdash}
+(p, y, \beta)$. Dann gilt für beliebige Strings $w\in\Sigma^{\ast}$, $\gamma$ in $\Gamma^{\ast}$:
 
-$(q, xw, \alpha \gamma) \overset{*}{\vdash}(p, yw, \beta\gamma)$
+$(q, xw, \alpha \gamma) \overset{\ast}{\vdash}(p, yw, \beta\gamma)$
 
-**Satz:** Sei $P = (Q, \Sigma, \Gamma, \gamma, q_0, \perp, F)$ ein PDA und $(q,xw,\alpha) \overset{*}{\vdash} 
+**Satz:** Sei $P = (Q, \Sigma, \Gamma, \gamma, q_0, \perp, F)$ ein PDA und $(q,xw,\alpha) \overset{\ast}{\vdash} 
 (p,y w, \beta)$.
 
-Dann gilt: $(q, x, a) \overset{*}{\vdash} (p, y, \beta)$
+Dann gilt: $(q, x, a) \overset{\ast}{\vdash} (p, y, \beta)$
 
 
 ## Akzeptierte Sprachen
 
 **Def.:** Sei $P=(Q, \Sigma, \Gamma, \delta, q_0, \perp, F)$ ein PDA. Dann ist die *über einen Endzustand*
-akzeptierte Sprache $L(P) = \{w \mid (q_0, w, \perp) \overset{*}{\vdash} (q, \epsilon, \alpha)\}$
-für einen Zustand $q \in F, \alpha \in \Gamma^*$.
+akzeptierte Sprache $L(P) = \{w \mid (q_0, w, \perp) \overset{\ast}{\vdash} (q, \epsilon, \alpha)\}$
+für einen Zustand $q \in F, \alpha \in \Gamma^{\ast}$.
 
 **Def.:** Für einen PDA $P=(Q, \Sigma, \Gamma, \delta, q_{0}, \perp, F)$
 definieren wir die über den *leeren Keller* akzeptierte Sprache
-$N(P) = \{(w \mid (q_0, w, \perp) \overset{*}{\vdash} (q, \epsilon, \epsilon)\}$.
+$N(P) = \{(w \mid (q_0, w, \perp) \overset{\ast}{\vdash} (q, \epsilon, \epsilon)\}$.
 
 
 ## Akzeptanzäquivalenzen
@@ -145,7 +147,7 @@ $L = L(P_L)$.
 $\epsilon$-Transitionen mit $L(P) = N(P) = L(Q) = N(Q)$.
 
 Die Transitionsfunktion $\delta$ ist dann von der Form
-$\delta: Q \times \Sigma \times \Gamma \to2^{Q \times \Gamma^*}$.
+$\delta: Q \times \Sigma \times \Gamma \to2^{Q \times \Gamma^{\ast}}$.
 
 
 ## Deterministische PDAs
@@ -175,16 +177,19 @@ DPDAs akzeptierten Sprachen.
 **Def.**   Eine *kontextfreie (cf-)* Grammatik ist ein 4-Tupel $G = (N, T, P, S)$ mit *N, T, S* wie in
 (formalen) Grammatiken und *P* ist eine endliche Menge von Produktionen der Form:
 
-$X \rightarrow Y$ mit $X \in N, Y \in {(N \cup T)}^*$.
+$X \rightarrow Y$ mit $X \in N, Y \in {(N \cup T)}^{\ast}$.
 
-$\Rightarrow, \overset{*}{\Rightarrow}$ sind definiert wie bei regulären Sprachen. Bei cf-Grammatiken nennt man die Ableitungsbäume oft *Parse trees*.
+$\Rightarrow, \overset{\ast}{\Rightarrow}$ sind definiert wie bei regulären Sprachen. Bei cf-Grammatiken nennt man die Ableitungsbäume oft *Parse trees*.
 
 
 ## Beispiel
 
+\vspace{-2.5cm}
+
 $S \rightarrow a \mid S\ +\  S\ |\  S \ast S$
 
 Ableitungsbäume für $a + a \ast a$:
+\vfill
 
 
 ## Mehrdeutige Grammatiken
@@ -216,7 +221,7 @@ Wenn wir beweisen müssen, dass eine Sprache nicht cf ist, hilft das Pumping Lem
 $\Rightarrow \exists$ eine Konstante $p \in \mathbb{N}$:
 
 $\underset{\underset{|z| \geq p} {z \in L}}\forall \exists$ $u, v, w, x, y \in
-\Sigma ^{*}$ mit $z = uvwxy$ und
+\Sigma ^{\ast}$ mit $z = uvwxy$ und
 
 *   $\mid vwx\mid \leq p$
 *   $vx \neq \epsilon$
@@ -229,7 +234,7 @@ $\underset{\underset{|z| \geq p} {z \in L}}\forall \exists$ $u, v, w, x, y \in
 
 *   Vereinigung
 *   Konkatenation
-*   Kleene-Hüllen $L^*$ und $L^+$
+*   Kleene-Hüllen $L^{\ast}$ und $L^+$
 
 **Satz:** Wenn *L* kontextfrei ist, dann ist $L^R$ kontextfrei.
 
@@ -241,7 +246,7 @@ $\underset{\underset{|z| \geq p} {z \in L}}\forall \exists$ $u, v, w, x, y \in
 *   ob $L(G) = \emptyset$
 *   welche Symbole nach $\epsilon$ abgeleitet werden können
 *   welche Symbole erreichbar sind
-*   ob $w  \in L(G)$ für ein gegebenes $w \in {\Sigma}^*$
+*   ob $w  \in L(G)$ für ein gegebenes $w \in {\Sigma}^{\ast}$
 
 
 **Satz:** Es ist nicht entscheidbar,
@@ -249,7 +254,7 @@ $\underset{\underset{|z| \geq p} {z \in L}}\forall \exists$ $u, v, w, x, y \in
 *   ob eine gegebene kontextfreie Grammatik eindeutig ist
 *   ob der Durchschnitt zweier kontextfreier Sprachen leer ist
 *   ob zwei kontextfreie Sprachen identisch sind
-*   ob eine gegebene kontextfreie Sprache gleich $\Sigma^{*}$ ist
+*   ob eine gegebene kontextfreie Sprache gleich $\Sigma^{\ast}$ ist
 
 
 ## Abschlusseigenschaften deterministisch kontextfreier Sprachen
@@ -305,7 +310,7 @@ $\Rightarrow$ Es gibt keinen generellen Algorithmus, um Grammatiken eindeutig zu
 
 ## Bevor wir richtig anfangen...
 
-**Def.:** Ein Nichtterminal *A* einer kontextfreien Grammatik *G* heißt *unerreichbar*, falls es kein $a,b \in {(N \cup T)}^*$ gibt mit $S \overset{*}{\Rightarrow} aAb$. Ein Nichtterminal *A* einer Grammatik *G* heißt *nutzlos*, wenn es kein Wort  $w \in T^*$ gibt mit $A \overset{*}{\Rightarrow} w$.
+**Def.:** Ein Nichtterminal *A* einer kontextfreien Grammatik *G* heißt *unerreichbar*, falls es kein $a,b \in {(N \cup T)}^{\ast}$ gibt mit $S \overset{\ast}{\Rightarrow} aAb$. Ein Nichtterminal *A* einer Grammatik *G* heißt *nutzlos*, wenn es kein Wort  $w \in T^{\ast}$ gibt mit $A \overset{\ast}{\Rightarrow} w$.
 
 **Def.:** Eine kontextfreie Grammatik $G=(N, T, P, S)$ heißt *reduziert*, wenn es keine nutzlosen oder unerreichbaren Nichtterminale in *N* gibt.
 
@@ -340,13 +345,15 @@ Was ist mit
 5) $A \rightarrow A \beta$
 6) $A \rightarrow B \alpha$ und $B \rightarrow A \beta$
 
+\vspace{2cm}
 
-$A, B, C, D \in N^*;  a, b, c, d \in T^*;  \beta$, $\alpha, \beta \in (N \cup T)^*$
+$A, B, C, D \in N^{\ast};  a, b, c, d \in T^{\ast};  \beta$, $\alpha, \beta \in (N \cup T)^{\ast}$
 
 
 ## Linksfaktorisierung
 $A \rightarrow BC\  \vert \  BD$
-
+\vfill
+\vfill
 
 ## Linksfaktorisierung
 
@@ -357,7 +364,7 @@ TODO
 
 ## Linksrekursion
 
-**Def.:** Eine Grammatik $G=(N, T, P, S)$ heißt *linksrekursiv*, wenn sie ein Nichtterminal *A* hat, für das es eine Ableitung $A \overset{+}{\Rightarrow} A\ \alpha$ für ein $\alpha \in (N \cup T)^*$ gibt.
+**Def.:** Eine Grammatik $G=(N, T, P, S)$ heißt *linksrekursiv*, wenn sie ein Nichtterminal *A* hat, für das es eine Ableitung $A \overset{+}{\Rightarrow} A\ \alpha$ für ein $\alpha \in (N \cup T)^{\ast}$ gibt.
 
 Linksrekursion gibt es
 
@@ -397,9 +404,9 @@ TODO
 
 ## Linksableitungen
 
-**Def.:** Bei einer kontextfreien Grammatik $G$ ist die $Linksableitung$ von $\alpha \in (N \cup T)^*$ die Ableitung, die man erhält, wenn in jedem Schritt das am weitesten links stehende Nichtterminal in $\alpha$ abgeleitet wird.
+**Def.:** Bei einer kontextfreien Grammatik $G$ ist die $Linksableitung$ von $\alpha \in (N \cup T)^{\ast}$ die Ableitung, die man erhält, wenn in jedem Schritt das am weitesten links stehende Nichtterminal in $\alpha$ abgeleitet wird.
 
-Man schreibt $\alpha \overset{*}{\Rightarrow}_l \beta.$
+Man schreibt $\alpha \overset{\ast}{\Rightarrow}_l \beta.$
 
 
 ## Follow-Mengen
@@ -423,15 +430,19 @@ Das hilft manchmal:
 Für $k = 1$:
 G ist $LL(1): \forall A \rightarrow \alpha, A \rightarrow \beta \in P, \alpha \neq \beta$ gilt:
 
-1)  $\lnot \exists a \in T: \alpha  \overset{*}{\Rightarrow}_l  a\alpha_1$ und $\beta \overset{*}{\Rightarrow}_l a\beta_1$
-2)  $((\alpha \overset{*}{\Rightarrow}_l \epsilon) \Rightarrow (\lnot \beta \overset{*}{\Rightarrow}_l \epsilon))$ und $((\beta \overset{*}{\Rightarrow}_l \epsilon \Rightarrow \alpha \lnot \overset{*}{\Rightarrow}_l \epsilon))$
-3)  $((\beta \overset{*}{\Rightarrow}_l \epsilon)$ und $(\alpha \overset{*}{\Rightarrow}_l a\alpha_1)) \Rightarrow a \notin Follow(A)$
-4)  $((\alpha \overset{*}{\Rightarrow}_l \epsilon)$ und $(\beta \overset{*}{\Rightarrow}_l a\beta_1)) \Rightarrow a \notin Follow(A)$
+1)  $\lnot \exists a \in T: \alpha  \overset{\ast}{\Rightarrow}_l  a\alpha_1$ und $\beta \overset{\ast}{\Rightarrow}_l a\beta_1$
+2)  $((\alpha \overset{\ast}{\Rightarrow}_l \epsilon) \Rightarrow (\lnot \beta \overset{\ast}{\Rightarrow}_l \epsilon))$ und $((\beta \overset{\ast}{\Rightarrow}_l \epsilon \Rightarrow \alpha \lnot \overset{\ast}{\Rightarrow}_l \epsilon))$
+3)  $((\beta \overset{\ast}{\Rightarrow}_l \epsilon)$ und $(\alpha \overset{\ast}{\Rightarrow}_l a\alpha_1)) \Rightarrow a \notin Follow(A)$
+4)  $((\alpha \overset{\ast}{\Rightarrow}_l \epsilon)$ und $(\beta \overset{\ast}{\Rightarrow}_l a\beta_1)) \Rightarrow a \notin Follow(A)$
 
-1) und 2) bedeuten:
+\bigskip
+
+1 und 2 bedeuten:
+
 $\alpha$ und $\beta$ können nicht beide $\epsilon$ ableiten,  $First_1(\alpha) \cap First_1(\beta) = \emptyset$
 
-3) und 4) bedeuten:
+3 und 4 bedeuten:
+
 $(\epsilon \in First_1(\beta)) \Rightarrow (First_1(\alpha) \cap Follow_1(A) = \emptyset)$
 $(\epsilon \in First_1(\alpha)) \Rightarrow (First_1(\beta) \cap Follow_1(A) = \emptyset)$
 
