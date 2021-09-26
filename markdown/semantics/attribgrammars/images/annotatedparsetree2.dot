@@ -1,0 +1,27 @@
+// dot -Tpdf annotatedparsetree2.dot -o annotatedparsetree2.pdf  &&   dot -Tpng annotatedparsetree2.dot -o annotatedparsetree2.png
+
+digraph annotatedparsetree2 {
+    node [shape=plaintext];
+    edge [arrowhead="none"];
+
+    t1 -> d1
+    t1 -> t2
+    
+    t2 -> m1
+    t2 -> d2
+    t2 -> t3
+    
+    t3 -> eps
+
+    t1 [label="term.syn=15"];
+    t2 [label="term'.inh=3\nterm'.syn=15"];
+    t3 [label="term'.inh=15\nterm'.syn=15"];
+    
+    eps [label="ε"];
+    
+    d1 [label="DIGIT.lexval=3"];
+    d2 [label="DIGIT.lexval=5"];
+    
+    m1 [label="'*'"];
+}
+
