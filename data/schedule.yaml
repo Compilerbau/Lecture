@@ -1,4 +1,3 @@
----
 - week: "KW40"
   lecture:
     - topic: "/misc/syllabus"
@@ -48,7 +47,7 @@
 
 - week: "KW44"
   misc_column:
-    - notes: "Happy Feiertach!"
+    - notes: ">> Happy Feiertach (01.11.)"
 
 - week: "KW45"
   lecture:
@@ -116,11 +115,11 @@
 
 - week: "KW51"
   misc_column:
-    - notes: "Weihnachten"
+    - notes: ">> Weihnachten"
 
 - week: "KW52"
   misc_column:
-    - notes: "Neujahr"
+    - notes: ">> Neujahr"
 
 - week: "KW01"
   lecture:
@@ -162,4 +161,3 @@
 - week: "KW05"
   misc_column:
     - notes: "(Prüfungsphase)"
----
