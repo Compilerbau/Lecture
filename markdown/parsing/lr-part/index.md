@@ -1,6 +1,6 @@
 ---
 type: lecture-bc
-title: "Syntaxanalyse: LR-Parser (Teil 1)"
+title: "Syntaxanalyse: LR-Parser"
 menuTitle: "LR-Parser 1"
 author: "BC George (FH Bielefeld)"
 weight: 4
