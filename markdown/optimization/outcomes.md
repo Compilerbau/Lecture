@@ -6,19 +6,9 @@ hidden: true
 
 
 {{% k1 %}}
--   Wuppie
--   Fluppie
+Verfahren für:
+*   Algebraische Optimierungen
+*   Maschinenunabhängige Optiierungen
+*   Maschinenabhängige Optimierungen
+*   Datenflussanalyse auf 3-Adress-Code
 {{% /k1 %}}
-
-{{% k2 %}}
--   foo
--   bar
-{{% /k2 %}}
-
-{{% k3 %}}
-hammwanich
-{{% /k3 %}}
-
-{{% k4 %}}
-gibbetsooch
-{{% /k4 %}}
