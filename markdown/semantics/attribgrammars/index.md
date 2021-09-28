@@ -1,6 +1,6 @@
 ---
 type: lecture-bc
-title: "Attributierte Grammatiken"
+title: "Typen, Type Checking und Attributierte Grammatiken"
 menuTitle: "Attributierte Grammatiken"
 author: "BC George (FH Bielefeld)"
 weight: 2
@@ -25,6 +25,157 @@ attachments:
     name: "Extra Material, e.g. annotated slides `...`{=markdown} Use This As Link Text"
 sketch: true
 ---
+
+# Motivation
+
+## Ist das alles erlaubt?
+
+Operation erlaubt?
+
+Zuweisung erlaubt?
+
+Welcher Ausdruck hat welchen Typ?
+
+(Welcher Code muss dafür erzeugt werden?)
+
+*   a = b
+*   a = f(b)
+*   a = b + c
+*   a = b + o.nummer
+*   if (f(a) == f(b))
+
+
+## Taschenrechner: Parsen von Ausdrücken wie `3*5+4`
+
+```
+expr : expr '+' term
+     | term
+     ;
+term : term '*' DIGIT
+     | DIGIT
+     ;
+
+DIGIT : [0-9] ;
+```
+
+\blueArrow Wie den Ausdruck **ausrechnen**?
+
+::: notes
+
+*Anmerkung*: Heute geht es um die einfachste Form der semantischen Analyse: Anreichern einer Grammatik um
+Attribute und Aktionen, die während des Parsens oder bei der Traversierung des Parse-Trees ausgewertet
+werden.
+
+:::
+
+
+## Einordnung: Dritte Phase in Compiler-Pipeline
+
+![Compiler-Pipeline](images/architektur_cb_sdt.png)
+
+
+
+# Semantische Analyse: Die Symboltabellen nutzen
+
+## Das haben wir bis jetzt (1/2)
+
+Wir haben Einträge in den Symboltabellen angelegt und dafür gesorgt, dass wir in den richtigen Scopes Definitionen in der richtigen Reihenfolge suchen können.
+
+Zum Auflösen von Deklarationen und Zuordnen von Objekten zu Klassen ist mindestens ein zweiter Lauf über Syntaxbaum und/oder Symboltabellen.
+
+Der Parse Tree enthält bei allen Namen Verweise in die Symboltabellen.
+Die Symboltabelleneinträge für Variablen und Objekte enthalten jetzt die Typen der Variablen und Objekte, bzw. Verweise auf ihre Typen in den Symboltabellen.
+
+
+## Das haben wir bis jetzt (2/2)
+
+Dabei konnten schon einige semantische Eigenschaften des zu übersetzenden Programms überprüft werden, falls erforderlich z. B.:
+
+*   Wurden alle Variablen / Objekte vor ihrer Verwendung definiert oder deklariert?
+*   Wurden keine Elemente mehrfach definiert?
+*   Wurden alle Funktionen / Methoden mit der richtigen Anzahl Parameter aufgerufen? (Nicht in allen Fällen schon prüfbar)
+*   Haben Arrayzugriffe auch keine zu hohe Dimension?
+*   Werden auch keine Namen benutzt, für die es keine Definition / Deklaration gibt?
+
+
+## Was fehlt jetzt noch?
+
+Es müssen kontextsensitive Analysen durchgeführt werden, allen voran Typanalysen. Damit der "richtige" (Zwischen-) Code entsprechend den beteiligten Datentypen erzeugt werden kann, muss mit Hilfe des Typsystems der Sprache (aus der Sprachdefinition) überprüft werden, ob alle Operationen nur mit den korrekten Datentypen benutzt werden. Dazu gehört auch, dass nicht nur Typen von z. B. Variablen, sondern von ganzen Ausdrücken betrachtet, bzw. bestimmt werden. Damit kann dann für die Codeerzeugung festgelegt werden, welcher Operator realisiert werden muss (Überladung).
+
+
+
+# Analyse von Datentypen
+
+## Typisierung
+
+*   stark oder statisch typisierte Sprachen: Alle oder fast alle Typüberprüfungen finden in der semantischen Analyse statt (C, C++, Java)
+*   schwach oder dynamisch typisierte Sprachen: Alle oder fast alle Typüberprüfungen finden zur Laufzeit statt (Python, Lisp, Perl)
+*   untypisierte Sprachen: keinerlei Typüberprüfungen (Maschinensprache)
+
+
+## Ausdrücke
+
+Jetzt muss für jeden Ausdruck im weitesten Sinne sein Typ bestimmt werden.
+
+Ausdrücke können hier sein:
+
+*   rechte Seiten von Zuweisungen
+*   linke Seiten von Zuweisungen
+*   Funktions- und Methodenaufrufe
+*   jeder einzelne aktuelle Parameter in Funktions- und Methodenaufrufen
+*   Bedingungen in Kontrollstrukturen
+
+
+## Typinferenz
+
+**Def.:** *Typinferenz* ist die Bestimmung des Datentyps jedes Bezeichners und jedes Ausdrucks im Code.
+
+Der Typ eines Ausdrucks wird mit Hilfe der Typen seiner Unterausdrücke bestimmt.
+
+Dabei kann man ein Kalkül mit sog. Inferenzregeln der Form
+
+$$\frac{f:s \rightarrow t\ \ \ \ \ x:s}{f(x) : t}$$
+*(Wenn f den Typ $s \rightarrow t$ hat und x den Typ s,
+dann hat der Ausdruck f(x) den Typ t.) *
+
+benutzen. So wird dann z. B. auch Überladung aufgelöst und Polymorphie zur Laufzeit.
+
+
+## Statische Typprüfungen
+
+**Bsp.:** Der + - Operator:
+
+| Typ 1. Operand | Typ 2. Operand | Ergebnistyp |
+|:--------------:|:--------------:|:-----------:|
+| int            | int            | int         |
+| float          | float          | float       |
+| int            | float          | float       |
+| float          | int            | float       |
+| string         | string         | string      |
+
+
+## Typkonvertierungen
+
+*   Der Compiler kann implizite Typkonvertierungen vornehmen, um einen Ausdruck zu verifizieren (siehe Sprachdefiniton).
+
+*   In der Regel sind dies Typerweiterungen, z.B. von *int* nach *float*.
+
+*   Manchmal muss zu zwei Typen der kleinste Typ gefunden werden, der beide vorhandenen Typen umschließt.
+
+*   Explizite Typkonvertierungen heißen auch *Type Casts*.
+
+
+## Nicht grundsätzlich statisch mögliche Typprüfungen
+
+**Bsp.:** Der \^\ - Operator $(a^b)$:
+
+| Typ 1. Operand | Typ 2. Operand | Ergebnistyp |
+|:--------------:|:--------------:|:-----------:|
+| int            | int $\geq$ 0   | int         |
+| int            | int < 0        | float       |
+| int            | float          | float       |
+| $\ldots$       | $\ldots$       | $\ldots$    |
+
 
 
 # Attributierte Grammatiken
@@ -152,7 +303,9 @@ S-attributierte SDD sind eine Teilmenge von L-attributierten SDD.
 
 ## Beispiel: Annotierter Syntaxbaum für `3*5+4`
 
-![Annotierter Parse-Tree](images/annotatedparsetree)
+::: center
+![Annotierter Parse-Tree](images/annotatedparsetree.png){height="90%"}\
+:::
 
 
 ## Erzeugung des AST aus dem Parse-Tree für `3*5+4`
@@ -169,7 +322,7 @@ S-attributierte SDD sind eine Teilmenge von L-attributierten SDD.
 \normalsize
 
 ::: center
-![AST](images/ast){width="40%"}\
+![AST](images/ast.png){width="40%"}\
 :::
 
 
@@ -194,7 +347,7 @@ und mit berechneten und geerbten Attributen:
 
 :::
 
-\vspace{-15mm}
+\vspace{-10mm}
 
 ::::::::: center
 :::::: columns
@@ -203,7 +356,7 @@ und mit berechneten und geerbten Attributen:
 **`3*5`** \blueArrow\
 :::
 ::: {.column width="45%"}
-![Annotierter Parse-Tree mit berechneten und geerbten Attributen (nur Multiplikation)](images/annotatedparsetree2)\
+![Annotierter Parse-Tree mit berechneten und geerbten Attributen (nur Multiplikation)](images/annotatedparsetree2.png)\
 :::
 ::::::
 :::::::::

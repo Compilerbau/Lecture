@@ -59,8 +59,9 @@
       leader: "cagi"
     - topic: "/semantics/symboltables/classes"
       leader: "cagi"
-    - topic: "/semantics/types"
-      leader: "BC"
+
+- week: "KW45"
+  lecture:
     - topic: "/semantics/attribgrammars"
       leader: "BC"
   misc_assignment:
