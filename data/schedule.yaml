@@ -46,7 +46,7 @@
     - notes: "COIL: ANTLR + Coden (CA): Mo, 25.10., 17:00-18:30 Uhr"
 
 - week: "KW44"
-  misc_column:
+  misc_lecture:
     - notes: ">> Happy Feiertach (01.11.)"
 
 - week: "KW45"
@@ -114,12 +114,12 @@
       due: "XX.XX."
 
 - week: "KW51"
-  misc_column:
-    - notes: ">> Weihnachten"
+  misc_lecture:
+    - notes: ">> Frohe Weihnachten!"
 
 - week: "KW52"
-  misc_column:
-    - notes: ">> Neujahr"
+  misc_lecture:
+    - notes: ">> Weihnachtsferien!"
 
 - week: "KW01"
   lecture:
@@ -138,6 +138,8 @@
       notes: "TODO: entfällt evtl. -- Vortrag stattdessen?!"
   misc_assignment:
     - notes: "Vortrag: JIT, ???"
+  misc_lecture:
+    - notes: ">> Alles Gute im neuen Jahr!"
 
 - week: "KW02"
   misc_lecture:
