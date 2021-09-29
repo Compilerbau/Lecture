@@ -153,11 +153,3 @@
     - notes: "mdl. Prüfung II"
   misc_assignment:
     - notes: "mdl. Prüfung II"
-
-- week: "KW04"
-  misc_column:
-    - notes: "(Prüfungsphase)"
-
-- week: "KW05"
-  misc_column:
-    - notes: "(Prüfungsphase)"
