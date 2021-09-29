@@ -8,13 +8,12 @@ hidden: true
 {{< schedule >}}
 
 
-#### Legende
+**Legende**:
 
 *   leeres Feld: keine Vorlesung bzw. kein Praktikum
-*   Vorlesung:
-    -   BC: Live-Vorlesungen via Zoom
-    -   cagix: Flipped-Classroom (Sprechstunde in VL-Slot via Zoom)
-*   Praktikum: via Zoom
+*   Durchführung der Vorlesungen und Praktika:
+    -   BC: Präsenz (D320)
+    -   cagix: Zoom (Zugangsdaten siehe ILIAS)
 *   Sonstiges:
     -   Vortrag: findet VL- bzw. Praktikumsslot statt
     -   COIL: Veranstaltungsteil findet in den Abendstunden statt, Sprache: englisch
