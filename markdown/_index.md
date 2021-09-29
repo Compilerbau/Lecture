@@ -35,7 +35,7 @@ eine Kooperation mit der University of Alberta (Edmonton/Alberta, Kanada) im Mod
 Wir werden in diesem Semester drei Sitzungen gemeinsam für beide Hochschulen durchführen.
 Diese Termine werden deshalb in englischer Sprache durchgeführt, ansonsten ist die
 Unterrichtssprache Deutsch. Die Unterlagen werden als *Open Educational Resources* über
-[Github](https://compilerbau.github.io/Lecture/) entwickelt und bereitgestellt.
+[Github](https://github.com/Compilerbau/Lecture) entwickelt und bereitgestellt.
 
 Zur Verteilung der Themen siehe auch den ["Fahrplan"]({{<ref "/misc/schedule" >}}).
 
