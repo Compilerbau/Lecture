@@ -6,7 +6,7 @@ hidden: true
 
 ## Worum geht's hier?
 
-![](images/architektur_cb)
+![](images/architektur_cb.png)
 
 
 *   Verständnis für die wichtigsten Konzepte im Compilerbau
