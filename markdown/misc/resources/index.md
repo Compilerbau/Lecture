@@ -9,7 +9,7 @@ hidden: true
 ### Basics ("Must Have"!)
 
 1.  "**Compiler: Prinzipien, Techniken und Werkzeuge**": @Aho2008
-2.  "**Crafting Interpreters**": @Nystrom2018
+2.  "**Crafting Interpreters**": @Nystrom2021
 
 ### Weitere empfohlene Literatur
 
@@ -36,7 +36,7 @@ Wer sich für Haskell interessiert, findet den passenden Beispielcode (für den 
 Analog wird in @Clausing2011 für verschiedene Sprachen (imperativ, objektorientiert, funktional: Mini-C,
 Mini-Java, Mini-Lisp) ein Interpreter in Java geschrieben. Um den Interpreter einfach zu halten, wird für die
 betrachteten Sprachen allerdings jeweils eine Scheme-ähnliche Syntax (und nicht die übliche) eingesetzt.
-@Nystrom2018 entwickelt ebenfalls einen Interpreter für eine fiktive Sprache.
+@Nystrom2021 entwickelt ebenfalls einen Interpreter für eine fiktive Sprache.
 
 Bei Interesse an Sprachkonzepten und der entsprechenden Umsetzung im Compilerbau erscheinen @Clausing2011,
 @Lee2017, @Sestoft2017 und @Scott2016 interessant.
