@@ -10,15 +10,14 @@ weight: 3
 
 ## A3.1: Konstruktion DAG (4P)
 
-Konstruieren Sie aus Ihrem AST einen DAG.
+Konstruieren Sie aus Ihrem AST einen DAG. Ergänzen Sie Ihre Ausgabefunktion, so dass auch
+der DAG als DOT-Code formatiert ausgegeben wird.
 
-## A3.2: Optimierung (4P)
 
-Führen Sie Optimierungen auf dem DAG durch.
+## A3.2: Optimierung (6P)
 
-## A3.3: Visualisierung des DAG mit DOT (2P)
-
-Visualisieren Sie den DAG vor und nach einer Optimierung mittels DOT.
+Welche der in der Vorlesung besprochenen Optimierungen sind auf der Grammatik sinnvoll?
+Begründen Sie Ihre Analyse und führen Sie diese Optimierung auf dem DAG durch.
 
 
 
