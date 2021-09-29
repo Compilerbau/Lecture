@@ -12,7 +12,7 @@ hidden: true
 
 *   leeres Feld: keine Vorlesung bzw. kein Praktikum
 *   Durchführung der Vorlesungen und Praktika:
-    -   BC: Präsenz (D320)
+    -   BC: Hybrid (D320)
     -   cagix: Zoom (Zugangsdaten siehe ILIAS)
 *   Sonstiges:
     -   Vortrag: findet VL- bzw. Praktikumsslot statt

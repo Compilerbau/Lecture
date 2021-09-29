@@ -46,7 +46,7 @@ Zur Verteilung der Themen siehe auch den ["Fahrplan"]({{<ref "/misc/schedule" >}
 
 => Vorlesungszeit: Mo, 14:00 - 15:30 Uhr (D320)
 
-*   **BC**: Durchführung als **Vorlesung in Präsenz**
+*   **BC**: Durchführung als **hybride Vorlesung**
 *   **cagi**: Durchführung als **Flipped Classroom**:
     *   Vorbereitung individuell \@home mit ausführlich kommentierten Skripten plus
         Screencasts (**Selbststudium**)
@@ -58,7 +58,7 @@ Zur Verteilung der Themen siehe auch den ["Fahrplan"]({{<ref "/misc/schedule" >}
 
 -   Bearbeitung der Aufgaben in **2er Teams** vor dem Praktikum
 -   Abgabe der gelösten Aufgaben **vor** der Deadline im ILIAS
--   Vorstellung und Diskussion der Lösung **im** Praktikum (Zoom)
+-   Vorstellung und Diskussion der Lösung **im** Praktikum (hybrid/Zoom)
 
 In ausgewählten Wochen finden statt der Praktika zusätzliche Vorlesungen statt
 (Durchführungsmodus dann wie bei den Vorlesungen).
