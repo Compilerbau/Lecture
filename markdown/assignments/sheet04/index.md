@@ -1,23 +1,29 @@
 ---
+type: assignment
 title: "Blatt 04: LLVM-IR"
-author: "BC George (FH Bielefeld)"
+author: "BC George, Carsten Gips (FH Bielefeld)"
+points: 10
 hidden: true
 weight: 4
 ---
 
-**TODO: Abnahmedatum eintragen**
 
-## A5: Erzeugung von LLVM-IR (Aufgaben zur Abnahme in KW??) {#a5}
+## A4.1: Sprachumfang im LLVM-IR (4P)
 
-*   Legen Sie fest, welche LLVM-IR-Befehle Sie für Ihr Projekt benötigen.
-    *   [https://releases.llvm.org/1.6/docs/CommandGuide/html/llc.html](https://releases.llvm.org/1.6/docs/CommandGuide/html/llc.html)
-    *   [https://releases.llvm.org/1.6/docs/CommandGuide/html/lli.html](https://releases.llvm.org/1.6/docs/CommandGuide/html/lli.html)
-    *   [http://llvm.org/devmtg/2010-11/Naumann-Cling.pdf](http://llvm.org/devmtg/2010-11/Naumann-Cling.pdf)
+Legen Sie fest, welche LLVM-IR-Befehle Sie für Ihr Projekt benötigen.
 
-\smallskip
+*   [https://releases.llvm.org/1.6/docs/CommandGuide/html/llc.html](https://releases.llvm.org/1.6/docs/CommandGuide/html/llc.html)
+*   [https://releases.llvm.org/1.6/docs/CommandGuide/html/lli.html](https://releases.llvm.org/1.6/docs/CommandGuide/html/lli.html)
+*   [http://llvm.org/devmtg/2010-11/Naumann-Cling.pdf](http://llvm.org/devmtg/2010-11/Naumann-Cling.pdf)
 
-*   Vervollständigen Sie den Compiler mit LLVM-Werkzeugen: Ihr Compiler soll LLVM-IR ausgeben, der mit
-    den LLVM-Werkzeugen in ein ausführbares Programm übersetzt werden kann.
+
+## A4.2: Erzeugung von LLVM-IR (6P))
+
+
+Vervollständigen Sie den Compiler mit LLVM-Werkzeugen: Ihr Compiler soll LLVM-IR ausgeben,
+der mit den LLVM-Werkzeugen in ein ausführbares Programm übersetzt werden kann.
+
+
 
 
 

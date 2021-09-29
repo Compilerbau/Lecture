@@ -1,19 +1,33 @@
 ---
+type: assignment
 title: "Blatt 02: Semantische Analyse"
-author: "Carsten Gips (FH Bielefeld)"
+author: "BC George, Carsten Gips (FH Bielefeld)"
+points: 10
 hidden: true
 weight: 2
 ---
 
 
-**TODO: Abnahmedatum eintragen**
+## A2.1: Symboltabellen (3P)
 
-## A2: Semantische Analyse + Symboltabellen, Visualisierung mit DOT (Aufgaben zur Abnahme in KW??) {#a3}
+Fügen Sie Symboltabellen in Ihren Compiler ein.
 
-*   Fügen Sie Symboltabellen in Ihren Compiler ein.
-*   Passen Sie dazu die beim Erkennen von Symbolen und Ableiten von Produktionen durchgeführten Aktionen an.
+
+## A2.2: Semantische Analyse + Symboltabellen (2P)
+
+Passen Sie dazu die beim Erkennen von Symbolen und Ableiten von Produktionen durchgeführten Aktionen an.
+
+
+## A2.3: Type Checking (3P)
+
 *   Attributieren Sie Ihren AST und führen Sie mit Hilfe der Attribute und der Symboltabellen ein *Type Checking* durch.
-*   Visualisieren Sie die Symboltabelle mit DOT.
+
+
+## A2.4: Visualisierung mit DOT (2P)
+
+Visualisieren Sie die Symboltabelle mit DOT.
+
+
 
 
 

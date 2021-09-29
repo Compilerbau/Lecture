@@ -7,7 +7,7 @@ weight: 10
 ---
 
 
-Diese Aufgaben sollten Sie lösen können :)
+Diese Aufgaben sollten Sie jeweils lösen können :)
 
 
 ## Thema I
@@ -26,4 +26,3 @@ tbd
 ### Aufgabe ...
 
 tbd
-
