@@ -43,7 +43,7 @@
   misc_assignment:
     - notes: "zweiter Teil der VL in Praktikumszeit"
   misc_column:
-    - notes: "COIL: ANTLR + Coden (CAN)"
+    - notes: "COIL: ANTLR + Coden (CA): Mo, 25.10., 17:00-18:30 Uhr"
 
 - week: "KW44"
   misc_column:
@@ -74,7 +74,7 @@
     - topic: "sheet01"
       due: "XX.XX."
   misc_column:
-    - notes: "COIL / Vortrag (2P): Yacc vs. Bison + Coden (DE)"
+    - notes: "COIL / Vortrag (2P): Yacc vs. Bison + Coden (DE): Mo, 15.11., 17:00-18:30 Uhr"
 
 - week: "KW47"
   misc_lecture:
@@ -99,7 +99,7 @@
     - topic: "sheet03"
       due: "XX.XX."
   misc_column:
-    - notes: "COIL: Optimierung (CAN)"
+    - notes: "COIL: Optimierung (CA): Mo, 06.12., 17:00-18:30 Uhr"
 
 - week: "KW50"
   lecture:
