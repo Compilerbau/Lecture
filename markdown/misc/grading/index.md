@@ -15,7 +15,7 @@ hidden: true
 -   **Gesamtnote: Mittelwert(mdl. Prüfung I, mdl. Prüfung II, Vortrag)**
 
 
-### Hinweise zur Modulprüfung: Parcours-Prüfung: Was ist das?
+### Parcours-Prüfung: Was ist das?
 
 Sie legen die **Prüfung in mehreren Stationen** zurück und sammeln jeweils Teilnoten, die
 gemittelt in **eine Gesamtnote** für das Modul münden.
@@ -34,7 +34,7 @@ Mittelwert der drei Teilnoten am Ende die Gesamtnote ergibt.
 Eine nicht bestandene Teilprüfung/Station (Aufgabenblätter, mdl. Prüfungen) führt zur
 Gesamtnote "nicht bestanden".
 
-#### Stationen 1-5: "Aufgabenblätter"
+### Stationen 1-5: "Aufgabenblätter"
 
 Die 5 Aufgabenblätter werden in 2er Teams als Hausaufgabe vor dem jeweiligen Praktikum
 gelöst, die Lösung muss jeweils vor Ablauf der Abgabefrist in die entsprechende ILIAS-Aufgabe
@@ -56,7 +56,7 @@ Für das Bestehen der Gesamtprüfung ist die erfolgreiche Bearbeitung der Statio
 (oder zu spät) erscheint oder die Lösung im Praktikum nicht vorstellen kann/will,
 bekommt das gesamte Übungsblatt als "nicht bestanden" testiert!
 
-#### Stationen 6+7: "mdl. Prüfung"
+### Stationen 6+7: "mdl. Prüfung"
 
 Die beiden mündlichen Prüfungen (Termine siehe [Fahrplan]({{<ref "/misc/schedule" >}})) werden
 einzeln pro Teilnehmer durchgeführt und dauern ca. 30 Minuten. Wir vereinbaren rechtzeitig
@@ -66,7 +66,7 @@ vorher individuelle Zeitslots an den beiden Prüfungstagen mit Ihnen. Die Prüfu
 Beide Prüfungen können sich auch auf Stoff beziehen, der durch die Bearbeitung der vorangegangenen
 Aufgabenblätter erarbeitet wurde.
 
-#### Stationen 8: "Vortrag"
+### Stationen 8: "Vortrag"
 
 <!-- TODO -->
 Es stehen verschiedene Vortragsthemen zur Auswahl (Termine siehe [Fahrplan]({{<ref "/misc/schedule" >}})).
@@ -75,7 +75,7 @@ Die Vorträge werden in der Regel als Einzelvortrag mit ca. 45 Minuten Dauer in 
 gehalten. Ausnahme ist der Vortrag zu Bison, der von zwei Personen in englischer Sprache und mit
 doppelter Länge durchgeführt wird (Teilnahme der kanadischen Studierenden).
 
-#### Praktikum: Verspätete Abgaben
+### Praktikum: Verspätete Abgaben
 
 Es gibt keine verspäteten Abgaben. Das sind 0P.
 
