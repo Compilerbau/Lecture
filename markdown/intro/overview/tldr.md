@@ -13,7 +13,7 @@ Ergebnis, welches an die nächste Phase weitergereicht wird. Dabei nimmt die Abs
 von Stufe zu Stufe zu: Der ursprüngliche Input ist ein Strom von Zeichen, daraus wird ein
 Strom von Wörtern (Token), daraus ein Baum (Parse Tree), Zwischencode (IC), ...
 
-![](images/architektur_cb.png){width="80%"}
+![](images/architektur_cb.png)
 
 Die gezeigten Phasen werden traditionell unterschieden. Je nach Aufgabe können verschiedene
 Stufen zusammengefasst werden oder sogar gar nicht auftreten.

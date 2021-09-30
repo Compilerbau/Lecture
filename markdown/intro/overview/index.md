@@ -45,9 +45,9 @@ Wir können hier (mit steigender Abstraktionsstufe) unterscheiden:
 
 ## Compiler: Big Picture
 
-![](https://github.com/munificent/craftinginterpreters/blob/master/site/image/a-map-of-the-territory/mountain.png)
+![](https://raw.githubusercontent.com/munificent/craftinginterpreters/master/site/image/a-map-of-the-territory/mountain.png)
 
-[Quelle: ["A Map of the Territory (Mountain)"](https://github.com/munificent/craftinginterpreters/blob/master/site/image/a-map-of-the-territory/mountain.png) by [Bob Nystrom](https://github.com/munificent), licensed under [MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE)]{.origin}
+[Quelle: ["A Map of the Territory (mountain.png)"](https://github.com/munificent/craftinginterpreters/blob/master/site/image/a-map-of-the-territory/mountain.png) by [Bob Nystrom](https://github.com/munificent), licensed under [MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE)]{.origin}
 
 
 ::: notes
@@ -92,6 +92,13 @@ Parser und die semantische Analyse.
     gesamten Baum und die Symboltabelle hinweg geprüft, ob beispielsweise
     Typen korrekt verwendet wurden, in welchen Scope ein Name gehört etc.
     Mit diesen Informationen wird der AST angereichert.
+
+*   Symboltabellen
+
+    Datenstrukturen, um Namen, Werte, Scopes und weitere Informationen zu
+    speichern. Die Symboltabellen werden vor allem beim Parsen befüllt und
+    bei der semantischen Analyse gelesen, aber auch der Lexer benötigt u.U.
+    diese Informationen.
 
 ### Backend, Synthese
 
@@ -441,6 +448,7 @@ expr : ID '(' ')'
 Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
 
 ### Exceptions
-*   Figure ["A Map of the Territory (Mountain)"](https://github.com/munificent/craftinginterpreters/blob/master/site/image/a-map-of-the-territory/mountain.png)
+*   Figure ["A Map of the Territory (mountain.png)"](https://github.com/munificent/craftinginterpreters/blob/master/site/image/a-map-of-the-territory/mountain.png)
+    (https://github.com/munificent/craftinginterpreters/blob/master/site/image/a-map-of-the-territory/mountain.png),
     by [Bob Nystrom](https://github.com/munificent), licensed under [MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE)
 :::
