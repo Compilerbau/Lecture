@@ -23,7 +23,7 @@ fhmedia:
 \bigskip
 \bigskip
 
-\blueArrow Struktur? Bedeutung?
+=> Struktur? Bedeutung?
 
 ::: notes
 Wir können hier (mit steigender Abstraktionsstufe) unterscheiden:
@@ -348,7 +348,7 @@ in manchen Compilern wird als IC aber auch der AST selbst genutzt.
 
 \bigskip
 
-\blueArrow\qquad `t1 = inttofloat(100)`
+=> `t1 = inttofloat(100)`
 
 
 ## Code optimieren
@@ -368,12 +368,12 @@ Aus zeitlichen und didaktischen Gründen werden wir in dieser Veranstaltung den
 Fokus auf die Frontend-Phasen legen und die Optimierung nur grob streifen.
 :::
 
-`t1 = inttofloat(100)`  \qquad\blueArrow\qquad `t1 = 100.0`
+`t1 = inttofloat(100)`  => `t1 = 100.0`
 
 \bigskip
 \bigskip
 
-`x = y*0;` \qquad\blueArrow\qquad `x = 0;`
+`x = y*0;` => `x = 0;`
 
 
 ## Code generieren
