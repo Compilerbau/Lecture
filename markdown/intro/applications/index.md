@@ -66,7 +66,7 @@ Beispiel: Java mit seiner JVM
 ## Anwendung: C-Toolchain
 
 ::: center
-![](images/c-toolchain.png)
+![](images/c-toolchain.png){width="80%"}
 :::
 
 ::: notes
@@ -85,7 +85,7 @@ Beispiele: gcc, clang, ...
 ## Anwendung: C++-Compiler
 
 ::: center
-![](images/cpp-toolchain.png)
+![](images/cpp-toolchain.png){width="80%"}
 :::
 
 ::: notes
@@ -104,7 +104,7 @@ Beispiel: g++
 ## Anwendung: Bugfinder
 
 ::: center
-![](images/findbugs.png)
+![](images/findbugs.png){width="80%"}
 :::
 
 ::: notes
