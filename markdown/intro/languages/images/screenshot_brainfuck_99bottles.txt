@@ -1,1 +1,1 @@
-Quelle: https://99-bottles-of-beer.net/language-brainfuck-2542.html, by Michal Wojciech Tarnowski
+File "screenshot_brainfuck_99bottles.png" is a screenshot from the code presented on https://99-bottles-of-beer.net/language-brainfuck-2542.html (by Michal Wojciech Tarnowski), license unknown.
