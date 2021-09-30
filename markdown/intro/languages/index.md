@@ -257,12 +257,13 @@ Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
 
 ### Exceptions
 
-Citations of "99 Bottles of Beer" lyrics and programming language examples:
+Citations of "99 Bottles of Beer" lyrics and programming language examples (license(s) unknown):
 *   [99-bottles-of-beer.net/lyrics.html](https://www.99-bottles-of-beer.net/lyrics.html) (Author unknown, Website hosted by Oliver Schade, Gregor Scheithauer, and Stefan Scheler)
 *   [99-bottles-of-beer.net/language-c-116.html](https://www.99-bottles-of-beer.net/language-c-116.html), by Bill Wein
 *   [99-bottles-of-beer.net/language-java-4.html](https://www.99-bottles-of-beer.net/language-java-4.html), by Sean Russell
 *   [99-bottles-of-beer.net/language-prolog-965.html](https://www.99-bottles-of-beer.net/language-prolog-965.html), by M\@
 *   [99-bottles-of-beer.net/language-haskell-1070.html](https://www.99-bottles-of-beer.net/language-haskell-1070.html), by Iavor
 *   [99-bottles-of-beer.net/language-brainfuck-2542.html](https://99-bottles-of-beer.net/language-brainfuck-2542.html), by Michal Wojciech Tarnowski
-
+    and screenshot of this website (file [`screenshot_brainfuck_99bottles.png`](https://github.com/Compilerbau/Lecture/blob/master/markdown/intro/languages/images/screenshot_brainfuck_99bottles.png)
+    in folder [`markdown/intro/languages/images/`](https://github.com/Compilerbau/Lecture/blob/master/markdown/intro/languages/images/))
 :::
