@@ -47,7 +47,7 @@ Beispiele aus, auf die die vorgestellte Lösung angewendet wird.
 
 Die erfolgreiche Bearbeitung der Aufgabenblätter ist Bestandteil der Parcoursprüfung, ergibt
 aber keine eigene Teilnote. (Wir wollen nicht den Lernprozess bewerten!) Ab mind. 4 erfolgreich
-bearbeiteten Aufgaben gilt diese Station als "bestanden".
+bearbeiteten Aufgabenblättern gilt diese Station als "bestanden".
 
 Für das Bestehen der Gesamtprüfung ist die erfolgreiche Bearbeitung der Station
 "Aufgabenblätter" erforderlich.
