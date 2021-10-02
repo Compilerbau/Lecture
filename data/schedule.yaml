@@ -43,7 +43,7 @@
   misc_assignment:
     - notes: "zweiter Teil der VL in Praktikumszeit"
   misc_column:
-    - notes: "COIL: ANTLR + Coden (CA): Mo, 25.10., 17:00-18:30 Uhr"
+    - notes: "COIL: ANTLR + Live-Coding (CA): Mo, 25.10.21, 17:00-18:30 Uhr"
 
 - week: "KW44"
   misc_lecture:
@@ -74,7 +74,7 @@
     - topic: "sheet01"
       due: "15.11.21, BC"
   misc_column:
-    - notes: "COIL / Vortrag (2P): Yacc vs. Bison + Coden (DE): Mo, 15.11., 17:00-18:30 Uhr"
+    - notes: "COIL / Vortrag (2P): YACC und Bison + Live-Coding (DE): Mo, 15.11.21, 17:00-18:30 Uhr"
 
 - week: "KW47"
   misc_lecture:
@@ -86,20 +86,20 @@
   lecture:
     - topic: "/intermediate/intro"
       leader: "cagi"
-    - topic: "/intermediate/llvm-ir"
-      leader: "BC"
+  misc_lecture:
+    - notes: "Vortrag: LLVM: Überblick, LLVM-IR, Möglichkeiten der Optimierung"
   assignment:
     - topic: "sheet02"
       due: "29.11.21, cagi"
 
 - week: "KW49"
   misc_lecture:
-    - notes: "Vortrag: Sprachen und Parser (manuell/Generator), Parser-Kombinatoren, PEG-Parser, ???"
+    - notes: "Vortrag: PEG-Parser, Pratt-Parser und Parser Combinators"
   assignment:
     - topic: "sheet03"
       due: "06.12.21, BC"
   misc_column:
-    - notes: "COIL: Optimierung (CA): Mo, 06.12., 17:00-18:30 Uhr"
+    - notes: "COIL: Optimierung (CA): Mo, 06.12.21, 17:00-18:30 Uhr"
 
 - week: "KW50"
   lecture:
@@ -122,33 +122,17 @@
     - notes: ">> Weihnachtsferien!"
 
 - week: "KW01"
-  lecture:
-    - topic: "/interpretation/vm/bytecode"
-      leader: "cagi"
-    - topic: "/interpretation/vm/consts"
-      leader: "cagi"
-    - topic: "/interpretation/vm/variables"
-      leader: "cagi"
-    - topic: "/interpretation/vm/functions"
-      leader: "cagi"
-    - topic: "/interpretation/vm/classes"
-      leader: "cagi"
-    - topic: "/interpretation/vm/garbage"
-      leader: "cagi"
-      notes: "TODO: entfällt evtl. -- Vortrag stattdessen?!"
+  misc_lecture:
+    - notes: "Vortrag: Maschinencode-Generierung"
+    - notes: ">> Alles Gute im neuen Jahr!"
   assignment:
     - topic: "sheet05"
       due: "03.01.22, cagi"
-  misc_assignment:
-    - notes: "Vortrag: JIT, ???"
-  misc_lecture:
-    - notes: ">> Alles Gute im neuen Jahr!"
 
 - week: "KW02"
   misc_lecture:
-    - notes: "Vortrag: GC (Varianten, Rust), ???"
-    - notes: "Vortrag: Paradigmen und Einfluss auf Strukturen/Laufzeitsystem, ???"
-    - notes: "Vortrag: Generierung von Maschinencode, ???"
+    - notes: "Vortrag: VM und Bytecode"
+    - notes: "Vortrag: Garbage Collection"
 
 - week: "KW03"
   misc_lecture:
