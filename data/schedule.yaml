@@ -72,7 +72,7 @@
       leader: "BC"
   assignment:
     - topic: "sheet01"
-      due: "15.11.21"
+      due: "15.11.21, BC"
   misc_column:
     - notes: "COIL / Vortrag (2P): Yacc vs. Bison + Coden (DE): Mo, 15.11., 17:00-18:30 Uhr"
 
@@ -90,14 +90,14 @@
       leader: "BC"
   assignment:
     - topic: "sheet02"
-      due: "29.11.21"
+      due: "29.11.21, cagi"
 
 - week: "KW49"
   misc_lecture:
     - notes: "Vortrag: Sprachen und Parser (manuell/Generator), Parser-Kombinatoren, PEG-Parser, ???"
   assignment:
     - topic: "sheet03"
-      due: "06.12.21"
+      due: "06.12.21, BC"
   misc_column:
     - notes: "COIL: Optimierung (CA): Mo, 06.12., 17:00-18:30 Uhr"
 
@@ -111,7 +111,7 @@
       leader: "cagi"
   assignment:
     - topic: "sheet04"
-      due: "13.12.21"
+      due: "13.12.21, BC"
 
 - week: "KW51"
   misc_lecture:
@@ -138,7 +138,7 @@
       notes: "TODO: entfällt evtl. -- Vortrag stattdessen?!"
   assignment:
     - topic: "sheet05"
-      due: "03.01.22"
+      due: "03.01.22, cagi"
   misc_assignment:
     - notes: "Vortrag: JIT, ???"
   misc_lecture:
