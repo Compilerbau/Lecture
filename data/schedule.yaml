@@ -123,7 +123,7 @@
 
 - week: "KW01"
   misc_lecture:
-    - notes: "Vortrag: Maschinencode-Generierung"
+    - notes: "Vortrag: Generierung von Maschinencode"
     - notes: ">> Alles Gute im neuen Jahr!"
   assignment:
     - topic: "sheet05"
