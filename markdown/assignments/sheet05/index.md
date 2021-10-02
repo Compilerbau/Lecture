@@ -2,13 +2,12 @@
 type: assignment
 title: "Blatt 05: Interpreter"
 author: "BC George, Carsten Gips (FH Bielefeld)"
-points: 10
 hidden: true
 weight: 5
 ---
 
 
-## A5.1: Interpreter (6P)
+## A5.1: Interpreter
 
 Bauen Sie einen Tree-Walking-Interpreter in Ihr Projekt ein:
 
@@ -16,7 +15,7 @@ Bauen Sie einen Tree-Walking-Interpreter in Ihr Projekt ein:
 *   Realisieren Sie die Funktionen `readint` und `writeint` als *native* Funktionen im Interpreter.
 
 
-## A5.2: Interaktivität (4P)
+## A5.2: Interaktivität
 
 Erweitern Sie Ihren Interpreter um Interaktivität:
 
@@ -27,12 +26,3 @@ Erweitern Sie Ihren Interpreter um Interaktivität:
     Einrückung" für den Prompt als visuelles Feedback für den User
 
 Sie können sich hier am [Interpreter für Lox](https://craftinginterpreters.com/a-tree-walk-interpreter.html) orientieren.
-
-
-
-
-
-{{% challenges %}}
-## Bonus: Wuppie (2P)
-Erstellen Sie ...
-{{% /challenges %}}

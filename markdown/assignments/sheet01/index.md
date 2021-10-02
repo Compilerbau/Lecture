@@ -2,13 +2,12 @@
 type: assignment
 title: "Blatt 01: Scanner und Parser"
 author: "BC George, Carsten Gips (FH Bielefeld)"
-points: 10
 hidden: true
 weight: 1
 ---
 
 
-## A1.1: Grammatik (3P)
+## A1.1: Grammatik
 
 Modifizieren Sie die Grammatik für [**Small C**](https://medium.com/\@efutch/a-small-c-language-definition-for-teaching-compiler-design-b70198531a2f)
 folgendermaßen:
@@ -32,13 +31,13 @@ folgendermaßen:
     dies auf die erlaubten Programme hat.
 
 
-## A1.2: Scanner (2P)
+## A1.2: Scanner
 
 Entwickeln Sie einen Scanner (Lexer) für Ihren Compiler. Nutzen Sie keinen Scanner-Generator (manuelle
 Implementierung gesucht).
 
 
-## A1.3: Parser (3P)
+## A1.3: Parser
 
 Entwickeln Sie einen LL-Parser für Ihre Grammatik. Nutzen Sie keinen Parser-Generator (manuelle
 Implementierung gesucht).
@@ -48,7 +47,7 @@ Implementierung gesucht).
 *   Bauen Sie einen AST auf.
 
 
-## A1.4: Visualisierung des AST (2P)
+## A1.4: Visualisierung des AST
 
 Visualisieren Sie Ihren AST mit DOT:
 
@@ -57,12 +56,3 @@ Visualisieren Sie Ihren AST mit DOT:
 
 Analysieren Sie die Grammatik, die dem DOT-System zugrunde liegt und programmieren Sie für Ihren Parser
 eine Ausgabefunktion, die den AST als DOT-Code ausgibt.
-
-
-
-
-
-{{% challenges %}}
-## Bonus: Wuppie (2P)
-Erstellen Sie ...
-{{% /challenges %}}
