@@ -8,15 +8,10 @@ weight: 1
 ---
 
 
-Schreiben Sie sukzessive über das Semester Ihren eigenen Compiler/Interpreter für ein C-Derivat ("*Small C*").
-
-Machen Sie sich mit **Small C**  vertraut:
-[https://medium.com/\@efutch/a-small-c-language-definition-for-teaching-compiler-design-b70198531a2f](https://medium.com/\@efutch/a-small-c-language-definition-for-teaching-compiler-design-b70198531a2f)
-
-
 ## A1.1: Grammatik (3P)
 
-Modifizieren Sie die Grammatik für *Small C* folgendermaßen:
+Modifizieren Sie die Grammatik für [**Small C**](https://medium.com/\@efutch/a-small-c-language-definition-for-teaching-compiler-design-b70198531a2f)
+folgendermaßen:
 
 1.  Entfernen Sie folgende Elemente:
     *   die `for`-Schleife
