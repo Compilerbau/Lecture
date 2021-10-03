@@ -10,4 +10,4 @@ weight: 1
 Was ist ein Compiler? Welche Bausteine lassen sich identifizieren, welche Aufgaben haben diese?
 
 
-{{< children description="true" showhidden="true" >}}
+{{< children showhidden="true" >}}
