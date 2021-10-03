@@ -11,12 +11,12 @@
 
 \begin{lstlisting} [mathescape, backgroundcolor=\color{lightgray},
     basicstyle=\scriptsize\ttfamily]
-    $ Q' = \{\{q_0\}\} $;
-    for each state q in Q' do
-      for each a $ \in \Sigma$ do
-        s = {p | $\delta$(r, a) = p, r $ \in $ q}
-        Q' = Q' $\cup$ {s}
-        $\delta$'(q,a) = s
+    $ Q' = \{\{q_0\}\} $
+    for each q in Q':
+      for each a $ \in \Sigma$:
+        n = {p | $\delta$(r, a) = p, r $ \in $ q}
+        Q' = Q' $\cup$ {n}
+        $\delta$'(q,a) = n
     F' = {q $\in$ Q' | q $\cap$ F $\neq$ $\emptyset$}
     {p,q} ->  pq //Umbenennung
 \end{lstlisting}
