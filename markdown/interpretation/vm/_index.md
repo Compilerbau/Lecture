@@ -1,13 +1,16 @@
 ---
 chapter: true
-title: "Bytecode und Virtuelle Maschinen"
+title: "Bytecode und Virtuelle Maschinen, Garbage Collection"
+menuTitle: "Bytecode/VM , Garbage Collection"
 weight: 4
 ---
 
 
 # Bytecode und Virtuelle Maschinen
 
-allgemeine einleitende Worte ...
+-- Vortragsthema --
 
 
-{{< children showhidden="true" >}}
+# Garbage Collection
+
+-- Vortragsthema --
