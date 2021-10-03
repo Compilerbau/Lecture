@@ -14,7 +14,7 @@ quizzes:
   - link: XYZ
     name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
 assignments:
-  - topic: blatt01
+
 
 attachments:
   - link: https://www.fh-bielefeld.de
