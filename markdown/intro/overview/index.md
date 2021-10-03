@@ -9,10 +9,10 @@ readings:
   - key: "Grune2012"
     comment: "Kapitel 1 Introduction"
 youtube:
-  - id: TODO
+  - id: zpELDC_3G7Q
 fhmedia:
-  - link: TODO
-    name: "TODO"
+  - link: "https://www.fh-bielefeld.de/medienportal/m/ec65309e6ba36d1d63e1aa8523f1f06b96af927d88c547083f1960ebf716e9d121701813bc1972dcf83779a007a62f839bf97f19bff3abc22c60dae523be7c0e"
+    name: "Direktlink FH-Medienportal: CB Überblick"
 ---
 
 
