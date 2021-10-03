@@ -10,10 +10,10 @@ readings:
   - key: "Grune2012"
     comment: "Kapitel 1 Introduction"
 youtube:
-  - id: TODO
+  - id: prsc8cf4cJ8
 fhmedia:
-  - link: TODO
-    name: "TODO"
+  - link: "https://www.fh-bielefeld.de/medienportal/m/00833ded94b0af9d20d6dc00034aeca1c2bcbbf42a8066615de06619fbd02206dfbac4a0cb447cf3cc08b615d818d49ee11cb187887eba435e81f09e6b142a9a"
+    name: "Direktlink FH-Medienportal: CB Programmiersprachen"
 ---
 
 
