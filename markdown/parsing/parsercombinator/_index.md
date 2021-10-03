@@ -1,7 +1,7 @@
 ---
 chapter: true
 title: "PEG-Parser, Pratt-Parser und Parser Combinators"
-weight: 8
+weight: 7
 ---
 
 
