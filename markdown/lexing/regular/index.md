@@ -10,16 +10,6 @@ readings:
   - key: "Torczon2012"
     comment: "Kapitel 2"
   - key: "Parr2014"
-quizzes:
-  - link: XYZ
-    name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
-assignments:
-
-
-attachments:
-  - link: https://www.fh-bielefeld.de
-    name: "Extra Material, e.g. annotated slides `...`{=markdown} Use This As Link Text"
-sketch: true
 ---
 
 
