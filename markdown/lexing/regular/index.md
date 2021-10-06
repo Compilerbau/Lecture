@@ -121,7 +121,7 @@ Wir konstruieren einen DFA $A' =  (Q', \Sigma, \delta ', q_0, F')$ wie folgt:
 
 \bigskip
 
-![Konvertierung NFA in DFA](images/nfa2dfa.png)
+![Konvertierung NFA in DFA](images/nfa2dfa.png){width="45%"}
 
 
 
@@ -132,6 +132,8 @@ $\delta$          |     a     |        b
 $\rightarrow q_0$ | $\{q_0\}$ | $\{q_1, q_2\}$
             $q_1$ | $\{q_2\}$ | $\{q_1\}$
            *$q_2$ |     -     | $\{q_0, q_2\}$
+
+
 
 $\delta$'               | a              | b
 :-----------------------|:---------------|:-------------------
@@ -148,7 +150,7 @@ Ist ist der DFA $A$ nicht vollständig, wird ein Fehlerzustand $q_e$, der kein E
 
 Dann wird eine Matrix generiert, die für alle Zustandspaare sagt, ob die beiden Zustände zu einem verschmelzen können.
 
-![DFA Minimierung](images/minimize_dfa.png)
+![DFA Minimierung](images/minimize_dfa.png){width="45%"}
 
 # Reguläre Ausdrücke
 
