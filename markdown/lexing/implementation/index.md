@@ -106,7 +106,7 @@ erledigt werden könnte ...
 
 ## Erkennung mit RE und DFA
 
-![](images/lexer/lexer.png)
+![](images/lexer.png)
 
 ::: notes
 Die obige Skizze ist eine Kurzzusammenfassung der Theorie-Vorlesung in der
