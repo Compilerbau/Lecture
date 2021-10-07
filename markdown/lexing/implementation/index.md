@@ -106,7 +106,7 @@ erledigt werden könnte ...
 
 ## Erkennung mit RE und DFA
 
-![Erkennung mit RE und DFA](images/lexer/lexer)\
+![](images/lexer/lexer.png)
 
 ::: notes
 Die obige Skizze ist eine Kurzzusammenfassung der Theorie-Vorlesung in der
@@ -186,7 +186,7 @@ Lexem wird als Attribut direkt gesetzt. Anderenfalls lag ein Fehler vor.
 *Anmerkung*: Diese Implementierung ist generisch: Wenn man im Code die
 direkte Nennung des akzeptierenden Zustands "`s2`" durch einen Vergleich
 mit einer Menge aller akzeptierender Zustände ersetzt ("`state == s2`"
-\blueArrow "`state in acceptedStates`"), bestimmen nur die Tabellen die
+=> "`state in acceptedStates`"), bestimmen nur die Tabellen die
 konkrete Funktionsweise.
 
 Die Tabellen können allerdings schnell sehr groß werden, insbesondere die
@@ -272,7 +272,7 @@ def nextToken():
             ...
     return Token(EOF_Type, "<EOF>")
 
-def match(c):   # lookahead one character
+def match(c):   # Lookahead: Ein Zeichen
     consume()
     if (peek == c): return True
     else: rollBack(); return False
@@ -308,7 +308,7 @@ Dazu nutzt man zwei `char`-Puffer mit jeweils der Länge $N$, wobei $N$ der
 Länge eines Disk-Blocks entsprechen sollte.
 :::
 
-![Doppel-Puffer](images/doublebuffer)\
+![](images/doublebuffer.png)
 
 
 ```python
@@ -377,7 +377,7 @@ dem Parser überlassen.
 1.  Schlüsselwörter
     *   Ein eigenes Token (RE/DFA) für jedes Schlüsselwort, oder
     *   Erkennung als Name und Vergleich mit Wörterbuch
-        [und nachträgliche Korrektur des Tokentyps (\blueArrow siehe B02 :-)]{.notes}
+        [und nachträgliche Korrektur des Tokentyps (=> siehe `["B01"]({{<ref "sheet01" >}})`{=markdown} :-)]{.notes}
 
     ::: notes
     Wenn Schlüsselwörter über je ein eigenes Token abgebildet werden, benötigt
@@ -433,7 +433,7 @@ Interpunktions-Token) kann man sich das Attribut auch sparen, da das Lexem
 durch den Tokennamen eindeutig rekonstruierbar ist.
 
 | Token     | Beschreibung                                         | Beispiel-Lexeme      |
-| :-------- | :--------------------------------------------------- | :------------------- |
+|:----------|:-----------------------------------------------------|:---------------------|
 | `if`      | Zeichen `i` und `f`                                  | `if`                 |
 | `relop`   | `<` oder `>` oder `<=` oder `>=` oder `==` oder `!=` | `<`, `<=`            |
 | `id`      | Buchstabe, gefolgt von Buchstaben oder Ziffern       | `pi`, `count`, `x3`  |
@@ -465,7 +465,7 @@ werden.
 
 \bigskip
 
-\blueArrow Was tun, wenn keines der Pattern auf den Anfang des Eingabestroms passt?
+=> Was tun, wenn keines der Pattern auf den Anfang des Eingabestroms passt?
 
 \bigskip
 \pause
