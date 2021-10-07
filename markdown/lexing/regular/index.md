@@ -150,7 +150,7 @@ Ist ist der DFA $A$ nicht vollständig, wird ein Fehlerzustand $q_e$, der kein E
 
 Dann wird eine Matrix generiert, die für alle Zustandspaare sagt, ob die beiden Zustände zu einem verschmelzen können.
 
-![DFA Minimierung](images/minimize_dfa.png){width="45%"}
+![DFA Minimierung](images/minimize_dfa.png){width="50%"}
 
 # Reguläre Ausdrücke
 
