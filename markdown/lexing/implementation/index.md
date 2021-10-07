@@ -11,18 +11,15 @@ readings:
   - key: "Mogensen2017"
     comment: "Kapitel 1 (insbesondere Abschnitt 1.8)"
 quizzes:
-  - link: XYZ
-    name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
+  - link: "TODO"
+    name: "TODO"
 assignments:
-  - topic: blatt01
+  - topic: sheet01
 youtube:
-  - id: XYZ (ID)
-  - link: https://youtu.be/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
+  - id: TODO
 fhmedia:
-  - link: https://www.fh-bielefeld.de/medienportal/m/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
-sketch: true
+  - link: "TODO"
+    name: "TODO"
 ---
 
 
@@ -158,7 +155,7 @@ und damit den Kreis schließen :-)
 
 ## Tabellenbasierte Implementierung
 
-**TODO Code** 
+**TODO Code**
 
 ::: notes
 Der dargestellte Code implementiert direkt den DFA zur Erkennung von
@@ -212,7 +209,7 @@ summieren kann.
 
 Die Lösung: Umsetzung der Tabelle direkt in Code ...
 
-**TODO Code** 
+**TODO Code**
 
 Durch die direkte Kodierung der Tabellen in Form von Sprungzielen für
 `goto`-Befehle spart man sich die Formulierung der Tabellen und den Zugriff
@@ -376,7 +373,7 @@ dem Parser überlassen.
 
 ## Vermeidung von (zuviel) Roll-Back
 
-**TODO** 
+**TODO**
 
 ## Typische Muster für Erstellung von Token
 
