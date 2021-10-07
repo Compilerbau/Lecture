@@ -10,9 +10,6 @@ readings:
     comment: "Kapitel 2"
   - key: "Mogensen2017"
     comment: "Kapitel 1 (insbesondere Abschnitt 1.8)"
-quizzes:
-  - link: "TODO"
-    name: "TODO"
 assignments:
   - topic: sheet01
 youtube:
