@@ -68,7 +68,25 @@ Wir spendieren den DFAs einen möglichst einfachen, aber beliebig großen, Speic
 
 ## Kellerautomaten (Push-Down-Automata, PDAs)
 
-TODO
+**Def.:** Ein Kellerautomat (PDA) $P = (Q,\ \Sigma,\ \Gamma,\  \delta,\ q_0,\ \perp,\ F)$
+ist ein Quintupel mit:
+
+\medskip
+\begin{tabular}{lp{11 cm}}
+Q: & eine endliche Menge von Zuständen\\
+$\Sigma$: & eine endliche Menge von Eingabesymbolen\\
+$\Gamma$: & ein endliches Kelleralphabet\\
+$\delta$: & die Übergangsfunktion\\
+&$\delta$ : Q $\times$ $\Sigma$ $\cup$ $\{\epsilon\}$ $\times \Gamma \to 2^{Q \times
+\Gamma^*{}}$ \\
+$q_0$:& der Startzustand\\
+$\perp \in \Gamma$: &  der anfängliche Kellerinhalt, symbolisiert den leeren\\
+& Keller ($\perp$ = bottom)\\
+F $\subseteq$ Q: & die Menge von Endzuständen
+\end{tabular}
+
+Ein PDA ist per Definition nichtdeterministisch und kann spontane Zustandsübergänge durchführen.
+
 
 ## Was kann man damit akzeptieren?
 
@@ -78,11 +96,8 @@ Bei jedem Zustandsübergang wird ein Zeichen (oder $\epsilon$) aus der Eingabe g
 
 ## Beispiel
 
-Ein PDA für $L=\{ww^{R}\mid w\in \{a,b\}^{\ast}\}$:
 
-\bigskip
-
-TODO
+![Ein PDA für $L=\{ww^{R}\mid w\in \{a,b\}^{\ast}\}$](images/pda2.png){width="45%"}
 
 
 ## Konfigurationen von PDAs
@@ -121,7 +136,7 @@ induktiv wie folgt:
 
 $(q, xw, \alpha \gamma) \overset{\ast}{\vdash}(p, yw, \beta\gamma)$
 
-**Satz:** Sei $P = (Q, \Sigma, \Gamma, \gamma, q_0, \perp, F)$ ein PDA und $(q,xw,\alpha) \overset{\ast}{\vdash} 
+**Satz:** Sei $P = (Q, \Sigma, \Gamma, \gamma, q_0, \perp, F)$ ein PDA und $(q,xw,\alpha) \overset{\ast}{\vdash}
 (p,y w, \beta)$.
 
 Dann gilt: $(q, x, a) \overset{\ast}{\vdash} (p, y, \beta)$
@@ -276,7 +291,7 @@ Sie sind nicht abgeschlossen unter
 
 ## Syntax
 
-TODO
+Wir verstehen unter Syntax eine Menge von Regeln, die die Struktur von Daten (z. B. Programmen) bestimmen.
 
 
 ## Ergebnisse der Syntaxanalyse
@@ -314,15 +329,7 @@ $\Rightarrow$ Es gibt keinen generellen Algorithmus, um Grammatiken eindeutig zu
 
 **Def.:** Eine kontextfreie Grammatik $G=(N, T, P, S)$ heißt *reduziert*, wenn es keine nutzlosen oder unerreichbaren Nichtterminale in *N* gibt.
 
-Bevor mit einer Grammatik weitergearbeitet wird, müssen alle nutzlosen oder unerreichbaren Symbole eliminiert werden.
-
-Wir betrachten ab jetzt nur reduzierte Grammatiken.
-
-
-## Algorithmus zur Reduzierung von Grammatiken
-
-Übungsaufgabe
-
+Bevor mit einer Grammatik weitergearbeitet wird, müssen erst alle nutzlosen und dann alle unerreichbaren Symbole eliminiert werden. Wir betrachten ab jetzt nur reduzierte Grammatiken.
 
 
 # Top-Down-Analyse
@@ -399,7 +406,12 @@ Welche Produktion nehmen?
 
 Wir brauchen die "terminalen k-Anfänge" von Ableitungen von Nichtterminalen, um eindeutig die nächste zu benutzende Produktion festzulegen. $k$ ist dabei die Anzahl der Vorschautoken.
 
-TODO
+**Def.:** Wir definieren $First$ - Mengen einer Grammatik wie folgt:
+
+*   $a \in T^*, |a| \leq k: {First}_k (a) = \{a\}$
+*   $a \in T^*, |a| > k: {First}_k (a) = \{v \in T^* \mid a = vw, |v| = k\}$
+*   $A \in (N \cup T)^* \backslash T^*: {First}_k (A) = \{v \in T^* \mid  A \overset{*}{\Rightarrow} w,$
+ mit $w \in T^*, First_k(w) = \{ v \}\}$
 
 
 ## Linksableitungen
@@ -415,12 +427,27 @@ Manchmal müssen wir wissen, welche terminalen Zeichen hinter einem Nichttermina
 
 **Def.** Wir definieren *Follow* - Mengen einer Grammatik wie folgt:
 
-TODO
+$\forall \beta \in (N \cup T)^*:$
+
+$Follow_k(\beta) = \{w \in T^*\ \mid \exists \alpha, \gamma \in  (N \cup T)^*$ mit
+$S \overset{*}{\Rightarrow}_l \alpha \beta \gamma$ und $w \in First_k(\gamma) \}$
 
 
 ## LL(k)-Grammatiken
 
-**Def.:** TODO
+**Def.:** Eine kontextfreie Grammatik *G = (N, T, P, S)* ist genau dann eine *LL(k)*-Grammatik, wenn für alle Linksableitungen der Form:
+
+$S \overset{*}{\Rightarrow}_l wA \gamma {\Rightarrow}_l w\alpha\gamma \overset{*}{\Rightarrow}_l wx$
+
+und
+
+$S \overset{*}{\Rightarrow}_l wA \gamma {\Rightarrow}_l w\beta\gamma \overset{*}{\Rightarrow}_l wy$
+
+
+mit $(w, x, y \in T^*, \alpha, \beta, \gamma \in (N \cup T)^*, A \in N)$ und $First_k(x) = First_k(y)$ gilt:
+
+$\alpha = \beta$
+
 
 
 ## LL(k)-Grammatiken
@@ -504,6 +531,4 @@ TODO
 
 Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
 
-### Exceptions
-*   TODO (what, where, license)
 :::
