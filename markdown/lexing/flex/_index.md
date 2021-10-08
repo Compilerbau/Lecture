@@ -7,4 +7,4 @@ weight: 4
 
 # Flex: Lexer generieren
 
--- Vortragsthema -- (gehört zu )
+-- Vortragsthema -- (gehört zu ["Flex: Lexer generieren)"]({{<ref "/lexing/flex" >}}))
