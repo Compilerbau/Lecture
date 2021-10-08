@@ -10,9 +10,7 @@ hidden: true
 {{% /k1 %}}
 
 {{% k2 %}}
-*   Erkennen von Lexemen mit RE und DFA
-*   DFA-nahe Implementierung: Tabellenbasiert und direkt codiert
-*   Manuelle Implementierung
+*   Manuelle Implementierung: Rekursiver Abstieg
 *   Umgang mit dem Doppel-Puffer
 *   Varianten bei der Erkennung von Schlüsselwörtern
 *   Fehler und Lösungsansätze in der lexikalischen Analyse
