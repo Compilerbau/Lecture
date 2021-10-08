@@ -294,11 +294,11 @@ erzeugt wird.
 :::
 
 
-## Manuelle Implementierung
+## Manuelle Implementierung: Rekursiver Abstieg
 
 ```python
 def nextToken():
-    while (peek != EOF):  # globale Variable
+    while (peek != EOF):  # globale Variable, über consume()
         switch (peek):
             case ' ': case '\t': case '\n': WS(); continue
             case '[': consume(); return Token(LBRACK, '[')
@@ -391,7 +391,7 @@ Länge eines Disk-Blocks entsprechen sollte.
 ```python
 Input = 0; Fence = 0; fill Buffer[0:n]
 
-def nextChar():     # consume()
+def consume():
     peek = Buffer[Input]
     Input = (Input+1) mod 2n
     if (Input mod n == 0):
@@ -409,9 +409,9 @@ Zunächst wird nur der erste Puffer durch einen passenden Systemaufruf
 gefüllt.
 
 Beim Weiterschalten im simulierten DFA oder im manuell kodierten Lexer
-(Funktionsaufrufe von `nextChar()` bzw. `consume()`) wird das nächste Zeichen
-aus dem ersten Puffer zurückgeliefert. Über die Modulo-Operation bleibt
-der Pointer `Input` immer im Speicherbereich der beiden Puffer.
+(Funktionsaufruf von `consume()`) wird das nächste Zeichen aus dem ersten
+Puffer zurückgeliefert. Über die Modulo-Operation bleibt der Pointer `Input`
+immer im Speicherbereich der beiden Puffer.
 
 Wenn man das Ende des ersten Puffers erreicht, wird der zweite Puffer mit
 einem Systemaufruf gefüllt. Gleichzeitig wird ein Hilfspointer `Fence` auf
@@ -454,7 +454,7 @@ dem Parser überlassen.
 1.  Schlüsselwörter
     *   Ein eigenes Token (RE/DFA) für jedes Schlüsselwort, oder
     *   Erkennung als Name und Vergleich mit Wörterbuch
-        [und nachträgliche Korrektur des Tokentyps (=> siehe `["B01"]({{<ref "sheet01" >}})`{=markdown} :-)]{.notes}
+        [und nachträgliche Korrektur des Tokentyps]{.notes}
 
     ::: notes
     Wenn Schlüsselwörter über je ein eigenes Token abgebildet werden, benötigt
@@ -470,7 +470,8 @@ dem Parser überlassen.
 
 3.  Bezeichner: Ein gemeinsames Token für alle Namen
 
-4.  Zahlen: Ein gemeinsames Token für alle numerischen Konstante  [(ggf. Integer und Float unterscheiden)]{.notes}
+4.  Zahlen: Ein gemeinsames Token für alle numerischen Konstante
+    [(ggf. Integer und Float unterscheiden)]{.notes}
 
     ::: notes
     Für Zahlen führt man oft ein Token "`NUM`" ein. Als Attribut speichert man
