@@ -373,7 +373,7 @@ gelesene Zeichen wieder in den Eingabestrom zurückgelegt werden (`rollBack()`).
 :::
 
 
-## Puffern des Input-Stroms
+## Puffern des Input-Stroms: Double Buffering
 
 ::: notes
 Das Einlesen einzelner Zeichen führt zwar zu eleganten algorithmischen
@@ -381,44 +381,46 @@ Lösungen, ist aber zur Laufzeit deutlich "teurer" als das Einlesen mit
 gepufferten I/O-Operationen, die eine ganze Folge von Zeichen einlesen
 (typischerweise einen ganzen Disk-Block, beispielsweise 4096 Zeichen).
 
-Dazu nutzt man zwei `char`-Puffer mit jeweils der Länge $N$, wobei $N$ der
-Länge eines Disk-Blocks entsprechen sollte.
+Dazu kann man einen Ringpuffer nutzen, den man mit Hilfe von zwei gleich
+großen `char`-Puffern mit jeweils der Länge $N$ simulieren kann. ($N$
+sollte dann der Länge eines Disk-Blocks entsprechen.)
+
+Vergleiche auch [Wikipedia: "Circular Buffer"](https://en.wikipedia.org/wiki/Circular_buffer)
 :::
 
 ![](images/doublebuffer.png)
 
 
 ```python
-Input = 0; Fence = 0; fill Buffer[0:n]
+cur = 0; flag = 0; fill(buffer[0:n])
 
 def consume():
-    peek = Buffer[Input]
-    Input = (Input+1) mod 2n
-    if (Input mod n == 0):
-        fill Buffer[Input:Input+n-1]
-        Fence = (Input+n) mod 2n
-    return peek
+    peek = buffer[cur]
+    cur = (cur+1) mod 2n
+    if (cur mod n == 0):
+        fill(buffer[cur:cur+n-1])
+        flag = (cur+n) mod 2n
 
 def rollBack():
-    if (Input == Fence): raise Error("roll back error")
-    Input = (Input-1) mod 2n
+    if (cur == flag): raise Error("roll back error")
+    cur = (cur-1) mod 2n
 ```
 
 ::: notes
-Zunächst wird nur der erste Puffer durch einen passenden Systemaufruf
+Zunächst wird nur der vordere Pufferteil durch einen passenden Systemaufruf
 gefüllt.
 
 Beim Weiterschalten im simulierten DFA oder im manuell kodierten Lexer
-(Funktionsaufruf von `consume()`) wird das nächste Zeichen aus dem ersten
-Puffer zurückgeliefert. Über die Modulo-Operation bleibt der Pointer `Input`
+(Funktionsaufruf von `consume()`) wird das nächste Zeichen aus dem vorderen
+Pufferteil zurückgeliefert. Über die Modulo-Operation bleibt der Pointer `cur`
 immer im Speicherbereich der beiden Puffer.
 
-Wenn man das Ende des ersten Puffers erreicht, wird der zweite Puffer mit
-einem Systemaufruf gefüllt. Gleichzeitig wird ein Hilfspointer `Fence` auf
-den Anfang des ersten Puffers gesetzt, um Fehler beim Roll-Back zu erkennen.
+Wenn man das Ende des vorderen Puffers erreicht, wird der hintere Puffer mit
+einem Systemaufruf gefüllt. Gleichzeitig wird ein Hilfspointer `flag` auf
+den Anfang des vorderen Puffers gesetzt, um Fehler beim Roll-Back zu erkennen.
 
-Wenn man das Ende des zweiten Puffers erreicht, wird der erste Puffer
-nachgeladen und der Hilfspointer auf den Anfang des zweiten Puffers gesetzt.
+Wenn man das Ende des hinteren Puffers erreicht, wird der vordere Puffer
+nachgeladen und der Hilfspointer auf den Anfang des hinteren Puffers gesetzt.
 
 Im Grunde ist also immer ein Puffer der "Arbeitspuffer" und der andere enthält
 die bereits gelesene (verarbeitete) Zeichenkette. Wenn beim Nachladen weniger
@@ -427,27 +429,22 @@ ein `EOF`. Beim Verarbeiten wird `peek` entsprechend diesen Wert bekommen und
 der Lexer muss diesen Wert abfragen und berücksichtigen.
 
 
-Für das Roll-Back wird der `Input`-Pointer einfach dekrementiert (und mit einer
+Für das Roll-Back wird der `cur`-Pointer einfach dekrementiert (und mit einer
 Modulo-Operation auf den Speicherbereich der beiden Puffer begrenzt). Falls
-dabei der `Fence`-Pointer "eingeholt" wird, ist der `Input`-Pointer durch beide
+dabei der `flag`-Pointer "eingeholt" wird, ist der `cur`-Pointer durch beide
 Puffer zurückgelaufen und es gibt keinen früheren Input mehr. In diesem Fall
 wird entsprechend ein Fehler gemeldet.
 
 
 *Anmerkung*: In der Regel sind die Lexeme kurz und man muss man nur ein bis
-zwei Zeichen im Voraus lesen (vgl. nächsten Abschnitt). Dann ist eine
-Puffergröße von 4096 Zeichen mehr als ausreichend groß und man sollte nicht in
-Probleme laufen. Wenn der nötige Look-Ahead aber beliebig groß werden kann,
-etwa bei Sprachen ohne reservierte Schlüsselwörter, muss man andere Strategien
-verwenden. ANTLR beispielsweise vergrößert in diesem Fall den Puffer dynamisch,
-alternativ könnte man die Auflösung zwischen Schlüsselwörtern und Bezeichnern
-dem Parser überlassen.
+zwei Zeichen im Voraus lesen. Dann ist eine Puffergröße von 4096 Zeichen mehr
+als ausreichend groß und man sollte nicht in Probleme laufen. Wenn der nötige
+Look-Ahead aber beliebig groß werden kann, etwa bei Sprachen ohne reservierte
+Schlüsselwörter, muss man andere Strategien verwenden. ANTLR beispielsweise
+vergrößert in diesem Fall den Puffer dynamisch, alternativ könnte man die
+Auflösung zwischen Schlüsselwörtern und Bezeichnern dem Parser überlassen.
 :::
 
-
-## Vermeidung von (zuviel) Roll-Back
-
-**TODO**
 
 ## Typische Muster für Erstellung von Token
 
@@ -528,8 +525,6 @@ Vorrangregeln bzgl. der Token arbeiten.
 
 
 ## Fehler bei der Lexikalischen Analyse
-
-<!-- XXX auch in Interpreter1 -->
 
 [Problem: Eingabestrom sieht so aus:]{.notes} `fi (a==42) { ... }`
 
@@ -618,9 +613,7 @@ Optionen:
 
 \smallskip
 
-*   Optimierungen
-    *   Puffern mit Doppel-Puffer-Strategie
-    *   Bitmuster zum Vermeiden von zuviel Roll-Back
+*   Optimierungen: Puffern mit Doppel-Puffer-Strategie
 
 \smallskip
 
