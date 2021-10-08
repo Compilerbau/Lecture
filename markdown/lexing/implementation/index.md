@@ -20,10 +20,6 @@ fhmedia:
 ---
 
 
-## Motivation
-Lorem Ipsum. Starte mit H2-Level.
-...
-
 ## Lexer: Erzeugen eines Token-Stroms aus einem Zeichenstrom
 
 \vspace{-20mm}
