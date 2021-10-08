@@ -381,25 +381,25 @@ Dazu kann man einen Ringpuffer nutzen, den man mit Hilfe von zwei gleich
 großen `char`-Puffern mit jeweils der Länge $N$ simulieren kann. ($N$
 sollte dann der Länge eines Disk-Blocks entsprechen.)
 
-Vergleiche auch [Wikipedia: "Circular Buffer"](https://en.wikipedia.org/wiki/Circular_buffer)
+Vergleiche auch [Wikipedia: "Circular Buffer"](https://en.wikipedia.org/wiki/Circular_buffer).
 :::
 
 ![](images/doublebuffer.png)
 
 
 ```python
-cur = 0; flag = 0; fill(buffer[0:n])
+start = 0; end = 0; fill(buffer[0:n])
 
 def consume():
-    peek = buffer[cur]
-    cur = (cur+1) mod 2n
-    if (cur mod n == 0):
-        fill(buffer[cur:cur+n-1])
-        flag = (cur+n) mod 2n
+    peek = buffer[start]
+    start = (start+1) mod 2n
+    if (start mod n == 0):
+        fill(buffer[start:start+n-1])
+        end = (start+n) mod 2n
 
 def rollBack():
-    if (cur == flag): raise Error("roll back error")
-    cur = (cur-1) mod 2n
+    if (start == end): raise Error("roll back error")
+    start = (start-1) mod 2n
 ```
 
 ::: notes
@@ -408,11 +408,11 @@ gefüllt.
 
 Beim Weiterschalten im simulierten DFA oder im manuell kodierten Lexer
 (Funktionsaufruf von `consume()`) wird das nächste Zeichen aus dem vorderen
-Pufferteil zurückgeliefert. Über die Modulo-Operation bleibt der Pointer `cur`
-immer im Speicherbereich der beiden Puffer.
+Pufferteil zurückgeliefert. Über die Modulo-Operation bleibt der Pointer
+`start` immer im Speicherbereich der beiden Puffer.
 
 Wenn man das Ende des vorderen Puffers erreicht, wird der hintere Puffer mit
-einem Systemaufruf gefüllt. Gleichzeitig wird ein Hilfspointer `flag` auf
+einem Systemaufruf gefüllt. Gleichzeitig wird ein Hilfspointer `end` auf
 den Anfang des vorderen Puffers gesetzt, um Fehler beim Roll-Back zu erkennen.
 
 Wenn man das Ende des hinteren Puffers erreicht, wird der vordere Puffer
@@ -425,9 +425,9 @@ ein `EOF`. Beim Verarbeiten wird `peek` entsprechend diesen Wert bekommen und
 der Lexer muss diesen Wert abfragen und berücksichtigen.
 
 
-Für das Roll-Back wird der `cur`-Pointer einfach dekrementiert (und mit einer
+Für das Roll-Back wird der `start`-Pointer einfach dekrementiert (und mit einer
 Modulo-Operation auf den Speicherbereich der beiden Puffer begrenzt). Falls
-dabei der `flag`-Pointer "eingeholt" wird, ist der `cur`-Pointer durch beide
+dabei der `end`-Pointer "eingeholt" wird, ist der `start`-Pointer durch beide
 Puffer zurückgelaufen und es gibt keinen früheren Input mehr. In diesem Fall
 wird entsprechend ein Fehler gemeldet.
 
@@ -436,9 +436,10 @@ wird entsprechend ein Fehler gemeldet.
 zwei Zeichen im Voraus lesen. Dann ist eine Puffergröße von 4096 Zeichen mehr
 als ausreichend groß und man sollte nicht in Probleme laufen. Wenn der nötige
 Look-Ahead aber beliebig groß werden kann, etwa bei Sprachen ohne reservierte
-Schlüsselwörter, muss man andere Strategien verwenden. ANTLR beispielsweise
-vergrößert in diesem Fall den Puffer dynamisch, alternativ könnte man die
-Auflösung zwischen Schlüsselwörtern und Bezeichnern dem Parser überlassen.
+Schlüsselwörtern oder bei Kontext-sensitiven Lexer-Grammatiken (denken Sie etwa
+an die Einrücktiefe bei Python), muss man andere Strategien verwenden. ANTLR
+beispielsweise vergrößert in diesem Fall den Puffer dynamisch, alternativ könnte
+man die Auflösung zwischen Schlüsselwörtern und Bezeichnern dem Parser überlassen.
 :::
 
 
