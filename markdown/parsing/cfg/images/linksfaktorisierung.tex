@@ -1,0 +1,37 @@
+\documentclass[
+    border=0.2cm,
+    convert={density=600}
+]{standalone}
+
+\usepackage{listings}
+\usepackage{standalone}
+\usepackage{xcolor}
+
+\begin{document}
+
+%%
+%% 1. Copy this template into an image folder of your page: "images/my-algorithm.tex".
+%% 2. Paste the algorithm or listing with math escaping here and replace this comment.
+%% 3. Include the image with the same name in your page "index.md": "[My Algorithm](images/my-algorithm.png)".
+%%
+%% When generating the slide sets and the website, "images/my-algorithm.png" is
+%% automatically generated from "images/my-algorithm.tex" during pre-processing.
+%%
+\begin{lstlisting} [mathescape, backgroundcolor=\color{lightgray},
+	basicstyle=\scriptsize\ttfamily]
+for each $X \in N$ 
+	    
+    for each longest prefix $\alpha \neq \epsilon$ of all $X$ - productions 
+    $X \rightarrow \alpha\ {\beta}_1 \mid \alpha\ {\beta}_2 \mid \ldots \mid \alpha\ {\beta}_n \mid \gamma$ with $\gamma \neq \alpha \delta$ for a $\delta \in (N \cup T)^*$
+	    
+        replace the X-productions by
+        $X \rightarrow \beta\  Y $
+        $Y \rightarrow \alpha\ Y \mid \epsilon$
+	     
+	            
+\end{lstlisting}
+\end{document}
+	                 
+replace the $X$-productions by 
+$X \rightarrow \beta \ X'$ and \alpha \mid \gamma$  and $X'\rightarrow \beta_1\ \mid\ \beta_2\ \mid\ \cdots \ \beta_n$ with            
+$X'$ being a new nonterminal	

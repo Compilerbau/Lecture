@@ -1,0 +1,30 @@
+\documentclass[
+    border=0.2cm,
+    convert={density=600}
+]{standalone}
+
+\usepackage{listings}
+\usepackage{standalone}
+\usepackage{xcolor}
+
+\begin{document}
+
+%%
+%% 1. Copy this template into an image folder of your page: "images/my-algorithm.tex".
+%% 2. Paste the algorithm or listing with math escaping here and replace this comment.
+%% 3. Include the image with the same name in your page "index.md": "[My Algorithm](images/my-algorithm.png)".
+%%
+%% When generating the slide sets and the website, "images/my-algorithm.png" is
+%% automatically generated from "images/my-algorithm.tex" during pre-processing.
+%%
+\begin{lstlisting} [mathescape, backgroundcolor=\color{lightgray},
+basicstyle=\scriptsize\ttfamily]
+RecursiveDescent$(X, a)\  // X \in N, a \in T$
+    for a production, $X \rightarrow Y_1 Y_2 \ldots Y_n$
+        for (i = 1 to n)
+            if ($Y_i \in N$)
+                RecursiveDescent$(Y_i,a)$
+            else if $(X_i \neq a)$
+                error
+\end{lstlisting}
+\end{document}
