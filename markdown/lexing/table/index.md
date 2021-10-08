@@ -35,6 +35,7 @@ a= [5  , 6]     ;
 
 \pause
 \bigskip
+\bigskip
 
 ```
 <ID, "a"> <ASSIGN> <LBRACK> <NUM, 5> <COMMA> <NUM, 6> <RBRACK> <SEMICOL>
@@ -133,8 +134,10 @@ Einsatz eines Lexer-Generators). Als typische Implementierungsansätze sollen
 nachfolgend die *tabellenbasierte Implementierung* sowie als etwas schnellere
 Variante die *direkt codierte Implementierung* betrachtet werden. Während diese
 beiden Varianten noch sehr nah an der Simulation eines DFA sind, ist die
-*manuelle Implementierung* noch einfacher in bestehenden Code zu integrieren
-(zum Preis einer erschwerten Änderbarkeit).
+*manuelle Implementierung*
+(vgl. `["Handcodierte Implementierung"]({{<ref "/lexing/recursive" >}})`{=markdown})
+noch einfacher in bestehenden Code zu integrieren (zum Preis einer erschwerten
+Änderbarkeit).
 
 Über die *Kleene's Construction* könnte man aus den DFA wieder *RE* erzeugen
 und damit den Kreis schließen :-)
