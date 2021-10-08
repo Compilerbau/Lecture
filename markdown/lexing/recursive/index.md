@@ -354,10 +354,7 @@ Optionen:
 
 \smallskip
 
-*   Implementierungsansätze:
-    *   Tabellenbasiert oder direkt codiert (DFA-Tabellen)
-    *   Manuell codiert: Funktionen für Token
-    *   Read-Ahead-Token
+*   Implementierungsansaty: Manuell codiert (rekursiver Abstieg)
 
 \smallskip
 

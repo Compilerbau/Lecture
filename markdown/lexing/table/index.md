@@ -296,18 +296,7 @@ erzeugt wird.
 
 \smallskip
 
-*   Implementierungsansätze:
-    *   Tabellenbasiert oder direkt codiert (DFA-Tabellen)
-    *   Manuell codiert: Funktionen für Token
-    *   Read-Ahead-Token
-
-\smallskip
-
-*   Optimierungen: Puffern mit Doppel-Puffer-Strategie
-
-\smallskip
-
-*   Typische Fehler beim Scannen
+*   Implementierungsansatz: Tabellenbasiert (DFA-Tabellen)
 
 
 
