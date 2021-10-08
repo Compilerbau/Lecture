@@ -359,8 +359,8 @@ Optionen:
 
 \smallskip
 
-*   Readahead Token
-*   Optimierungen: Puffern mit Doppel-Puffer-Strategie
+*   Read-Ahead
+*   Puffern mit Doppel-Puffer-Strategie
 
 \smallskip
 
