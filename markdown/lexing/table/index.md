@@ -1,6 +1,7 @@
 ---
 type: lecture-cg
-title: "Tabellenbasierte Implementierung"
+title: "Lexer: Tabellenbasierte Implementierung"
+menuTitle: "Tabellenbasierte Implementierung"
 author: "Carsten Gips (FH Bielefeld)"
 weight: 2
 readings:
