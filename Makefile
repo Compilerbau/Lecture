@@ -76,7 +76,6 @@ SRC   += lexing/regular
 SRC   += lexing/table
 SRC   += lexing/recursive
 SRC   += lexing/flex
-SRC   += lexing/implementation
 SRC   += parsing/cfg
 SRC   += parsing/ll-parser
 SRC   += parsing/ll-advanced
