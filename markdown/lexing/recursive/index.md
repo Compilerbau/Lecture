@@ -1,8 +1,8 @@
 ---
 type: lecture-cg
-title: "Lexer: Implementierungen"
+title: "Handcodierte Implementierung"
 author: "Carsten Gips (FH Bielefeld)"
-weight: 2
+weight: 3
 readings:
   - key: "Aho2008"
     comment: " Abschnitt 2.6 und Kapitel 3"
