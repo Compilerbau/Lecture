@@ -16,8 +16,8 @@ assignments:
 youtube:
   - id: N0WJQ4UkXkM
 fhmedia:
-  - link: "TODO"
-    name: "TODO"
+  - link: "https://www.fh-bielefeld.de/medienportal/m/17a4958b1d4c0cf3488a7df02743806a33951d49f1cc22bccbdab7ad873738f0a24d0ad83f13c6d00ad48a669758659fde7a7e2ce19e793fe6f412e35ea0ee6d"
+    name: "Direktlink FH-Medienportal: CB Handcodierte Lexer"
 ---
 
 
