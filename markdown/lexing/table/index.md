@@ -1,6 +1,6 @@
 ---
 type: lecture-cg
-title: "Tabellenbasierte Implementierungen"
+title: "Tabellenbasierte Implementierung"
 author: "Carsten Gips (FH Bielefeld)"
 weight: 2
 readings:

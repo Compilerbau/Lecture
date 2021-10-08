@@ -33,7 +33,7 @@ a= [5  , 6]     ;
 
 [erstellt der Lexer (oder auch Scanner genannt) eine Sequenz von Token:]{.notes}
 
-\pause
+\bigskip
 \bigskip
 
 ```
@@ -284,10 +284,11 @@ Dieses Problem kann erst in der nächsten Stufe sinnvoll erkannt und behoben
 werden.
 :::
 
-\bigskip
+\smallskip
 
 => Was tun, wenn keines der Pattern auf den Anfang des Eingabestroms passt?
 
+\bigskip
 \bigskip
 \pause
 
@@ -354,10 +355,11 @@ Optionen:
 
 \smallskip
 
-*   Implementierungsansaty: Manuell codiert (rekursiver Abstieg)
+*   Implementierungsansatz: Manuell codiert (rekursiver Abstieg)
 
 \smallskip
 
+*   Readahead Token
 *   Optimierungen: Puffern mit Doppel-Puffer-Strategie
 
 \smallskip
