@@ -293,6 +293,8 @@ Sie sind nicht abgeschlossen unter
 
 Wir verstehen unter Syntax eine Menge von Regeln, die die Struktur von Daten (z. B. Programmen) bestimmen.
 
+Syntaxanalyse ist die Bestimmung, ob Eingabedaten einer vorgegebenen Syntax entsprechen.
+
 
 ## Ergebnisse der Syntaxanalyse
 
@@ -336,56 +338,65 @@ Bevor mit einer Grammatik weitergearbeitet wird, müssen erst alle nutzlosen und
 
 ## Rekursiver Abstieg
 
-Hier ist ein einfacher Algorithmus, der (indeterministisch) einen Ableitungsbaum vom Nonterminal *A* von oben nach unten aufbaut:
+Hier ist ein einfacher Algorithmus, der (indeterministisch) einen Ableitungsbaum vom Nonterminal *X* von oben nach unten aufbaut:
 
-TODO
+** Eingabe: Ein Nichtterminal $X$ und das nächste zu verarbeitende Eingabezeichen $a$.
+
+![Recursive Descent-Algorithmus](images/recursive_descent.png){width="45%"}
 
 
 ## Grenzen des Algorithmus
 
 Was ist mit
 
-1) $A \rightarrow a \alpha \mid b \beta$
-2) $A \rightarrow B\alpha \mid C \beta$
-3) $A \rightarrow B \alpha \mid B \beta$
-4) $A \rightarrow  B \alpha \mid C \beta$ und $C\rightarrow B$
-5) $A \rightarrow A \beta$
-6) $A \rightarrow B \alpha$ und $B \rightarrow A \beta$
+1) $X \rightarrow a \alpha \mid b \beta$
+2) $X \rightarrow B\alpha \mid C \beta$
+3) $X \rightarrow B \alpha \mid B \beta$
+4) $X \rightarrow  B \alpha \mid C \beta$ und $C\rightarrow B$
+5) $X \rightarrow X \beta$
+6) $X \rightarrow B \alpha$ und $B \rightarrow A \beta$
 
 \vspace{2cm}
 
-$A, B, C, D \in N^{\ast};  a, b, c, d \in T^{\ast};  \beta$, $\alpha, \beta \in (N \cup T)^{\ast}$
+$X, B, C, D \in N^{\ast};  a, b, c, d \in T^{\ast};  \beta$, $\alpha, \beta \in (N \cup T)^{\ast}$
 
 
 ## Linksfaktorisierung
-$A \rightarrow BC\  \vert \  BD$
+$X \rightarrow BC\  \vert \  BD$
 \vfill
 \vfill
 
 ## Linksfaktorisierung
 
-Algorithmus
+**Eingabe:** Eine  Grammatik G = (N, T, P, S)
 
-TODO
+**Ausgabe:** Eine äquivalente links-faktorisierte Grammatik $G'$
+
+![Algorithmus zur Linksfaktorisierung](images/linksfaktorisierung.png){width="85%"}
+
 
 
 ## Linksrekursion
 
-**Def.:** Eine Grammatik $G=(N, T, P, S)$ heißt *linksrekursiv*, wenn sie ein Nichtterminal *A* hat, für das es eine Ableitung $A \overset{+}{\Rightarrow} A\ \alpha$ für ein $\alpha \in (N \cup T)^{\ast}$ gibt.
+**Def.:** Eine Grammatik $G=(N, T, P, S)$ heißt *linksrekursiv*, wenn sie ein Nichtterminal *X* hat, für das es eine Ableitung $X \overset{+}{\Rightarrow} X\ \alpha$ für ein $\alpha \in (N \cup T)^{\ast}$ gibt.
 
 Linksrekursion gibt es
 
-*direkt*: $A \rightarrow A \alpha$
+*direkt*: $X \rightarrow X \alpha$
 
 und
 
-*indirekt*: $A \rightarrow \ldots \rightarrow \ldots \rightarrow A \alpha$
+*indirekt*: $X \rightarrow \ldots \rightarrow \ldots \rightarrow X \alpha$
 
 ## Entfernung von direkter Linksrekursion {.fragile}
 
 Algorithmus
 
-TODO
+**Eingabe:** Eine  Grammatik G = (N, T, P, S)
+
+**Ausgabe:** Eine äquivalente links-faktorisierte Grammatik $G'$ ohne Linksrekursion
+
+![Algorithmus zur Linksfaktorisierung](images/linksfaktorisierung.png){width="85%"}
 
 
 ## Entfernung von (in)direkter Linksrekursion {.fragile}
