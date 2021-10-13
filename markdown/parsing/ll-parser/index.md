@@ -115,9 +115,9 @@ Dabei ist `lookahead` eine globale Variable, die das zu betrachtende Token enth�
 (vergleichbar mit `peek` beim Lexer).
 
 Das Prädikat `predicting_a` soll andeuten, dass man mit dem aktuellen Token eine
-Vorhersage für die Regel `a` versucht (hier kommen die FIRST- und `FOLLOW`-Mengen
-ins Spiel ...). Wenn das der Fall ist, springt man entsprechend in die Funktion/Methode
-`a()`.
+Vorhersage für die Regel `a` versucht (hier kommen die FIRST- und FOLLOW-Mengen
+ins Spiel ...). Wenn das der Fall ist, springt man entsprechend in die Funktion
+bzw. Methode `a()`.
 :::
 
 

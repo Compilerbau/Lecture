@@ -7,10 +7,11 @@ hidden: true
 
 ![](images/architektur_cb_parser.png)
 
-LL-Parser können direkt aus einer Grammatik implementiert werden: Zu jeder Produktionsregel
-erstellt man eine gleichnamige Funktion. Wenn in der Produktionsregel andere Regeln "aufgerufen"
-werden, erfolgt in der Funktion an dieser Stelle der entsprechende Funktionsaufruf. Bei
-Terminalsymbolen wird das erwartete Token geprüft.
+LL-Parser können über einen "rekursiven Abstieg" direkt aus einer Grammatik implementiert werden:
+-   Zu jeder Produktionsregel erstellt man eine gleichnamige Funktion.
+-   Wenn in der Produktionsregel andere Regeln "aufgerufen" werden, erfolgt in der Funktion an
+    dieser Stelle der entsprechende Funktionsaufruf.
+-   Bei Terminalsymbolen wird das erwartete Token geprüft.
 
 Dabei findet man wie bereits im Lexer die Funktionen `match` und `consume`, die sich hier aber
 auf den Tokenstrom beziehen. LL(1)-Parser schauen dabei immer das nächste Token an, LL(k) haben
