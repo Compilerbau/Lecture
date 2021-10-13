@@ -49,6 +49,14 @@ def consume():
         end = (start+n) mod 2n
 ```
 
+::: notes
+Erinnerung: Der Lexer arbeitet direkt auf dem Zeichenstrom und versucht über längste Matches daraus
+einen Tokenstrom zu erzeugen. Dabei wird immer das nächste Zeichen angeschaut (Funktion `match`) und
+mit `consume` das aktuelle Zeichen "verbraucht" und das nächste Zeichen geladen. Hier kann man über
+die Doppel-Puffer-Strategie das Einlesen einzelner Zeichen aus einer Datei vermeiden und immer blockweise
+in den Puffer einlesen.
+:::
+
 
 ## Grundidee LL-Parser
 
@@ -63,11 +71,10 @@ r : X s ;
 
 [LL-Implementierung:]{.notes}
 
-```java
-void r() {
-    match(X);
-    s();
-}
+```python
+def r():
+    match(X)
+    s()
 ```
 
 ::: notes
@@ -77,8 +84,8 @@ void r() {
     *   Anderenfalls löst `match()` eine Exception aus
 *   Referenzen auf Regeln `s` werden durch Methodenaufrufe `s()` aufgelöst
 
-*Erinnerung*: In ANTLR werden Parser-Regeln mit einem kleinen und Lexer-Regeln mit einem
-großen Anfangsbuchstaben geschrieben.
+*Erinnerung*: In ANTLR werden Parser-Regeln (non-Terminale) mit einem kleinen und Lexer-Regeln
+(Terminale/Token) mit einem großen Anfangsbuchstaben geschrieben.
 :::
 
 
@@ -89,21 +96,28 @@ großen Anfangsbuchstaben geschrieben.
 a | b | c
 ```
 
-[wird zu einem `switch`-Konstrukt aufgelöst:]{.notes}
+[kann zu einem `switch`-Konstrukt aufgelöst werden:]{.notes}
 
 \bigskip
 \bigskip
 
-```java
-switch (lookahead) {
+```python
+switch (lookahead):
     case predicting_a:
         a(); break;
     case predicting_b:
         b(); break;
     ...
-    default: throw new Exception();
-}
+    default: raise Error()
 ```
+
+Dabei ist `lookahead` eine globale Variable, die das zu betrachtende Token enthält
+(vergleichbar mit `peek` beim Lexer).
+
+Das Prädikat `predicting_a` soll andeuten, dass man mit dem aktuellen Token eine
+Vorhersage für die Regel `a` versucht (hier kommen die FIRST- und `FOLLOW`-Mengen
+ins Spiel ...). Wenn das der Fall ist, springt man entsprechend in die Funktion/Methode
+`a()`.
 :::
 
 
@@ -118,8 +132,8 @@ switch (lookahead) {
 
 \bigskip
 
-```java
-if (lookahead.predicting_T) { match(T); }
+```python
+if lookahead.predicting_T: match(T)
 ```
 :::
 
@@ -131,21 +145,21 @@ if (lookahead.predicting_T) { match(T); }
 (T)+
 ```
 
-[wird zu einer `do-while`-Schleife:]{.notes}
+[wird zu einer `do-while`-Schleife (mind. ein Durchlauf):]{.notes}
 
 \bigskip
 
-```java
+```python
 do {
-    match(T);
-} while (lookahead.predicting_T);
+    match(T)
+} while lookahead.predicting_T
 ```
 :::
 
 
 ## LL(1)-Parser
 
-[Parsen von Sequenzen wie `[A,B,C]` oder `[A,[B,C],D]`]{.notes}
+[Beispiel: Parsen von Listen, also Sequenzen wie `[A,B,C]` oder `[A,[B,C],D]`:]{.notes}
 
 ```yacc
 list     : '[' elements ']' ;
@@ -171,7 +185,7 @@ def list():
     match(LBRACK); elements(); match(RBRACK);
 def elements():
     element()
-    while lookahead == COMMA:  # globale Variable/Attribut
+    while lookahead == COMMA:  # # globale Variable, über consume()
         match(COMMA); element()
 def element():
     if lookahead == ID: match(ID)
