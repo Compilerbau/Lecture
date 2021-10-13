@@ -211,10 +211,10 @@ def memoize(memo, s, failed):
     memo.put(s, stop)
 
 def alreadyParsed(memo):
-    idx = memo.get(start)
-    if idx == null: return False
-    if idx == -1: raise Exception()
-    start = idx  # Vorspulen
+    i = memo.get(start)
+    if i == null: return False
+    if i == -1: raise Exception()
+    start = i  # Vorspulen
     return True
 ```
 
