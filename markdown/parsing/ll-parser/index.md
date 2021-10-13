@@ -159,13 +159,13 @@ while True:
 
 ## LL(1)-Parser
 
-[Beispiel: Parsen von Listen, also Sequenzen wie `[A,B,C]` oder `[A,[B,C],D]`:]{.notes}
+[Beispiel: Parsen von Listen, also Sequenzen wie `[1,2,3,4]`:]{.notes}
 
 ```yacc
 list     : '[' elements ']' ;
-elements : element (',' element)* ;
-element  : ID | list ;
-ID       : ('a'..'z' | 'A'..'Z')+ ;
+elements : INT (',' INT)* ;
+
+INT      : ('0'..'9')+ ;
 ```
 
 ::: notes
@@ -179,18 +179,16 @@ um eine Entscheidung zu treffen.
 
 \pause
 \bigskip
+\bigskip
 
 ```python
 def list():
     match(LBRACK); elements(); match(RBRACK);
+
 def elements():
-    element()
-    while lookahead == COMMA:  # # globale Variable, über consume()
-        match(COMMA); element()
-def element():
-    if lookahead == ID: match(ID)
-    elif lookahead == LBRACK: list()
-    else: raise Exception()
+    match(INT)
+    while lookahead == COMMA:  # globale Variable, über consume()
+        match(COMMA); match(INT)
 ```
 
 
@@ -200,7 +198,6 @@ def element():
 def match(x):
     if lookahead == x: consume()
     else: raise Exception()
-
 
 def consume():
     lookahead = lexer.nextToken()
@@ -386,7 +383,7 @@ def lookahead(i):
     return lookahead[(start+i-1) % k]  # i==1: start
 ```
 
-[Tafel: Beispiel mit Ringpuffer: k=3 und "[a,b,c,d]"]{.bsp}
+[Tafel: Beispiel mit Ringpuffer: k=3 und "[1,2,3,4,5]"]{.bsp}
 
 
 ## Wrap-Up
