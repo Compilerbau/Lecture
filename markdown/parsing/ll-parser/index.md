@@ -15,7 +15,7 @@ readings:
   - key: "Grune2012"
     comment: "Abschnitte 3.1 bis (einschließlich) 3.4"
 assignments:
-  - topic: blatt01
+  - topic: sheet01
 youtube:
   - id: TODO
 fhmedia:
@@ -169,9 +169,9 @@ ID       : ('a'..'z' | 'A'..'Z')+ ;
 ```
 
 ::: notes
-Formal berechnet man die Lookahead-Mengen mit `FIRST` und `FOLLOW`. Praktisch betrachtet
-kann man sich fragen, welche(s) Token eine Phrase in der aktuellen Alternative starten
-können.
+Formal berechnet man die Lookahead-Mengen mit `FIRST` und `FOLLOW`, um eine Entscheidung
+für die nächste Regel zu treffen. Praktisch betrachtet kann man sich fragen, welche(s)
+Token eine Phrase in der aktuellen Alternative starten können.
 
 Für LL(1)-Parser betrachtet man immer das **aktuelle** Token (**genau *EIN* Lookahead-Token**),
 um eine Entscheidung zu treffen.
@@ -334,8 +334,8 @@ ignoriert?!
 ## LL(k)-Parser
 
 ```yacc
-expr : ID '++' // x++
-     | ID '--' // x--
+expr : ID '++'    // x++
+     | ID '--'    // x--
      ;
 ```
 
@@ -351,25 +351,8 @@ umschreiben:
 \pause
 
 ```yacc
-expr : ID ('++' | '--') ; // x++ oder x--
+expr : ID ('++' | '--') ;    // x++ oder x--
 ```
-
-::: notes
-Analog
-
-```yacc
-list     : '[' elements ']' ;
-elements : element (',' element)* ;
-element  : NAME '=' NAME | NAME | list ;
-NAME     : ('a'..'z' | 'A'..'Z')+ ;
-```
-
-bzw.
-
-```yacc
-element  : NAME ('=' NAME)? | list ;
-```
-:::
 
 
 ## LL(k)-Parser: Implementierung mit Ringpuffer
@@ -377,51 +360,40 @@ element  : NAME ('=' NAME)? | list ;
 ::: notes
 Für einen größeren Lookahead benötigt man einen Puffer für die Token. Für einen Lookahead von
 $k$ Token (also einen LL(k)-Parser) würde man einen Puffer mit $k$ Plätzen anlegen und diesen
-wie einen Ringpuffer benutzen. Dabei ist `p` der Index des aktuellen Lookahead-Tokens.
+wie einen Ringpuffer benutzen. Dabei ist `start` der Index des aktuellen Lookahead-Tokens. Über
+die neue Funktion `lookahead(1)` ist dieses aktuelle Lookahead-Token abrufbar.
 
 ```python
 class Parser:
     Lexer lexer
-    k = 3               # Lookahead: 3 Token
-    p = 0               # aktuelle Tokenposition im Ringpuffer
+    k = 3               # Lookahead: 3 Token => LL(3)
+    start = 0           # aktuelle Tokenposition im Ringpuffer
     Token[k] lookahead  # Ringpuffer mit k Plätzen (vorbefüllt via Konstruktor)
 ```
 :::
 
 
 ```python
-def consume():
-    lookahead[p] = lexer.nextToken()
-    p = (p+1) % k
-
-def LT(i):
-    return lookahead[(p+i-1) % k]  # i==1: p
-
 def match(x):
-    if LT(1) == x: consume()
+    if lookahead(1) == x: consume()
     else: raise Exception()
+
+def consume():
+    lookahead[start] = lexer.nextToken()
+    start = (start+1) % k
+
+def lookahead(i):
+    return lookahead[(start+i-1) % k]  # i==1: start
 ```
 
-[Tafel: Beispiel mit Ringpuffer: k=3 und "[a,b=c]"]{.bsp}
-
-<!-- XXX
-Beispiel S. 46 in Parr: "Language Implementation Patterns"
-
-*   Eingabe: "[a,b=c]"
-*   Puffer (3 Token):
-    *   `[a,` (p=0)
-    *   `ba,` (p=1)
-    *   `b=,` (p=2)
-    *   `b=c` (p=0)
-    *   `]=c` (p=1)
-    ...
--->
+[Tafel: Beispiel mit Ringpuffer: k=3 und "[a,b,c,d]"]{.bsp}
 
 
 ## Wrap-Up
 
 *   LL(1) und LL(k) mit festem Lookahead
 *   Implementierung von Vorrang- und Assoziativitätsregeln
+*   Beachtung und Auflösung von Linksrekursion
 
 
 
