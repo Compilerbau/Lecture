@@ -4,7 +4,8 @@ disableToc: true
 hidden: true
 ---
 
-![Compiler-Pipeline](images/architektur_cb_parser)\
+
+![](images/architektur_cb_parser.png)
 
 LL-Parsern können direkt aus einer Grammatik implementiert werden: Zu jeder Produktionsregel
 erstellt man eine gleichnamige Funktion. Wenn in der Produktionsregel andere Regeln "aufgerufen"
