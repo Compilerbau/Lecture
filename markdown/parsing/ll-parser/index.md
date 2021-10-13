@@ -20,7 +20,7 @@ youtube:
   - id: TODO
 fhmedia:
   - link: "TODO"
-    name: "TODO"
+    name: "Direktlink FH-Medienportal: CB LL-Parser selbst implementiert"
 ---
 
 
