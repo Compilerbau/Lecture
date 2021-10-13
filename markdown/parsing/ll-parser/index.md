@@ -150,9 +150,9 @@ if lookahead.predicting_T: match(T)
 \bigskip
 
 ```python
-do {
+while True:
     match(T)
-} while lookahead.predicting_T
+    if not lookahead.predicting_T: break
 ```
 :::
 
