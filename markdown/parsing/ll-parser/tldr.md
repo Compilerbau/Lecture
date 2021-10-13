@@ -7,7 +7,7 @@ hidden: true
 
 ![](images/architektur_cb_parser.png)
 
-LL-Parsern können direkt aus einer Grammatik implementiert werden: Zu jeder Produktionsregel
+LL-Parser können direkt aus einer Grammatik implementiert werden: Zu jeder Produktionsregel
 erstellt man eine gleichnamige Funktion. Wenn in der Produktionsregel andere Regeln "aufgerufen"
 werden, erfolgt in der Funktion an dieser Stelle der entsprechende Funktionsaufruf. Bei
 Terminalsymbolen wird das erwartete Token geprüft.
