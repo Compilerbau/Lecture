@@ -171,6 +171,9 @@ behandelt wurde (erfolgreich oder nicht), könnte man das Spekulieren effiziente
 Jede Regel muss also durch eine passende Regel mit Speicherung ergänzt werden.
 
 *Anmerkung*: Mit `EOF` kann man ANTLR-Parser zwingen, den kompletten Eingabestrom zu betrachten.
+
+https://en.wikipedia.org/wiki/Memoization
+https://en.wikipedia.org/wiki/Parsing_expression_grammar#Implementing_parsers_from_parsing_expression_grammars
 :::
 
 \pause
