@@ -18,29 +18,22 @@ quizzes:
   - link: XYZ
     name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
 assignments:
-  - topic: blatt01
+  - topic: sheet01
 youtube:
-  - id: XYZ (ID)
-  - link: https://youtu.be/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
+  - id: TODO
 fhmedia:
-  - link: https://www.fh-bielefeld.de/medienportal/m/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
-sketch: true
+  - link: "TODO"
+    name: "Direktlink FH-Medienportal: CB LL-Parser: Fortgeschrittene Techniken"
 ---
 
-
-## Motivation
-Lorem Ipsum. Starte mit H2-Level.
-...
 
 ## LL-Parser mit Backtracking
 
 [Problem: Manchmal kennt man den nötigen Lookahead nicht vorher. Beispiel:]{.notes}
 
 ```cpp
-void bar();         // Vorwärtsdeklaration
-void bar() { ...}   // Definition
+wuppie();         // Vorwärtsdeklaration
+wuppie() { ...}   // Definition
 ```
 
 [Entsprechend sähe die Grammatik aus:]{.notes}
@@ -66,8 +59,8 @@ die Spekulation rückgängig machen:
 
 ```python
 def func():
-    if speculate_def: def()
-    elif speculate_decl: decl()
+    if sdef: def()      # Spekuliere auf "def"
+    elif sdecl: decl()  # Spekuliere auf "decl"
     else: raise Exception()
 ```
 
@@ -80,15 +73,15 @@ entsprechend Vorrangregeln implementieren.
 ## Spekulatives Matchen
 
 ```python
-def speculate_decl():
+def sdecl():
     success = True
 
     mark()                  # markiere aktuelle Position
-    try:
-        decl()              # probiere Regel decl
-    catch:
-        success = False
-    release()               # Rollback
+
+    try:   decl()           # probiere Regel decl
+    catch: success = False
+
+    clear()                 # Rollback
 
     return success
 ```
@@ -96,8 +89,9 @@ def speculate_decl():
 ::: notes
 Vor dem spekulativen Matchen muss die aktuelle Position im Tokenstrom markiert werden. Falls
 der Versuch, die Deklaration zu matchen nicht funktioniert, wird `decl()` eine Exception werfen,
-entsprechend wird die Hilfsvariable gesetzt. Anschließend muss noch mit `release()` das aktuelle
-Token wieder hergestellt werden.
+entsprechend wird die Hilfsvariable gesetzt. Anschließend muss noch mit `clear()` das aktuelle
+Token wieder hergestellt werden (wir sind ja nur im Spekulationsmodus, d.h. selbst im Erfolgsfall
+wird ja die Regel `decl()` noch aufgerufen).
 :::
 
 
@@ -108,13 +102,13 @@ class Parser:
     Lexer lexer
     Stack<INT> markers     # Stack für Integer
     List<Token> lookahead  # Puffer (1 Token vorbefüllt via Konstruktor)
-    int p = 0  # aktuelle Tokenposition im lookahead-Puffer
+    int start = 0          # aktuelle Tokenposition im lookahead-Puffer
 
     def mark():
-        markers.push(p)
+        markers.push(start)
 
-    def release():
-        p = markers.pop()
+    def clear():
+        start = markers.pop()
 ```
 
 
@@ -122,18 +116,18 @@ class Parser:
 
 ```python
 def consume():
-    p++
-    if p == lookahead.count() and markers.isEmpty():
-        p = 0; lookahead.clear()
+    ++start
+    if start == lookahead.count() and markers.isEmpty():
+        start = 0; lookahead.clear()
     sync(1)
 
-def LT(i):
+def lookahead(i):
     sync(i)
-    return lookahead.get(p+i-1)
+    return lookahead.get(start+i-1)
 
 def sync(i):
-    if p+i-1 > lookahead.count()-1:
-        n = (p+i-1) - (lookahead.count()-1)
+    if start+i-1 > lookahead.count()-1:
+        n = (start+i-1) - (lookahead.count()-1)
         for (i=0; i<n; i++):
             lookahead.add(lexer.nextToken())
 ```
@@ -151,19 +145,12 @@ Token schreiben).
 
 [Tafel: Beispiel mit dynamisch wachsendem Puffer]{.bsp}
 
-<!-- XXX
-*   Fall 1: `p` steht am Ende und kein Spekulieren: `consume()` würde `p=0` setzen
-*   Fall 2: `p` steht mitten im Puffer (mit Spekulieren), `LT(2)` würde den Platz hinter `p` mit befüllen
-    (dahinter noch leere Plätze)
-*   Fall 3: wie eben, aber `LT(8)` würde Puffer um weitere Plätze ergänzen
--->
-
 ::: notes
 Backtracking führt zu Problemen:
 
-1.  BT kann sehr langsam sein (Ausprobieren vieler Alternativen)
+1.  Backtracking kann _sehr_ langsam sein (Ausprobieren vieler Alternativen)
 2.  Der spekulative Match muss ggf. rückgängig gemacht werden
-3.  Man muss bereits gematchte Strukturen erneut matchen (\blueArrow Vorgriff: Packrat-Parsing)
+3.  Man muss bereits gematchte Strukturen erneut matchen (=> Vorgriff: Packrat-Parsing)
 :::
 
 
@@ -189,7 +176,7 @@ Jede Regel muss also durch eine passende Regel mit Speicherung ergänzt werden.
 \pause
 
 ::: center
-![Beispiel zu Packrat](images/packrat){height="85%"}\
+![](images/packrat.png){width="60%"}
 :::
 
 
@@ -203,12 +190,12 @@ def _list():  # Original List-Methode (umbenannt)
 
 def list():   # Ersatz-Methode mit Packrat-Parsing
     failed = False
-    start = p
+    s = start
     if markers.isNotEmpty() and alreadyParsed(list_memo): return
     try: _list()  # nicht am Spekulieren oder noch nicht untersucht
     catch(e): failed = True; raise e
     finally:
-        if markers.isNotEmpty(): memoize(list_memo, start, failed)
+        if markers.isNotEmpty(): memoize(list_memo, s, failed)
 ```
 
 ::: notes
@@ -219,15 +206,15 @@ def list():   # Ersatz-Methode mit Packrat-Parsing
 :::
 
 ``` {.python size="scriptsize"}
-def memoize(memo, start, failed):
-    stop = failed ? -1 : p
-    memo.put(start, stop)
+def memoize(memo, s, failed):
+    stop = failed ? -1 : start
+    memo.put(s, stop)
 
 def alreadyParsed(memo):
-    idx = memo.get(p)
+    idx = memo.get(start)
     if idx == null: return False
     if idx == -1: raise Exception()
-    p = idx  # Vorspulen
+    start = idx  # Vorspulen
     return True
 ```
 
@@ -244,7 +231,7 @@ def alreadyParsed(memo):
         an dieser Position getestet, aber nicht erfolgreich. Dies würde wieder der Fall sein,
         also kann man direkt eine Exception auslösen
     *   Anderenfalls wurde für die aktuelle Startposition die Regel bereits erfolgreich getestet
-        (aber die Spekulation passte nicht), also wird einfach "vorgespult", d.h. `p` auf die
+        (aber die Spekulation passte nicht), also wird einfach "vorgespult", d.h. `start` auf die
         vermerkte Endposition gesetzt.
 
 
@@ -253,9 +240,9 @@ def alreadyParsed(memo):
 
 ```python
 def consume():
-    p++
-    if p == lookahead.count() and markers.isEmpty():
-        p = 0
+    ++start
+    if start == lookahead.count() and markers.isEmpty():
+        start = 0
         lookahead.clear()
         clearAllMemos()  # leere alle "regel"_memo-Maps
     sync(1)
@@ -287,7 +274,7 @@ die Unterscheidung treffen kann, dann würde die Umsetzung der Regel ungefähr s
 
 ```python
 def prog():
-    if LT(1) == ENUM and java5: enumDecl()
+    if lookahead(1) == ENUM and java5: enumDecl()
     else: stat()
 ```
 
@@ -337,8 +324,6 @@ genutzt werden. In Verbindung mit einer Symboltabelle (["Symboltabellen"](cb_sym
 und/oder mit Attributen und Aktionen in der Grammatik (["Attribute"](cb_attribute.html) und
 ["Interpreter: Attribute+Aktionen"](cb_interpreter2.html)) hat man hier ein mächtiges Hilfswerkzeug!
 :::
-
-[[Beispiel: EnumP.g4 und EnumL.g4]{.bsp}]{.notes}
 
 
 ## Wrap-Up
