@@ -24,36 +24,29 @@ fhmedia:
 ---
 
 
-## Motivation
-Lorem Ipsum. Starte mit H2-Level.
-...
-
 ## Erinnerung Lexer: Zeichenstrom $\to$ Tokenstrom
-
-<!-- XXX analog zu lexer.md (Zusammenfassung) -->
 
 ``` {.python size="footnotesize"}
 def nextToken():
-    while (peek != EOF):  # globale Variable
+    while (peek != EOF):  # globale Variable, über consume()
         switch (peek):
-            case '<':   if match('='): consume(); return Token(LE, "<=")
-                        else: consume(); return Token(LESS, '<')
-            case '[':   consume(); return Token(LBRACK, '[')
+            case ' ': case '\t': case '\n': WS(); continue
+            case '[': consume(); return Token(LBRACK, '[')
             ...
-            default:    raise Error("invalid character: "+peek)
+            default: raise Error("invalid character: "+peek)
     return Token(EOF_Type, "<EOF>")
 
-def match(c):   # lookahead one character
+def match(c):   # Lookahead: Ein Zeichen
     consume()
     if (peek == c): return True
     else: rollBack(); return False
 
 def consume():
-    peek = Buffer[Input]
-    Input = (Input+1) mod 2n
-    if (Input mod n == 0):
-        fill Buffer[Input:Input+n-1]
-        Fence = (Input+n) mod 2n
+    peek = buffer[start]
+    start = (start+1) mod 2n
+    if (start mod n == 0):
+        fill(buffer[start:start+n-1])
+        end = (start+n) mod 2n
 ```
 
 
@@ -212,9 +205,7 @@ Starten würde man den Parser nach dem Erzeugen einer Instanz (dabei wird ein Le
 durchgereicht) über den Aufruf der Start-Regel, also beispielsweise `parser.list()`.
 
 *Anmerkung*: Mit dem generierten Parse-Tree bzw. *AST* beschäftigen wir uns später
-(\blueArrow ["Interpreter: AST-Traversierung"](cb_interpreter1.html)).
-
-[Beispiel: NestedLists.g4 (grun NestedLists list -tree/-gui)]{.bsp}
+(=> `["AST-basierte Interpreter"]({{<ref "/interpretation/astdriven-part1" >}})`{=markdown}).
 :::
 
 
@@ -300,7 +291,7 @@ expr : expM | ... ;
 expM : expr '*' expr ;
 ```
 
-[\blueArrow\ *Nicht* erlaubt!]{.notes}
+[=> *Nicht* erlaubt!]{.notes}
 
 
 ::: notes
@@ -377,9 +368,9 @@ wie einen Ringpuffer benutzen. Dabei ist `p` der Index des aktuellen Lookahead-T
 ```python
 class Parser:
     Lexer lexer
-    int k = 3  # Lookahead: 3 Token
+    k = 3               # Lookahead: 3 Token
+    p = 0               # aktuelle Tokenposition im Ringpuffer
     Token[k] lookahead  # Ringpuffer mit k Plätzen (vorbefüllt via Konstruktor)
-    int p = 0  # aktuelle Tokenposition im Ringpuffer
 ```
 :::
 
@@ -428,7 +419,4 @@ Beispiel S. 46 in Parr: "Language Implementation Patterns"
 ![](https://licensebuttons.net/l/by-sa/4.0/88x31.png)
 
 Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
-
-### Exceptions
-*   TODO (what, where, license)
 :::
