@@ -40,9 +40,9 @@ wuppie() { ...}   // Definition
 [Entsprechend sähe die Grammatik aus:]{.notes}
 
 ```yacc
-func : def | decl ;
-def  : head '{' body '}' ;
-decl : head ';' ;
+func : fdef | fdecl ;
+fdef  : head '{' body '}' ;
+fdecl : head ';' ;
 head : ... ;
 ```
 
@@ -60,8 +60,8 @@ die Spekulation rückgängig machen:
 
 ```python
 def func():
-    if sdef: def()      # Spekuliere auf "def"
-    elif sdecl: decl()  # Spekuliere auf "decl"
+    if sfdef: fdef()      # Spekuliere auf "fdef"
+    elif sfdecl: fdecl()  # Spekuliere auf "fdecl"
     else: raise Exception()
 ```
 
@@ -71,7 +71,7 @@ entsprechend Vorrangregeln implementieren.
 :::
 
 
-## Spekulatives Matchen
+## Details: Spekulatives Matchen
 
 ```python
 def sdecl():
@@ -101,7 +101,7 @@ wird ja die Regel `decl()` noch aufgerufen).
 ```python
 class Parser:
     Lexer lexer
-    Stack<INT> markers     # Stack für Integer
+    Stack<INT> markers     # Integer-Stack: speichere Tokenpositionen
     List<Token> lookahead  # Puffer (1 Token vorbefüllt via Konstruktor)
     int start = 0          # aktuelle Tokenposition im lookahead-Puffer
 
@@ -127,13 +127,22 @@ def lookahead(i):
     return lookahead.get(start+i-1)
 
 def sync(i):
-    if start+i-1 > lookahead.count()-1:
-        n = (start+i-1) - (lookahead.count()-1)
+    n = start + i - lookahead.count()
+    if n > 0:
         for (i=0; i<n; i++):
             lookahead.add(lexer.nextToken())
 ```
 
 ::: notes
+`consume` holt wie immer das nächste Token, hier indem der Index `start` weiter gesetzt
+wird und ein weiteres Token über `sync` in den Puffer geladen wird. Falls wir nicht am
+Spekulieren sind und das Ende des Puffers erreicht haben, nutzen wir die Gelegenheit und
+setzen den Puffer zurück. (Dies geht nicht, wenn wir spekulieren -- hier müssen wir ja
+ggf. ein Rollback vornehmen und benötigen also den aktuellen Puffer dann noch.)
+
+Die Funktion `sync` stellt sicher, dass ab der Position `start` noch `i` unverbrauchte
+Token im Puffer sind.
+
 **Hinweis**: Die Methode `count` liefert die Anzahl der aktuell gespeicherten Elemente
 in `lookahead` zurück (nicht die Gesamtzahl der Plätze in der Liste -- diese kann größer
 sein). Mit der Methode `add` wird ein Element hinten an die Liste angefügt, dabei wird
@@ -151,7 +160,7 @@ Backtracking führt zu Problemen:
 
 1.  Backtracking kann _sehr_ langsam sein (Ausprobieren vieler Alternativen)
 2.  Der spekulative Match muss ggf. rückgängig gemacht werden
-3.  Man muss bereits gematchte Strukturen erneut matchen (=> Vorgriff: Packrat-Parsing)
+3.  Man muss bereits gematchte Strukturen erneut matchen (=> Abhilfe: Packrat-Parsing)
 :::
 
 
