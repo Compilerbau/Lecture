@@ -17,11 +17,11 @@ gestartet hat, um im Fall des Nichterfolgs dorthin wieder zurückspringen zu kö
 
 Das Backtracking kann sehr langsam werden durch das Ausprobieren mehrerer Alternativen und das jeweils
 nötige Zurückrollen. Zudem kann es passieren, dass eine bestimmte Sequenz immer wieder erkannt werden
-muss. Hier hilft eine weitere Technik:
-[Packrat Parsing](https://en.wikipedia.org/wiki/Parsing_expression_grammar#Implementing_parsers_from_parsing_expression_grammars)
-("*memoisation*"). Hierbei führt man pro Regel eine Map mit, in der zu einer Position im Tokenstrom
-festgehalten wird, ob diese Regel an/ab dieser Position bereits erfolgreich oder nicht erfolgreich war.
-Dies kann man dann nutzen, um bei einem erneuten Parsen der selben Regel "vorzuspulen".
+muss. Hier hilft eine weitere Technik: **Packrat Parsing** [@Packrat2006] (nutzt
+["*memoisation*"](https://en.wikipedia.org/wiki/Memoization)). Hierbei führt man pro Regel eine Map mit,
+in der zu einer Position im Tokenstrom festgehalten wird, ob diese Regel an/ab dieser Position bereits
+erfolgreich oder nicht erfolgreich war. Dies kann man dann nutzen, um bei einem erneuten Parsen der
+selben Regel "vorzuspulen".
 
 In ANTLR kann man *semantische Prädikate* benutzen, um Alternativen "abzuschalten". Dies ist beispielsweise
 nützlich, wenn man nur eine Grammatik für unterschiedliche Versionen einer Sprache implementieren will.
