@@ -185,30 +185,22 @@ die Liste mit weiteren Plätzen erweitern, sondern könnte direkt an Index 0 das
 
 ## Verbesserung Backtracking: Packrat Parser (Memoizing)
 
-```yacc
-stat :  list EOF  |  list '=' list  ;
-```
+::: center
+![](images/packrat.png){width="60%"}
+:::
 
 ::: notes
-Bei Eingabe `[a,b]=[c,d]` wird zunächst spekulativ die erste Alternative untersucht und
-eine `list` gematcht. Da die Alternative nicht komplett passt, muss die Spekulation
-rückgängig gemacht werden und die zweite Alternative untersucht werden. Dabei muss man
-den selben Input erneut auf `list` matchen!
+Bei Eingabe `wuppie();` wird zunächst spekulativ die erste Alternative `fdef` untersucht
+und ein `head` gematcht. Da die Alternative nicht komplett passt (es kommt ein ";" statt
+einem "}"), muss die Spekulation rückgängig gemacht werden und die zweite Alternative
+`fdecl` untersucht werden. Dabei muss man den selben Input erneut auf `head` matchen!
 
-Idee: Wenn `list` sich merken würde, ob damit ein bestimmter Teil des Tokenstroms bereits
+Idee: Wenn `head` sich merken würde, ob damit ein bestimmter Teil des Tokenstroms bereits
 behandelt wurde (erfolgreich oder nicht), könnte man das Spekulieren effizienter gestalten.
 Jede Regel muss also durch eine passende Regel mit Speicherung ergänzt werden.
 
-*Anmerkung*: Mit `EOF` kann man ANTLR-Parser zwingen, den kompletten Eingabestrom zu betrachten.
-
-https://en.wikipedia.org/wiki/Memoization
-https://en.wikipedia.org/wiki/Parsing_expression_grammar#Implementing_parsers_from_parsing_expression_grammars
-:::
-
-\pause
-
-::: center
-![](images/packrat.png){width="60%"}
+Dies wird auch als ["Memoization"](https://en.wikipedia.org/wiki/Memoization) bezeichnet
+und ist ein zentrales Element des Packrat Parsers (vgl. @Packrat2006).
 :::
 
 
@@ -217,46 +209,37 @@ https://en.wikipedia.org/wiki/Parsing_expression_grammar#Implementing_parsers_fr
 ``` {.python size="scriptsize"}
 Map<INT, INT> list_memo
 
-def _list():  # Original List-Methode (umbenannt)
-    match(LBRACK); elements(); match(RBRACK);
+def list():
+    failed = False; s = start
 
-def list():   # Ersatz-Methode mit Packrat-Parsing
-    failed = False
-    s = start
-    if markers.isNotEmpty() and alreadyParsed(list_memo): return
-    try: _list()  # nicht am Spekulieren oder noch nicht untersucht
+    if alreadyParsed(list_memo): return
+
+    try: match(LBRACK); elements(); match(RBRACK);
     catch(e): failed = True; raise e
-    finally:
-        if markers.isNotEmpty(): memoize(list_memo, s, failed)
+    finally: list_memo.put(s, failed ? -1 : start)
 ```
 
 ::: notes
-*   Wenn am Spekulieren und bereits untersucht: Direkt zurückkehren (und Vorspulen)
-*   Sonst Original-Regel ausführen
-*   Exception: Regel hatte keinen Erfolg; merken und Exception weiter reichen
-*   Falls wir am Spekulieren sind: Ergebnis für diese Startposition und diese Regel merken
+*   Wenn bereits untersucht: Direkt zurückkehren (und ggf. Vorspulen)
+*   Sonst:
+    *   Original-Regel ausführen
+    *   Exception: Regel hatte keinen Erfolg; merken und Exception weiter reichen
+*   Ergebnis für diese Startposition und diese Regel merken:
+    *   Falls Regel erfolgreich, dann Start-Position und die aktuelle Position
+        (Stopp-Position) notieren
+    *   Falls Regel nicht erfolgreich, wird als Stopp-Position der Wert `-1` genutzt
+
 :::
 
 ``` {.python size="scriptsize"}
-def memoize(memo, s, failed):
-    stop = failed ? -1 : start
-    memo.put(s, stop)
-
 def alreadyParsed(memo):
-    i = memo.get(start)
-    if i == null: return False
-    if i == -1: raise Exception()
-    start = i  # Vorspulen
-    return True
+    if memo.get(start) == null: return False
+    if memo.get(start) == -1: raise Exception()
+    start = memo.get(start); return True  # Vorspulen
 ```
 
 ::: notes
-*   `memoize` wird nach dem Test der Regel aufgerufen (im spekulativen Modus)
-    *   Falls Regel erfolgreich, dann wird die Start-Position und die aktuelle Position
-        (Stopp-Position) notiert
-    *   Falls Regel nicht erfolgreich, wird als Stopp-Position der Wert `-1` genutzt
-
-*   `alreadyParsed` wird im spekulativen Fall vor dem (erneuten) Test einer Regel aufgerufen
+*   `alreadyParsed` wird vor dem (erneuten) Test einer Regel aufgerufen
     *   Falls aktuelle Position noch nicht in der Tabelle, dann wurde die Regel offenbar noch
         nicht getestet (an dieser Position)
     *   Falls für die aktuelle Position eine `-1` in der Tabelle steht, wurde die Regel bereits
@@ -267,15 +250,16 @@ def alreadyParsed(memo):
         vermerkte Endposition gesetzt.
 
 
-**Anmerkung**: Die Funktion `consume()` muss passend ergänzt werden: Falls der Parser nicht
-(mehr) spekuliert, d.h. der `markers`-Stack leer ist, müssen alle `*_memo` zurückgesetzt werden!
+### Anmerkung
+
+Die Funktion `consume()` muss passend ergänzt werden: Falls der Parser nicht (mehr) spekuliert,
+d.h. der `markers`-Stack leer ist, müssen alle `*_memo` zurückgesetzt werden!
 
 ```python
 def consume():
     ++start
     if start == lookahead.count() and markers.isEmpty():
-        start = 0
-        lookahead.clear()
+        start = 0; lookahead.clear()
         clearAllMemos()  # leere alle "regel"_memo-Maps
     sync(1)
 ```
