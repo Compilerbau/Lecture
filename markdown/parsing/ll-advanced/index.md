@@ -60,8 +60,8 @@ die Spekulation rückgängig machen:
 
 ```python
 def func():
-    if sfdef: fdef()      # Spekuliere auf "fdef"
-    elif sfdecl: fdecl()  # Spekuliere auf "fdecl"
+    if speculate(fdef): fdef()      # Spekuliere auf "fdef"
+    elif speculate(fdecl): fdecl()  # Spekuliere auf "fdecl"
     else: raise Exception()
 ```
 
@@ -86,12 +86,12 @@ jetzt einfach aus :)
 ## Details: Spekulatives Matchen
 
 ```python
-def sfdecl():
+def speculate(fn):
     success = True
 
     mark()                  # markiere aktuelle Position
 
-    try:   fdecl()           # probiere Regel fdecl
+    try:   fn()             # probiere Regel
     catch: success = False
 
     clear()                 # Rollback
@@ -100,11 +100,14 @@ def sfdecl():
 ```
 
 ::: notes
-Vor dem spekulativen Matchen muss die aktuelle Position im Tokenstrom markiert werden. Falls
-der Versuch, die Deklaration zu matchen nicht funktioniert, wird `fdecl()` eine Exception werfen,
+Der Funktion `speculate` wird die zu testende Regel (Funktion) als Parameter übergeben, im obigen
+Beispiel wären dies `fdef` bzw. `fdecl`.
+
+Vor dem spekulativen Matchen muss die aktuelle Position im Tokenstrom markiert werden. Falls der
+Versuch, die Deklaration zu matchen nicht funktioniert, wird der Regel-Aufruf eine Exception werfen,
 entsprechend wird die Hilfsvariable gesetzt. Anschließend muss noch mit `clear()` das aktuelle
 Token wieder hergestellt werden (wir sind ja nur im Spekulationsmodus, d.h. selbst im Erfolgsfall
-wird ja die Regel `fdecl()` noch aufgerufen).
+wird ja die Regel noch "richtig" aufgerufen).
 :::
 
 
@@ -155,20 +158,21 @@ ggf. ein Rollback vornehmen und benötigen also den aktuellen Puffer dann noch.)
 Die Funktion `sync` stellt sicher, dass ab der Position `start` noch `i` unverbrauchte
 Token im Puffer sind.
 
-**Hinweis**: Die Methode `count` liefert die Anzahl der aktuell gespeicherten Elemente
-in `lookahead` zurück (nicht die Gesamtzahl der Plätze in der Liste -- diese kann größer
-sein). Mit der Methode `add` wird ein Element hinten an die Liste angefügt, dabei wird
-das Token auf den nächsten Index-Platz (`count`) geschrieben und ggf. die Liste automatisch
-um weitere Speicherplätze ergänzt. Über `clear` werden die Elemente in der Liste gelöscht,
-aber der Speicherplatz erhalten (d.h. `count()` liefert den Wert 0, aber ein `add` müsste
-nicht erst die Liste mit weiteren Plätzen erweitern, sondern könnte direkt an Index 0 das
-Token schreiben).
+### Hinweis
+
+Die Methode `count` liefert die Anzahl der aktuell gespeicherten Elemente in `lookahead`
+zurück (nicht die Gesamtzahl der Plätze in der Liste -- diese kann größer sein). Mit der
+Methode `add` wird ein Element hinten an die Liste angefügt, dabei wird das Token auf den
+nächsten Index-Platz (`count`) geschrieben und ggf. die Liste ggf. automatisch um weitere
+Speicherplätze ergänzt. Über `clear` werden die Elemente in der Liste gelöscht, aber der
+Speicherplatz erhalten (d.h. `count()` liefert den Wert 0, aber ein `add` müsste nicht erst
+die Liste mit weiteren Plätzen erweitern, sondern könnte direkt an Index 0 das Token schreiben).
 :::
 
 [Tafel: Beispiel mit dynamisch wachsendem Puffer]{.bsp}
 
 ::: notes
-Backtracking führt zu Problemen:
+### Backtracking führt zu Problemen
 
 1.  Backtracking kann _sehr_ langsam sein (Ausprobieren vieler Alternativen)
 2.  Der spekulative Match muss ggf. rückgängig gemacht werden
