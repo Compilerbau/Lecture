@@ -14,6 +14,7 @@ readings:
     comment: "Abschnitte 2.4 und 4.4"
   - key: "Grune2012"
     comment: "Abschnitte 3.1 bis (einschließlich) 3.4"
+  - key: "Packrat2006"
 quizzes:
   - link: XYZ
     name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
