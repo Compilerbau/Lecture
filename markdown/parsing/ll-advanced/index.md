@@ -41,8 +41,8 @@ wuppie() { ...}   // Definition
 
 ```yacc
 func : fdef | fdecl ;
-fdef  : head '{' body '}' ;
-fdecl : head ';' ;
+fdef : head '{' body '}' ;
+fdecl: head ';' ;
 head : ... ;
 ```
 
@@ -119,9 +119,9 @@ wird ja die Regel noch "richtig" aufgerufen).
 ```python
 class Parser:
     Lexer lexer
-    Stack<INT> markers     # Integer-Stack: speichere Tokenpositionen
-    List<Token> lookahead  # Puffer (1 Token vorbefüllt via Konstruktor)
-    int start = 0          # aktuelle Tokenposition im lookahead-Puffer
+    markers = []    # Integer-Stack: speichere Tokenpositionen
+    lookahead = []  # Puffer (1 Token vorbefüllt via Konstruktor)
+    int start = 0   # aktuelle Tokenposition im lookahead-Puffer
 
     def mark():
         markers.push(start)
@@ -146,9 +146,8 @@ def lookahead(i):
 
 def sync(i):
     n = start + i - lookahead.count()
-    if n > 0:
-        for (i=0; i<n; i++):
-            lookahead.add(lexer.nextToken())
+    while (n > 0):
+        lookahead.add(lexer.nextToken()); --n
 ```
 
 ::: notes
@@ -190,80 +189,57 @@ die Liste mit weiteren Plätzen erweitern, sondern könnte direkt an Index 0 das
 :::
 
 ::: notes
-Bei Eingabe `wuppie();` wird zunächst spekulativ die erste Alternative `fdef` untersucht
+Bei der Eingabe `wuppie();` wird zunächst spekulativ die erste Alternative `fdef` untersucht
 und ein `head` gematcht. Da die Alternative nicht komplett passt (es kommt ein ";" statt
-einem "}"), muss die Spekulation rückgängig gemacht werden und die zweite Alternative
+einem "{"), muss die Spekulation rückgängig gemacht werden und die zweite Alternative
 `fdecl` untersucht werden. Dabei muss man den selben Input erneut auf `head` matchen!
+(Und wenn die Spekulation (irgendwann) erfolgreich war, muss noch einmal ein `head` gematcht
+werden ...)
 
 Idee: Wenn `head` sich merken würde, ob damit ein bestimmter Teil des Tokenstroms bereits
 behandelt wurde (erfolgreich oder nicht), könnte man das Spekulieren effizienter gestalten.
 Jede Regel muss also durch eine passende Regel mit Speicherung ergänzt werden.
 
 Dies wird auch als ["Memoization"](https://en.wikipedia.org/wiki/Memoization) bezeichnet
-und ist ein zentrales Element des Packrat Parsers (vgl. @Packrat2006).
+und ist eine zentrales Technik des Packrat Parsers (vgl. @Packrat2006).
 :::
 
 
-## Details zum Packrat-Parsing
+## Skizze: Idee des Packrat-Parsing
 
-``` {.python size="scriptsize"}
-Map<INT, INT> list_memo
+``` python
+head_memo = {}
 
-def list():
-    failed = False; s = start
-
-    if alreadyParsed(list_memo): return
-
-    try: match(LBRACK); elements(); match(RBRACK);
-    catch(e): failed = True; raise e
-    finally: list_memo.put(s, failed ? -1 : start)
+def head():
+    if head_memo.get(start) == -1:
+        raise Exception()                             # kein Match
+    if head_memo.get(start) >= 0:
+        start = head_memo[start]; return True     # Vorspulen
+    else:
+        failed = False; start_ = start
+        try: ...         # rufe die ursprüngliche head()-Regel auf
+        catch(e): failed = True; raise e
+        finally: head_memo[start_] = (failed ? -1 : start)
 ```
 
 ::: notes
-*   Wenn bereits untersucht: Direkt zurückkehren (und ggf. Vorspulen)
-*   Sonst:
+*   Wenn bereits untersucht (Eintrag vorhanden): Vorspulen bzw. Exception werfen
+*   Sonst (aktuelle Position noch nicht in der Tabelle => Regel noch nicht an
+    dieser Position getestet):
     *   Original-Regel ausführen
-    *   Exception: Regel hatte keinen Erfolg; merken und Exception weiter reichen
+    *   Exception: Regel hatte keinen Erfolg => merken und Exception weiter reichen
 *   Ergebnis für diese Startposition und diese Regel merken:
     *   Falls Regel erfolgreich, dann Start-Position und die aktuelle Position
-        (Stopp-Position) notieren
-    *   Falls Regel nicht erfolgreich, wird als Stopp-Position der Wert `-1` genutzt
+        (Stopp-Position) in der Tabelle für diese Regel notieren
+    *   Falls Regel nicht erfolgreich, zur Start-Position eine ungültige Position setzen
 
+### Anmerkung *consume()*
+
+Die Funktion `consume()` muss passend ergänzt werden: Wann immer man den `lookahead`-Puffer
+zurücksetzt, werden alle `*_memo` ungültig und müssen ebenfalls zurückgesetzt werden!
 :::
 
-``` {.python size="scriptsize"}
-def alreadyParsed(memo):
-    if memo.get(start) == null: return False
-    if memo.get(start) == -1: raise Exception()
-    start = memo.get(start); return True  # Vorspulen
-```
-
-::: notes
-*   `alreadyParsed` wird vor dem (erneuten) Test einer Regel aufgerufen
-    *   Falls aktuelle Position noch nicht in der Tabelle, dann wurde die Regel offenbar noch
-        nicht getestet (an dieser Position)
-    *   Falls für die aktuelle Position eine `-1` in der Tabelle steht, wurde die Regel bereits
-        an dieser Position getestet, aber nicht erfolgreich. Dies würde wieder der Fall sein,
-        also kann man direkt eine Exception auslösen
-    *   Anderenfalls wurde für die aktuelle Startposition die Regel bereits erfolgreich getestet
-        (aber die Spekulation passte nicht), also wird einfach "vorgespult", d.h. `start` auf die
-        vermerkte Endposition gesetzt.
-
-
-### Anmerkung
-
-Die Funktion `consume()` muss passend ergänzt werden: Falls der Parser nicht (mehr) spekuliert,
-d.h. der `markers`-Stack leer ist, müssen alle `*_memo` zurückgesetzt werden!
-
-```python
-def consume():
-    ++start
-    if start == lookahead.count() and markers.isEmpty():
-        start = 0; lookahead.clear()
-        clearAllMemos()  # leere alle "regel"_memo-Maps
-    sync(1)
-```
-:::
+[[Anmerkung Anpassung `consume()`]{.bsp}]{.slides}
 
 
 ## Semantische Prädikate
@@ -271,7 +247,7 @@ def consume():
 Problem in Java: `enum` ab Java5 Schlüsselwort [(vorher als Identifier-Name verwendbar)]{.notes}
 
 ```yacc
-prog : (enumDecl | stat) ;
+prog : (enumDecl | stat)+ ;
 stat : ... ;
 
 enumDecl : ENUM id '{' id (',' id)* '}' ;
@@ -311,12 +287,8 @@ enumDecl : ENUM id '{' id (',' id)* '}' ;
 ```
 
 ::: notes
-Prädikate aktivieren bzw. deaktivieren alles, was nach der Abfrage des Prädikats gematcht
-werden könnte. Entsprechend könnte man die obige Formulierung auch so schreiben:
-
-Wichtig ist hierbei nur, dass das Prädikat ausgewertet wird, bevor ein "`enum`"-Token im
-Eingabestrom auftritt.
-
+Prädikate in Parser-Regeln aktivieren bzw. deaktivieren alles, was nach der Abfrage
+des Prädikats gematcht werden könnte.
 
 ### Semantische Prädikate in Lexer-Regeln
 
@@ -358,7 +330,4 @@ und/oder mit Attributen und Aktionen in der Grammatik (["Attribute"](cb_attribut
 ![](https://licensebuttons.net/l/by-sa/4.0/88x31.png)
 
 Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
-
-### Exceptions
-*   TODO (what, where, license)
 :::
