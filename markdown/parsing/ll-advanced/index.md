@@ -70,16 +70,19 @@ Die erste Alternative, die passt, gewinnt. Über die Reihenfolge der Spekulation
 entsprechend Vorrangregeln implementieren.
 
 
-**Anmerkung**: Man könnte die obige Grammatik umformen und bräuchte dann kein spekulatives
-Parsen mit Backtracking:
+### Anmerkung
+
+Man könnte die obige Grammatik umformen ...
 
 ```yacc
 func : head ('{' body '}' | ';') ;
 head : ... ;
 ```
 
+...und bräuchte dann kein spekulatives Parsen mit Backtracking.
+
 Da wir aber das Parsen mit Backtracking betrachten wollen, blenden wir diese Möglichkeit
-jetzt einfach aus :)
+jetzt einfach aus ;)
 :::
 
 
@@ -91,7 +94,7 @@ def speculate(fn):
 
     mark()                  # markiere aktuelle Position
 
-    try:   fn()             # probiere Regel
+    try:   fn()             # probiere Regel fn()
     catch: success = False
 
     clear()                 # Rollback
