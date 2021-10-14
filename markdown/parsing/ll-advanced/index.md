@@ -86,12 +86,12 @@ jetzt einfach aus :)
 ## Details: Spekulatives Matchen
 
 ```python
-def sdecl():
+def sfdecl():
     success = True
 
     mark()                  # markiere aktuelle Position
 
-    try:   decl()           # probiere Regel decl
+    try:   fdecl()           # probiere Regel fdecl
     catch: success = False
 
     clear()                 # Rollback
@@ -101,10 +101,10 @@ def sdecl():
 
 ::: notes
 Vor dem spekulativen Matchen muss die aktuelle Position im Tokenstrom markiert werden. Falls
-der Versuch, die Deklaration zu matchen nicht funktioniert, wird `decl()` eine Exception werfen,
+der Versuch, die Deklaration zu matchen nicht funktioniert, wird `fdecl()` eine Exception werfen,
 entsprechend wird die Hilfsvariable gesetzt. Anschließend muss noch mit `clear()` das aktuelle
 Token wieder hergestellt werden (wir sind ja nur im Spekulationsmodus, d.h. selbst im Erfolgsfall
-wird ja die Regel `decl()` noch aufgerufen).
+wird ja die Regel `fdecl()` noch aufgerufen).
 :::
 
 
