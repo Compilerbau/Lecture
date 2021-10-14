@@ -68,6 +68,18 @@ def func():
 ::: notes
 Die erste Alternative, die passt, gewinnt. Über die Reihenfolge der Spekulationen kann man
 entsprechend Vorrangregeln implementieren.
+
+
+**Anmerkung**: Man könnte die obige Grammatik umformen und bräuchte dann kein spekulatives
+Parsen mit Backtracking:
+
+```yacc
+func : head ('{' body '}' | ';') ;
+head : ... ;
+```
+
+Da wir aber das Parsen mit Backtracking betrachten wollen, blenden wir diese Möglichkeit
+jetzt einfach aus :)
 :::
 
 
