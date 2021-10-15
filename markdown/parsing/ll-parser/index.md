@@ -17,9 +17,9 @@ readings:
 assignments:
   - topic: sheet01
 youtube:
-  - id: TODO
+  - id: 3djLtMtW82k
 fhmedia:
-  - link: "TODO"
+  - link: "https://www.fh-bielefeld.de/medienportal/m/fc75fe2bfb0c45447689e386f3e0c227bb30a0d081374134c60e20392a1f8c54536a749aefec5c5825c4d8c9e9aa77c30b37acb56e9b3c314da17691d9c5eee8"
     name: "Direktlink FH-Medienportal: CB LL-Parser selbst implementiert"
 ---
 
