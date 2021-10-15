@@ -6,7 +6,7 @@ author: "Carsten Gips (FH Bielefeld)"
 weight: 2
 readings:
   - key: "Parr2010"
-    comment: "Kapitel"
+    comment: "Kapitel 2"
   - key: "Parr2014"
   - key: "Mogensen2017"
     comment: "Kapitel 2 (insbesondere Abschnitte 2.3 bis (einschließlich) 2.19)"
@@ -203,6 +203,8 @@ def consume():
     lookahead = lexer.nextToken()
 ```
 
+[Quelle: Eigener Code basierend auf einer Idee nach [@Parr2010, S. 43]]{.origin}
+
 ::: notes
 Dabei setzt man in der Klasse `Parser` zwei Attribute voraus:
 
@@ -382,6 +384,8 @@ def consume():
 def lookahead(i):
     return lookahead[(start+i-1) % k]  # i==1: start
 ```
+
+[Quelle: Eigener Code basierend auf einer Idee nach [@Parr2010, S. 47]]{.origin}
 
 [Tafel: Beispiel mit Ringpuffer: k=3 und "[1,2,3,4,5]"]{.bsp}
 
