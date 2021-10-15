@@ -22,3 +22,5 @@ Zur Beachtung der Vorrang- und Assoziativitätsregeln muss die Grammatik entspre
 werden. LL-Parser haben durch die Betrachtung des aktuellen Vorschau-Tokens ein Problem mit
 Linksrekursion in der Grammatik, diese muss zunächst beseitigt werden. (ANTLR bietet hier gewisse
 Vereinfachungen an, kann aber mit indirekter Linksrekursion auch nicht umgehen.)
+
+Eine gute Darstellung finden Sie in [@Parr2010] (Kapitel 2).
