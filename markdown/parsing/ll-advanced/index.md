@@ -15,15 +15,12 @@ readings:
   - key: "Grune2012"
     comment: "Abschnitte 3.1 bis (einschließlich) 3.4"
   - key: "Packrat2006"
-quizzes:
-  - link: XYZ
-    name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
 assignments:
   - topic: sheet01
 youtube:
-  - id: TODO
+  - id: 12GT2WxZsxY
 fhmedia:
-  - link: "TODO"
+  - link: "https://www.fh-bielefeld.de/medienportal/m/c3dc479884ce6b50bbd0fe85a8dd49f7b250576ac73742b879c564d6cba4b83c79fa499f9164b947e81e597add85e6addfd91a41a4eb85438c51218846aac0cb"
     name: "Direktlink FH-Medienportal: CB LL-Parser: Fortgeschrittene Techniken"
 ---
 
