@@ -25,3 +25,5 @@ selben Regel "vorzuspulen".
 
 In ANTLR kann man *semantische Prädikate* benutzen, um Alternativen "abzuschalten". Dies ist beispielsweise
 nützlich, wenn man nur eine Grammatik für unterschiedliche Versionen einer Sprache implementieren will.
+
+Eine gute Darstellung finden Sie in [@Parr2010] (Kapitel 3).
