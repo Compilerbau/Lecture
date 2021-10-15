@@ -121,7 +121,7 @@ class Parser:
     Lexer lexer
     markers = []    # Integer-Stack: speichere Tokenpositionen
     lookahead = []  # Puffer (1 Token vorbefüllt via Konstruktor)
-    int start = 0   # aktuelle Tokenposition im lookahead-Puffer
+    start = 0       # aktuelle Tokenposition im lookahead-Puffer
 
     def mark():
         markers.push(start)
@@ -212,12 +212,12 @@ head_memo = {}
 
 def head():
     if head_memo.get(start) == -1:
-        raise Exception()                             # kein Match
+        raise Exception()                         # kein Match
     if head_memo.get(start) >= 0:
         start = head_memo[start]; return True     # Vorspulen
     else:
         failed = False; start_ = start
-        try: ...         # rufe die ursprüngliche head()-Regel auf
+        try: ...     # rufe die ursprüngliche head()-Regel auf
         catch(e): failed = True; raise e
         finally: head_memo[start_] = (failed ? -1 : start)
 ```
