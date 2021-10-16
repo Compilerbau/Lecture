@@ -15,10 +15,6 @@ fhmedia:
 ---
 
 
-## Motivation
-Lorem Ipsum. Starte mit H2-Level.
-...
-
 ## Grenze Lexer und Parser (Faustregeln)
 
 ::: notes
@@ -28,7 +24,7 @@ Error-Recovery arbeitet. Entsprechend sollte man alle Arbeit, die
 man bereits im Lexer erledigen kann, auch dort erledigen. Oder
 andersherum: Man sollte dem Parser nicht unnötige Arbeit aufbürden.
 
-\blueArrow Erreiche in jeder Verarbeitungsstufe die maximal mögliche Abstraktionsstufe!
+=> Erreiche in jeder Verarbeitungsstufe die maximal mögliche Abstraktionsstufe!
 :::
 
 
@@ -134,7 +130,15 @@ Typischer Aufbau einer Zeile im Logfile eines Webservers:
     der Adressen entsprechend eine Parser-Regel sein:
     :::
 
+    ``` {.yacc size="scriptsize"}
+    file: row+;
+    row : ip REST;
+    ip  : INT '.' INT '.' INT '.' INT ;
+    ```
+
+[[Quelle: nach [@Parr2014, S. 82]]{.origin}]{.notes}
 **TODO Code**
+
 
 ## Wrap-Up
 
