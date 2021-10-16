@@ -5,9 +5,6 @@ author: "Carsten Gips (FH Bielefeld)"
 weight: 9
 readings:
   - key: "Parr2014"
-quizzes:
-  - link: XYZ
-    name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
 assignments:
   - topic: blatt01
 youtube:
@@ -140,7 +137,7 @@ Typischer Aufbau einer Zeile im Logfile eines Webservers:
     der Adressen entsprechend eine Parser-Regel sein:
     :::
 
-**TODO Code** 
+**TODO Code**
 
 ## Wrap-Up
 
