@@ -4,6 +4,7 @@ disableToc: true
 hidden: true
 ---
 
+
 Umgang mit Fehlern ist im Compiler sehr wichtig: Falscher Code darf nicht in ein ausführbares Programm
 umgewandelt werden oder ausgeführt werden, gleichzeitig erwarten Nutzer zielführende Fehlermeldungen
 und auch das Erkennen von möglichst mehreren Fehlern in einem Lauf.
