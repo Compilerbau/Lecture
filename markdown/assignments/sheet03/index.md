@@ -1,22 +1,24 @@
 ---
-type: assignment
 title: "Blatt 03: Optimierung"
-author: "BC George, Carsten Gips (FH Bielefeld)"
+author: "BC George (FH Bielefeld)"
 hidden: true
 weight: 3
 ---
 
 
-## A3.1: Konstruktion DAG
+Hier kommt der Inhalt für Blatt XYZ hin ... allgemeine einleitende Worte ...
 
-Konstruieren Sie aus Ihrem AST einen DAG. Ergänzen Sie Ihre Ausgabefunktion, so dass auch
-der DAG als DOT-Code formatiert ausgegeben wird.
+## Aufgabe 1: XYZ (2P)
 
-Hinweis: Geben Sie sowohl den ursprünglichen DAG als auch den DAG nach der Optimierung (siehe
-nächste Aufgabe) aus.
+tbd
+
+## Aufgabe 2: XYZ (3P)
+
+tbd
 
 
-## A3.2: Optimierung
 
-Welche der in der Vorlesung besprochenen Optimierungen sind in der betrachteten Sprache sinnvoll?
-Begründen Sie Ihre Analyse und führen Sie diese Optimierungen auf dem DAG durch.
+{{% challenges %}}
+## Bonus: Wuppie (2P)
+Erstellen Sie ...
+{{% /challenges %}}

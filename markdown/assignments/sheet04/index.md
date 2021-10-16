@@ -1,22 +1,24 @@
 ---
-type: assignment
 title: "Blatt 04: LLVM-IR"
-author: "BC George, Carsten Gips (FH Bielefeld)"
+author: "BC George (FH Bielefeld)"
 hidden: true
 weight: 4
 ---
 
 
-## A4.1: Sprachumfang im LLVM-IR
+Hier kommt der Inhalt für Blatt XYZ hin ... allgemeine einleitende Worte ...
 
-Legen Sie fest, welche LLVM-IR-Befehle Sie für Ihr Projekt benötigen.
+## Aufgabe 1: XYZ (2P)
 
-*   [https://releases.llvm.org/1.6/docs/CommandGuide/html/llc.html](https://releases.llvm.org/1.6/docs/CommandGuide/html/llc.html)
-*   [https://releases.llvm.org/1.6/docs/CommandGuide/html/lli.html](https://releases.llvm.org/1.6/docs/CommandGuide/html/lli.html)
-*   [http://llvm.org/devmtg/2010-11/Naumann-Cling.pdf](http://llvm.org/devmtg/2010-11/Naumann-Cling.pdf)
+tbd
+
+## Aufgabe 2: XYZ (3P)
+
+tbd
 
 
-## A4.2: Erzeugung von LLVM-IR
 
-Vervollständigen Sie den Compiler mit LLVM-Werkzeugen: Ihr Compiler soll LLVM-IR ausgeben,
-der mit den LLVM-Werkzeugen in ein ausführbares Programm übersetzt werden kann.
+{{% challenges %}}
+## Bonus: Wuppie (2P)
+Erstellen Sie ...
+{{% /challenges %}}
