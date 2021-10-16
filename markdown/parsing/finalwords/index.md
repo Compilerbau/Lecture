@@ -6,7 +6,7 @@ weight: 9
 readings:
   - key: "Parr2014"
 assignments:
-  - topic: blatt01
+  - topic: sheet01
 youtube:
   - id: XYZ (ID)
   - link: https://youtu.be/XYZ
