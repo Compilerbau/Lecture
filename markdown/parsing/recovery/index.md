@@ -19,13 +19,10 @@ fhmedia:
 ---
 
 
-## Motivation
-Lorem Ipsum. Starte mit H2-Level.
-...
-
 ## Fehler beim Parsen
 
-![XML-Syntaxerror](images/bc_xml-parsing-error)\
+![](images/bc_xml-parsing-error.png)
+
 [Quelle: BC George, Vorlesung "Einführung in die Programmierung mit Skriptsprachen"]{.origin}
 
 ::: notes
@@ -34,7 +31,7 @@ Lorem Ipsum. Starte mit H2-Level.
     *   Reproduzierbare Ergebnisse
     *   Aussagekräftige Fehlermeldungen
     *   Nach Erkennen eines Fehlers: (vorläufige) Korrektur und Parsen des restlichen Codes
-        \blueArrow weitere Fehler anzeigen.
+        => weitere Fehler anzeigen.
         Problem: Bis wohin "gobbeln", d.h. was als Synchronisationspunkt nehmen? Semikolon?
     *   Syntaktisch fehlerhafte Programme dürfen nicht in die Zielsprache übersetzt werden!
 :::
@@ -112,7 +109,7 @@ Fehlermeldung: `no viable alternative at input 'int;'`
 ## Überblick Recovery bei Parser-Fehlern
 
 ::: center
-![Parser-Recovery](images/recovery)\
+![](images/recovery.png)
 :::
 
 ::: notes
@@ -126,7 +123,7 @@ Fehlermeldung: `no viable alternative at input 'int;'`
     *   Spezielle Fehlerproduktionen: Spezielle Regeln in der Grammatik, die typische Fehler matchen.
 
 Anmerkung LR-Parser: Ein Syntaxfehler wird entdeckt, wenn die Action-Tabelle für Top-of-Stack und akt. Token leer
-ist \blueArrow Stack und/oder Token modifizieren, aber deutlich schwieriger als bei LL ...
+ist => Stack und/oder Token modifizieren, aber deutlich schwieriger als bei LL ...
 :::
 
 
@@ -205,7 +202,7 @@ public void classDef() {
 
 \bigskip
 
-\blueArrow Entferne solange Token, bis aktuelles Token im "*Resynchronization Set*"
+=> Entferne solange Token, bis aktuelles Token im "*Resynchronization Set*"
 
 
 ## Definition *Resynchronization Set*
@@ -250,7 +247,7 @@ expr: atom '^' INT ;    // Following Set für "atom": {'^'}
 
 **Following** ist dagegen **abhängig vom aktuellen Kontext**!
 
-*   Stack: `[group, expr, atom]` \blueArrow\ *Resynchronization Set*: `{'^', ']'}`
+*   Stack: `[group, expr, atom]` => *Resynchronization Set*: `{'^', ']'}`
 :::
 
 
@@ -326,7 +323,7 @@ class X {{ int x; }
 class Y { int y; }
 ```
 
-\blueArrow `line 1:9 extraneous input '{' expecting 'int'`
+=> `line 1:9 extraneous input '{' expecting 'int'`
 
 Die zweite `}` nach `X` wird am Start von `member` durch die extra *single token deletion* entfernt.
 
@@ -342,7 +339,7 @@ class X {
 class Y { int y; }
 ```
 
-\blueArrow `line 3:4 extraneous input 'y' expecting {'}', 'int'}`
+=> `line 3:4 extraneous input 'y' expecting {'}', 'int'}`
 
 Die Token resultierend aus `y;;;` werden schrittweise entfernt, bis das aktuelle Token wieder
 einen Schleifenanfang anzeigt.
@@ -358,7 +355,7 @@ class X {
 class Y { int y; }
 ```
 
-\blueArrow `line 3:4 extraneous input 'y' expecting {'}', 'int'}`
+=> `line 3:4 extraneous input 'y' expecting {'}', 'int'}`
 
 Die Token resultierend aus `y;;;` werden schrittweise entfernt, bis das aktuelle Token dem
 auf die Schleife folgenden Token entspricht.
@@ -373,7 +370,7 @@ class X {
 class Y { int y; }
 ```
 
-\blueArrow `line 3:4 extraneous input ';' expecting {'}', 'int'}`
+=> `line 3:4 extraneous input ';' expecting {'}', 'int'}`
 
 Das Token `;` wird entfernt. Da der Aufrufstack an der Stelle `[prog, classDef, member]`
 ist, ist das *Resynchronization Set* entsprechend `['int', '}', 'class']`. Dadurch wird
@@ -416,7 +413,7 @@ fort. Da das nächste Token wieder ein `int` ist, wird dieses wieder nicht entfe
 
 Das sieht man schön im generierten Parse-Tree:
 
-![Fail-Save](images/fail-save)\
+![](images/fail-save.png)
 :::
 
 
@@ -464,6 +461,17 @@ Definition von Statements mehrere Synchronisationspunkte einbauen:
 \bigskip
 \bigskip
 
+```yacc
+stmt : ...
+     | RETURN expr ';'
+     | '{' stmt_list '}'
+     | error ';'  /* Synchronisation für RETURN */
+     | error '}'  /* Synchronisation nach Block */
+     ;
+```
+
+[Quelle: [@Levine2009, S.207]]{.origin}
+
 **TODO Grammatik**
 
 ::: notes
@@ -487,6 +495,16 @@ Beispiel:
 ::: notes
 ### ANTLR
 :::
+
+```yacc
+funcall
+  : ID '(' expr ')'
+  | ID '(' expr ')' ')' {notifyErrorListeners("Too many ')'");}
+  | ID '(' expr         {notifyErrorListeners("Missing ')'");}
+  ;
+```
+
+[Quelle: nach [@Parr2014, S. 172]]{.origin}
 
 **TODO Grammatik**
 
@@ -518,10 +536,31 @@ Stelle ein Aufruf `this.notifyErrorListeners("Too many parentheses");` ...
 Erkennung von Strings (Flex):
 :::
 
+```
+\"[^\"\n]+\"    { yylval.string = yytext; return STRING; }
+\"[^\"\n]+$     { warning("unterminated string");
+                  yylval.string = yytext; return STRING; }
+```
+
+[Quelle: [@Levine2009, S. 198]]{.origin}
+
 **TODO Grammatik**
 
 ::: notes
 Erkennen von IDs:
+
+```
+id : NAME   { $$ = $1; }
+   | STRING { yyerror("id %s cannot be a string", $1);
+              $$ = $1; }
+   ;
+%%
+void yyerror(char *s, ...) {
+    va_list ap; va_start(ap, s);
+    fprintf(stderr, "%d: error: ", yylineno);
+    vfprintf(stderr, s, ap); fprintf(stderr, "\n");
+}
+```
 
 **TODO Code**
 
@@ -545,7 +584,7 @@ spezieller Datentyp `YYLTYPE`.
 ## ANTLR4: Ändern der Fehler-Meldungen
 
 ::: center
-![ANTLRErrorListener](images/listener){width="80%"}\
+![](images/listener.png){width="80%"}
 :::
 
 ```java
@@ -683,17 +722,31 @@ Liste der wichtigsten Exceptions (nach
 ::: notes
 ## ANTLR4: Ändern der Fehlerbehandlungs-Strategie (global)
 
-![Setzen eines eigenen Fehlerhandlers](images/handler)\
+![](images/handler.png)
 :::
 
 
 ::: notes
 ## Anmerkung: Nicht eindeutige Grammatiken
 
+```yacc
+grammar Ambig;
+
+stat: expr ';'        // expression statement
+    | ID '(' ')' ';'  // function call statement
+    ;
+
+expr: ID '(' ')'
+    | INT
+    ;
+```
+
+[Quelle: [@Parr2014, S. 159]]{.origin}
+
 **TODO Grammatik**
 
 
-\blueArrow Eingabe: `f()`
+=> Eingabe: `f()`
 
 [Konsole: Ambig.g4 ohne/mit "-diagnostics"]{.bsp}
 
