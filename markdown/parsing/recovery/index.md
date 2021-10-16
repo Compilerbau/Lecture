@@ -9,19 +9,13 @@ readings:
   - key: "Parr2014"
   - key: "Levine2009"
     comment: "Kapitel 7 und 8"
-quizzes:
-  - link: XYZ
-    name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
 assignments:
-  - topic: blatt01
+  - topic: sheet01
 youtube:
-  - id: XYZ (ID)
-  - link: https://youtu.be/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
+  - id: TODO
 fhmedia:
-  - link: https://www.fh-bielefeld.de/medienportal/m/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
-sketch: true
+  - link: "TODO"
+    name: "Direktlink FH-Medienportal: CB Error-Recovery"
 ---
 
 
@@ -470,7 +464,7 @@ Definition von Statements mehrere Synchronisationspunkte einbauen:
 \bigskip
 \bigskip
 
-**TODO Grammatik** 
+**TODO Grammatik**
 
 ::: notes
 Wenn Bison im Recovery-Modus ist, werden Symbole und ihre Werte vom Stack entfernt.
@@ -494,7 +488,7 @@ Beispiel:
 ### ANTLR
 :::
 
-**TODO Grammatik** 
+**TODO Grammatik**
 
 ::: notes
 <!-- XXX Konsole statt IDEA, weil zusätzliche Fehlermeldungen nur in Konsole auftauchen ... -->
@@ -524,12 +518,12 @@ Stelle ein Aufruf `this.notifyErrorListeners("Too many parentheses");` ...
 Erkennung von Strings (Flex):
 :::
 
-**TODO Grammatik** 
+**TODO Grammatik**
 
 ::: notes
 Erkennen von IDs:
 
-**TODO Code** 
+**TODO Code**
 
 [Quelle: [@Levine2009, S. 198]]{.origin}
 
@@ -696,7 +690,7 @@ Liste der wichtigsten Exceptions (nach
 ::: notes
 ## Anmerkung: Nicht eindeutige Grammatiken
 
-**TODO Grammatik** 
+**TODO Grammatik**
 
 
 \blueArrow Eingabe: `f()`
