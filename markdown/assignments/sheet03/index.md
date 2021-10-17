@@ -18,17 +18,5 @@ nächste Aufgabe) aus.
 
 ## A3.2: Optimierung
 
-<<<<<<< HEAD
 Welche der in der Vorlesung besprochenen Optimierungen sind in der betrachteten Sprache sinnvoll?
 Begründen Sie Ihre Analyse und führen Sie diese Optimierungen auf dem DAG durch.
-=======
-
-
-{{% challenges %}}
-## Optimierungen
-*   Welche Optimierungen finden typischerweise auf dem AST statt?
-*   Was ist "Peephole-Optimierung"? Welche Varianten kennen Sie und wozu dienen sie?
-*   Welche Probleme stellen sich bei der Register-Zuweisung? Wie kann man das algorithmisch umsetzen?
-*   Wie kann man durch Optimierungen Energieeinsparungen erreichen?
-{{% /challenges %}}
->>>>>>> challenges
