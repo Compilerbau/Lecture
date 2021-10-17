@@ -307,7 +307,7 @@ Bevor mit einer Grammatik weitergearbeitet wird, müssen erst alle nutzlosen und
 
 Hier ist ein einfacher Algorithmus, der (indeterministisch) einen Ableitungsbaum vom Nonterminal *X* von oben nach unten aufbaut:
 
-** Eingabe: Ein Nichtterminal $X$ und das nächste zu verarbeitende Eingabezeichen $a$.
+**Eingabe:** Ein Nichtterminal $X$ und das nächste zu verarbeitende Eingabezeichen $a$.
 
 ![Recursive Descent-Algorithmus](images/recursive_descent.png){width="55%"}
 
@@ -386,7 +386,10 @@ Wir brauchen die "terminalen k-Anfänge" von Ableitungen von Nichtterminalen, um
 
 **Def.:** Wir definieren $First$ - Mengen einer Grammatik wie folgt:
 
-![Definitioin von First-Mengen](images/Def_First.png){width="50%"}
+*   $a \in T^\ast, |a| \leq k: {First}_k (a) = \{a\}$
+*   $a \in T^\ast, |a| > k: {First}_k (a) = \lbrace v \in T^\ast \mid a = vw, |v| = k\rbrace$
+*   $A \in (N \cup T)^\ast \backslash T^\ast: {First}_k (A) = \lbrace v \in T^\ast \mid  A \overset{\ast}{\Rightarrow} w,\text{mit}\ w \in T^\ast*, First_k(w) = \lbrace v \rbrace \rbrace$
+
 
 ## Linksableitungen
 
@@ -401,15 +404,25 @@ Manchmal müssen wir wissen, welche terminalen Zeichen hinter einem Nichttermina
 
 **Def.** Wir definieren *Follow* - Mengen einer Grammatik wie folgt:
 
-![Definition von Follow-Mengen](images/Def_Follow.png){width="45%"}
+
+$\forall \beta \in (N \cup T)^*:$
+
+$Follow_k(\beta) = \lbrace w \in T^\ast \mid \exists \alpha, \gamma \in  (N \cup T)^\ast\ \text{mit}\
+S \overset{\ast}{\Rightarrow}_l \alpha \beta \gamma\ \text{und}\ w \in First_k(\gamma) \rbrace$
 
 
 ## LL(k)-Grammatiken
 
 **Def.:** Eine kontextfreie Grammatik *G = (N, T, P, S)* ist genau dann eine *LL(k)*-Grammatik, wenn für alle Linksableitungen der Form:
 
-![](images/Def_LLk.png){width="45%"}
+$S \overset{\ast}{\Rightarrow}_l\ wA \gamma\ {\Rightarrow}_l\ w\alpha\gamma \overset{\ast}{\Rightarrow}_l wx$
 
+und
+
+$S \overset{\ast}{\Rightarrow}_l wA \gamma {\Rightarrow}_l w\beta\gamma \overset{\ast}{\Rightarrow}_l wy$
+
+
+mit $(w, x, y \in T^\ast, \alpha, \beta, \gamma \in (N \cup T)^\ast, A \in N)$ und $First_k(x) = First_k(y)$
 gilt:
 
 $\alpha = \beta$
