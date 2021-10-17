@@ -8,27 +8,14 @@
 \usepackage{xcolor}
 
 \begin{document}
-
-%%
-%% 1. Copy this template into an image folder of your page: "images/my-algorithm.tex".
-%% 2. Paste the algorithm or listing with math escaping here and replace this comment.
-%% 3. Include the image with the same name in your page "index.md": "[My Algorithm](images/my-algorithm.png)".
-%%
-%% When generating the slide sets and the website, "images/my-algorithm.png" is
-%% automatically generated from "images/my-algorithm.tex" during pre-processing.
-%%
-
-\\begin{lstlisting} [mathescape, backgroundcolor=\color{lightgray},
-basicstyle=\scriptsize\ttfamily]
-Ersetze jede Produktion der Form
-
-    $X \rightarrow X\ \alpha \mid \beta$
-
-    durch die Produktionen
-
-    $X \rightarrow \beta \ Y$
-    $Y \rightarrow \alpha\ Y \mid \epsilon$
+\begin{lstlisting} [mathescape, backgroundcolor=\color{lightgray},
+	basicstyle=\scriptsize\ttfamily]
+	
+replace each production $X \rightarrow X \alpha \mid \beta$ by
+	$X \rightarrow \beta\  Y $
+	$Y \rightarrow \alpha\ Y \mid \epsilon$
+     	 	
+	
 \end{lstlisting}
 
-\end{lstlisting}
 \end{document}
