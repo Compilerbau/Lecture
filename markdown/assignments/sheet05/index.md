@@ -25,15 +25,4 @@ Erweitern Sie Ihren Interpreter um Interaktivität:
     Codeblöcken aus Dateien vor oder implementieren Sie entsprechend eine "logische
     Einrückung" für den Prompt als visuelles Feedback für den User
 
-<<<<<<< HEAD
 Sie können sich hier am [Interpreter für Lox](https://craftinginterpreters.com/a-tree-walk-interpreter.html) orientieren.
-=======
-{{% challenges %}}
-
-## Interpreter
-
-* Welche Sprachen kann man mit syntaxgesteuerten Interpretern verarbeiten?
-
-
-{{% /challenges %}}
->>>>>>> challenges
