@@ -25,16 +25,4 @@ Erweitern Sie Ihren Interpreter um Interaktivität:
     Codeblöcken aus Dateien vor oder implementieren Sie entsprechend eine "logische
     Einrückung" für den Prompt als visuelles Feedback für den User
 
-<<<<<<< HEAD
 Sie können sich hier am [Interpreter für Lox](https://craftinginterpreters.com/a-tree-walk-interpreter.html) orientieren.
-=======
-{{% challenges %}}
-## VM-Zwischencode
-
-*   Welche Varianten von Zwischencode kennen Sie? Was sind mögliche Vor- und Nachteile?
-*   Was ist "Drei-Adressen-Code"? Worin unterscheidet sich das Format von Assembler?
-*   Wie kann man Ausdrücke und Funktionen in Drei-Adressen-Code übersetzen?
-*   Wie geht man mit Klassen und Strukturen sowie mit Polymorphie um?
-
-{{% /challenges %}}
->>>>>>> challenges
