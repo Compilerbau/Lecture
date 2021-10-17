@@ -18,14 +18,5 @@ nächste Aufgabe) aus.
 
 ## A3.2: Optimierung
 
-<<<<<<< HEAD
 Welche der in der Vorlesung besprochenen Optimierungen sind in der betrachteten Sprache sinnvoll?
 Begründen Sie Ihre Analyse und führen Sie diese Optimierungen auf dem DAG durch.
-=======
-
-
-{{% challenges %}}
-## Bonus: Wuppie (2P)
-Erstellen Sie ...
-{{% /challenges %}}
->>>>>>> challenges
