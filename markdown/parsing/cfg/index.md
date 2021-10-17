@@ -6,21 +6,6 @@ weight: 1
 readings:
   - key: "aho2013compilers"
   - key: "hopcroft2003"
-quizzes:
-  - link: XYZ
-    name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
-assignments:
-  - topic: blatt01
-youtube:
-  - id: XYZ (ID)
-  - link: https://youtu.be/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
-fhmedia:
-  - link: https://www.fh-bielefeld.de/medienportal/m/XYZ
-    name: "Use This As Link Text (Direkt-Link from `'share'`{=markdown}-Button)"
-attachments:
-  - link: https://www.fh-bielefeld.de
-    name: "Extra Material, e.g. annotated slides `...`{=markdown} Use This As Link Text"
 sketch: true
 ---
 
@@ -71,19 +56,9 @@ Wir spendieren den DFAs einen möglichst einfachen, aber beliebig großen, Speic
 **Def.:** Ein Kellerautomat (PDA) $P = (Q,\ \Sigma,\ \Gamma,\  \delta,\ q_0,\ \perp,\ F)$
 ist ein Quintupel mit:
 
-\medskip
-\begin{tabular}{lp{11 cm}}
-Q: & eine endliche Menge von Zuständen\\
-$\Sigma$: & eine endliche Menge von Eingabesymbolen\\
-$\Gamma$: & ein endliches Kelleralphabet\\
-$\delta$: & die Übergangsfunktion\\
-&$\delta$ : Q $\times$ $\Sigma$ $\cup$ $\{\epsilon\}$ $\times \Gamma \to 2^{Q \times
-\Gamma^*{}}$ \\
-$q_0$:& der Startzustand\\
-$\perp \in \Gamma$: &  der anfängliche Kellerinhalt, symbolisiert den leeren\\
-& Keller ($\perp$ = bottom)\\
-F $\subseteq$ Q: & die Menge von Endzuständen
-\end{tabular}
+
+![Definition eines PDAs](images/Def_PDA.png){width="60%"}
+
 
 Ein PDA ist per Definition nichtdeterministisch und kann spontane Zustandsübergänge durchführen.
 
@@ -296,14 +271,6 @@ Wir verstehen unter Syntax eine Menge von Regeln, die die Struktur von Daten (z.
 Syntaxanalyse ist die Bestimmung, ob Eingabedaten einer vorgegebenen Syntax entsprechen.
 
 
-## Ergebnisse der Syntaxanalyse
-
-*   eventuelle  Syntaxfehler mit Angabe der Fehlerart und des -Ortes
-*   Fehlerkorrektur
-*   Format für die Weiterverarbeitung (Syntaxbaum)
-*   Symboltabelle
-
-
 ## Arten der Syntaxanalyse
 
 Die Syntax bezieht sich auf die Struktur der zu analysierenden Eingabe, z. B. einem Computerprogramm in einer Hochsprache. Diese Struktur wird mit formalen Grammatiken beschrieben. Einsetzbar sind Grammatiken, die deterministisch kontextfreie Sprachen erzeugen.
@@ -336,13 +303,13 @@ Bevor mit einer Grammatik weitergearbeitet wird, müssen erst alle nutzlosen und
 
 # Top-Down-Analyse
 
-## Rekursiver Abstieg
+##  Algorithmus: Rekursiver Abstieg
 
 Hier ist ein einfacher Algorithmus, der (indeterministisch) einen Ableitungsbaum vom Nonterminal *X* von oben nach unten aufbaut:
 
 ** Eingabe: Ein Nichtterminal $X$ und das nächste zu verarbeitende Eingabezeichen $a$.
 
-![Recursive Descent-Algorithmus](images/recursive_descent.png){width="45%"}
+![Recursive Descent-Algorithmus](images/recursive_descent.png){width="55%"}
 
 
 ## Grenzen des Algorithmus
@@ -366,13 +333,13 @@ $X \rightarrow BC\  \vert \  BD$
 \vfill
 \vfill
 
-## Linksfaktorisierung
+##  Algorithmus: Linksfaktorisierung
 
 **Eingabe:** Eine  Grammatik G = (N, T, P, S)
 
 **Ausgabe:** Eine äquivalente links-faktorisierte Grammatik $G'$
 
-![Algorithmus zur Linksfaktorisierung](images/linksfaktorisierung.png){width="85%"}
+![Algorithmus zur Linksfaktorisierung](images/Linksfaktorisierung.png){width="85%"}
 
 
 
@@ -388,22 +355,22 @@ und
 
 *indirekt*: $X \rightarrow \ldots \rightarrow \ldots \rightarrow X \alpha$
 
-## Entfernung von direkter Linksrekursion {.fragile}
-
-Algorithmus
+##  Algorithmus: Entfernung von direkter Linksrekursion {.fragile}
 
 **Eingabe:** Eine  Grammatik G = (N, T, P, S)
 
-**Ausgabe:** Eine äquivalente links-faktorisierte Grammatik $G'$ ohne Linksrekursion
+**Ausgabe:** Eine äquivalente Grammatik $G'$ ohne direkte Linksrekursion
 
-![Algorithmus zur Linksfaktorisierung](images/linksfaktorisierung.png){width="85%"}
+![Algorithmus zur Entfernung direkter Linksrekursion](images/direkte_Linksrekursion_Elim.png){width="55%"}
 
 
-## Entfernung von (in)direkter Linksrekursion {.fragile}
+##  Algorithmus: Entfernung von indirekter Linksrekursion {.fragile}
 
-Algorithmus
+**Eingabe:** Eine  Grammatik G = (N, T, P, S)  mit $N= \{X_1, X_2, \ldots X_n\}$ ohne $\epsilon$-Regeln oder Zyklen der Form $X_1 \rightarrow X_2, X_2 \rightarrow X_3, \ldots X_{m-1} \rightarrow X_m, X_m \rightarrow X_1$
 
-TODO
+**Ausgabe:** Eine äquivalente Grammatik $G'$ ohne Linksrekursion
+
+![Algorithmus zur Entfernung indirekter Linksrekursion](images/indirekte_Linksrekursion_Elim.png){width="60%"}
 
 
 
@@ -419,11 +386,7 @@ Wir brauchen die "terminalen k-Anfänge" von Ableitungen von Nichtterminalen, um
 
 **Def.:** Wir definieren $First$ - Mengen einer Grammatik wie folgt:
 
-*   $a \in T^*, |a| \leq k: {First}_k (a) = \{a\}$
-*   $a \in T^*, |a| > k: {First}_k (a) = \{v \in T^* \mid a = vw, |v| = k\}$
-*   $A \in (N \cup T)^* \backslash T^*: {First}_k (A) = \{v \in T^* \mid  A \overset{*}{\Rightarrow} w,$
- mit $w \in T^*, First_k(w) = \{ v \}\}$
-
+![Definitioin von First-Mengen](images/Def_First.png){width="50%"}
 
 ## Linksableitungen
 
@@ -438,24 +401,16 @@ Manchmal müssen wir wissen, welche terminalen Zeichen hinter einem Nichttermina
 
 **Def.** Wir definieren *Follow* - Mengen einer Grammatik wie folgt:
 
-$\forall \beta \in (N \cup T)^*:$
-
-$Follow_k(\beta) = \{w \in T^*\ \mid \exists \alpha, \gamma \in  (N \cup T)^*$ mit
-$S \overset{*}{\Rightarrow}_l \alpha \beta \gamma$ und $w \in First_k(\gamma) \}$
+![Definition von Follow-Mengen](images/Def_Follow.png){width="45%"}
 
 
 ## LL(k)-Grammatiken
 
 **Def.:** Eine kontextfreie Grammatik *G = (N, T, P, S)* ist genau dann eine *LL(k)*-Grammatik, wenn für alle Linksableitungen der Form:
 
-$S \overset{*}{\Rightarrow}_l wA \gamma {\Rightarrow}_l w\alpha\gamma \overset{*}{\Rightarrow}_l wx$
+![](images/Def_LLk.png){width="45%"}
 
-und
-
-$S \overset{*}{\Rightarrow}_l wA \gamma {\Rightarrow}_l w\beta\gamma \overset{*}{\Rightarrow}_l wy$
-
-
-mit $(w, x, y \in T^*, \alpha, \beta, \gamma \in (N \cup T)^*, A \in N)$ und $First_k(x) = First_k(y)$ gilt:
+gilt:
 
 $\alpha = \beta$
 
@@ -475,17 +430,17 @@ G ist $LL(1): \forall A \rightarrow \alpha, A \rightarrow \beta \in P, \alpha \n
 
 \bigskip
 
-1 und 2 bedeuten:
+1) und 2)bedeuten:
 
 $\alpha$ und $\beta$ können nicht beide $\epsilon$ ableiten,  $First_1(\alpha) \cap First_1(\beta) = \emptyset$
 
-3 und 4 bedeuten:
+3) und 4) bedeuten:
 
 $(\epsilon \in First_1(\beta)) \Rightarrow (First_1(\alpha) \cap Follow_1(A) = \emptyset)$
 $(\epsilon \in First_1(\alpha)) \Rightarrow (First_1(\beta) \cap Follow_1(A) = \emptyset)$
 
 
-## LL(k)-Grammatiken
+## LL(1)-Grammatiken
 
 
 ## LL(k)-Sprachen
@@ -499,12 +454,16 @@ Für eine kontextfreie Grammatik *G* ist nicht entscheidbar, ob es eine *LL(1)* 
 In der Praxis reichen $LL(1)$ - Grammatiken oft. Hier gibt es effiziente Parsergeneratoren, deren Eingabe eine LL(k)- (meist LL(1)-) Grammatik ist, und die als Ausgabe den Quellcode eines (effizienten) tabellengesteuerten Parsers generieren.
 
 
-## Konstruktion einer LL-Parsertabelle {.fragile}
+##  Algorithmus: Konstruktion einer LL-Parsertabelle {.fragile}
 
-Algorithmus
+**Eingabe:** Eine  Grammatik G = (N, T, P, S)
 
-TODO
+**Ausgabe:** Eine Parsertabelle *P*
 
+![Algorithmus zur Generierung einer LL-Parsertabelle](images/LL-Parsertabelle.png){width="60%"}
+
+Hier ist $\perp$ das Endezeichen des Inputs.
+Statt $First_1(\alpha)$ und $Follow_1(\alpha)$ wird oft nur $First(\alpha)$ und $Follow(\alpha)$ geschrieben.
 
 ## LL-Parsertabellen
 
@@ -513,15 +472,27 @@ TODO
 
 Rekursive Programmierung bedeutet, dass das Laufzeitsystem einen Stack benutzt (bei einem Recursive-Descent-Parser, aber auch bei der Parsertabelle). Diesen Stack kann man auch "selbst programmieren", d. h. einen PDA implementieren. Dabei wird ebenfalls die oben genannte Tabelle zur Bestimmung der nächsten anzuwendenden Produktion benutzt. Der Stack enthält die zu erwartenden Eingabezeichen, wenn immer eine Linksableitung gebildet wird. Diese Zeichen im Stack werden mit dem Input gematcht.
 
-## Tabellengesteuertes LL-Parsen mit einem PDA {.fragile}
+## Algorithmus: Tabellengesteuertes LL-Parsen mit einem PDA {.fragile}
 
-Algorithmus
+**Eingabe:** Eine  Grammatik G = (N, T, P, S), eine Parsertabelle *P* mit $w\perp$ als initialem Kellerinhalt 
 
-TODO
+**Ausgabe:** Wenn $w \in L(G)$,  eine Linksableitung von $w$, Fehler sonst
+
+![Algorithmus zum tabellengesteuerten LL-Parsen](images/LL-Parser.png){width="50%"}
 
 
+Der Eingabestring sei $w\perp$, der initiale Kellerinhalt sei $\perp$.
 
-# Wrap-Up
+
+## Ergebnisse der Syntaxanalyse
+
+*   eventuelle  Syntaxfehler mit Angabe der Fehlerart und des -Ortes
+*   Fehlerkorrektur
+*   Format für die Weiterverarbeitung:
+    *   Syntaxbaum oder Parse Tree
+    *   abstrakter Syntaxbaum (AST): Der Parse Tree ohne Symbole, die nach der Syntaxanalyse inhaltlich irrelevant sind (z. B. ;, Klammern, manche Schlüsselwörter, $\ldots$)
+*   Symboltabelle
+
 
 ## Wrap-Up
 
@@ -529,6 +500,7 @@ TODO
 *   Eine Teilmenge der dazu gehörigen Sprachen lässt sich bottom-up parsen.
 *   Ein einfacher Recursive-Descent-Parser arbeitet mit Backtracking.
 *   Ein effizienter LL(k)-Parser realisiert einen DPDA und kann automatisch aus einer LL(k)-Grammatik generiert werden.
+*   Der Parser liefert in der Regel einen abstrakten Syntaxbaum.
 
 
 
