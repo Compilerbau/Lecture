@@ -19,23 +19,21 @@
 %%
 \begin{lstlisting} [mathescape, backgroundcolor=\color{lightgray},
 	basicstyle=\scriptsize\ttfamily]
+	for each $A \in N$ find the longest prefix
+	$\alpha \in (N \cup T)^*$ common to at least two of its alternatives.
 	
-repeat
-   for each $X \in N$ 
-      find the longest prefix $\alpha \in (N \cup T)^*$ common to at least two 
-         of its productions
-
-      if $\alpha \neq \epsilon$ exists
-         replace all $X$-productions
-
-              $X \rightarrow \alpha\ {\beta}_1 \mid \alpha\ {\beta}_2 \mid \ldots \mid \alpha\ {\beta}_n \mid \gamma$ 
-              (with $\gamma \neq \alpha \delta$ for a $\delta \in (N \cup T)^*$)
-             
-	        by the following rules with a new nonterminal $Y$:
-
-                  $X \rightarrow \alpha\ Y \mid \gamma$
-                  $Y\rightarrow {\beta}_1 \mid {\beta}_2 \mid \ldots \mid {\beta}_n$
-
-  until there are no two $X \in N$ with productions with common prefixes
+	If $\alpha \neq \epsilon$ exists, replace all $A$-productions
+	
+	$A \rightarrow \alpha\ {\beta}_1 \mid \alpha\ {\beta}_2 \mid \ldots \mid \alpha\ {\beta}_n \mid \gamma$
+	
+	(with $\gamma$ representing all alternatives not
+	beginning with $\alpha$)
+	by rules with a new nonterminal $A'$ of the form:
+	
+	$A \rightarrow \alpha\ A' \mid \gamma$
+	$A'\rightarrow {\beta}_1 \mid {\beta}_2 \mid \ldots \mid {\beta}_n$
+	
+	Repeat these steps until there are only nonterminals
+	without alternatives with common prefixes.
 \end{lstlisting}
 \end{document}
