@@ -23,7 +23,6 @@ Erzeugen Sie mithilfe der Grammatik und ANTLR einen Scanner und Parser, den Sie 
 Aufgaben nutzen.
 
 
-<<<<<<< HEAD
 ## A2.3: Symboltabellen
 
 Fügen Sie Symboltabellen in Ihren Compiler ein.
@@ -39,15 +38,3 @@ durch.
 
 Bestimmen Sie zunächst, wo ein Type Checking möglich und/oder nötig ist. Welche Attribute benötigen Sie,
 wo können Sie Ableitungsregeln geeignet einsetzen/anpassen?
-=======
-{{% challenges %}}
-
-## Symboltabellen
-
-*   Warum werden Symboltabellen eingesetzt?
-*   Warum muss man zwischen Deklaration und Definition unterscheiden?
-*   Erklären Sie die Verbindung einer Symboltabelle zu den einzelnen
-    Phasen einer Compiler-Pipeline.
-*   Wo liegen die Grenzen der semantischen Analyse?
-{{% /challenges %}}
->>>>>>> challenges
