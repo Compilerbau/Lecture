@@ -6,22 +6,6 @@ weight: 1
 readings:
   - key: "aho2013compilers"
   - key: "hopcroft2003"
-quizzes:
-  - link: XYZ
-    name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
-assignments:
-  - topic: blatt01
-youtube:
-  - id: XYZ (ID)
-  - link: https://youtu.be/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
-fhmedia:
-  - link: https://www.fh-bielefeld.de/medienportal/m/XYZ
-    name: "Use This As Link Text (Direkt-Link from `'share'`{=markdown}-Button)"
-attachments:
-  - link: https://www.fh-bielefeld.de
-    name: "Extra Material, e.g. annotated slides `...`{=markdown} Use This As Link Text"
-sketch: true
 ---
 
 
@@ -489,7 +473,7 @@ Rekursive Programmierung bedeutet, dass das Laufzeitsystem einen Stack benutzt (
 
 ## Algorithmus: Tabellengesteuertes LL-Parsen mit einem PDA {.fragile}
 
-**Eingabe:** Eine  Grammatik G = (N, T, P, S), eine Parsertabelle *P* mit $w\perp$ als initialem Kellerinhalt
+**Eingabe:** Eine  Grammatik G = (N, T, P, S), eine Parsertabelle *P* mit $w\perp$ als initialem Kellerinhalt 
 
 **Ausgabe:** Wenn $w \in L(G)$,  eine Linksableitung von $w$, Fehler sonst
 
