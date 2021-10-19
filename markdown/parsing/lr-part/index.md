@@ -119,7 +119,7 @@ Shiften bedeutet, das nächste Eingabesymbol miteinbeziehen.
 
 ## Da wollen wir hin
 
-![LR(0)-Automat](images/LR_0-Automat.png){width=500}\
+![Parser-Automat](images/Parser-Automat.png){width=500}\
 
 
 ## So geht es
