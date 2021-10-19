@@ -6,6 +6,9 @@ weight: 1
 readings:
   - key: "aho2013compilers"
   - key: "hopcroft2003"
+attachments:
+  - link: "https://github.com/Compilerbau/AnnotatedSlides/blob/master/parsing_cfg.ann.pdf"
+    name: "Annotierte Folien: CFG, LL-Parser"
 ---
 
 
@@ -486,7 +489,7 @@ Rekursive Programmierung bedeutet, dass das Laufzeitsystem einen Stack benutzt (
 
 ## Algorithmus: Tabellengesteuertes LL-Parsen mit einem PDA {.fragile}
 
-**Eingabe:** Eine  Grammatik G = (N, T, P, S), eine Parsertabelle *P* mit $w\perp$ als initialem Kellerinhalt 
+**Eingabe:** Eine  Grammatik G = (N, T, P, S), eine Parsertabelle *P* mit $w\perp$ als initialem Kellerinhalt
 
 **Ausgabe:** Wenn $w \in L(G)$,  eine Linksableitung von $w$, Fehler sonst
 
