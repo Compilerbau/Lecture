@@ -7,8 +7,8 @@ digraph G {
 	node [shape = doublecircle, label="q2"]; 2;
 	
 	start -> 0;
-	0 -> 1 [label = "&#949;, &#8869; / &#8869;\n &#949;, a / a\n &#949;, b / b"];
+	0 -> 1 [label = "&#949;, &#8869; / &#8869;\l&#949;, a / a\l&#949;, b / b\l"];
 	1 -> 2 [label = "&#949;, &#8869; / &#8869;"];
-	0 -> 0 [label = "a, &#8869; / a&#8869;\n b, &#8869; / b&#8869;\n a, a / aa\n a, b / ab\n b, a / ba\n b, b / bb\n"];
-	1 -> 1 [label = "a, a / &#949;\n b, b / &#949;"];
+	0 -> 0 [label = "a, &#8869; / a&#8869;\lb, &#8869; / b&#8869;\la, a / aa\la, b / ab\lb, a / ba\lb, b / bb\l"];
+	1 -> 1 [label = "a, a / &#949;\lb, b / &#949;\l"];
 }
