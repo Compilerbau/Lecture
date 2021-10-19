@@ -34,7 +34,7 @@ sketch: true
 # Wiederholung
 <!-- 10 Minuten: 1 Folie -->
 
-TODO: PDA Bild (hopcroft2003)
+![Ein PDA für $L=\{ww^{R}\mid w\in \{a,b\}^{\ast}\}$](images/pda.png){width="45%"}
 
 ## Top-Down-Analyse
 
