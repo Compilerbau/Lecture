@@ -6,6 +6,9 @@ weight: 1
 readings:
   - key: "aho2013compilers"
   - key: "hopcroft2003"
+attachments:
+  - link: "https://github.com/Compilerbau/AnnotatedSlides/blob/master/parsing_cfg.ann.pdf"
+    name: "Annotierte Folien: CFG, LL-Parser"
 ---
 
 
