@@ -164,7 +164,7 @@ Mehrdeutige Grammatiken können nicht *LR* sein.
 
 ## Steuerung des Parsens mittels der Parse Table
 
-TODO: Bild Parsschema (aho2013compilers, S.248 (Abb. 4.35))
+![Parser Schema](images/ParserProgram.png)
 
 
 ## Arbeitsweise
