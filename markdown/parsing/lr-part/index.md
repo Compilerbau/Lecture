@@ -119,7 +119,7 @@ Shiften bedeutet, das nächste Eingabesymbol miteinbeziehen.
 
 ## Da wollen wir hin
 
-TODO: Bild LR(0)-Automat (Aho u. a. 2013, S. 244 (Abb. 4.31))
+![LR(0)-Automat](images/LR_0-Automat.png){width=500}\
 
 
 ## So geht es
