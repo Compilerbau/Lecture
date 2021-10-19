@@ -6,21 +6,19 @@ hidden: true
 
 
 {{% k1 %}}
-*   PDAs
-*   Deterministische PDAs
-*   Kontextfreie Grammatiken
-*   Deterministisch kontextfreie Grammatiken
-*   Top-Down-Analyse
-*   Recursive-Descent-Parser
-*   First- und Follow-Mengen
-*   LL-Parser
+-   Wuppie
+-   Fluppie
 {{% /k1 %}}
 
 {{% k2 %}}
-*   Zusammenhang zwischen PDAs und kontextfreien Grammatiken
-*   Schreiben von LL-Parsern
+-   foo
+-   bar
 {{% /k2 %}}
 
 {{% k3 %}}
-*   Top-Down Analyse programmieren
+hammwanich
 {{% /k3 %}}
+
+{{% k4 %}}
+gibbetsooch
+{{% /k4 %}}
