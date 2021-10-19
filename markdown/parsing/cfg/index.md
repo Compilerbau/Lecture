@@ -512,7 +512,7 @@ Der Eingabestring sei $w\perp$, der initiale Kellerinhalt sei $\perp$.
 ## Wrap-Up
 
 *   Syntaxanalyse wird mit deterministisch kontextfreien Grammatiken durchgeführt.
-*   Eine Teilmenge der dazu gehörigen Sprachen lässt sich bottom-up parsen.
+*   Eine Teilmenge der dazu gehörigen Sprachen lässt sich top-down parsen.
 *   Ein einfacher Recursive-Descent-Parser arbeitet mit Backtracking.
 *   Ein effizienter LL(k)-Parser realisiert einen DPDA und kann automatisch aus einer LL(k)-Grammatik generiert werden.
 *   Der Parser liefert in der Regel einen abstrakten Syntaxbaum.
