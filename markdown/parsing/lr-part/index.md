@@ -419,7 +419,7 @@ Folgendes kann trotzdem helfen:
 
 # Hierarchie der kontextfreien Sprachen
 
-TODO: Bild Hierarchie (Wagenknecht2014, S.197 (Abb. 10.3))
+![Sprachenhierarchie](images/CFG-hierarchy.png)\
 
 
 
