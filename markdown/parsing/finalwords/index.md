@@ -4,6 +4,7 @@ title: "Grenze Lexer und Parser"
 author: "Carsten Gips (FH Bielefeld)"
 weight: 9
 readings:
+  - key: "Nystrom2021"
   - key: "Parr2014"
 assignments:
   - topic: sheet01
@@ -70,74 +71,75 @@ andersherum: Man sollte dem Parser nicht unnötige Arbeit aufbürden.
 4.  Wenn der Parser Texteinheiten unterscheiden muss, erzeuge dafür eigene Token-Typen im Lexer.
 
     ::: notes
-    Wenn der Parser etwa Elemente einer IP-Adresse verarbeiten muss, sollte
-    der Lexer passende Token für die Teile der IP-Adresse erzeugen und an den
+    Wenn der Parser etwa Elemente einer Telefonnummer verarbeiten muss, sollte
+    der Lexer passende Token für die Teile der Telefonnummer erzeugen und an den
     Parser schicken.
     :::
 
 
-## Diskussion: Parsen von Logfiles eines Webservers
+## Diskussion: Parsen von Adressbüchern und Telefonnummern
 
 ::: notes
-Typischer Aufbau einer Zeile im Logfile eines Webservers:
+Typischer Aufbau eines Adressbuch-Eintrags:
 :::
 
 ``` {size="footnotesize"}
-192.168.0.10 "GET /wuppie.html HTTP/1.0" 200
+Vorname Name: +49.571.8385-268
 ```
 
 \pause
 \bigskip
 
-*   Zählen der Zeilen
+*   Zählen der Zeilen des Adressbuchs
 
     ::: notes
     Wenn es nur um das Zählen der Zeilen geht, muss der Parser nicht den
-    Aufbau der Zeilen oder sogar der IP-Adressen verstehen. Es reichen
-    einfache Lexer-Regeln, die quasi die Zeilenumbrüche repräsentieren.
-    Der Rest wird per `skip` einfach entfernt ...
+    Aufbau der Zeilen oder sogar den Aufbau von Telefonnummern verstehen.
+    Es reichen einfache Lexer-Regeln (`ROW`), die quasi die Zeilenumbrüche
+    repräsentieren. Der Rest (`OTHER`) wird per `skip` (ANTLR-Syntax)
+    einfach entfernt ...
     :::
 
     ``` {.yacc size="scriptsize"}
-    file : ROW+;
-    ROW  : '\n';
-    STUFF: ~'\n' -> skip ;
+    addrbk : ROW+;
+    ROW    : '\n';
+    OTHER  : ~'\n' -> skip ;
     ```
 
 \pause
 
-*   Liste aller IP-Adressen
+*   Liste aller Telefonnummern
 
     ::: notes
-    Wenn man nun eine Liste aller IP-Adressen erzeugen will, wäre es ausreichend,
-    die Struktur einer Zeile (und damit die IP-Adressen) mit Lexer-Regeln
+    Wenn man nun eine Liste aller Telefonnummern erzeugen will, wäre es ausreichend,
+    die Struktur einer Zeile (und damit die Telefonnummern) mit Lexer-Regeln
     (und -Fragmenten) zu erkennen.
     :::
 
     ``` {.yacc size="scriptsize"}
-    file: row+;
-    row : IP REST;
-    IP  : INT '.' INT '.' INT '.' INT ;
+    addrbk  : row+;
+    row     : SURNAME NAME ':' TELNR;
     ```
 
 \pause
 
-*   Bearbeiten der IP-Adressen im Parser (Aktionen)
+*   Weitere Verarbeiten der Telefonnummern im Parser (Aktionen)
 
     ::: notes
-    Wenn man zusätzlich die IP-Adressen noch im Parser bearbeiten will
-    (etwa durch eingebettete Aktionen), dann muss die Regel zum Erkennen
-    der Adressen entsprechend eine Parser-Regel sein:
+    Wenn man zusätzlich die Telefonnummern noch weiter im Parser verarbeiten will
+    (etwa durch eingebettete Aktionen), dann muss die Regel zum Erkennen der
+    Adressen entsprechend eine Parser-Regel sein:
     :::
 
     ``` {.yacc size="scriptsize"}
-    file: row+;
-    row : ip REST;
-    ip  : INT '.' INT '.' INT '.' INT ;
-    ```
+    addrbk  : row+;
+    row     : SURNAME NAME ':' telnr;
+   ```
 
-[[Quelle: nach [@Parr2014, S. 82]]{.origin}]{.notes}
-**TODO Code**
+::: notes
+Die weiterführenden Lexer- und Parser-Regeln (`telnr`, `TELNR`, `SURNAME`, `NAME`)
+sind hier nicht dargestellt.
+:::
 
 
 ## Wrap-Up
@@ -155,7 +157,4 @@ Typischer Aufbau einer Zeile im Logfile eines Webservers:
 ![](https://licensebuttons.net/l/by-sa/4.0/88x31.png)
 
 Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
-
-### Exceptions
-*   TODO (what, where, license)
 :::
