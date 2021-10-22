@@ -285,7 +285,7 @@ beispielsweise alternativ einen Namen (`ID`) oder einen Integer (`INT`) verlange
 ## ANTLR4: Details zu Fehlerbehandlung in Sub-Regeln
 
 Bei Sub-Regeln (d.h. eine Regel enthält Alternativen) oder Schleifenkonstrukten
-(d.h. eine Regel enthält `(...)*` oder `(...)+`) geht ANTLR etwas anders vor.
+(d.h. eine Regel enthält `(...)*` oder `(...)+`) geht ANTLR4 etwas anders vor.
 
 ```yacc
 classDef :  'class' ID '{' member+ '}' ;
@@ -493,7 +493,7 @@ Beispiel:
 ## Fehlerproduktionen
 
 ::: notes
-### ANTLR
+### ANTLR4
 :::
 
 ```yacc
@@ -584,7 +584,7 @@ spezieller Datentyp `YYLTYPE`.
 ## ANTLR4: Ändern der Fehler-Meldungen
 
 ::: center
-![](images/listener.png){width="80%"}
+![](images/listener.png)
 :::
 
 
@@ -691,7 +691,7 @@ selbst steckt.
 Während des Debuggings von Grammatiken lohnt es sich aber, diese Warnungen
 zu aktivieren. Dies kann entweder mit der Option "`-diagnostics`" beim Aufruf
 des `grun`-Tools geschehen oder über das Setzen des `DiagnosticErrorListener`
-aus der ANTLR-Runtime als ErrorListener.
+aus der ANTLR4-Runtime als ErrorListener.
 
 
 ### Bison
@@ -709,7 +709,7 @@ man im über die Option `-v` erzeugten `<name>.output`-File überprüfen.
 
 *   Panic Mode: *sync-and-return* bis Token in *Resynchronization Set* (ANTLR4)
     oder `error`-Token shiftbar (Bison)
-    *   ANTLR: Sonderbehandlung bei Start von Sub-Regeln und in Schleifen
+    *   ANTLR4: Sonderbehandlung bei Start von Sub-Regeln und in Schleifen
     *   ANTLR4: Fail-Save zur Vermeidung von Endlosschleifen
 
 *   Fehler-Alternativen in Grammatik einbauen
