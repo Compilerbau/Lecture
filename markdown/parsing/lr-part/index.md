@@ -246,19 +246,16 @@ Hier entsteht ein Tafelbild.
 
 ## Die Beispielgrammatik G1
 
-TODO ersetzen
+(0) $S^{'} \rightarrow S$
 
-(1) $Z \rightarrow S$
+(1) $S     \rightarrow a A b S c S$
 
-(2) $S \rightarrow Sb$
+(2) $S     \rightarrow a A b S$
 
-(3) $S \rightarrow bAa$
+(3) $S     \rightarrow d$
 
-(4) $A \rightarrow aSc$
+(4) $A     \rightarrow e$
 
-(5) $A \rightarrow a$
-
-(5) $A \rightarrow aSb$
 
 ## Der LR(0)-Automat zu G1
 
@@ -352,10 +349,14 @@ Terminals eingetragen, die in der LOOKAHEAD-Menge der entsprechenden Regel entha
 
 ## Die Beispielgrammatik G2
 
-(0) S' → S
-(1) S → NN
-(2) N → 0N
-(3) N → 1
+(0) $S^{'} \rightarrow S$
+
+(1) $S \rightarrow NN$
+
+(2) $N \rightarrow 0N$
+
+(3) $N \rightarrow 1$
+
 
 ## Der LR(1)-Automat der Grammatik G2
 
