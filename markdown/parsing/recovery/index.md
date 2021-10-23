@@ -354,115 +354,120 @@ Zu Details zur Fehlerbehandlung durch ANTLR vergleiche [@Parr2014, S. 170 ff.].
 ## Panic Mode in Bison (Error Recovery)
 
 ```yacc
-line    : /* nothing */
-        | line expr '\n'    { printf("%d\n", $2); }
-        | error '\n'        { yyerror(); yyerrok; }
-        ;
-```
-
-::: notes
-Bison kennt ein spezielles Fehler-Token `error`. Dieses Token wird genutzt, um einen
-Synchronisationspunkt in der Grammatik zu finden, von dem aus man *höchstwahrscheinlich*
-weiter parsen kann.
-
-Der Parser wird mit diesen Produktionen generiert wie mit normalen Token auch. Im
-Fehlerfall werden so lange Symbole vom Stack entfernt, bis eine Regel der Form
-$A \to \operatorname{error} \alpha$ anwendbar ist. Dann wird das Token `error` auf den
-Stack geschoben und so lange Eingabe-Token gelesen und verworfen, bis eines gefunden
-wird, welches auf das `error`-Token folgen kann. Dies nennt Bison "Resynchronisation".
-Anschließend wird im Recovery-Modus normal fortgefahren, bis drei weitere Token auf den
-Stack geschoben wurden und damit der Recovery-Modus verlassen wird. Falls bereits vorher
-weitere Fehler auftreten, werden diese nicht separat gemeldet.
-
-Im obigen Beispiel ist die Regel `line : error '\n'` enthalten. Im Fehlerfall werden die
-Symbole vom Stack entfernt, bis ein Zustand erreicht ist, der eine Shift-Aktion auf das
-Token `error` hat. Das Error-Token wird auf den Stack geschoben und alle Eingabetoken bis
-zum nächsten `'\n'` gelesen und entfernt. Mit dem Erreichen des Umbruchs wird die zugeordnete
-Aktion ausgeführt. Diese gibt den Fehler auf der Konsole aus und führt mit dem Makro `yyerrok`
-einen Reset des Parsers aus (d.h. er verlässt den Recovery-Modus **vor** dem Shiften von drei
-Token). Anschließend ist der Bison-Parser wieder im normalen Modus. Die fehlerhaften Symbole/Token
-wurden aus dem Eingabestrom entfernt.
-
-
-Die "schwarze Kunst" ist, die Error-Token an geeigneten Stellen unterzubringen, d.h.
-vorherzusehen, wo der Parser am sinnvollsten wieder aufsetzen kann. Häufig sind dies
-beispielsweise das ein Statement beendende Semikolon oder die einen Block beendende
-schließende geschweifte Klammer. Beispielsweise könnte man für die Sprache C bei der
-Definition von Statements mehrere Synchronisationspunkte einbauen:
-:::
-
-\pause
-\bigskip
-\bigskip
-
-```yacc
-stmt : ...
-     | RETURN expr ';'
-     | '{' stmt_list '}'
-     | error ';'  /* Synchronisation für RETURN */
-     | error '}'  /* Synchronisation nach Block */
+stmt : 'int' ID ';'     { printf("%s\n", $2); }
+     | error '\n'       { yyerror(); yyerrok; }
      ;
 ```
 
-[Quelle: [@Levine2009, S.207]]{.origin}
-
-**TODO Grammatik**
-
 ::: notes
+Bison kennt ein spezielles Fehler-Token `error`. Dieses Token wird genutzt, um
+einen Synchronisationspunkt in der Grammatik zu definieren, von dem aus man
+*höchstwahrscheinlich* weiter parsen kann.
+
+### Parsen mit *error*-Token
+
+Der Parser wird mit diesen Produktionen generiert wie mit normalen Token auch.
+Im Fehlerfall werden so lange Symbole vom Stack entfernt, bis eine Regel der
+Form $A \to \operatorname{error} \alpha$ anwendbar ist. Dann wird das Token
+`error` auf den Stack geschoben und so lange Eingabe-Token gelesen und verworfen,
+bis eines gefunden wird, welches auf das `error`-Token folgen kann. Dies nennt
+Bison "Resynchronisation". Anschließend wird im Recovery-Modus normal fortgefahren,
+bis drei weitere Token auf den Stack geschoben wurden und damit der Recovery-Modus
+verlassen wird. Falls bereits vorher weitere Fehler auftreten, werden diese nicht
+separat gemeldet.
+
+### Anwendung im obigen Beispiel
+
+Im obigen Beispiel ist die Regel `stmt : error '\n'` enthalten. Im Fehlerfall
+werden die Symbole vom Stack entfernt, bis ein Zustand erreicht ist, der eine
+Shift-Aktion auf das Token `error` hat. Das Error-Token wird auf den Stack
+geschoben und alle Eingabetoken bis zum nächsten `'\n'` gelesen und direkt
+entfernt. Mit dem Erreichen des Zeilenumbruchs wird die zugeordnete Aktion
+ausgeführt. Diese gibt den Fehler auf der Konsole aus und führt mit dem Makro
+`yyerrok` einen Reset des Parsers aus (d.h. er verlässt den Recovery-Modus
+**vor** dem Shiften der per Default drei gültigen Token). Anschließend ist der
+Bison-Parser wieder im normalen Modus. Die fehlerhaften Symbole/Token wurden
+aus dem Eingabestrom entfernt.
+
+### Wo kommen die *error*-Token am besten hin?
+
+Die "schwarze Kunst" ist, die Error-Token an geeigneten Stellen unterzubringen,
+d.h. vorherzusehen, wo der Parser am sinnvollsten wieder aufsetzen kann. Häufig
+sind dies beispielsweise das ein Statement beendende Semikolon oder die einen
+Block beendende schließende geschweifte Klammer. Beispielsweise könnte man für
+die Sprache C bei der Definition von Statements mehrere Synchronisationspunkte
+einbauen:
+
+```yacc
+stmt : ...
+     | error ';'    /* Synchronisation für 'return' */
+     | error '}'    /* Synchronisation nach Block */
+     | error '\n'   /* Synchronisation nach Zeilenumbruch */
+     ;
+```
+
+### Bison und C und Speichermanagement im Fehlerfall
+
 Wenn Bison im Recovery-Modus ist, werden Symbole und ihre Werte vom Stack entfernt.
 Falls diese Werte (vgl. `%union`) Pointer mit dynamisch alloziertem Speicher sind,
-muss Bison diesen Speicher freigeben. Dazu kann man sich über die Direktive
-`%destructor { code } symbols`  oder `%destructor { code } <types>`
-Code definieren, der dann für die jeweiligen Symbole oder Typen ausgeführt wird.
+muss Bison diesen Speicher freigeben.
+
+Dazu kann man sich über die Direktive `%destructor { code } symbols` oder
+`%destructor { code } <types>` Code definieren, der dann für die jeweiligen Symbole
+oder Typen ausgeführt wird.
+
 Die Typangabe `<*>` dient dabei als Catch-All für Symbole, für die ein Typ definiert
 wurde, aber kein Destruktor.
 
+
 Beispiel:
+
 ```yacc
-%destructor { printf("freeing %s at %d\n", $$, @$.first_line); free($$); } <strval>
+%union {
+    char* str;
+}
+%token <str> ID
+
+%destructor { free($$); } <str>
 ```
+
+Für weitere Details vergleiche [@Levine2009, Kap. 8].
 :::
 
 
 ## Fehlerproduktionen
 
 ::: notes
+Häufig vorkommende Fehler kann man bereits in der Grammatik berücksichtigen.
+Dadurch kommt es nicht zu einem Parser-Error mit Recovery-Mechanismus, sondern
+der Fehler wird über eine entsprechende Alternative in der Grammatik korrigiert.
+
+Es bietet sich an, in diesem Fall eine entsprechende Ausgabe zu tätigen. Dies
+wird in der folgenden Grammatik über eingebettete Aktionen erledigt.
+:::
+
+::: notes
 ### ANTLR4
 :::
 
 ```yacc
-funcall
-  : ID '(' expr ')'
-  | ID '(' expr ')' ')' {notifyErrorListeners("Too many ')'");}
-  | ID '(' expr         {notifyErrorListeners("Missing ')'");}
-  ;
+stmt : 'int' ID ';'
+     : 'int' ID             {notifyErrorListeners("Missing ';'");}
+     : 'int' ID ';' ';'     {notifyErrorListeners("Too many ';'");}
+     ;
 ```
 
-[Quelle: nach [@Parr2014, S. 172]]{.origin}
-
-**TODO Grammatik**
-
 ::: notes
-<!-- XXX Konsole statt IDEA, weil zusätzliche Fehlermeldungen nur in Konsole auftauchen ... -->
-[Konsole: Call.g4]{.bsp}
-
-Häufig vorkommende Fehler kann man bereits in der Grammatik berücksichtigen.
-Dadurch kommt es nicht zu einem Parser-Error mit Recovery-Mechanismus, sondern
-der Fehler wird über eine entsprechende Alternative in der Grammatik korrigiert.
-Es bietet sich an, in diesem Fall eine entsprechende Ausgabe zu tätigen. Dies
-wird in der obigen Grammatik über eingebettete Aktionen erledigt.
-
 Der aus der Grammatik generierte Parser leitet von der Basisklasse `Parser`
 ab. Dort wird eine Methode `notifyErrorListeners()` implementiert, die man
 mit Hilfe von in die Grammatik eingebetteten Aktionen aufrufen kann (Vorgriff
-auf ["Interpreter: Attribute+Aktionen"](cb_interpreter2.html)). Letztlich steht
-im generierten Parser in der generierten Methode `funcall()` an der passenden
-Stelle ein Aufruf `this.notifyErrorListeners("Too many parentheses");` ...
+auf `["Syntaxgesteuerte Interpreter"]({{<ref "/interpretation/syntaxdriven" >}})`{=markdown}).
+Letztlich steht im generierten Parser in der generierten Methode `stmt()` an
+der passenden Stelle ein Aufruf `notifyErrorListeners(Too many ';'");` ...
 :::
 
 \bigskip
 \bigskip
-
 
 :::notes
 ### Flex und Bison
@@ -470,24 +475,11 @@ Stelle ein Aufruf `this.notifyErrorListeners("Too many parentheses");` ...
 Erkennung von Strings (Flex):
 :::
 
-```
-\"[^\"\n]+\"    { yylval.string = yytext; return STRING; }
-\"[^\"\n]+$     { warning("unterminated string");
-                  yylval.string = yytext; return STRING; }
-```
-
-[Quelle: [@Levine2009, S. 198]]{.origin}
-
-**TODO Grammatik**
-
-::: notes
-Erkennen von IDs:
-
-```
-id : NAME   { $$ = $1; }
-   | STRING { yyerror("id %s cannot be a string", $1);
-              $$ = $1; }
-   ;
+```yacc
+stmt : 'int' ID ';'     { $$ = $2; }
+     : 'int' ID         { yyerror("unterminated id");
+                          $$ = $2; }
+     ;
 %%
 void yyerror(char *s, ...) {
     va_list ap; va_start(ap, s);
@@ -496,10 +488,7 @@ void yyerror(char *s, ...) {
 }
 ```
 
-**TODO Code**
-
-[Quelle: [@Levine2009, S. 198]]{.origin}
-
+::: notes
 Analog zu ANTLR4 ist es auch in Flex/Bison üblich, für typische Szenarien
 "nicht ganz korrekte" Eingaben zu akzeptieren. Dazu definiert man zusätzliche
 Lexer- oder Parser-Regeln, die diese Eingaben als das, was gemeint war akzeptieren
@@ -511,47 +500,32 @@ mit `yylineno` hat man Zugriff auf die aktuelle Eingabezeile (`yylineno`
 wird automatisch bei jedem `\n` inkrementiert). Wenn man weitere Informationen
 benötigt, muss man mit dem Bison-Feature "Locations" arbeiten. Dies ist ein
 spezieller Datentyp `YYLTYPE`.
+
+Für weitere Details vergleiche [@Levine2009, Kap. 8].
 :::
-
-
 
 
 ::: notes
 ## Anmerkung: Nicht eindeutige Grammatiken
 
 ```yacc
-grammar Ambig;
-
-stat: expr ';'        // expression statement
-    | ID '(' ')' ';'  // function call statement
-    ;
-
-expr: ID '(' ')'
-    | INT
-    ;
+stat: expr ';' | ID '+' ID ';' ;
+expr: ID '+' ID | INT ;
 ```
 
-[Quelle: [@Parr2014, S. 159]]{.origin}
-
-**TODO Grammatik**
-
-
-=> Eingabe: `f()`
-
-[Konsole: Ambig.g4 ohne/mit "-diagnostics"]{.bsp}
-
+=> Was passiert bei der Eingabe: `a+b` ??! Welche Regel/Alternative soll
+jetzt matchen, d.h. welcher AST soll am Ende erzeugt werden?!
 
 ### ANTLR4
 
-Nicht eindeutige Grammatiken führen **nicht** zu einer Fehlermeldung, da nicht
-der Nutzer mit seiner Eingabe Schuld ist, sondern das Problem in der Grammatik
-selbst steckt.
+Nicht eindeutige Grammatiken führen **nicht** zu einer Fehlermeldung,
+da nicht der Nutzer mit seiner Eingabe Schuld ist, sondern das Problem
+in der Grammatik selbst steckt.
 
-Während des Debuggings von Grammatiken lohnt es sich aber, diese Warnungen
-zu aktivieren. Dies kann entweder mit der Option "`-diagnostics`" beim Aufruf
-des `grun`-Tools geschehen oder über das Setzen des `DiagnosticErrorListener`
-aus der ANTLR4-Runtime als ErrorListener.
-
+Während des Debuggings von Grammatiken lohnt es sich aber, diese
+Warnungen zu aktivieren. Dies kann entweder mit der Option "`-diagnostics`"
+beim Aufruf des `grun`-Tools geschehen oder über das Setzen des
+`DiagnosticErrorListener` aus der ANTLR4-Runtime als ErrorListener.
 
 ### Bison
 
