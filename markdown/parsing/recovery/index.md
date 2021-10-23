@@ -142,11 +142,9 @@ def stmt():
         _errHandler.reportError(self)               # let's report it
         _errHandler.recover(self)                   # Panic-Mode
 
-def match(ttype):
-    token = getCurrentToken()
-    if token.type() == ttype: consume()
-    else: token = _errHandler.recoverInline(this)   # Inline-Mode
-    return token
+def match(x):
+    if lookahead == x: consume()
+    else: _errHandler.recoverInline(self)           # Inline-Mode
 }
 ```
 
