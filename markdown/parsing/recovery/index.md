@@ -476,7 +476,6 @@ der passenden Stelle ein Aufruf `notifyErrorListeners(Too many ';'");` ...
 :::notes
 ### Flex und Bison
 
-Erkennung von Strings (Flex):
 :::
 
 ```yacc
