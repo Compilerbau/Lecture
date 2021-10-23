@@ -188,7 +188,7 @@
 \draw [arrow] (q5.195) -- (q5.195 -| q3.north) -- node[anchor=east]{$T$} (q3.north);
 \draw [arrow] (q2.east -| q5.west) -- node[anchor=south]{$F$} (q2.east);
 \draw [arrow] (q5.45) -- node[anchor=south]{$E$} (q5.45 -| q7.south) -- (q7.south);
-\path [arrow, every loop/.style={min distance=10mm,out=5,in=-5,looseness=4}] (q5) edge[loop right, transform canvas={yshift=-15mm}] node[anchor=west]{$($} ();
+\path [arrow, every loop/.style={looseness=3}] (q5) edge[loop right, transform canvas={yshift=-10mm}] node[anchor=west]{$($} ();
 
 %% q7
 \draw [arrow] (q7.east) -- node[anchor=south]{$)$} (q9.west);
