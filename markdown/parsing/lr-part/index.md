@@ -371,15 +371,22 @@ Zusammenfassung aller LR(1)-Zustände, die sich nur in den LOOKAHEAD-Mengen unte
 Parsergeneratoren generieren oft direkt aus einem LR(0)- einen LALR(1)-Zustands-
 Übergangsgraphen durch Hinzufügen der LOOKAHEAD-Mengen.
 
+## Die Beispielgrammatik G3
 
-## Der LALR-Automat der Grammatik G1
+(0) S' → S
+(1) S → NN
+(2) N → 0N
+(3) N → 1
 
-TODO: Bild LALR-Automat (Kunert2018)
+
+## Der LALR-Automat der Grammatik G3
+
+![LALR(1)-Automat](images/LALR-Automat.png)\
 
 
-## Die LALR-Parsertabelle der Grammatik G1
+## Die LALR-Parsertabelle der Grammatik G3
 
-TODO: Bild LALR-Parsertabelle (Kunert2018)
+![LALR(1)-Parsertabelle](images/LALR-Table.png)\
 
 
 
