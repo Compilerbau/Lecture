@@ -353,12 +353,12 @@ Terminals eingetragen, die in der LOOKAHEAD-Menge der entsprechenden Regel entha
 
 ## Der LR(1)-Automat der Grammatik G1
 
-TODO: Bild LR(1)-Automat (Kunert2018)
+![LR(1)-Automat](images/LR_1-Automat.png)\
 
 
 ## Die LR(1)-Parsertabelle der Grammatik G1
 
-TODO: Bild LR(1)-Parsertabelle (Kunert2018)
+![LR(1)-Parsertabelle](images/LR_1-Table.png)\
 
 
 
