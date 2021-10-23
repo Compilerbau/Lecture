@@ -56,45 +56,45 @@ stmt2 : 'int' ID '=' ID ';'  ;
 
 ### Lexikalische Fehler
 
-Eingabe: `int x1;`
+Eingabe: `int x1;` (Startregel `stmt`)
 
-Fehlermeldung: `token recognition error at: '1'` (Startregel `stmt`)
+Fehlermeldung: `token recognition error at: '1'`
 
 Die ist ein Fehler aus dem Lexer, wenn beim Erkennen eines Tokens ein komplett
 unbekanntes Zeichen auftritt.
 
 ### Ein extra Token
 
-Eingabe: `int x y;`
+Eingabe: `int x y;` (Startregel `stmt`)
 
-Fehlermeldung: `extraneous input 'y' expecting ';'` (Startregel `stmt`)
+Fehlermeldung: `extraneous input 'y' expecting ';'`
 
 Wenn nur ein Token zu viel ist, dann kann der von ANTLR generierte Parser eine
 passende Fehlermeldung ausgeben.
 
 ### Mehrere extra Token
 
-Eingabe: `int x y z;`
+Eingabe: `int x y z;` (Startregel `stmt`)
 
-Fehlermeldung: `mismatched input 'y' expecting ';'` (Startregel `stmt`)
+Fehlermeldung: `mismatched input 'y' expecting ';'`
 
 Wenn dagegen mehr als ein Token zu viel ist, dann gibt der von ANTLR generierte
 Parser eine generische Fehlermeldung aus.
 
 ### Fehlendes Token
 
-Eingabe: `int ;`
+Eingabe: `int ;` (Startregel `stmt`)
 
-Fehlermeldung: `missing ID at ';'` (Startregel `stmt`)
+Fehlermeldung: `missing ID at ';'`
 
 Ein anderer typischer Fehler sind fehlende Token, die kann der Parser analog zu
 überzähligen Token erkennen und ausgeben.
 
 ### Fehlendes Token am Entscheidungspunkt
 
-Eingabe: `int ;`
+Eingabe: `int ;` (Startregel `alt`)
 
-Fehlermeldung: `no viable alternative at input 'int;'` (Startregel `alt`)
+Fehlermeldung: `no viable alternative at input 'int;'`
 
 Hier fehlt ein Token, aber an einer Stelle, wo sich der Parser zwischen zwei
 Alternativen (Sub-Regeln) entscheiden muss.
@@ -214,7 +214,7 @@ def rule():
 
 ## ANTLR: Einsatz des "*Resynchronization Set*"
 
-::: note
+::: notes
 *   **Following Set**: Menge der Token, die direkt auf eine Regel-Referenz folgen,
     ohne dass die aktuelle Regel/Alternative verlassen wird
 *   **Resynchronization Set**: Vereinigung der *Following Sets* für alle Regeln im
@@ -266,15 +266,56 @@ angenommen, dass das aktuelle Token `':'` nicht passt.
         *   `consume()`, bis aktuelles Token in *Resynchronization Set*: `{'+', ':'}`
             (d.h. hier bleibt `':'` das aktuelle Token)
         *   Rückkehr zu Regel `expr`
-    *   In Regel `expr`: Token `':'` passt jetzt
+    *   In Regel `expr`: Token `':'` passt nicht
+        *   `consume()`, bis aktuelles Token in *Resynchronization Set*: `{':'}`
+            (d.h. hier bleibt `':'` das aktuelle Token)
+        *   Rückkehr zu Regel `stmt`
+    *   In Regel `stmt`: Token `':'` passt jetzt
         *   Abschluss des Parsing (mit Fehlermeldung)
 
 *   Eingabe: `if x + 42 ))):`
-    *   In Regel `expr`: Token `')'` passt nicht
+    *   In Regel `stmt`: Token `')'` passt nicht
         *   `consume()`, bis aktuelles Token in *Resynchronization Set*: `{':'}`  (d.h.
             hier werden alle `')'` entfernt)
-    *   In Regel `expr`: Token `':'` passt jetzt
+    *   In Regel `stmt`: Token `':'` passt jetzt
         *   Abschluss des Parsing (mit Fehlermeldung)
+:::
+
+
+::: notes
+## ANTLR4: Anmerkungen Fehlerbehandlung in Sub-Regeln
+
+Bei Sub-Regeln (d.h. eine Regel enthält Alternativen) oder Schleifenkonstrukten
+(d.h. eine Regel enthält `(...)*` oder `(...)+`) geht ANTLR4 etwas anders vor.
+
+1.  Start einer Sub-Regel/Alternative: Versuch einer *single token deletion*
+
+    ```python
+    # am Anfang einer Alternative oder Schleife
+    _errHandler.sync(self)
+    ```
+
+2.  Schleifenkonstrukte: `(...)*` oder `(...)+`
+
+    Versuche, in der Schleife zu bleiben! Im Fehlerfall `consume()` bis
+
+    *   Weitere Iteration der Schleife erkannt
+    *   Token, welches der Schleife folgt, erkannt
+    *   Token im *Resynchronization Set* des aktuellen Aufruf-Stacks
+
+    Anmerkung: Im Prinzip entspricht dies dem *Panic Mode*, der Unterschied liegt
+    darin, bis wohin der Parser nach der Recovery in einer Funktion/Methode (Regel)
+    zurückspringt. D.h. wenn es verschiedene Möglichkeiten gibt, haben diese die
+    obige Priorisierung.
+
+3.  Fail-Save
+
+    Um Endlos-Schleifen durch die Schritte (1) bzw. (2) zu vermeiden, löst der Parser
+    beim zweiten Versuch, die selbe Parser-Stelle und Input-Position zu bearbeiten
+    (also bei bereits aktivem Fehler), einen "*Fail-Safe*" aus. Der Parser konsumiert
+    dann ein Token und fährt dann mit der Recovery fort.
+
+Zu Details zur Fehlerbehandlung durch ANTLR vergleiche [@Parr2014, S. 170 ff.].
 :::
 
 
@@ -312,40 +353,6 @@ Für einen eigenen Listener leitet man sinnvollerweise von `BaseErrorListener` a
 
 Damit die Fehlermeldungen nicht mehrfach ausgegeben werden, entfernt man zunächst alle
 Listener und fügt dann den eigenen hinzu, bevor man den Parser startet.
-
-### ANTLR4: Anmerkungen Fehlerbehandlung in Sub-Regeln
-
-Bei Sub-Regeln (d.h. eine Regel enthält Alternativen) oder Schleifenkonstrukten
-(d.h. eine Regel enthält `(...)*` oder `(...)+`) geht ANTLR4 etwas anders vor.
-
-1.  Start einer Sub-Regel/Alternative: Versuch einer *single token deletion*
-
-    ```python
-    # am Anfang einer Alternative oder Schleife
-    _errHandler.sync(self)
-    ```
-
-2.  Schleifenkonstrukte: `(...)*` oder `(...)+`
-
-    Versuche, in der Schleife zu bleiben! Im Fehlerfall `consume()` bis
-
-    *   Weitere Iteration der Schleife erkannt
-    *   Token, welches der Schleife folgt, erkannt
-    *   Token im *Resynchronization Set* des aktuellen Aufruf-Stacks
-
-    Anmerkung: Im Prinzip entspricht dies dem *Panic Mode*, der Unterschied liegt
-    darin, bis wohin der Parser nach der Recovery in einer Funktion/Methode (Regel)
-    zurückspringt. D.h. wenn es verschiedene Möglichkeiten gibt, haben diese die
-    obige Priorisierung.
-
-3.  Fail-Save
-
-    Um Endlos-Schleifen durch die Schritte (1) bzw. (2) zu vermeiden, löst der Parser
-    beim zweiten Versuch, die selbe Parser-Stelle und Input-Position zu bearbeiten
-    (also bei bereits aktivem Fehler), einen "*Fail-Safe*" aus. Der Parser konsumiert
-    dann ein Token und fährt dann mit der Recovery fort.
-
-Zu Details zur Fehlerbehandlung durch ANTLR vergleiche [@Parr2014, S. 170 ff.].
 :::::::::
 
 
@@ -464,7 +471,6 @@ Letztlich steht im generierten Parser in der generierten Methode `stmt()` an
 der passenden Stelle ein Aufruf `notifyErrorListeners(Too many ';'");` ...
 :::
 
-\bigskip
 \bigskip
 
 :::notes
