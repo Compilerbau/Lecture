@@ -105,7 +105,7 @@ Shiften bedeutet, das nächste Eingabesymbol miteinbeziehen.
 Der Stack enthält Zustände, keine Terminals oder Nonterminals.
 
 Der Top-of-Stack ist immer der aktuelle Zustand, am Anfang
- $I_0$. Im Stack steht $I_0\ \bottom$.
+ $I_0$. Im Stack steht $I_0\ \bot$.
 
 
 Vorgehen:
@@ -115,7 +115,7 @@ Im aktuellen Zustand nachschauen, ob das Eingabezeichen auf einem Pfeil steht.
 
 * nein: Reduzieren nach der Regel aus dem aktuellen Zustand mit dem Punkt hinten, d. h. so viele Zustände poppen, wie die Regel Elemente auf der rechten Seite hat. Der Zustand darunter wird aktuell, dem Pfeil mit dem zu reduzierenden Nonterminal der linken Seite der Regel folgen und pushen.
 
-Am Schluss kann nur noch mit $\bottom$ akzeptiert werden.
+Am Schluss kann nur noch mit $\bot$ akzeptiert werden.
 
 
 ## Beispiel
@@ -233,7 +233,7 @@ für eine Itemmenge *I* und $X \in N \cup T, A \in N, \alpha, \beta \in (N \cup 
 
 2. Shift: Für jeden mit einem Terminal beschrifteten Pfeil aus einem Zustand erstelle in der Aktionstabelle die Aktion shift mit der Nummer des Zustands, auf den der Pfeil zeigt. Für Pfeile mit Nonterminals schreibe in die Sprungtabelle nur die Nummer des Folgezustands.
 
-3. Schreibe beim Zustand $[S' \rightarrow S \cdot]$ ein $accept$ bei dem Symbol $\bottom$.
+3. Schreibe beim Zustand $[S' \rightarrow S \cdot]$ ein $accept$ bei dem Symbol $\bot$.
 
 4. Für jedes Item mit $[A \rightarrow \beta \cdot]$ aus allen Zuständen schreibe für alle Terminals $reduce$ und die Nummer der entsprechenden Grammatikregel in die Tabelle.
 
@@ -317,7 +317,7 @@ Jetzt werden nicht Follow-Mengen von Nichtterminalen, sondern LOOKAHEAD-Mengen v
 
 Zu jedem LR(0)-Item (hier auch $Kern$ genannt) wird eine $LOOKAHEAD$ - Menge $L$ hinzugefügt, die angibt, welche Terminals dem Symbol auf der linken Seite folgen können.
 
-z. B. $[S' \rightarrow \cdot S, \lbrace \bottom \rbrace ]$
+z. B. $[S' \rightarrow \cdot S, \lbrace \bot \rbrace ]$
 
 
 ## Die Hülle $CLOSURE_1$
@@ -340,7 +340,7 @@ für eine Itemmenge $I$ und $X \in N \cup T, A \in N, \alpha, \beta \in (N \cup 
 
 Der Automat wird analog zum LR(0)-Automaten erstellt mit dem Startzustand
 
-$[S' \rightarrow \cdot S, \lbrace \bottom \rbrace ]$
+$[S' \rightarrow \cdot S, \lbrace \bot \rbrace ]$
 
 Die Tabelle unterscheidet sich nur bei der Reduktion von der LR(0)-Tabelle:
 
