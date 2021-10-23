@@ -40,76 +40,81 @@ fhmedia:
 ## Typische Fehler beim Parsing
 
 ```yacc
-grammar SimpleClassDef;
+grammar VarDef;
 
-prog     :  classDef+ ;
-classDef :  'class' ID '{' member+ '}' ;
-member   :  'int' ID ';' | 'int' ID '=' INT ';' ;
-
-ID  :   [a-zA-Z]+ ;
-INT :   [0-9]+ ;
-WS  :   [ \t\r\n]+ -> skip ;
+alt   : stmt | stmt2 ;
+stmt  : 'int' ID ';' ;
+stmt2 : 'int' ID '=' ID ';'  ;
 ```
 
-[ANTLR4: SimpleClassDef.g4, Beispiele: SimpleClassDef.txt]{.bsp}
+[ANTLR4: VarDef.g4, Beispiele: VarDef.txt]{.bsp}
 
 
 ::::::::: notes
 *Anmerkung*: Die nachfolgenden Fehler werden am Beispiel der Grammatik
-`SimpleClassDef.g4` und ANTLR4 demonstriert.
-
+`VarDef.g4` und ANTLR4 demonstriert.
 
 ### Lexikalische Fehler
 
 ```
-class X* { int x; }
+int x1;
 ```
 
-Fehlermeldung: `token recognition error at: '*'`
+Fehlermeldung: `token recognition error at: '1'` (Startregel `stmt`)
 
+Die ist ein Fehler aus dem Lexer, wenn beim Erkennen eines Tokens ein komplett
+unbekanntes Zeichen auftritt.
 
-### Ein extra Token {#std}
+### Ein extra Token
 
 ```
-class Xa Xb { int x; }
+int x y;
 ```
 
-Fehlermeldung: `extraneous input 'Xb' expecting '{'`
+Fehlermeldung: `extraneous input 'y' expecting ';'` (Startregel `stmt`)
 
+Wenn nur ein Token zu viel ist, dann kann der von ANTLR generierte Parser eine passende
+Fehlermeldung ausgeben.
 
 ### Mehrere extra Token
 
 ```
-class Xa Xb Xc { int x; }
+int x y z;
 ```
 
-Fehlermeldung: `mismatched input 'Xb' expecting '{'`
+Fehlermeldung: `mismatched input 'y' expecting ';'` (Startregel `stmt`)
 
+Wenn dagegen mehr als ein Token zu viel ist, dann gibt der von ANTLR generierte Parser
+eine generische Fehlermeldung aus.
 
-### Fehlendes Token {#sti}
+### Fehlendes Token
 
 ```
-class { int x; }
+int ;
 ```
 
-Fehlermeldung: `missing ID at '{'`
+Fehlermeldung: `missing ID at ';'` (Startregel `stmt`)
 
+Ein anderer typischer Fehler sind fehlende Token, die kann der Parser analog zu
+überzähligen Token erkennen und ausgeben.
 
 ### Fehlendes Token am Entscheidungspunkt
 
 ```
-class X { int ; }
+int ;
 ```
 
-Hier fehlt ein Token, aber an einer Stelle, wo sich der Parser zwischen zwei Sub-Regeln entscheiden muss.
-Fehlermeldung: `no viable alternative at input 'int;'`
+Fehlermeldung: `no viable alternative at input 'int;'` (Startregel `alt`)
+
+Hier fehlt ein Token, aber an einer Stelle, wo sich der Parser zwischen zwei
+Alternativen (Sub-Regeln) entscheiden muss.
 :::::::::
 
 
 ## Überblick Recovery bei Parser-Fehlern
 
 ::: center
-![](images/recovery.png)
+![](images/recovery.png){with="80%"}
 :::
 
 ::: notes
@@ -181,9 +186,6 @@ Die Klasse `InputMismatchException` drückt aus, dass das aktuelle Token nicht z
 Erwartung des Parsers passt. Deshalb wird diese Exception am Ende von `recoverInline`
 geworfen. Die Klasse `RecognitionException`, die in den Parserregeln wie `classDef`
 gefangen wird, ist die gemeinsame Oberklasse aller Parser-Exceptions.
-
-*  Beispiel zu Token-Mismatch: Single Token Deletion (LL) siehe ["Ein extra Token"](#std)
-*  Beispiel zu Token-Mismatch: Single Token Insertion (LL) siehe ["Fehlendes Token"](#sti)
 :::
 
 
@@ -725,7 +727,4 @@ man im über die Option `-v` erzeugten `<name>.output`-File überprüfen.
 ![](https://licensebuttons.net/l/by-sa/4.0/88x31.png)
 
 Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
-
-### Exceptions
-*   TODO (what, where, license)
 :::

@@ -9,7 +9,7 @@ ANTLR = $(JAVA) $(CP) org.antlr.v4.Tool
 GRUN  = $(JAVA) $(CP) org.antlr.v4.gui.TestRig
 
 
-EXAMPLES = SimpleClassDef Ambig
+EXAMPLES = VarDef
 
 
 $(EXAMPLES): %: %.tokens
