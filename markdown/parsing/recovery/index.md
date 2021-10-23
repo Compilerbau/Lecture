@@ -23,7 +23,7 @@ fhmedia:
 
 ![](images/bc_xml-parsing-error.png)
 
-[Quelle: BC George, Vorlesung "Einführung in die Programmierung mit Skriptsprachen"]{.origin}
+[Quelle: BC George, Vorlesung "Einführung in die Programmierung mit Skriptsprachen", [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/)]{.origin}
 
 ::: notes
 *   Compiler ist ein schnelles Mittel zum Finden von (syntaktischen) Fehlern
@@ -52,13 +52,11 @@ stmt2 : 'int' ID '=' ID ';'  ;
 
 ::::::::: notes
 *Anmerkung*: Die nachfolgenden Fehler werden am Beispiel der Grammatik
-`VarDef.g4` und ANTLR4 demonstriert.
+`[VarDef.g4](src/VarDef.g4)`{=markdown} und ANTLR4 demonstriert.
 
 ### Lexikalische Fehler
 
-```
-int x1;
-```
+Eingabe: `int x1;`
 
 Fehlermeldung: `token recognition error at: '1'` (Startregel `stmt`)
 
@@ -67,31 +65,25 @@ unbekanntes Zeichen auftritt.
 
 ### Ein extra Token
 
-```
-int x y;
-```
+Eingabe: `int x y;`
 
 Fehlermeldung: `extraneous input 'y' expecting ';'` (Startregel `stmt`)
 
-Wenn nur ein Token zu viel ist, dann kann der von ANTLR generierte Parser eine passende
-Fehlermeldung ausgeben.
+Wenn nur ein Token zu viel ist, dann kann der von ANTLR generierte Parser eine
+passende Fehlermeldung ausgeben.
 
 ### Mehrere extra Token
 
-```
-int x y z;
-```
+Eingabe: `int x y z;`
 
 Fehlermeldung: `mismatched input 'y' expecting ';'` (Startregel `stmt`)
 
-Wenn dagegen mehr als ein Token zu viel ist, dann gibt der von ANTLR generierte Parser
-eine generische Fehlermeldung aus.
+Wenn dagegen mehr als ein Token zu viel ist, dann gibt der von ANTLR generierte
+Parser eine generische Fehlermeldung aus.
 
 ### Fehlendes Token
 
-```
-int ;
-```
+Eingabe: `int ;`
 
 Fehlermeldung: `missing ID at ';'` (Startregel `stmt`)
 
@@ -100,9 +92,7 @@ Ein anderer typischer Fehler sind fehlende Token, die kann der Parser analog zu
 
 ### Fehlendes Token am Entscheidungspunkt
 
-```
-int ;
-```
+Eingabe: `int ;`
 
 Fehlermeldung: `no viable alternative at input 'int;'` (Startregel `alt`)
 
@@ -114,91 +104,108 @@ Alternativen (Sub-Regeln) entscheiden muss.
 ## Überblick Recovery bei Parser-Fehlern
 
 ::: center
-![](images/recovery.png){with="80%"}
+![](images/recovery.png){width="80%"}
 :::
 
 ::: notes
 *   Fehler im Lexer (hier nicht weiter betrachtet):
-    *   Aktuelles Zeichen passt zu keinem Token: Entfernen oder Hinzufügen von Zeichen (plus Rückmeldung an den Parser)
-    *   Spezielle Token, die typische fehlerhafte Zeichenketten als Token erkennen (mit Weiterverarbeitung im Parser)
+    *   Aktuelles Zeichen passt zu keinem Token: Entfernen oder Hinzufügen
+        von Zeichen (plus Rückmeldung an den Parser)
+    *   Spezielle Token, die typische fehlerhafte Zeichenketten als Token
+        erkennen (mit Weiterverarbeitung im Parser)
 
 *   Fehler im Parser:
     *   Token passt nicht: Token entfernen oder ein Dummy-Token erzeugen
-    *   Panic-Mode: Entferne Token bis zu einem Synchronisationspunkt. Problem: Dabei nicht zu weit zu springen!
-    *   Spezielle Fehlerproduktionen: Spezielle Regeln in der Grammatik, die typische Fehler matchen.
+    *   Panic-Mode: Entferne Token bis zu einem Synchronisationspunkt.
+        Problem: Dabei nicht zu weit zu springen!
+    *   Spezielle Fehlerproduktionen: Spezielle Regeln in der Grammatik,
+        die typische Fehler matchen.
 
-Anmerkung LR-Parser: Ein Syntaxfehler wird entdeckt, wenn die Action-Tabelle für Top-of-Stack und akt. Token leer
-ist => Stack und/oder Token modifizieren, aber deutlich schwieriger als bei LL ...
+Anmerkung LR-Parser: Ein Syntaxfehler wird entdeckt, wenn die Action-Tabelle
+für Top-of-Stack und akt. Token leer ist => Stack und/oder Token modifizieren,
+aber deutlich schwieriger als bei LL ...
 :::
 
 
-## Detail: Generierte Parser-Regeln (LL)
+## Skizze: Generierte Parser-Regeln (ANTLR)
 
 ```yacc
-classDef :  'class' ID '{' member+ '}' ;
+stmt  : 'int' ID ';' ;
 ```
 
 \bigskip
 
-```java
-public void classDef() {
-    try {
-        match("class"); match(ID); match("{");
-        do { member(); } while (LA(1) == "int");
-        match("}");
-    } catch (RecognitionException re) {
-        _errHandler.recover(this, re);               // Panic-Mode
-    }
-}
-public Token match(int ttype) throws RecognitionException {
-    Token t = getCurrentToken();
-    if ( t.getType() == ttype ) { consume(); }
-    else { t = _errHandler.recoverInline(this); }    // Inline-Mode
-    return t;
-}
-```
+```python
+def stmt():
+    try: match("int"); match(ID); match(";")
+    catch (RecognitionException re):
+        _errHandler.reportError(self)               # let's report it
+        _errHandler.recover(self)                   # Panic-Mode
 
-
-## Recovery bei Token-Mismatch (LL)
-
-```java
-public Token recoverInline(Parser recognizer) {
-    // SINGLE TOKEN DELETION
-    Token matchedSymbol = singleTokenDeletion(recognizer);
-    if ( matchedSymbol != null ) {
-        recognizer.consume();
-        return matchedSymbol;
-    }
-
-    // SINGLE TOKEN INSERTION
-    if ( singleTokenInsertion(recognizer) ) {
-        return getMissingSymbol(recognizer);
-    }
-
-    // even that didn't work; must throw the exception
-    throw new InputMismatchException(recognizer);
+def match(ttype):
+    token = getCurrentToken()
+    if token.type() == ttype: consume()
+    else: token = _errHandler.recoverInline(this)   # Inline-Mode
+    return token
 }
 ```
 
 ::: notes
-*Anmerkung*: Siehe Folie ["*ANTLR4: Ändern der Fehlerbehandlungs-Strategie*"](#antlr-change):
-Die Klasse `InputMismatchException` drückt aus, dass das aktuelle Token nicht zur
-Erwartung des Parsers passt. Deshalb wird diese Exception am Ende von `recoverInline`
-geworfen. Die Klasse `RecognitionException`, die in den Parserregeln wie `classDef`
-gefangen wird, ist die gemeinsame Oberklasse aller Parser-Exceptions.
+Der im Parser registrierte ErrorHandler erzeugt in der Methode
+`reportError()` eine geeignete Meldung und gibt sie an den Parser
+über dessen Methode `notifyErrorListeners()` weiter.
+
+Die eigentliche Fehlerbehandlung findet in der Methode `recover()`
+bzw. `recoverInline()` des ErrorHandlers statt.
 :::
 
 
-## Panic Mode: Sync-and-Return (LL)
+## Inline-Recovery bei Token-Mismatch (Skizze)
 
-```java
-public void classDef() {
-    try {
-        ... rule-body ...
-    } catch (RecognitionException re) {
-        _errHandler.reportError(this, re);
-        _errHandler.recover(this, re);
-    }
+```python
+def recoverInline(parser):
+    # SINGLE TOKEN DELETION
+    if singleTokenDeletion(parser):
+        return getMatchedSymbol(parser)
+
+    # SINGLE TOKEN INSERTION
+    if singleTokenInsertion(parser):
+        return getMissingSymbol(parser)
+
+    # that didn't work, throw a new exception
+    throw new InputMismatchException(parser)
+}
+```
+
+::: notes
+Die Klasse `InputMismatchException` drückt aus, dass das aktuelle Token nicht
+zur Erwartung des Parsers passt. Deshalb wird diese Exception am Ende von
+`recoverInline()` geworfen. Die Klasse `RecognitionException`, die in den
+Parserregeln wie `stmt` gefangen wird, ist die gemeinsame Oberklasse aller
+Parser-Exceptions.
+
+
+Liste der wichtigsten Exceptions (nach
+[github.com/antlr/antlr4/blob/master/doc/parser-rules.md](https://github.com/antlr/antlr4/blob/master/doc/parser-rules.md)):
+
+| Exception                   | Beschreibung                                                                           |
+|:----------------------------|:---------------------------------------------------------------------------------------|
+| `RecognitionException`      | Basisklasse für alle Parser-Exceptions                                                 |
+| `NoViableAltException`      | Parser konnte sich nicht für (mind.) einen Pfad entscheiden angesichts des Tokenstroms |
+| `LexerNoViableAltException` | Lexer-Pendant zu `NoViableAltException`                                                |
+| `InputMismatchException`    | Das aktuelle Token ist nicht das, was der Parser erwartet                              |
+
+:::
+
+
+## Panic Mode: Sync-and-Return (Skizze)
+
+```python
+def rule():
+    try: ... rule-body ...
+    catch (RecognitionException re):
+        _errHandler.reportError(self)       # let's report it
+        _errHandler.recover(self)           # Panic-Mode
 }
 ```
 
@@ -207,216 +214,141 @@ public void classDef() {
 => Entferne solange Token, bis aktuelles Token im "*Resynchronization Set*"
 
 
-## Definition *Resynchronization Set*
+## ANTLR: Einsatz des "*Resynchronization Set*"
 
-::: notes
+::: note
 *   **Following Set**: Menge der Token, die direkt auf eine Regel-Referenz folgen,
-    ohne dass die aktuelle Regel/Alternative verlassen wird.
+    ohne dass die aktuelle Regel/Alternative verlassen wird
 *   **Resynchronization Set**: Vereinigung der *Following Sets* für alle Regeln im
-    aktuellen Aufruf-Stack.
+    aktuellen Aufruf-Stack
+
+[Quelle: nach [@Parr2014, S. 161 ff.]]{.origin}
 :::
 
 \bigskip
 
 ```yacc
-group
-    : '[' expr ']'      // Following Set für "expr": {']'}
-    | '(' expr ')'      // Following Set für "expr": {')'}
-    ;
-expr: atom '^' INT ;    // Following Set für "atom": {'^'}
+stmt : 'if' expr ':' stmt           // Following Set für "expr": {':'}
+     | 'while' '(' expr ')' stmt ;  // Following Set für "expr": {')'}
+expr : term '+' INT ;               // Following Set für "term": {'+'}
 ```
-
-[Quelle: nach [@Parr2014, S. 162]]{.origin}
 
 \bigskip
 
-*   Eingabe: `[]`
-*   Aufruf-Stack nach Bearbeitung von `[`: `[group, expr, atom]`
-*   **Resynchronization Set**: `{'^', ']'}`
+*   Eingabe: `if :`
+*   Aufruf-Stack nach Bearbeitung von `if`: `[stmt, expr, term]`
+*   **Resynchronization Set**: `{'+', ':'}`
 
 [[Hinweis: *FOLLOW* $\ne$ *Following*]{.bsp}]{.slides}
 
 
 ::: notes
-## Hinweis: *FOLLOW* $\ne$ *Following*
+### Hinweis: *FOLLOW* $\ne$ *Following*
 
 **FOLLOW** ist die Menge aller Token, die auf eine Regel folgen können
 
-*   `FOLLOW(atom) = {'^'}`
-*   `FOLLOW(expr) = {']', ')'}`
+*   `FOLLOW(term) = {'+'}`
+*   `FOLLOW(expr) = {':', ')'}`
 
-\bigskip
 
 **Following** ist dagegen **abhängig vom aktuellen Kontext**!
 
-*   Stack: `[group, expr, atom]` => *Resynchronization Set*: `{'^', ']'}`
+*   Stack: `[stmt, expr, term]` => *Resynchronization Set*: `{'+', ':'}`
 :::
 
 
 ::: notes
-## Beispiele Resynchronisation im Panic Mode (LL)
+### Beispiele Resynchronisation im Panic Mode (ANTLR)
 
-**Hinweis**: Die Regel `atom` ist in obigem Beispiel nicht weiter detailliert. Sie könnte
-beispielsweise alternativ einen Namen (`ID`) oder einen Integer (`INT`) verlangen.
+**Hinweis**: Die Regel `term` ist in obigem Beispiel nicht weiter detailliert. Hier wird
+angenommen, dass das aktuelle Token `':'` nicht passt.
 
-*   Eingabe: `[]`
-    *   In Regel `atom`: Token `']'` passt nicht
-        *   `consume()`, bis aktuelles Token in *Resynchronization Set*: `{'^', ']'}`
-            (d.h. hier bleibt `']'` das aktuelle Token)
+*   Eingabe: `if :`
+    *   In Regel `term`: Token `':'` passt nicht
+        *   `consume()`, bis aktuelles Token in *Resynchronization Set*: `{'+', ':'}`
+            (d.h. hier bleibt `':'` das aktuelle Token)
         *   Rückkehr zu Regel `expr`
-    *   In Regel `expr`: Token `']'` passt nicht
-        *   `consume()`, bis aktuelles Token in *Resynchronization Set*: `{']'}`  (d.h.
-            hier bleibt `']'` das aktuelle Token)
-        *   Rückkehr zu Regel `group`
-    *   Abschluss des Parsing (mit Fehlermeldung)
+    *   In Regel `expr`: Token `':'` passt jetzt
+        *   Abschluss des Parsing (mit Fehlermeldung)
 
-\smallskip
-
-*   Eingabe: `[42 ^ )))]`
+*   Eingabe: `if x + 42 ))):`
     *   In Regel `expr`: Token `')'` passt nicht
-        *   `consume()`, bis aktuelles Token in *Resynchronization Set*: `{']'}`  (d.h.
+        *   `consume()`, bis aktuelles Token in *Resynchronization Set*: `{':'}`  (d.h.
             hier werden alle `')'` entfernt)
-        *   Rückkehr zu Regel `group`
-    *   Abschluss des Parsing (mit Fehlermeldung)
-
-[ANTLR4: Following.g4]{.bsp}
+    *   In Regel `expr`: Token `':'` passt jetzt
+        *   Abschluss des Parsing (mit Fehlermeldung)
 :::
 
 
-::: notes
-## ANTLR4: Details zu Fehlerbehandlung in Sub-Regeln
+::::::::: notes
+## ANTLR4: Ändern der Fehlerbehandlungs-Strategie
+
+### Ändern der Fehlerbehandlungs-Strategie (global)
+
+![](images/handler.png)
+
+Sie überschreiben die Klasse `DefaultErrorStrategy` und müssen die oben gezeigten Methoden
+`recover()` und `recoverInline()`aufrufen. Die eigene Fehlerbehandlung setzen Sie über die
+Methode `setErrorHandler` des Parsers.
+
+### Ändern der Fehlerbehandlungs-Strategie (lokal)
+
+```yacc
+r : ...
+  ;
+  catch[RecognitionException e] { throw e; }
+```
+
+Es lassen sich auch andere bzw. mehrere Exceptions fangen. Der `catch`-Block ersetzt den
+Default-`catch`-Block der generierten Methode. Das bedeutet, dass sich der geänderte Modus
+nur für die eine Regel auswirkt.
+
+### Ändern der Fehler-Meldungen
+
+::: center
+![](images/listener.png)
+:::
+
+Für einen eigenen Listener leitet man sinnvollerweise von `BaseErrorListener` ab und
+überschreibt die leere Implementierung von `syntaxError()`.
+
+Damit die Fehlermeldungen nicht mehrfach ausgegeben werden, entfernt man zunächst alle
+Listener und fügt dann den eigenen hinzu, bevor man den Parser startet.
+
+### ANTLR4: Anmerkungen Fehlerbehandlung in Sub-Regeln
 
 Bei Sub-Regeln (d.h. eine Regel enthält Alternativen) oder Schleifenkonstrukten
 (d.h. eine Regel enthält `(...)*` oder `(...)+`) geht ANTLR4 etwas anders vor.
 
-```yacc
-classDef :  'class' ID '{' member+ '}' ;
-member   :  'int' ID ';' | 'int' ID '=' INT ';' ;
-```
-
 1.  Start einer Sub-Regel/Alternative: Versuch einer *single token deletion*
 
-    ```java
-    // am Anfang einer Alternative oder Schleife
-    _errHandler.sync(this);
+    ```python
+    # am Anfang einer Alternative oder Schleife
+    _errHandler.sync(self)
     ```
-
-\smallskip
 
 2.  Schleifenkonstrukte: `(...)*` oder `(...)+`
 
     Versuche, in der Schleife zu bleiben! Im Fehlerfall `consume()` bis
 
-    *   Weitere Iteration der Schleife
-    *   Token, welches der Schleife folgt
-    *   *Resynchronization Set* des aktuellen Aufruf-Stacks
+    *   Weitere Iteration der Schleife erkannt
+    *   Token, welches der Schleife folgt, erkannt
+    *   Token im *Resynchronization Set* des aktuellen Aufruf-Stacks
 
-    Anmerkung: Im Prinzip entspricht dies dem *Panic Mode*, der Unterschied liegt darin, bis
-    wohin der Parser nach der Recovery in einer Funktion/Methode (Regel) zurückspringt. D.h.
-    wenn es verschiedene Möglichkeiten gibt, haben diese die obige Priorisierung.
+    Anmerkung: Im Prinzip entspricht dies dem *Panic Mode*, der Unterschied liegt
+    darin, bis wohin der Parser nach der Recovery in einer Funktion/Methode (Regel)
+    zurückspringt. D.h. wenn es verschiedene Möglichkeiten gibt, haben diese die
+    obige Priorisierung.
 
-[IDEA: SimpleClassDef.g4, Beispiele: Subrule.txt]{.bsp}
+3.  Fail-Save
 
+    Um Endlos-Schleifen durch die Schritte (1) bzw. (2) zu vermeiden, löst der Parser
+    beim zweiten Versuch, die selbe Parser-Stelle und Input-Position zu bearbeiten
+    (also bei bereits aktivem Fehler), einen "*Fail-Safe*" aus. Der Parser konsumiert
+    dann ein Token und fährt dann mit der Recovery fort.
 
-### *Single Token Deletion* am Start einer Alternative
-
-```java
-class X {{ int x; }
-class Y { int y; }
-```
-
-=> `line 1:9 extraneous input '{' expecting 'int'`
-
-Die zweite `}` nach `X` wird am Start von `member` durch die extra *single token deletion* entfernt.
-
-
-### *consume()* bis weitere Schleifeniteration
-
-```java
-class X {
-    int x;
-    y;;;
-    int z;
-}
-class Y { int y; }
-```
-
-=> `line 3:4 extraneous input 'y' expecting {'}', 'int'}`
-
-Die Token resultierend aus `y;;;` werden schrittweise entfernt, bis das aktuelle Token wieder
-einen Schleifenanfang anzeigt.
-
-
-### *consume()* bis Token, welches der Schleife folgt
-
-```java
-class X {
-    int x;
-    y;;;
-}
-class Y { int y; }
-```
-
-=> `line 3:4 extraneous input 'y' expecting {'}', 'int'}`
-
-Die Token resultierend aus `y;;;` werden schrittweise entfernt, bis das aktuelle Token dem
-auf die Schleife folgenden Token entspricht.
-
-
-### *consume()* bis Resynchronization Set des aktuellen Aufruf-Stacks
-
-```java
-class X {
-    int x;
-    ;
-class Y { int y; }
-```
-
-=> `line 3:4 extraneous input ';' expecting {'}', 'int'}`
-
-Das Token `;` wird entfernt. Da der Aufrufstack an der Stelle `[prog, classDef, member]`
-ist, ist das *Resynchronization Set* entsprechend `['int', '}', 'class']`. Dadurch wird
-verhindert, dass der Recovery-Prozess noch `class Y { int y;` entfernt und die erste
-Klassendefinition mit der letzten `}` abschließt. Die auf die kaputte Klassendefinition
-für `X` folgende Definition für `Y` wird also korrekt erkannt.
-:::
-
-
-::: notes
-### Error Recovery Fail-Save (LL)
-
-```java
-class X {
-    int int x;
-}
-```
-
-[IDEA: SimpleClassDef.g4]{.bsp}
-
-
-Der Parser geht nach dem Verarbeiten von `{` in die Schleife `member+`, d.h. in die Regel
-`member`. Da dort beide Alternativen mit `int` beginnen, wird keine *single token deletion*
-ausgeführt. Das zweite `int` ergibt aber einen Syntaxfehler, auf den der Parser mit einem
-*sync-and-return* reagiert. Dummerweise führt das in eine Endlosschleife:
-
-*   Der Aufrufstack ist `[prog, classDef, member]`
-*   Das *Resynchronization Set* ist entsprechend ['int', '}', 'class']
-*   Der Parser kehrt aus `member` ohne weiteres `consume()` zur `member+`-Schleife zurück, da
-    das aktuelle Token `int` im *Resynchronization Set* enthalten ist.
-*   Die `member+`-Schleife versucht gemäß der Sonderregeln für Sub-Regeln, in der Schleife zu
-    bleiben: Aufruf von `member` mit dem selben Problem ...
-
-
-Ausweg: Der Parser löst beim zweiten Versuch, die `member`-Regel mit `int int x;` zu bearbeiten,
-einen *Fail-Safe* aus, weil er an der selben Parser-Stelle und Input-Position angekommen ist
-(bei bereits aktivem Fehler). Der *Fail-Safe* konsumiert ein Token und fährt mit der Recovery
-fort. Da das nächste Token wieder ein `int` ist, wird dieses wieder nicht entfernt, sondern nach
-`member+` zurückgekehrt und von dort wieder nach `member` gesprungen. Diesmal passt es dann ...
-
-Das sieht man schön im generierten Parse-Tree:
-
-![](images/fail-save.png)
-:::
+Zu Details zur Fehlerbehandlung durch ANTLR vergleiche [@Parr2014, S. 170 ff.].
+:::::::::
 
 
 ## Panic Mode in Bison (Error Recovery)
@@ -582,81 +514,6 @@ spezieller Datentyp `YYLTYPE`.
 :::
 
 
-::: notes
-## ANTLR4: Ändern der Fehler-Meldungen
-
-::: center
-![](images/listener.png)
-:::
-
-
-Für einen eigenen Listener leitet man sinnvollerweise von `BaseErrorListener` ab und überschreibt
-die leere Implementierung von `syntaxError()`.
-
-Im obigen Beispiel wird der aktuelle Aufrufstack ausgegeben, gefolgt von der Zeilennummer und Position
-und Original-Fehlermeldung. Zum Unterstreichen gibt man die fehlerhafte Zeile des Inputs erneut aus, und
-auf der nächsten Zeile Leerzeichen, bis man unter der fehlerhaften Stelle (`offendingToken`) ist, danach
-dann `'^'` zum markieren ...
-
-Damit die Fehlermeldungen nicht mehrfach ausgegeben werden, entfernt man zunächst alle Listener und fügt
-dann den eigenen hinzu, bevor man den Parser startet.
-
-[Konsole: SimpleListener.java]{.bsp}
-:::
-
-
-::: notes
-## ANTLR4: Ändern der Fehlerbehandlungs-Strategie {#antlr-change}
-
-```java
-public void classDef() {
-    try {
-        ... rule-body ...
-    } catch (RecognitionException re) {
-        _errHandler.reportError(this, re);
-        _errHandler.recover(this, re);
-    }
-}
-```
-
-```yacc
-r : ...
-  ;
-  catch[RecognitionException e] { throw e; }
-```
-
-
-Anmerkung: Es lassen sich auch andere bzw. mehrere Exceptions fangen.
-Der `catch`-Block ersetzt den Default-`catch`-Block der generierten
-Methode. Das bedeutet, dass sich der geänderte Modus nur für die
-eine Regel auswirkt.
-
-Der im Parser registrierte ErrorHandler erzeugt in der Methode
-`reportError()` eine geeignete Meldung und gibt sie an den Parser
-über dessen Methode `notifyErrorListeners()` weiter.
-
-Die eigentliche Fehlerbehandlung findet in der Methode `recover()`
-des ErrorHandlers statt.
-
-
-Liste der wichtigsten Exceptions (nach
-[github.com/antlr/antlr4/blob/master/doc/parser-rules.md](https://github.com/antlr/antlr4/blob/master/doc/parser-rules.md)):
-
-| Exception                   | Beschreibung                                                                           |
-|:----------------------------|:---------------------------------------------------------------------------------------|
-| `RecognitionException`      | Basisklasse für alle Parser-Exceptions                                                 |
-| `NoViableAltException`      | Parser konnte sich nicht für (mind.) einen Pfad entscheiden angesichts des Tokenstroms |
-| `LexerNoViableAltException` | Lexer-Pendant zu `NoViableAltException`                                                |
-| `InputMismatchException`    | Das aktuelle Token ist nicht das, was der Parser erwartet                              |
-
-:::
-
-
-::: notes
-## ANTLR4: Ändern der Fehlerbehandlungs-Strategie (global)
-
-![](images/handler.png)
-:::
 
 
 ::: notes
