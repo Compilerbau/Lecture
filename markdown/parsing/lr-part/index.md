@@ -3,7 +3,7 @@ type: lecture-bc
 title: "Syntaxanalyse: LR-Parser"
 menuTitle: "LR-Parser"
 author: "BC George (FH Bielefeld)"
-weight: 5
+weight: 4
 readings:
   - key: "Aho2008"
     comment: "Kapitel 4.5 bis 4.8"
@@ -12,22 +12,6 @@ readings:
   - key: "hopcroft2003"
   - key: "Kunert2018"
   - key: "Wagenknecht2014"
-quizzes:
-  - link: XYZ
-    name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
-assignments:
-  - topic: blatt01
-youtube:
-  - id: XYZ (ID)
-  - link: https://youtu.be/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
-fhmedia:
-  - link: https://www.fh-bielefeld.de/medienportal/m/XYZ
-    name: "Use This As Link Text (Direkt-Link from `'share'`{=markdown}-Button)"
-attachments:
-  - link: https://www.fh-bielefeld.de
-    name: "Extra Material, e.g. annotated slides `...`{=markdown} Use This As Link Text"
-sketch: true
 ---
 
 
@@ -55,22 +39,6 @@ sketch: true
 Die Menge der *LL*-Sprachen ist eine echte Teilmenge der deterministisch kontextfreien Sprachen. Wir brauchen ein Verfahren, mit dem man alle deterministisch kontextfreien Sprachen parsen kann.
 
 
-## Themen für heute: Zweite Phase in Compiler-Pipeline
-
-\bigskip
-
-::: notes
-Am Ende der VL können/verstehen Sie:
-
-*   Shift-Reduce
-*   LR(0), SLR(1), LR(1), LALR(1)
-:::
-
-<!-- 70 Minuten: 19 Folien (inkl. Diskussion) -->
-<!-- XXX GTB, Kap. 1 und 2 -->
-
-
-
 # Bottom-Up-Analyse
 <!-- 70 Minuten: 57 Folien (inkl. Diskussion) -->
 <!-- XXX GTB, Kap. 1 und 2 -->
@@ -86,13 +54,23 @@ Fehlermeldungen können näher am Programmtext erfolgen.
 
 ## Baumaufbau von unten
 
+:::notes
+Hier entsteht ein Tafelbild.
+:::
+
 
 ## Kann ein Stack helfen?
+
+:::notes
+Hier entsteht ein Tafelbild.
+:::
 
 
 ## Probleme damit?
 
-
+:::notes
+Hier entsteht ein Tafelbild.
+:::
 
 # Konfliktfälle
 
@@ -127,7 +105,7 @@ Shiften bedeutet, das nächste Eingabesymbol miteinbeziehen.
 Der Stack enthält Zustände, keine Terminals oder Nonterminals.
 
 Der Top-of-Stack ist immer der aktuelle Zustand, am Anfang
- $I_0$. Im Stack steht $I_0\ \$$.
+ $I_0$. Im Stack steht $I_0\ \bottom$.
 
 
 Vorgehen:
@@ -137,7 +115,14 @@ Im aktuellen Zustand nachschauen, ob das Eingabezeichen auf einem Pfeil steht.
 
 * nein: Reduzieren nach der Regel aus dem aktuellen Zustand mit dem Punkt hinten, d. h. so viele Zustände poppen, wie die Regel Elemente auf der rechten Seite hat. Der Zustand darunter wird aktuell, dem Pfeil mit dem zu reduzierenden Nonterminal der linken Seite der Regel folgen und pushen.
 
-Am Schluss kann nur noch mit \$ akzeptiert werden.
+Am Schluss kann nur noch mit $\bottom$ akzeptiert werden.
+
+
+## Beispiel
+
+:::notes
+Hier entsteht ein Tafelbild.
+:::
 
 
 ## Definitionen
@@ -169,7 +154,7 @@ Mehrdeutige Grammatiken können nicht *LR* sein.
 
 ## Arbeitsweise
 
-Im Stack stehen nur Zustandsnummern, am Anfang die Nummer des Startzustandes (+ Bottomzeichen, hier oft $\$$). Es ist nicht nötig, Symbole zu stacken.
+Im Stack stehen nur Zustandsnummern, am Anfang die Nummer des Startzustandes (+ Bottomzeichen, oft auch $\$$). Es ist nicht nötig, Symbole zu stacken.
 
 *   Lesen des obersten Stackelements ergibt Zustand *q*
 *   Lesen des nächsten Eingabezeichens ergibt Zeichen *a*
@@ -217,6 +202,9 @@ Das zu $A \rightarrow \epsilon$ gehörende Item ist $[A \rightarrow \cdot]$
 
 ## Was bedeuten die Items?
 
+:::notes
+Hier entsteht ein Tafelbild.
+:::
 
 ## Berechnung der *Closure_0* von einer Menge *I* von Items
 
@@ -227,7 +215,7 @@ Das zu $A \rightarrow \epsilon$ gehörende Item ist $[A \rightarrow \cdot]$
 
 ## Berechnung der *GOTO_0*-Sprungmarken
 
-$GOTO_0(I, X) = CLOSURE_0(\{[A \rightarrow \alpha X \cdot \beta] \mid [A \rightarrow \alpha \cdot X \beta] \in I\})$
+$GOTO_0(I, X) = CLOSURE_0(\lbrace[A \rightarrow \alpha X \cdot \beta] \mid [A \rightarrow \alpha \cdot X \beta] \in I\rbrace)$
 
 für eine Itemmenge *I* und $X \in N \cup T, A \in N, \alpha, \beta \in (N \cup T)^{\ast}$.
 
@@ -245,15 +233,20 @@ für eine Itemmenge *I* und $X \in N \cup T, A \in N, \alpha, \beta \in (N \cup 
 
 2. Shift: Für jeden mit einem Terminal beschrifteten Pfeil aus einem Zustand erstelle in der Aktionstabelle die Aktion shift mit der Nummer des Zustands, auf den der Pfeil zeigt. Für Pfeile mit Nonterminals schreibe in die Sprungtabelle nur die Nummer des Folgezustands.
 
-3. Schreibe beim Zustand $[S' \rightarrow S \cdot]$ ein $accept$ bei dem Symbol \$.
+3. Schreibe beim Zustand $[S' \rightarrow S \cdot]$ ein $accept$ bei dem Symbol $\bottom$.
 
 4. Für jedes Item mit $[A \rightarrow \beta \cdot]$ aus allen Zuständen schreibe für alle Terminals $reduce$ und die Nummer der entsprechenden Grammatikregel in die Tabelle.
 
 
 ## Und wenn in einer Zelle schon ein Eintrag ist?
 
+:::notes
+Hier entsteht ein Tafelbild.
+:::
 
 ## Die Beispielgrammatik G1
+
+TODO ersetzen
 
 (1) $Z \rightarrow S$
 
@@ -327,7 +320,7 @@ Jetzt werden nicht Follow-Mengen von Nichtterminalen, sondern LOOKAHEAD-Mengen v
 
 Zu jedem LR(0)-Item (hier auch $Kern$ genannt) wird eine $LOOKAHEAD$ - Menge $L$ hinzugefügt, die angibt, welche Terminals dem Symbol auf der linken Seite folgen können.
 
-z. B. $[S' \rightarrow \cdot S, \{\$ \} ]$
+z. B. $[S' \rightarrow \cdot S, \lbrace \bottom \rbrace ]$
 
 
 ## Die Hülle $CLOSURE_1$
@@ -336,16 +329,12 @@ z. B. $[S' \rightarrow \cdot S, \{\$ \} ]$
 
 2. gibt es ein LR(1) - Item $[A \rightarrow \alpha \cdot B \beta,\ L]$ aus $CLOSURE_1 (I)$ und eine Produktion $(B \rightarrow \gamma)$, füge $[B \rightarrow \cdot \gamma, FIRST(\beta\ L)]$ zu $CLOSURE_1 (I)$ hinzu \\($\alpha, \beta$ dürfen $\epsilon$ sein).
 
-mit $$\beta\ L = \{a \mid \exists x \in L: y = \beta x\}$$
-
-und $$FIRST(L) = \bigcup\nolimits_{\alpha \in L} FIRST(\alpha)$$
-
 
 ## $Goto_1$
 
 $GOTO_1(I, X) =$ eine Produktion
 
-$CLOSURE_1(\{[A \rightarrow \alpha X \cdot \beta, \ L] \mid [A \rightarrow \alpha \cdot X \beta,\ L] \in I\})$
+$CLOSURE_1(\lbrace[A \rightarrow \alpha X \cdot \beta, \ L] \mid [A \rightarrow \alpha \cdot X \beta,\ L] \in I\rbrace)$
 
 für eine Itemmenge $I$ und $X \in N \cup T, A \in N, \alpha, \beta \in (N \cup T)^{\ast}$.
 
@@ -354,7 +343,7 @@ für eine Itemmenge $I$ und $X \in N \cup T, A \in N, \alpha, \beta \in (N \cup 
 
 Der Automat wird analog zum LR(0)-Automaten erstellt mit dem Startzustand
 
-$[S' \rightarrow \cdot S, \{\$\} ]$
+$[S' \rightarrow \cdot S, \lbrace \bottom \rbrace ]$
 
 Die Tabelle unterscheidet sich nur bei der Reduktion von der LR(0)-Tabelle:
 
