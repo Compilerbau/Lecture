@@ -259,7 +259,7 @@ Hier entsteht ein Tafelbild.
 
 ## Der LR(0)-Automat zu G1
 
-[LR(0)-Automat](images/LR_0-SLR_1-Automat.png)\
+![LR(0)-Automat](images/LR_0-SLR_1-Automat.png)\
 
 
 ## Die LR(0)-Parsertabelle zu G1
@@ -295,7 +295,7 @@ Regel bei allen Terminals ein, die in der FOLLOW-Menge des Nonterminals auf der 
 
 ## Der SLR-Automat der Grammatik G1:
 
-[SLR(1)-Automat](images/LR_0-SLR_1-Automat.png)\
+![SLR(1)-Automat](images/LR_0-SLR_1-Automat.png)\
 
 
 ## Die SLR-Parsertabelle der Grammatik G1
