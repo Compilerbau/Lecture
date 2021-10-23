@@ -264,7 +264,7 @@ Hier entsteht ein Tafelbild.
 
 ## Die LR(0)-Parsertabelle zu G1
 
-TODO: LR(0)-Parsertabelle (Kunert2018)
+![LR(0)-Parsertabelle](images/LR_0-Table.png)\
 
 
 
