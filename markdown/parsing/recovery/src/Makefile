@@ -6,7 +6,9 @@ JAVAC  = $(DOCKER) --entrypoint "javac" $(IMAGE)
 
 CP    = -cp .:/opt/antlr4/antlr-4.9.2-complete.jar
 ANTLR = $(JAVA) $(CP) org.antlr.v4.Tool
-GRUN  = $(JAVA) $(CP) org.antlr.v4.runtime.misc.TestRig
+GRUN  = $(JAVA) $(CP) org.antlr.v4.gui.TestRig
+
+EXAMPLES = SimpleClassDef Ambig
 
 
 .PHONY: all
@@ -18,4 +20,6 @@ all: SimpleClassDef.g4
 
 .PHONY: clean
 clean:
-	rm -rf SimpleClassDef.interp SimpleClassDef.tokens SimpleClassDefBase* SimpleClassDefLexer* SimpleClassDefListener* SimpleClassDefParser* *.class
+	rm -rf *.interp *.tokens *.class
+	rm -rf $(patsubst %,%Base*,$(EXAMPLES)) $(patsubst %,%Listener*,$(EXAMPLES))
+	rm -rf $(patsubst %,%Lexer*,$(EXAMPLES)) $(patsubst %,%Parser*,$(EXAMPLES))
