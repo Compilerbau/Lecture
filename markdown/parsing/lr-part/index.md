@@ -350,13 +350,19 @@ Die Tabelle unterscheidet sich nur bei der Reduktion von der LR(0)-Tabelle:
 Reduktionsoperationen werden in den Spalten der
 Terminals eingetragen, die in der LOOKAHEAD-Menge der entsprechenden Regel enthalten sind.
 
+## Die Beispielgrammatik G2
 
-## Der LR(1)-Automat der Grammatik G1
+(0) S' → S
+(1) S → NN
+(2) N → 0N
+(3) N → 1
+
+## Der LR(1)-Automat der Grammatik G2
 
 ![LR(1)-Automat](images/LR_1-Automat.png)\
 
 
-## Die LR(1)-Parsertabelle der Grammatik G1
+## Die LR(1)-Parsertabelle der Grammatik G2
 
 ![LR(1)-Parsertabelle](images/LR_1-Table.png)\
 
@@ -371,20 +377,13 @@ Zusammenfassung aller LR(1)-Zustände, die sich nur in den LOOKAHEAD-Mengen unte
 Parsergeneratoren generieren oft direkt aus einem LR(0)- einen LALR(1)-Zustands-
 Übergangsgraphen durch Hinzufügen der LOOKAHEAD-Mengen.
 
-## Die Beispielgrammatik G3
 
-(0) S' → S
-(1) S → NN
-(2) N → 0N
-(3) N → 1
-
-
-## Der LALR-Automat der Grammatik G3
+## Der LALR-Automat der Grammatik G2
 
 ![LALR(1)-Automat](images/LALR-Automat.png)\
 
 
-## Die LALR-Parsertabelle der Grammatik G3
+## Die LALR-Parsertabelle der Grammatik G2
 
 ![LALR(1)-Parsertabelle](images/LALR-Table.png)\
 
