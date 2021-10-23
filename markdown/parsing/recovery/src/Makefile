@@ -8,14 +8,16 @@ CP    = -cp .:/opt/antlr4/antlr-4.9.2-complete.jar
 ANTLR = $(JAVA) $(CP) org.antlr.v4.Tool
 GRUN  = $(JAVA) $(CP) org.antlr.v4.gui.TestRig
 
+
 EXAMPLES = SimpleClassDef Ambig
 
 
-.PHONY: all
-all: SimpleClassDef.g4
-	$(ANTLR) SimpleClassDef.g4
+$(EXAMPLES): %: %.tokens
+	$(GRUN) $@ startrule -tokens
+
+%.tokens: %.g4
+	$(ANTLR) $<
 	$(JAVAC) $(CP) *.java
-	$(GRUN) SimpleClassDef prog -tokens
 
 
 .PHONY: clean
