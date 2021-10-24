@@ -323,7 +323,7 @@ Was ist mit
 3) $X \rightarrow B \alpha \mid B \beta$
 4) $X \rightarrow  B \alpha \mid C \beta$ und $C\rightarrow B$
 5) $X \rightarrow X \beta$
-6) $X \rightarrow B \alpha$ und $B \rightarrow A \beta$
+6) $X \rightarrow B \alpha$ und $B \rightarrow X \beta$
 
 \vspace{2cm}
 
@@ -438,20 +438,21 @@ Das hilft manchmal:
 Für $k = 1$:
 G ist $LL(1): \forall A \rightarrow \alpha, A \rightarrow \beta \in P, \alpha \neq \beta$ gilt:
 
-1)  $\lnot \exists a \in T: \alpha  \overset{\ast}{\Rightarrow}_l  a\alpha_1$ und $\beta \overset{\ast}{\Rightarrow}_l a\beta_1$
-2)  $((\alpha \overset{\ast}{\Rightarrow}_l \epsilon) \Rightarrow (\lnot \beta \overset{\ast}{\Rightarrow}_l \epsilon))$ und $((\beta \overset{\ast}{\Rightarrow}_l \epsilon \Rightarrow \alpha \lnot \overset{\ast}{\Rightarrow}_l \epsilon))$
-3)  $((\beta \overset{\ast}{\Rightarrow}_l \epsilon)$ und $(\alpha \overset{\ast}{\Rightarrow}_l a\alpha_1)) \Rightarrow a \notin Follow(A)$
-4)  $((\alpha \overset{\ast}{\Rightarrow}_l \epsilon)$ und $(\beta \overset{\ast}{\Rightarrow}_l a\beta_1)) \Rightarrow a \notin Follow(A)$
+1.  $\lnot \exists a \in T: \alpha  \overset{\ast}{\Rightarrow}_l  a\alpha_1$ und $\beta \overset{\ast}{\Rightarrow}_l a\beta_1$
+2.  $((\alpha \overset{\ast}{\Rightarrow}_l \epsilon) \Rightarrow (\lnot (\beta \overset{\ast}{\Rightarrow}_l \epsilon)))$ und $((\beta \overset{\ast}{\Rightarrow}_l \epsilon) \Rightarrow (\lnot (\alpha\overset{\ast}{\Rightarrow}_l \epsilon)))$
+3.  $((\beta \overset{\ast}{\Rightarrow}_l \epsilon)$ und $(\alpha \overset{\ast}{\Rightarrow}_l a\alpha_1)) \Rightarrow a \notin Follow(A)$
+4.  $((\alpha \overset{\ast}{\Rightarrow}_l \epsilon)$ und $(\beta \overset{\ast}{\Rightarrow}_l a\beta_1)) \Rightarrow a \notin Follow(A)$
 
 \bigskip
 
-1) und 2)bedeuten:
+Die ersten beiden  Zeilen bedeuten:
 
 $\alpha$ und $\beta$ können nicht beide $\epsilon$ ableiten,  $First_1(\alpha) \cap First_1(\beta) = \emptyset$
 
-3) und 4) bedeuten:
+Die dritte und vierte Zeile bedeuten:
 
 $(\epsilon \in First_1(\beta)) \Rightarrow (First_1(\alpha) \cap Follow_1(A) = \emptyset)$
+
 $(\epsilon \in First_1(\alpha)) \Rightarrow (First_1(\beta) \cap Follow_1(A) = \emptyset)$
 
 
