@@ -96,7 +96,7 @@ Shiften bedeutet, das nächste Eingabesymbol miteinbeziehen.
 
 ## Da wollen wir hin
 
-![Parser-Automat](images/Parser-Automat.png){width=500}\
+![Parser-Automat](images/Parser-Automat.png){width=500}
 
 
 ## So geht es
@@ -258,12 +258,12 @@ Hier entsteht ein Tafelbild.
 
 ## Der LR(0)-Automat zu G1
 
-![LR(0)-Automat](images/LR_0-SLR_1-Automat.png)\
+![LR(0)-Automat](images/LR_0-SLR_1-Automat.png)
 
 
 ## Die LR(0)-Parsertabelle zu G1
 
-![LR(0)-Parsertabelle](images/LR_0-Table.png)\
+![LR(0)-Parsertabelle](images/LR_0-Table.png)
 
 
 
@@ -294,12 +294,12 @@ Regel bei allen Terminals ein, die in der FOLLOW-Menge des Nonterminals auf der 
 
 ## Der SLR-Automat der Grammatik G1:
 
-![SLR(1)-Automat](images/LR_0-SLR_1-Automat.png)\
+![SLR(1)-Automat](images/LR_0-SLR_1-Automat.png)
 
 
 ## Die SLR-Parsertabelle der Grammatik G1
 
-![SLR(1)-Parsertabelle](images/SLR_1-Table.png)\
+![SLR(1)-Parsertabelle](images/SLR_1-Table.png)
 
 
 
@@ -359,12 +359,12 @@ Terminals eingetragen, die in der LOOKAHEAD-Menge der entsprechenden Regel entha
 
 ## Der LR(1)-Automat der Grammatik G2
 
-![LR(1)-Automat](images/LR_1-Automat.png)\
+![LR(1)-Automat](images/LR_1-Automat.png)
 
 
 ## Die LR(1)-Parsertabelle der Grammatik G2
 
-![LR(1)-Parsertabelle](images/LR_1-Table.png)\
+![LR(1)-Parsertabelle](images/LR_1-Table.png)
 
 
 
@@ -380,12 +380,12 @@ Parsergeneratoren generieren oft direkt aus einem LR(0)- einen LALR(1)-Zustands-
 
 ## Der LALR-Automat der Grammatik G2
 
-![LALR(1)-Automat](images/LALR-Automat.png)\
+![LALR(1)-Automat](images/LALR-Automat.png)
 
 
 ## Die LALR-Parsertabelle der Grammatik G2
 
-![LALR(1)-Parsertabelle](images/LALR-Table.png)\
+![LALR(1)-Parsertabelle](images/LALR-Table.png)
 
 
 
@@ -414,7 +414,7 @@ Folgendes kann trotzdem helfen:
 
 # Hierarchie der kontextfreien Sprachen
 
-![Sprachenhierarchie](images/CFG-Hierarchy.png)\
+![Sprachenhierarchie](images/CFG-Hierarchy.png)
 
 
 
