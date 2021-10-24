@@ -8,7 +8,6 @@ readings:
   - key: "Aho2008"
     comment: "Kapitel 4.5 bis 4.8"
   - key: "aho2013compilers"
-  - key: "Kunert2018"
   - key: "hopcroft2003"
   - key: "Kunert2018"
   - key: "Wagenknecht2014"
