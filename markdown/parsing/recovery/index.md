@@ -12,7 +12,7 @@ readings:
 assignments:
   - topic: sheet01
 youtube:
-  - id: TODO
+  - id: 9sFdI7pYMQs
 fhmedia:
   - link: "TODO"
     name: "Direktlink FH-Medienportal: CB Error-Recovery"
