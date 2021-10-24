@@ -17,7 +17,7 @@ readings:
 # Wiederholung
 <!-- 10 Minuten: 1 Folie -->
 
-![Ein PDA für $L=\{ww^{R}\mid w\in \{a,b\}^{\ast}\}$](images/pda.png){width="45%"}
+![Ein PDA für $L=\{ww^{R}\mid w\in \{a,b\}^{\ast}\}$](images/pda.png){width="60%"}
 
 ## Top-Down-Analyse
 
@@ -96,7 +96,7 @@ Shiften bedeutet, das nächste Eingabesymbol miteinbeziehen.
 
 ## Da wollen wir hin
 
-![Parser-Automat](images/Parser-Automat.png){width=500}
+![Parser-Automat](images/Parser-Automat.png){width="80%"}
 
 
 ## So geht es
@@ -148,7 +148,7 @@ Mehrdeutige Grammatiken können nicht *LR* sein.
 
 ## Steuerung des Parsens mittels der Parse Table
 
-![Parser Schema](images/ParserProgram.png)
+![Parser Schema](images/ParserProgram.png){width="80%"}
 
 
 ## Arbeitsweise
@@ -263,7 +263,7 @@ Hier entsteht ein Tafelbild.
 
 ## Die LR(0)-Parsertabelle zu G1
 
-![LR(0)-Parsertabelle](images/LR_0-Table.png)
+![LR(0)-Parsertabelle](images/LR_0-Table.png){width="80%"}
 
 
 
@@ -299,7 +299,7 @@ Regel bei allen Terminals ein, die in der FOLLOW-Menge des Nonterminals auf der 
 
 ## Die SLR-Parsertabelle der Grammatik G1
 
-![SLR(1)-Parsertabelle](images/SLR_1-Table.png)
+![SLR(1)-Parsertabelle](images/SLR_1-Table.png){width="80%"}
 
 
 
@@ -364,7 +364,7 @@ Terminals eingetragen, die in der LOOKAHEAD-Menge der entsprechenden Regel entha
 
 ## Die LR(1)-Parsertabelle der Grammatik G2
 
-![LR(1)-Parsertabelle](images/LR_1-Table.png)
+![LR(1)-Parsertabelle](images/LR_1-Table.png){width="55%"}
 
 
 
@@ -385,7 +385,7 @@ Parsergeneratoren generieren oft direkt aus einem LR(0)- einen LALR(1)-Zustands-
 
 ## Die LALR-Parsertabelle der Grammatik G2
 
-![LALR(1)-Parsertabelle](images/LALR-Table.png)
+![LALR(1)-Parsertabelle](images/LALR-Table.png){width="80%"}
 
 
 
@@ -414,7 +414,7 @@ Folgendes kann trotzdem helfen:
 
 # Hierarchie der kontextfreien Sprachen
 
-![Sprachenhierarchie](images/CFG-Hierarchy.png)
+![Sprachenhierarchie](images/CFG-Hierarchy.png){width="80%"}
 
 
 
