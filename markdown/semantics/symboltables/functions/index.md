@@ -25,6 +25,29 @@ fhmedia:
 sketch: true
 ---
 
+## Inhalt
+
+![Nested Scopes](images/nestedscopes.png)
+
+![Nested Scopes](images/nestedscopesuml.png)
+
+```python
+class Scope:
+    Scope enclosingScope # None if global (outermost) scope
+    Symbol<String, Symbol> symbols
+    
+    def resolve(name):
+        # do we know "name" here?
+        s = symbols[name]
+        if (s != None) return s
+        # if not here, check any enclosing scope
+        if (enclosingScope != None) return
+        enclosingScope.resolve(name)
+        return None # not found
+    
+	def bind(symbol):
+   	    symbols[symbol.name] = symbol
+```
 
 ## Motivation
 Lorem Ipsum. Starte mit H2-Level.
