@@ -4,8 +4,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1030</x>
-      <y>580</y>
+      <x>1560</x>
+      <y>640</y>
       <w>130</w>
       <h>90</h>
     </coordinates>
@@ -20,8 +20,8 @@ scope: Scope
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1130</x>
-      <y>730</y>
+      <x>1660</x>
+      <y>790</y>
       <w>100</w>
       <h>30</h>
     </coordinates>
@@ -31,8 +31,8 @@ scope: Scope
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>980</x>
-      <y>730</y>
+      <x>1510</x>
+      <y>790</y>
       <w>100</w>
       <h>30</h>
     </coordinates>
@@ -42,8 +42,8 @@ scope: Scope
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>840</x>
-      <y>730</y>
+      <x>1370</x>
+      <y>790</y>
       <w>80</w>
       <h>30</h>
     </coordinates>
@@ -53,8 +53,8 @@ scope: Scope
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>590</x>
-      <y>580</y>
+      <x>1140</x>
+      <y>620</y>
       <w>230</w>
       <h>100</h>
     </coordinates>
@@ -70,8 +70,8 @@ resolve(name: String): Symbol</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1110</x>
-      <y>660</y>
+      <x>1640</x>
+      <y>720</y>
       <w>80</w>
       <h>90</h>
     </coordinates>
@@ -81,8 +81,8 @@ resolve(name: String): Symbol</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1020</x>
-      <y>660</y>
+      <x>1550</x>
+      <y>720</y>
       <w>80</w>
       <h>90</h>
     </coordinates>
@@ -92,12 +92,45 @@ resolve(name: String): Symbol</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>910</x>
-      <y>730</y>
+      <x>1290</x>
+      <y>670</y>
+      <w>290</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>270.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1440</x>
+      <y>790</y>
       <w>90</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1200</x>
+      <y>790</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>*Function*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1240</x>
+      <y>710</y>
+      <w>30</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
   </element>
 </diagram>
