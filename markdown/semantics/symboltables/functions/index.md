@@ -22,11 +22,7 @@ youtube:
 fhmedia:
   - link: https://www.fh-bielefeld.de/medienportal/m/XYZ
     name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
-sketch: true
 ---
-
-## Motivation
-Lorem Ipsum. Starte mit H2-Level.
 
 **TODO** 
 
@@ -62,8 +58,6 @@ void g(int z){}
 :::
 ::::::
 
-
-::: notes
 ### Behandlung von Funktionsdefinitionen
 
 *   Jeder Symboltabelleneintrag braucht ein Feld, das angibt, ob es sich um eine
@@ -128,8 +122,9 @@ Den Listener zum Aufbau der Scopes könnte man entsprechend erweitern:
     *   löse den Typ der Variablen im aktuellen Scope auf
     *   definiere ein neues Variablensymbol im aktuellen Scope
 *   `exitCall`: analog zu `exitVar`
-    *   löse das Funktionssymbol (und die Argumente) im aktuellen Scope auf
-    :::
+    *   löse das Funktionssymbol (und die Argumente) im aktuellen Scope auf 
+
+:::
 
 :::::: columns
 ::: {.column width="38%"}
