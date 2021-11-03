@@ -1,34 +1,26 @@
 ---
-  type: lecture-cg
-  title: "Nested Scopes"
-  author: "Carsten Gips (FH Bielefeld)"
-  weight: 2
-  readings:
-    - key: "Mogensen2017"
-      comment: "Kapitel 3"
-    - key: "Parr2014"
-      comment: "Kapitel 6.4 und 8.4"
-    - key: "Parr2010"
-      comment: "Kapitel 6, 7 und 8"
-      quizzes:
-    - link: XYZ
-      name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
-      assignments:
-    - topic: blatt01
-  youtube:
-    - id: XYZ (ID)
-    - link: https://youtu.be/XYZ
-      name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
-      fhmedia:
-    - link: https://www.fh-bielefeld.de/medienportal/m/XYZ
-      name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
+type: lecture-cg
+title: "Nested Scopes"
+author: "Carsten Gips (FH Bielefeld)"
+weight: 2
+readings:
+  - key: "Mogensen2017"
+    comment: "Kapitel 3"
+  - key: "Parr2014"
+    comment: "Kapitel 6.4 und 8.4"
+  - key: "Parr2010"
+    comment: "Kapitel 6, 7 und 8"
+assignments:
+  - topic: sheet02
+youtube:
+  - id: TODO
+fhmedia:
+  - link: "TODO"
+    name: "TODO"
 ---
 
-**TODO** 
 
-* Text anpassen für die Überschriften
-* Klassenhierarchie für Scopes
-
+::: notes
 ## Scopes und Name Spaces
 
 **Def.:** Unter dem *Gültigkeitsbereich* (Sichtbarkeitsbereich, Scope) eines
@@ -62,8 +54,8 @@ float y;
 {
     int x;
     x = 1;
-	y = 2;
-	{ int y = x; }
+    y = 2;
+    { int y = x; }
 }
 ```
 
@@ -72,7 +64,7 @@ float y;
 
 \pause
 
-![Nested Scopes](images/nestedscopes.png)
+![](images/nestedscopes.png)
 
 :::
 ::::::
@@ -86,7 +78,6 @@ float y;
 *   `resolve()`: Symbole [aus Scope oder Eltern-Scope]{.notes} abrufen
 
 ::: notes
-
 ### Hinzunahme von Scopes
 
 **Bsp.:** Die zu übersetzende Sprache ist scope-basiert und kennt nur Bezeichner
@@ -104,9 +95,7 @@ umschließenden Scopes gesucht werden. Hier wird oft ein Stack aller "offenen" S
 benutzt.
 :::
 
-
 ::: notes
-
 ### Grundlegendes Vorgehen
 
 Das Element, das einen neuen Scope definiert, steht selbst in dem aktuell
@@ -119,7 +108,6 @@ oder Bezeichners.
 ## Nested Scopes: Symbole und Scopes
 
 ::::::::: notes
-
 ### Implementierung mit hierarchischen (verketteten) Tabellen
 
 Pro Scope wird eine Symboltabelle angelegt, dabei enthält jede Symboltabelle zusätzlich
@@ -128,22 +116,21 @@ Symboltabelle wird typischerweise mit allen Schlüsselwörtern initialisiert.
 
 *   Wenn ein neuer Scope betreten wird, wird eine neue Symboltabelle erzeugt.
 *   Scanner: Erkennt Bezeichner und sucht ihn in der Symboltabelle des aktuellen
-Scopes bzw. trägt ihn dort ein und übergibt dem Parser das erkannte Token und
-einen Verweis auf den Symboltabelleneintrag (**Erinnerung**: Der Scanner wird
-i.d.R. vom Parser aus aufgerufen, d.h. der Parser setzt den aktuellen Scope!)
+    Scopes bzw. trägt ihn dort ein und übergibt dem Parser das erkannte Token und
+    einen Verweis auf den Symboltabelleneintrag (**Erinnerung**: Der Scanner wird
+    i.d.R. vom Parser aus aufgerufen, d.h. der Parser setzt den aktuellen Scope!)
 *   Parser:
     *   Wird ein neues Element (ein Bezeichner) definiert, muss bestimmt werden, ob
-    es einen eigenen Scope hat. Wenn ja, wird eine neue Symboltabelle für den
-    Scope angelegt. Sie enthält alle Definitionen von Elementen, die in diesem
-    Scope liegen. Der Bezeichner selbst wird in die aktuelle Symboltabelle eingetragen
-    mit einem Verweis auf die neue Tabelle, die all die Bezeichner beinhaltet, die
-    außerhalb dieses Scopes nicht sichtbar sein sollen. Die Tabellen werden untereinander
-    verzeigert.
+        es einen eigenen Scope hat. Wenn ja, wird eine neue Symboltabelle für den
+        Scope angelegt. Sie enthält alle Definitionen von Elementen, die in diesem
+        Scope liegen. Der Bezeichner selbst wird in die aktuelle Symboltabelle eingetragen
+        mit einem Verweis auf die neue Tabelle, die all die Bezeichner beinhaltet, die
+        außerhalb dieses Scopes nicht sichtbar sein sollen. Die Tabellen werden untereinander
+        verzeigert.
     *   Wird ein Element deklariert oder benutzt, muss sein Eintrag in allen sichtbaren
-    Scopes in der richtigen Reihenfolge entlang der Verzeigerung gesucht (und je nach
-    Sprachdefinition auch gefunden) werden.
+        Scopes in der richtigen Reihenfolge entlang der Verzeigerung gesucht (und je nach
+        Sprachdefinition auch gefunden) werden.
 *   Der Parse-Tree enthält im Knoten für den Bezeichner den Verweis in die Symboltabelle
-
 
 ### Klassenhierarchie für Scopes
 
@@ -164,23 +151,22 @@ ein "Marker-Interface" `Type` erstellt, um Variablen- und Typ-Symbole unterschei
 können.
 :::::::::
 
-![Nested Scopes (Klassendiagramm)](images/nestedscopesuml.png)
+![](images/nestedscopesuml.png)
+
 
 ::: notes
-
-
-
 ### Alternative Implementierung über einen Stack
 
 *   Der Parse Tree bzw. der AST enthalten an den Knoten, die jeweils einen ganzen
-Scope repräsentieren, einen Verweis auf die Symboltabelle dieses Scopes.
+    Scope repräsentieren, einen Verweis auf die Symboltabelle dieses Scopes.
 *   Die Scopes werden in einem Stack verwaltet.
 *   Wird ein Scope betreten beim Baumdurchlauf, wird ein Verweis auf seine
-Symboltabelle auf den Stack gepackt.
+    Symboltabelle auf den Stack gepackt.
 *   Die Suche von Bezeichnern in umliegenden Scopes erfordert ein Durchsuchen
-des Stacks von oben nach unten.
+    des Stacks von oben nach unten.
 *   Beim Verlassen eines Scopes beim Baumdurchlauf wird der Scope vom Stack entfernt.
 :::
+
 
 ## Nested Scopes: Definieren und Auflösen von Namen
 
@@ -202,6 +188,7 @@ class Scope:
         symbols[symbol.name] = symbol
 ```
 
+
 ## Nested Scopes: Listener
 
 ::: notes
@@ -220,7 +207,6 @@ Mit einem passenden Listener kann man damit die nötigen Scopes aufbauen:
     *   ersetze den aktuellen Scope durch den lokalen Scope
 *   `exitBlock`:
     *   ersetze den aktuellen Scope durch dessen Elternscope
-
 :::
 
 :::::: columns
@@ -232,23 +218,23 @@ Mit einem passenden Listener kann man damit die nötigen Scopes aufbauen:
 file:   stat+ ;
 
 varDecl
-	:   type ID ('=' expr)? ';'
-	;
+    :   type ID ('=' expr)? ';'
+    ;
 var : ID ;
 type:   'float' | 'int' ;
 
 block:  '{' stat* '}' ;
 stat:   block
-	|   varDecl
-	|   expr ';'
-	;
+    |   varDecl
+    |   expr ';'
+    ;
 expr:   expr ('*'|'/') expr
-	|   expr ('+'|'-') expr
-	|   expr '==' expr
-	|   var '=' expr
-	|   var
-	|   INT
-	;
+    |   expr ('+'|'-') expr
+    |   expr '==' expr
+    |   var '=' expr
+    |   var
+    |   INT
+    ;
 ```
 
 [Relevanter Ausschnitt aus der Grammatik]{.notes}
@@ -268,9 +254,9 @@ class MyListener(CBaseListener):
         scope = globals
 
     def enterBlock(CParser.BlockContext ctx):
-   	 	scope = Scope(scope)
+        scope = Scope(scope)
     def exitBlock(CParser.BlockContext ctx):
-    	scope = scope.getEnclosingScope()
+        scope = scope.getEnclosingScope()
 
     def exitVarDecl(CParser.VarDeclContext ctx):
         def t = scope.resolve(ctx.type().getText())
@@ -298,7 +284,6 @@ Variablen abgerufen werden ...
 
 
 ::: notes
-
 ## Löschen von Symboltabellen
 
 Möglicherweise sind die Symboltabellen nach der Identifizierungsphase der Elemente
@@ -313,20 +298,25 @@ noch gebraucht werden.
 ## Wrap-Up
 
 *   Symboltabellen: Verwaltung von Symbolen und Typen (Informationen über Bezeichner)
-*   Blöcke: Nested Scopes \blueArrow hierarchische Organisation
-*   Binden von Bezeichner gleichen Namens an ihren jeweiligen Scope \blueArrow\ `bind()`
-*   Abrufen von Bezeichnern aus dem aktuellen Scope oder den Elternscopes \blueArrow\ `resolve()`
+*   Blöcke: Nested Scopes => hierarchische Organisation
+*   Binden von Bezeichner gleichen Namens an ihren jeweiligen Scope => `bind()`
+*   Abrufen von Bezeichnern aus dem aktuellen Scope oder den Elternscopes => `resolve()`
 
-  <!-- DO NOT REMOVE - THIS IS A LAST SLIDE TO INDICATE THE LICENSE AND POSSIBLE EXCEPTIONS (IMAGES, ...). -->
-  ::: slides
 
-  ## LICENSE
 
-  ![](https://licensebuttons.net/l/by-sa/4.0/88x31.png)
 
-  Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
 
-  ### Exceptions
 
-  *   TODO (what, where, license)
-      :::
+
+<!-- DO NOT REMOVE - THIS IS A LAST SLIDE TO INDICATE THE LICENSE AND POSSIBLE EXCEPTIONS (IMAGES, ...). -->
+::: slides
+## LICENSE
+
+![](https://licensebuttons.net/l/by-sa/4.0/88x31.png)
+
+Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
+
+### Exceptions
+
+*   TODO (what, where, license)
+:::
