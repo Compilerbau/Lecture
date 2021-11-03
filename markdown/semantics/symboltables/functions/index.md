@@ -44,11 +44,13 @@ void g(int z){}
 
 \pause
 
-![Nested Scopes](images/functionscopes.png)
+![](images/functionscopes.png)
 
 :::
 ::::::
 
+
+::: notes
 ### Behandlung von Funktionsdefinitionen
 
 *   Jeder Symboltabelleneintrag braucht ein Feld, das angibt, ob es sich um eine
@@ -61,7 +63,6 @@ void g(int z){}
 *   Die formalen Parameter werden als Einträge in der Symboltabelle für den Scope der
     Funktion angelegt and entsprechend als Parameter gekennzeichnet.
 
-
 ### Behandlung von Funktionsaufrufen
 
 *   Der Name der Funktion steht als Bezeichner in der Symboltabelle des Scopes, in dem
@@ -70,32 +71,22 @@ void g(int z){}
     Parameter.
 *   Die Definition der Funktion wird in den zugänglichen Scopes gesucht (wie oben) und
     ein Verweis darauf in der Symboltabelle gespeichert.
-    :::
+:::
 
 
 ## Erweiterung des Klassendiagramms für Funktions-Scopes
 
-![Nested Scopes](images/functionscopesuml.png)
+![](images/functionscopesuml.png)
+
 
 ## Funktionen sind Symbole *und* Scopes
 
 ``` python
 class Function(Scope, Symbol):
     def __init__(name, retType, enclosingScope):
-        Symbol.__init__(name, retType) 		# we are "Symbol" ...
-        enclosingScope = enclosingScope 	# ... and "Scope"
+        Symbol.__init__(name, retType)      # we are "Symbol" ...
+        enclosingScope = enclosingScope)    # ... and "Scope"
 ```
-
-::: notes
-Im Grunde ist die Implementierung von `resolve()` *exakt* die aus `BaseScope`.
-Da man in Java nur von einer Klasse erben kann (und `FunctionSymbol` bereits
-von `Symbol` erbt), bleibt das unschöne Nebeneinander.
-
-Alternativ könnte man die Implementierung von `resolve()` ab Java8 auch in
-das Interface `Scope` schreiben und müsste dann statt des Zugriffs auf die
-Attribute `symbols` und `enclosingScope` entsprechend Hilfsmethoden
-aufrufen, da Interfaces keinen Zustand haben ...
-:::
 
 ## Funktionen: Listener
 
@@ -140,6 +131,7 @@ exprList : expr (',' expr)* ;
 ```
 
 [Relevanter Ausschnitt aus der Grammatik]{.notes}
+
 :::
 ::: {.column width="62%"}
 
@@ -188,8 +180,13 @@ gespeichert werden (weiteres Feld/Attribut in `Function`)!
 ## Wrap-Up
 
 *   Symboltabellen: Verwaltung von Symbolen und Typen (Informationen über Bezeichner)
-    *   Funktionen: Nested Scopes \blueArrow hierarchische Organisation
+    *   Funktionen: Nested Scopes => hierarchische Organisation
     *   Umgang mit dem Funktionsnamen, den Parametern und dem Funktionskörper
+
+
+
+
+
 
 
 <!-- DO NOT REMOVE - THIS IS A LAST SLIDE TO INDICATE THE LICENSE AND POSSIBLE EXCEPTIONS (IMAGES, ...). -->
