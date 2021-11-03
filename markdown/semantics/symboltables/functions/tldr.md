@@ -4,7 +4,8 @@ disableToc: true
 hidden: true
 ---
 
-![Compiler-Pipeline](images/architektur_cb)\
+
+![](images/architektur_cb.png)
 
 Eine Funktion sind selbst ein Symbol, welches in einem Scope gilt und entsprechend
 in der Symboltabelle eingetragen wird. Darüber hinaus bildet sie einen neuen
