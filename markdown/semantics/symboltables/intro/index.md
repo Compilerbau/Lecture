@@ -1,6 +1,7 @@
 ---
 type: lecture-cg
-title: "Nested Scopes"
+title: "Semantische Analyse: Symboltabellen"
+menuTitle: "Überblick Symboltabellen"
 author: "Carsten Gips (FH Bielefeld)"
 weight: 1
 readings:
