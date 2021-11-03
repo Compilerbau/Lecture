@@ -34,7 +34,7 @@
 
 * Bilder und Links anpassen
 
-  ## Was passiert nach der Syntaxanalyse?
+## Was passiert nach der Syntaxanalyse?
 
   :::::: columns
   ::: {.column width="20%"}
