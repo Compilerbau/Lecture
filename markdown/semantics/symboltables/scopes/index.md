@@ -22,309 +22,300 @@
       fhmedia:
     - link: https://www.fh-bielefeld.de/medienportal/m/XYZ
       name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
-      sketch: true
 ---
 
-  ## Motivation
+**TODO** 
 
-  Lorem Ipsum. Starte mit H2-Level.
-  ...
+* Text anpassen für die Überschriften
+* Klassenhierarchie für Scopes
 
-  **TODO** 
+## Scopes und Name Spaces
 
-  * Text anpassen für die Überschriften
-    * Klassenhierarchie für Scopes
+**Def.:** Unter dem *Gültigkeitsbereich* (Sichtbarkeitsbereich, Scope) eines
+Bezeichners versteht man den Programmabschnitt, in dem der Bezeichner sichtbar
+und nutzbar ist. Das ist oft der kleinste umgebende Block, außer darin enthaltene
+Scopes, die ein eigenes Element dieses Namens benutzen.
 
-  ## Scopes und Name Spaces
+Scopes sind fast immer hierarchisch angeordnet.
 
-  **Def.:** Unter dem *Gültigkeitsbereich* (Sichtbarkeitsbereich, Scope) eines
-  Bezeichners versteht man den Programmabschnitt, in dem der Bezeichner sichtbar
-  und nutzbar ist. Das ist oft der kleinste umgebende Block, außer darin enthaltene
-  Scopes, die ein eigenes Element dieses Namens benutzen.
+**Def.:** Unter einem *Namensraum* (name space) versteht man die Menge der zu
+einem Zeitpunkt sichtbaren Bezeichner.
 
-  Scopes sind fast immer hierarchisch angeordnet.
+Es gibt Sprachen, in denen man eigene Namensräume explizit definieren kann (z.B.
+C++).
 
-  **Def.:** Unter einem *Namensraum* (name space) versteht man die Menge der zu
-  einem Zeitpunkt sichtbaren Bezeichner.
+Vorsicht: Diese Begriffe werden nicht immer gleich definiert und auch gerne
+verwechselt.
+:::
 
-  Es gibt Sprachen, in denen man eigene Namensräume explizit definieren kann (z.B.
-  C++).
 
-  Vorsicht: Diese Begriffe werden nicht immer gleich definiert und auch gerne
-  verwechselt.
-  :::
+## Symbole und (nested) Scopes
 
+:::::: columns
+::: {.column width="40%"}
 
-  ## Symbole und (nested) Scopes
+\vspace{4mm}
 
-  :::::: columns
-  ::: {.column width="40%"}
+```c
+int x = 42;
+float y;
+{
+    int x;
+    x = 1;
+	y = 2;
+	{ int y = x; }
+}
+```
 
-  \vspace{4mm}
+:::
+::: {.column width="40%"}
 
-  ```c
-  int x = 42;
-  float y;
-  {
-      int x;
-      x = 1;
-      y = 2;
-      { int y = x; }
-  }
-  ```
+\pause
 
-  :::
-  ::: {.column width="40%"}
+![Nested Scopes](images/nestedscopes.png)
 
-  \pause
+:::
+::::::
 
-  ![Nested Scopes](images/nestedscopes.png)\
+\pause
+\bigskip
 
-  :::
-  ::::::
+**Aufgaben**:
 
-  \pause
-  \bigskip
+*   `bind()`: Symbole [im Scope]{.notes} definieren
+*   `resolve()`: Symbole [aus Scope oder Eltern-Scope]{.notes} abrufen
 
-  **Aufgaben**:
+::: notes
 
-  *   `bind()`: Symbole [im Scope]{.notes} definieren
-  *   `resolve()`: Symbole [aus Scope oder Eltern-Scope]{.notes} abrufen
+### Hinzunahme von Scopes
 
-  ::: notes
+**Bsp.:** Die zu übersetzende Sprache ist scope-basiert und kennt nur Bezeichner
+für Variablen
 
-  ### Hinzunahme von Scopes
+Scopes können ineinander verschachtelt sein. Die Spezifikation der zu übersetzenden
+Sprache legt fest, in welcher Reihenfolge Scopes zu durchsuchen sind, wenn auf einen
+Bezeichner Bezug genommen wird, der nicht im aktuellen Scope definiert ist.
 
-  **Bsp.:** Die zu übersetzende Sprache ist scope-basiert und kennt nur Bezeichner
-  für Variablen
+Insgesamt bilden die Scopes oft eine Baumstruktur, wobei jeder Knoten einen Scope
+repräsentiert und seine Söhne die direkt in ihm enthaltenen Scopes sind. Dabei ist
+es in der Regel so, dass Scopes sich entweder vollständig überlappen oder gar nicht.
+Wenn ein Bezeichner nicht im aktuellen Scope vorhanden ist, muss er in der Regel in
+umschließenden Scopes gesucht werden. Hier wird oft ein Stack aller "offenen" Scopes
+benutzt.
+:::
 
-  Scopes können ineinander verschachtelt sein. Die Spezifikation der zu übersetzenden
-  Sprache legt fest, in welcher Reihenfolge Scopes zu durchsuchen sind, wenn auf einen
-  Bezeichner Bezug genommen wird, der nicht im aktuellen Scope definiert ist.
 
-  Insgesamt bilden die Scopes oft eine Baumstruktur, wobei jeder Knoten einen Scope
-  repräsentiert und seine Söhne die direkt in ihm enthaltenen Scopes sind. Dabei ist
-  es in der Regel so, dass Scopes sich entweder vollständig überlappen oder gar nicht.
-  Wenn ein Bezeichner nicht im aktuellen Scope vorhanden ist, muss er in der Regel in
-  umschließenden Scopes gesucht werden. Hier wird oft ein Stack aller "offenen" Scopes
-  benutzt.
-  :::
+::: notes
 
+### Grundlegendes Vorgehen
 
-  ::: notes
+Das Element, das einen neuen Scope definiert, steht selbst in dem aktuell
+behandelten Scope. Wenn dieses Element selbst ein Bezeichner ist, gehört
+dieser in den aktuellen Scope. Nur das, was nur innerhalb des oben genannten
+Elements oder Bezeichners definiert wird, gehört in den Scope des Elements
+oder Bezeichners.
+:::
 
-  ### Grundlegendes Vorgehen
+## Nested Scopes: Symbole und Scopes
 
-  Das Element, das einen neuen Scope definiert, steht selbst in dem aktuell
-  behandelten Scope. Wenn dieses Element selbst ein Bezeichner ist, gehört
-  dieser in den aktuellen Scope. Nur das, was nur innerhalb des oben genannten
-  Elements oder Bezeichners definiert wird, gehört in den Scope des Elements
-  oder Bezeichners.
-  :::
+::::::::: notes
 
-  ## Nested Scopes: Symbole und Scopes
+### Implementierung mit hierarchischen (verketteten) Tabellen
 
-  ::::::::: notes
-
-  ### Implementierung mit hierarchischen (verketteten) Tabellen
-
-  Pro Scope wird eine Symboltabelle angelegt, dabei enthält jede Symboltabelle zusätzlich
-  einen Verweis auf ihre Vorgängersymboltabelle für den umgebenden Scope. Die globale
-  Symboltabelle wird typischerweise mit allen Schlüsselwörtern initialisiert.
-
-  *   Wenn ein neuer Scope betreten wird, wird eine neue Symboltabelle erzeugt.
-  *   Scanner: Erkennt Bezeichner und sucht ihn in der Symboltabelle des aktuellen
-      Scopes bzw. trägt ihn dort ein und übergibt dem Parser das erkannte Token und
-      einen Verweis auf den Symboltabelleneintrag (**Erinnerung**: Der Scanner wird
-      i.d.R. vom Parser aus aufgerufen, d.h. der Parser setzt den aktuellen Scope!)
-  *   Parser:
-      *   Wird ein neues Element (ein Bezeichner) definiert, muss bestimmt werden, ob
-          es einen eigenen Scope hat. Wenn ja, wird eine neue Symboltabelle für den
-          Scope angelegt. Sie enthält alle Definitionen von Elementen, die in diesem
-          Scope liegen. Der Bezeichner selbst wird in die aktuelle Symboltabelle eingetragen
-          mit einem Verweis auf die neue Tabelle, die all die Bezeichner beinhaltet, die
-          außerhalb dieses Scopes nicht sichtbar sein sollen. Die Tabellen werden untereinander
-          verzeigert.
-      *   Wird ein Element deklariert oder benutzt, muss sein Eintrag in allen sichtbaren
-          Scopes in der richtigen Reihenfolge entlang der Verzeigerung gesucht (und je nach
-          Sprachdefinition auch gefunden) werden.
-  *   Der Parse-Tree enthält im Knoten für den Bezeichner den Verweis in die Symboltabelle
-
-
-  ### Klassenhierarchie für Scopes
-
-  Für die Scopes wird ein Interface `Scope` definiert mit den Methoden `bind()` (zum
-  Definieren von Symbolen im Scope) und `resolve()` (zum Abrufen von Symbolen aus
-  dem Scope oder dem umgebenden Scope). Außerdem ist die Methode `getEnclosingScope`
-  vorgesehen, um später den Eltern-Scope abrufen zu können.
-
-  Die Klasse `BaseScope` implementiert das Interface. Zur Unterscheidung zwischen globalen
-  und lokalen Scopes kann man noch weitere Klassen `GlobalScope` und `LocalScope`
-  ableiten.
-
-  ### Klassen und Interfaces für Symbole
-
-  Für die Symbole gibt es die Klasse `Symbol`, wo für jedes Symbol Name und Typ gespeichert
-  wird. Variablensymbole leiten direkt von dieser Klasse ab. Für die eingebauten Typen wird
-  ein "Marker-Interface" `Type` erstellt, um Variablen- und Typ-Symbole unterscheiden zu
-  können.
-  :::::::::
-
-  ![Nested Scopes (Klassendiagramm)](images/nestedscopesuml.png)\
-
-  ::: notes
-
-  
-
-  ### Alternative Implementierung über einen Stack
-
-  *   Der Parse Tree bzw. der AST enthalten an den Knoten, die jeweils einen ganzen
-      Scope repräsentieren, einen Verweis auf die Symboltabelle dieses Scopes.
-  *   Die Scopes werden in einem Stack verwaltet.
-  *   Wird ein Scope betreten beim Baumdurchlauf, wird ein Verweis auf seine
-      Symboltabelle auf den Stack gepackt.
-  *   Die Suche von Bezeichnern in umliegenden Scopes erfordert ein Durchsuchen
-      des Stacks von oben nach unten.
-  *   Beim Verlassen eines Scopes beim Baumdurchlauf wird der Scope vom Stack entfernt.
-      :::
-
-  ## Nested Scopes: Definieren und Auflösen von Namen
-
-  ```python
-  class Scope:
-      Scope enclosingScope # None if global (outermost) scope
-      Symbol<String, Symbol> symbols
-      
-      def resolve(name):
-          # do we know "name" here?
-          s = symbols[name]
-          if (s != None) return s
-          # if not here, check any enclosing scope
-          if (enclosingScope != None) return
-          enclosingScope.resolve(name)
-          return None # not found
-      
-  	def bind(symbol):
-     	    symbols[symbol.name] = symbol
-  ```
-
-  ## Nested Scopes: Listener
-
-  ::: notes
-  Mit einem passenden Listener kann man damit die nötigen Scopes aufbauen:
-
-  *   `enterFile`:
-      *   erzeuge neuen globalen Scope
-      *   definiere und pushe die eingebauten Typen
-  *   `exitVarDecl`:
-      *   löse den Typ der Variablen im aktuellen Scope auf
-      *   definiere ein neues Variablensymbol im aktuellen Scope
-  *   `exitVar`:
-      *   löse die Variable im aktuellen Scope auf
-  *   `enterBlock`:
-      *   erzeuge neuen lokalen Scope, wobei der aktuelle Scope der Elternscope ist
-      *   ersetze den aktuellen Scope durch den lokalen Scope
-  *   `exitBlock`:
-      *   ersetze den aktuellen Scope durch dessen Elternscope
-          :::
-
-  :::::: columns
-  ::: {.column width="35%"}
-
-  \vspace{4mm}
-
-  ``` {.yacc size="footnotesize"}
-  file:   stat+ ;
-  
-  varDecl
-      :   type ID ('=' expr)? ';'
-      ;
-  var : ID ;
-  type:   'float' | 'int' ;
-  
-  block:  '{' stat* '}' ;
-  stat:   block
-      |   varDecl
-      |   expr ';'
-      ;
-  expr:   expr ('*'|'/') expr
-      |   expr ('+'|'-') expr
-      |   expr '==' expr
-      |   var '=' expr
-      |   var
-      |   INT
-      ;
-  ```
-
-  [Relevanter Ausschnitt aus der Grammatik]{.notes}
-  :::
-  ::: {.column width="65%"}
-
-  \vspace{-2mm}
-
-  ``` {.python size="footnotesize"}
-  class MyListener(CBaseListener):
-      private Scope scope
-  
-      def enterFile(CParser.FileContext ctx):
-          def globals = Scope()
-          globals.bind(BuiltInTypeSymbol("int"))
-          globals.bind(BuiltInTypeSymbol("float"))
-          scope = globals
-  
-      def enterBlock(CParser.BlockContext ctx):
-          scope = Scope(scope)
-      def exitBlock(CParser.BlockContext ctx):
-          scope = scope.getEnclosingScope()
-  
-      def exitVarDecl(CParser.VarDeclContext ctx):
-          def t = scope.resolve(ctx.type().getText())
-          def var = VariableSymbol(ctx.ID().getText(), t)
-          scope.bind(var)
-      def exitVar(CParser.VarContext ctx):
-          def name = ctx.ID().getText()
-          def var = scope.resolve(name)
-          if (var == null): error("no such var: " + name)
-  ```
-
-  [*Anmerkung*: Um den Code auf die Folie zu bekommen, ist dies ein Mix aus Java und Python geworden. Sry ;)]{.notes}
-  :::
-  ::::::
-
-  ::: notes
-  In der Methode `exitVar()` wird das Variablensymbol beim Ablaufen des AST
-  lediglich aufgelöst und ein Fehler geworfen, wenn das Variablensymbol (noch)
-  nicht bekannt ist. Hier könnte man weiteres Type-Checking und/oder -Propagation
-  ansetzen.
-
-  Später im Interpreter muss an dieser Stelle dann aber auch der **Wert** der
-  Variablen abgerufen werden ...
-  :::
-
-
-  ::: notes
-
-  ## Löschen von Symboltabellen
-
-  Möglicherweise sind die Symboltabellen nach der Identifizierungsphase der Elemente
-  überflüssig, weil die zusammengetragenen Informationen als Attribute im AST stehen.
-  Die Knoten enthalten dann Verweise auf definierende Knoten von Elementen, nicht mehr
-  auf Einträge in den Symboltabellen. In diesem Fall können die Symboltabellen nach der
-  Identifizierung gelöscht werden, wenn sie nicht z.B. für einen symbolischen Debugger
-  noch gebraucht werden.
-  :::
-
-
-  ## Wrap-Up
-
-  *   Symboltabellen: Verwaltung von Symbolen und Typen (Informationen über Bezeichner)
-      *   Blöcke: Nested Scopes \blueArrow hierarchische Organisation
-      *   Binden von Bezeichner gleichen Namens an ihren jeweiligen Scope \blueArrow\ `bind()`
-      *   Abrufen von Bezeichnern aus dem aktuellen Scope oder den Elternscopes \blueArrow\ `resolve()`
-
-  
-
-  ::: notes
+Pro Scope wird eine Symboltabelle angelegt, dabei enthält jede Symboltabelle zusätzlich
+einen Verweis auf ihre Vorgängersymboltabelle für den umgebenden Scope. Die globale
+Symboltabelle wird typischerweise mit allen Schlüsselwörtern initialisiert.
+
+*   Wenn ein neuer Scope betreten wird, wird eine neue Symboltabelle erzeugt.
+*   Scanner: Erkennt Bezeichner und sucht ihn in der Symboltabelle des aktuellen
+Scopes bzw. trägt ihn dort ein und übergibt dem Parser das erkannte Token und
+einen Verweis auf den Symboltabelleneintrag (**Erinnerung**: Der Scanner wird
+i.d.R. vom Parser aus aufgerufen, d.h. der Parser setzt den aktuellen Scope!)
+*   Parser:
+    *   Wird ein neues Element (ein Bezeichner) definiert, muss bestimmt werden, ob
+    es einen eigenen Scope hat. Wenn ja, wird eine neue Symboltabelle für den
+    Scope angelegt. Sie enthält alle Definitionen von Elementen, die in diesem
+    Scope liegen. Der Bezeichner selbst wird in die aktuelle Symboltabelle eingetragen
+    mit einem Verweis auf die neue Tabelle, die all die Bezeichner beinhaltet, die
+    außerhalb dieses Scopes nicht sichtbar sein sollen. Die Tabellen werden untereinander
+    verzeigert.
+    *   Wird ein Element deklariert oder benutzt, muss sein Eintrag in allen sichtbaren
+    Scopes in der richtigen Reihenfolge entlang der Verzeigerung gesucht (und je nach
+    Sprachdefinition auch gefunden) werden.
+*   Der Parse-Tree enthält im Knoten für den Bezeichner den Verweis in die Symboltabelle
+
+
+### Klassenhierarchie für Scopes
+
+Für die Scopes wird ein Interface `Scope` definiert mit den Methoden `bind()` (zum
+Definieren von Symbolen im Scope) und `resolve()` (zum Abrufen von Symbolen aus
+dem Scope oder dem umgebenden Scope). Außerdem ist die Methode `getEnclosingScope`
+vorgesehen, um später den Eltern-Scope abrufen zu können.
+
+Die Klasse `BaseScope` implementiert das Interface. Zur Unterscheidung zwischen globalen
+und lokalen Scopes kann man noch weitere Klassen `GlobalScope` und `LocalScope`
+ableiten.
+
+### Klassen und Interfaces für Symbole
+
+Für die Symbole gibt es die Klasse `Symbol`, wo für jedes Symbol Name und Typ gespeichert
+wird. Variablensymbole leiten direkt von dieser Klasse ab. Für die eingebauten Typen wird
+ein "Marker-Interface" `Type` erstellt, um Variablen- und Typ-Symbole unterscheiden zu
+können.
+:::::::::
+
+![Nested Scopes (Klassendiagramm)](images/nestedscopesuml.png)
+
+::: notes
+
+
+
+### Alternative Implementierung über einen Stack
+
+*   Der Parse Tree bzw. der AST enthalten an den Knoten, die jeweils einen ganzen
+Scope repräsentieren, einen Verweis auf die Symboltabelle dieses Scopes.
+*   Die Scopes werden in einem Stack verwaltet.
+*   Wird ein Scope betreten beim Baumdurchlauf, wird ein Verweis auf seine
+Symboltabelle auf den Stack gepackt.
+*   Die Suche von Bezeichnern in umliegenden Scopes erfordert ein Durchsuchen
+des Stacks von oben nach unten.
+*   Beim Verlassen eines Scopes beim Baumdurchlauf wird der Scope vom Stack entfernt.
+:::
+
+## Nested Scopes: Definieren und Auflösen von Namen
+
+```python
+class Scope:
+    Scope enclosingScope # None if global (outermost) scope
+    Symbol<String, Symbol> symbols
+
+    def resolve(name):
+        # do we know "name" here?
+        s = symbols[name]
+        if (s != None) return s
+        # if not here, check any enclosing scope
+        if (enclosingScope != None) return
+        enclosingScope.resolve(name)
+        return None # not found
+
+    def bind(symbol):
+        symbols[symbol.name] = symbol
+```
+
+## Nested Scopes: Listener
+
+::: notes
+Mit einem passenden Listener kann man damit die nötigen Scopes aufbauen:
+
+*   `enterFile`:
+    *   erzeuge neuen globalen Scope
+    *   definiere und pushe die eingebauten Typen
+*   `exitVarDecl`:
+    *   löse den Typ der Variablen im aktuellen Scope auf
+    *   definiere ein neues Variablensymbol im aktuellen Scope
+*   `exitVar`:
+    *   löse die Variable im aktuellen Scope auf
+*   `enterBlock`:
+    *   erzeuge neuen lokalen Scope, wobei der aktuelle Scope der Elternscope ist
+    *   ersetze den aktuellen Scope durch den lokalen Scope
+*   `exitBlock`:
+    *   ersetze den aktuellen Scope durch dessen Elternscope
+
+:::
+
+:::::: columns
+::: {.column width="35%"}
+
+\vspace{4mm}
+
+``` {.yacc size="footnotesize"}
+file:   stat+ ;
+
+varDecl
+	:   type ID ('=' expr)? ';'
+	;
+var : ID ;
+type:   'float' | 'int' ;
+
+block:  '{' stat* '}' ;
+stat:   block
+	|   varDecl
+	|   expr ';'
+	;
+expr:   expr ('*'|'/') expr
+	|   expr ('+'|'-') expr
+	|   expr '==' expr
+	|   var '=' expr
+	|   var
+	|   INT
+	;
+```
+
+[Relevanter Ausschnitt aus der Grammatik]{.notes}
+:::
+::: {.column width="65%"}
+
+\vspace{-2mm}
+
+``` {.python size="footnotesize"}
+class MyListener(CBaseListener):
+    private Scope scope
+
+    def enterFile(CParser.FileContext ctx):
+        def globals = Scope()
+        globals.bind(BuiltInTypeSymbol("int"))
+        globals.bind(BuiltInTypeSymbol("float"))
+        scope = globals
+
+    def enterBlock(CParser.BlockContext ctx):
+   	 	scope = Scope(scope)
+    def exitBlock(CParser.BlockContext ctx):
+    	scope = scope.getEnclosingScope()
+
+    def exitVarDecl(CParser.VarDeclContext ctx):
+        def t = scope.resolve(ctx.type().getText())
+        def var = VariableSymbol(ctx.ID().getText(), t)
+        scope.bind(var)
+    def exitVar(CParser.VarContext ctx):
+        def name = ctx.ID().getText()
+        def var = scope.resolve(name)
+        if (var == null): error("no such var: " + name)
+```
+
+[*Anmerkung*: Um den Code auf die Folie zu bekommen, ist dies ein Mix aus Java und Python geworden. Sry ;)]{.notes}
+:::
+::::::
+
+::: notes
+In der Methode `exitVar()` wird das Variablensymbol beim Ablaufen des AST
+lediglich aufgelöst und ein Fehler geworfen, wenn das Variablensymbol (noch)
+nicht bekannt ist. Hier könnte man weiteres Type-Checking und/oder -Propagation
+ansetzen.
+
+Später im Interpreter muss an dieser Stelle dann aber auch der **Wert** der
+Variablen abgerufen werden ...
+:::
+
+
+::: notes
+
+## Löschen von Symboltabellen
+
+Möglicherweise sind die Symboltabellen nach der Identifizierungsphase der Elemente
+überflüssig, weil die zusammengetragenen Informationen als Attribute im AST stehen.
+Die Knoten enthalten dann Verweise auf definierende Knoten von Elementen, nicht mehr
+auf Einträge in den Symboltabellen. In diesem Fall können die Symboltabellen nach der
+Identifizierung gelöscht werden, wenn sie nicht z.B. für einen symbolischen Debugger
+noch gebraucht werden.
+:::
+
+
+## Wrap-Up
+
+*   Symboltabellen: Verwaltung von Symbolen und Typen (Informationen über Bezeichner)
+*   Blöcke: Nested Scopes \blueArrow hierarchische Organisation
+*   Binden von Bezeichner gleichen Namens an ihren jeweiligen Scope \blueArrow\ `bind()`
+*   Abrufen von Bezeichnern aus dem aktuellen Scope oder den Elternscopes \blueArrow\ `resolve()`
 
   <!-- DO NOT REMOVE - THIS IS A LAST SLIDE TO INDICATE THE LICENSE AND POSSIBLE EXCEPTIONS (IMAGES, ...). -->
   ::: slides
