@@ -20,11 +20,6 @@ fhmedia:
 ---
 
 
-
- **TODO**
-
-* Bilder und Links anpassen
-
 ## Was passiert nach der Syntaxanalyse?
 
 :::::: columns
@@ -33,26 +28,26 @@ fhmedia:
 \vspace{2mm}
 
 ``` {.c size="footnotesize"}
-  int x = 42;
-  int f(int x) {
-      int y = 9;
-      return y+x;
-  }
+int x = 42;
+int f(int x) {
+    int y = 9;
+    return y+x;
+}
 
-  x = f(x);
+x = f(x);
 ```
 
 :::
 ::: {.column width="70%"}
 
-![Cymbol-Parsetree](figs/symboltabellen/cymbolparsetree)
+![](images/parsetree.png)
 
 :::
 ::::::
 
 Nach der Syntaxanalyse braucht der Compiler für die  darauf folgenden Phasen
-**semantische Analyse**, Optimierung und Codegenerierung Informationen
-über Bezeichner, z.B.
+**semantische Analyse**, Optimierung und Codegenerierung **Informationen
+über Bezeichner**, z.B.
 
 *   Welcher Bezeichner ist gemeint?
 *   Welchen Typ hat ein Bezeichner?
@@ -63,38 +58,35 @@ Aspekte von Symboltabellen betrachten und eine mögliche Implementierung erarbei
 bevor wir uns (in ["Interpreter"](cb_interpreter1.html)) um die Auswertung (Interpretation)
 des AST kümmern können.
 
-"Cymbol" ist eine C-ähnliche Sprache, die T. Parr in seinen Büchern [Parr2014]
-und [Parr2010] als Beispiel zum Aufbauen von Symboltabellen nutzt. Neben einfachen
-Basistypen gibt es Variablendeklarationen, Funktionsdeklarationen, Structs/Klassen
-und verschachtelte Scopes.
 
+<!-- TODO: an den jeweiligen Stellen platzieren -->
 **Quellen-Hinweis**: Für diese Vorlesung wird eine überarbeitete und erweiterte Version
 der ursprünglichen in [Parr2014] vorgestellten Strukturen für Symboltabellen eingesetzt.
 
 
 ### Logische Compilierungsphasen
 
-  *   Die lexikalische Analyse generiert eine Folge von Token.
-  *   Die Syntaxanalyse generiert einen Parse Tree.
+*   Die lexikalische Analyse generiert eine Folge von Token.
+*   Die Syntaxanalyse generiert einen Parse Tree.
 
 \smallskip
 
-  *   Die semantische Analyse macht folgendes:
-      *   Der Parse Tree wird in einen abstrakten Syntaxbaum (AST) umgewandelt.
-      *   Dieser wird häufig mit Attributen annotiert.
-      *   Dabei sind oft mehrere Baumdurchläufe nötig (z.B. wegen der Abhängigkeiten
-          der Attribute).
+*   Die semantische Analyse macht folgendes:
+    *   Der Parse Tree wird in einen abstrakten Syntaxbaum (AST) umgewandelt.
+    *   Dieser wird häufig mit Attributen annotiert.
+    *   Dabei sind oft mehrere Baumdurchläufe nötig (z.B. wegen der Abhängigkeiten
+        der Attribute).
 
 \smallskip
 
-  *   Nachfolgende Stufen:
-      *   Der AST wird in einen Zwischencode umgewandelt mit Registern und virtuellen
-          Adressen.
-      *   Der Zwischencode wird optimiert.
-      *   Aus dem optimierten Zwischencode wird der endgültige Code, aber immer noch
-          mit virtuellen Adressen, generiert.
-      *   Der generierte Code wird nachoptimiert.
-      *   Der Linker ersetzt die virtuellen Adressen durch reale Adressen.
+*   Nachfolgende Stufen:
+    *   Der AST wird in einen Zwischencode umgewandelt mit Registern und virtuellen
+        Adressen.
+    *   Der Zwischencode wird optimiert.
+    *   Aus dem optimierten Zwischencode wird der endgültige Code, aber immer noch
+        mit virtuellen Adressen, generiert.
+    *   Der generierte Code wird nachoptimiert.
+    *   Der Linker ersetzt die virtuellen Adressen durch reale Adressen.
 
 ### Abgrenzung der Phasen
 
@@ -109,7 +101,7 @@ Oft werden gar nicht alle Phasen und alle Zwischendarstellungen benötigt.
 
 ## Semantische Analyse und Symboltabellen
 
-![Compiler-Pipeline](figs/symboltabellen/architektur_cb)
+![](images/architektur_cb.png)
 
 ## Syntax und Semantik
 
@@ -122,7 +114,7 @@ Oft werden gar nicht alle Phasen und alle Zwischendarstellungen benötigt.
 \bigskip
 \bigskip
 
-\blueArrow Keine Codegenerierung für syntaktisch/semantisch inkorrekte Programme!
+=> Keine Codegenerierung für syntaktisch/semantisch inkorrekte Programme!
 
 ::: notes
 Zur Erinnerung: Die *Syntaxregeln* einer Programmiersprache bestimmen den formalen
@@ -154,13 +146,12 @@ sein!
 \smallskip
 
 *   Validieren der Nutzung von Symbolen
-
--   Vermeidung von Mehrfachdefinition
--   Zugriff auf nicht definierte Bezeichner
--   (Lesender) Zugriff auf nicht initialisierte Bezeichner
--   Kein Zugriff auf definierte Bezeichner
--   Funktionen werden nicht als Variablen genutzt
--   ...
+    -   Vermeidung von Mehrfachdefinition
+    -   Zugriff auf nicht definierte Bezeichner
+    -   (Lesender) Zugriff auf nicht initialisierte Bezeichner
+    -   Kein Zugriff auf definierte Bezeichner
+    -   Funktionen werden nicht als Variablen genutzt
+    -   ...
 
 ::: notes
 Die semantische Analyse überprüft die Gültigkeit eines syntaktisch korrekten Programms
@@ -179,10 +170,9 @@ Zu Annotationen/Attributen, Typen und Type-Checks siehe VL
 \bigskip
 \bigskip
 
-\blueArrow\ [Ein wichtiges]{.notes} Hilfsmittel dazu sind **Symboltabellen**.
+=> [Ein wichtiges]{.notes} Hilfsmittel dazu sind **Symboltabellen**.
 
 ::: notes
-
 ### Identifizierung von Objekten
 
 Beim Compiliervorgang müssen Namen immer wieder den dazugehörigen Definitionen
@@ -192,12 +182,10 @@ Symboltabellen werden im Compiler fast überall gebraucht (siehe Abbildung unter
 
 Welche Informationen zu einem Bezeichner gespeichert und ermittelt werden, ist dann
 abhängig von der Klasse des Bezeichners.
-
 :::
 
 
 ::: notes
-
 ### Validieren der Nutzung von Symbolen
 
 Hier sind unendlich viele Möglichkeiten denkbar. Dies reicht von den unten aufgeführten
@@ -210,7 +198,7 @@ Konvertierungen vorgenommen werden, etwa bei `3+4.1` ...
 *   Variablen werden nicht als Funktionen genutzt
 *   Funktionen werden nicht als Variablen genutzt
 
-\blueArrow Verweis auf VL ["Typprüfungen, Attributgrammatiken"](Typpruefungen_Attributgrammatiken.pdf)
+=> Verweis auf VL ["Typprüfungen, Attributgrammatiken"](Typpruefungen_Attributgrammatiken.pdf)
 
 
 Da Funktionen bereits vor dem Bekanntmachen der Definition aufgerufen werden dürfen, bietet
@@ -221,7 +209,6 @@ aufgelöst.
 
 
 ::: notes
-
 ### Das Mittel der Wahl: Tabellen für die Symbole (= Bezeichner)
 
 **Def.:** *Symboltabellen* sind die zentrale Datenstruktur zur Identifizierung und
@@ -258,13 +245,13 @@ int x = 0;
 int i = 0;
 
 for (i=0; i<10; i++) {
-x++;
+    x++;
 }
 ```
 
 :::
 ::: {.column width="24%"}
-![Einfache Tabelle für globalen Scope](figs/symboltabellen/simpletable)
+![](images/simpletable.png)
 :::
 ::::::
 
@@ -291,7 +278,7 @@ int x = 0;
 int i = 0;
 
 for (i=0; i<10; i++) {
-x++;
+    x++;
 }
 
 a = 42;
@@ -332,12 +319,13 @@ Wird bei objektorientierten Sprachen ein Objekt definiert, dessen Klassendefinit
 Datei liegt, kann man die Definition des Objekts gleichzeitig als Deklaration der Klasse auffassen
 (Java).
 :::
+
 [[Definition vs. Deklaration]{.bsp}]{.slides}
 
 
 ## Wo werden Verweise in Symboltabellen gebraucht?
 
-\blueArrow Parse Tree und AST enthalten Verweise auf Symboltabelleneinträge
+=> Parse Tree und AST enthalten Verweise auf Symboltabelleneinträge
 
 ::: notes
 
@@ -348,7 +336,7 @@ Datei liegt, kann man die Definition des Objekts gleichzeitig als Deklaration de
     ihnen berechnen.
 *   Für Debugging-Zwecke können die Symboltabellen die ganze Compilierung und das
     Linken überleben.
-    :::
+:::
 
 
 ## Grenzen der semantischen Analyse
@@ -380,22 +368,24 @@ und anschließend dereferenziert wird.
 
 \smallskip
 
-* Symboltabellen: Verwaltung von Symbolen und Typen (Informationen über Bezeichner)
-
-* Symboltabelleneinträge werden an verschiedenen Stellen des Compilers generiert und benutzt
-
+*   Symboltabellen: Verwaltung von Symbolen und Typen (Informationen über Bezeichner)
+*   Symboltabelleneinträge werden an verschiedenen Stellen des Compilers generiert und benutzt
 
 
-  <!-- DO NOT REMOVE - THIS IS A LAST SLIDE TO INDICATE THE LICENSE AND POSSIBLE EXCEPTIONS (IMAGES, ...). -->
-  ::: slides
 
-  ## LICENSE
 
-  ![](https://licensebuttons.net/l/by-sa/4.0/88x31.png)
 
-  Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
 
-  ### Exceptions
 
-  *   TODO (what, where, license)
-      :::
+<!-- DO NOT REMOVE - THIS IS A LAST SLIDE TO INDICATE THE LICENSE AND POSSIBLE EXCEPTIONS (IMAGES, ...). -->
+::: slides
+## LICENSE
+
+![](https://licensebuttons.net/l/by-sa/4.0/88x31.png)
+
+Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
+
+### Exceptions
+
+*   TODO (what, where, license)
+:::
