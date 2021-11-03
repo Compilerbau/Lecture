@@ -1,33 +1,27 @@
 ---
-  type: lecture-cg
-  title: "Nested Scopes"
-  author: "Carsten Gips (FH Bielefeld)"
-  weight: 2
-  readings:
-    - key: "Mogensen2017"
-      comment: "Kapitel 3"
-    - key: "Parr2014"
-      comment: "Kapitel 6.4 und 8.4"
-    - key: "Parr2010"
-      comment: "Kapitel 6, 7 und 8"
-      quizzes:
-    - link: XYZ
-      name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
-      assignments:
-    - topic: blatt01
-  youtube:
-    - id: XYZ (ID)
-    - link: https://youtu.be/XYZ
-      name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
-      fhmedia:
-    - link: https://www.fh-bielefeld.de/medienportal/m/XYZ
-      name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
-
+type: lecture-cg
+title: "Nested Scopes"
+author: "Carsten Gips (FH Bielefeld)"
+weight: 1
+readings:
+  - key: "Mogensen2017"
+    comment: "Kapitel 3"
+  - key: "Parr2014"
+    comment: "Kapitel 6.4 und 8.4"
+  - key: "Parr2010"
+    comment: "Kapitel 6, 7 und 8"
+assignments:
+  - topic: sheet02
+youtube:
+  - id: TODO
+fhmedia:
+  - link: "TODO"
+    name: "TODO"
 ---
 
 
 
- **TODO** 
+ **TODO**
 
 * Bilder und Links anpassen
 
@@ -44,7 +38,7 @@
       int y = 9;
       return y+x;
   }
-  
+
   x = f(x);
 ```
 
@@ -197,7 +191,7 @@ Symboltabellen werden im Compiler fast überall gebraucht (siehe Abbildung unter
 "Einordnung").
 
 Welche Informationen zu einem Bezeichner gespeichert und ermittelt werden, ist dann
-abhängig von der Klasse des Bezeichners. 
+abhängig von der Klasse des Bezeichners.
 
 :::
 
