@@ -10,24 +10,15 @@ readings:
     comment: "Kapitel 6.4 und 8.4"
   - key: "Parr2010"
     comment: "Kapitel 6, 7 und 8"
-quizzes:
-  - link: XYZ
-    name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
 assignments:
-  - topic: blatt01
+  - topic: sheet02
 youtube:
-  - id: XYZ (ID)
-  - link: https://youtu.be/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
+  - id: TODO
 fhmedia:
-  - link: https://www.fh-bielefeld.de/medienportal/m/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
+  - link: "TODO"
+    name: "TODO"
 ---
 
-**TODO** 
-
-* Texte anpassen für die Überschriften
-  * Funktionen sind Symbole *und* Scopes
 
 ## Funktionen und Scopes
 
@@ -122,7 +113,7 @@ Den Listener zum Aufbau der Scopes könnte man entsprechend erweitern:
     *   löse den Typ der Variablen im aktuellen Scope auf
     *   definiere ein neues Variablensymbol im aktuellen Scope
 *   `exitCall`: analog zu `exitVar`
-    *   löse das Funktionssymbol (und die Argumente) im aktuellen Scope auf 
+    *   löse das Funktionssymbol (und die Argumente) im aktuellen Scope auf
 
 :::
 
