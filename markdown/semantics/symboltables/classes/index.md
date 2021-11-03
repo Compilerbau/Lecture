@@ -22,7 +22,6 @@ youtube:
 fhmedia:
   - link: https://www.fh-bielefeld.de/medienportal/m/XYZ
     name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
-sketch: true
 ---
 
 ## Motivation
@@ -263,8 +262,6 @@ Klassen (Methoden) auf globale Variablen verweisen ...
     * Strukturen/Klassen lösen etwas anders auf: Zugriff auf Attribute und Methoden
     
       
-
-::: notes
 
 <!-- DO NOT REMOVE - THIS IS A LAST SLIDE TO INDICATE THE LICENSE AND POSSIBLE EXCEPTIONS (IMAGES, ...). -->
 ::: slides
