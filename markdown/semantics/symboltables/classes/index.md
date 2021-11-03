@@ -10,30 +10,15 @@ readings:
     comment: "Kapitel 6.4 und 8.4"
   - key: "Parr2010"
     comment: "Kapitel 6, 7 und 8"
-quizzes:
-  - link: XYZ
-    name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
 assignments:
-  - topic: blatt01
+  - topic: sheet02
 youtube:
-  - id: XYZ (ID)
-  - link: https://youtu.be/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
+  - id: TODO
 fhmedia:
-  - link: https://www.fh-bielefeld.de/medienportal/m/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
+  - link: "TODO"
+    name: "TODO"
 ---
 
-## Motivation
-
-Lorem Ipsum. Starte mit H2-Level.
-...
-
-**TODO** 
-* Bilder anpassen
-* Quelle von neuen Bilder entfernen?
-* Text anpassen für die Überschriften
-  * 	Strukturen: Erweiterung der Symbole und Scopes
 
 ## Strukturen
 
@@ -59,16 +44,17 @@ void f() {
 
 \pause
 
-![Struct-Scopes](images/structscopes.png)
+![](images/structscopes.png)
 
 :::
 ::::::
 
 [Quelle: nach [@Parr2010, S.156]]{.origin}
 
+
 ## Strukturen: Erweiterung der Symbole und Scopes
 
-![Struct-Scopes (Klassendiagramm)](images/structscopesuml.png)
+![](images/structscopesuml.png)
 
 ::: notes
 Strukturen stellen wie Funktionen sowohl einen Scope als auch ein Symbol dar.
@@ -94,20 +80,21 @@ Entsprechend muss man die `bind()`-Methode ergänzen:
 ```python
 def bind(symbol):
     symbols[symbol.name] = symbol
-    symbol.scope = self # track the scope in each symbol
+    symbol.scope = self     # track the scope in each symbol
 ```
 :::
+
 
 ## Strukturen: Auflösen von Namen
 
 ```python
-class Struct(Scope, Symbol, Type): 
+class Struct(Scope, Symbol, Type):
     def resolveMember(name):
         return symbols[name]
 ```
 \bigskip
 
-\blueArrow Auflösen von "`a.b`"[\ (im Listener in `exitMember()`)]{.notes}:
+=> Auflösen von "`a.b`"[\ (im Listener in `exitMember()`)]{.notes}:
 
 *   `a` im "normalen" Modus mit `resolve()` über den aktuellen Scope
 *   Typ von `a` ist `Struct` mit Verweis auf den eigenen Scope
@@ -130,13 +117,14 @@ void f() {
 ```
 :::
 ::: {.column width="33%"}
-![Struct-Scopes](images/structscopes.png)
+![](images/structscopes.png)
 :::
 ::: {.column width="54%"}
-![Struct-Scopes (Klassendiagramm)](images/structscopesuml.png)\
+![](images/structscopesuml.png)
 :::
 ::::::
 :::::::::
+
 
 ## Klassen
 
@@ -163,16 +151,17 @@ public
 
 \pause
 
-![Klassen-Scopes](images/classscopes.png)
+![](images/classscopes.png)
 
 :::
 ::::::
 
 [Quelle: nach [@Parr2010, S.159]]{.origin}
 
+
 ## Klassen: Erweiterung der Symbole und Scopes
 
-![Klassen-Scopes (Klassendiagramm)](images/classscopesuml.png)
+![](images/classscopesuml.png)
 
 ::: notes
 Bei Klassen kommt in den Tabellen ein weiterer Pointer `parent` auf die Elternklasse
@@ -183,7 +172,7 @@ hinzu (in der Superklasse ist der Wert `null`).
 
 ``` python
 class Clazz(Struct):
-  	Clazz parent # None if base class
+    Clazz parent # None if base class
 
     def resolve(name):
         # do we know "name" here?
@@ -194,7 +183,7 @@ class Clazz(Struct):
         # ... or enclosing scope if base class
         if (enclosingScope != None) return enclosingScope.resolve(name)
         return None # not found
-    
+
     def resolveMember(name):
         s = symbols[name]
         if (s != None) return s
@@ -257,11 +246,17 @@ Klassen (Methoden) auf globale Variablen verweisen ...
 ## Wrap-Up
 
 *   Symboltabellen: Verwaltung von Symbolen und Typen (Informationen über Bezeichner)
-    * Strukturen und Klassen bilden eigenen Scope
-    
-    * Strukturen/Klassen lösen etwas anders auf: Zugriff auf Attribute und Methoden
-    
-      
+
+\smallskip
+
+*   Strukturen und Klassen bilden eigenen Scope
+*   Strukturen/Klassen lösen etwas anders auf: Zugriff auf Attribute und Methoden
+
+
+
+
+
+
 
 <!-- DO NOT REMOVE - THIS IS A LAST SLIDE TO INDICATE THE LICENSE AND POSSIBLE EXCEPTIONS (IMAGES, ...). -->
 ::: slides
