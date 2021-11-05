@@ -471,16 +471,27 @@ Regel/Alternative reduziert werden konnte.
 
 ## Geerbte (*inherited*) Attribute (1/2)
 
-TODO
+```
+functiondecl : returntype fname paramlist ;
+
+returntype  : REAL    { $$ = 1; }
+            | INT     { $$ = 2; }
+            ;
+
+fname : IDENTIFIER;
+
+paramlist : IDENTIFIER           { mksymbol($0, $-1, $1); }
+          | paramlist IDENTIFIER { mksymbol($0, $-1, $2); }
+          ;
+```
 
 
 ## Geerbte (*inherited*) Attribute (2/2)
 
 Hier:
-*   `class` und `type` haben normale berechnete
-Attribute
+*   `returntype` und `fname` haben normale berechnete Attribute
 
-*   `nameliste`: Funktonsaufruf mit den erzeugten Werte für `class` und `type` als Parameter $\Rightarrow$ der Wert von `namelist` ist ein "geerbtes Attribut".
+*   `paramlist`: Funktionsaufruf mit den erzeugten Werte für `returntype` und `fname` als Parameter $\Rightarrow$ der Wert von `paramlist` ist ein "geerbtes Attribut".
 
 Zugriff auf die Werte der Symbole auf dem Stack links vom aktuellen
 Symbol: `$0` ist das erste
@@ -490,9 +501,18 @@ usw. ...
 
 ## Probleme mit geerbten Attributen
 
-TODO
+```
+functiondecl : returntype fname paramlist ;
+functiondecl : STRING paramlist ;  /* Autsch! */
 
-Wenn vor `namelist` ein `STRING` steht, ist `$0` der Wert von `STRING`, nicht `type`. Analog
+...
+
+paramlist : IDENTIFIER           { mksymbol($0, $-1, $1); }
+          | paramlist IDENTIFIER { mksymbol($0, $-1, $2); }
+          ;
+```
+
+Wenn vor `paramlist` ein `STRING` steht, ist `$0` der Wert von `STRING`, nicht `fname`. Analog
 für `$-1`, $\ldots$
 
 Dies ist eine Quelle für schwer zu findende Bugs!
@@ -500,7 +520,13 @@ Dies ist eine Quelle für schwer zu findende Bugs!
 
 ## Typen für geerbte Attribute
 
-TODO
+```
+functiondecl : returntype fname paramlist ;
+
+paramlist : IDENTIFIER           { mksymbol($0, $-1, $1); }
+          | paramlist IDENTIFIER { mksymbol($0, $-1, $2); }
+          ;
+```
 
 **Achtung**: Für geerbte Attribute funktioniert die Deklaration von Typen
 mit `%type` nicht mehr!
@@ -508,10 +534,14 @@ mit `%type` nicht mehr!
 Das Symbol, auf das man sich mit `$0` bezieht, steht nicht in der Produktion,
 sondern im Stack. Bison kann zur Compilezeit nicht den
 Typ des referenzierten Symbols bestimmen. Falls
-oben die Typen von `class` und `type` jeweils `cval` und `tval`
+oben die Typen von `returntype` und `fname` jeweils `rval` und `fval`
 wären, müsste man die Aktion manuell wie folgt anpassen:
 
-TODO
+```
+paramlist : IDENTIFIER           { mksymbol($<fval>0, $<rval>-1, $1); }
+          | paramlist IDENTIFIER { mksymbol($<fval>0, $<rval>-1, $2); }
+          ;
+```
 
 
 ## Bison und Aktionen
