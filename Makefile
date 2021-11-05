@@ -4,7 +4,8 @@
 ## Launch the tools directly:              export DOCKER=false; make TARGET
 ##
 ## By default, a custom Docker image will be used. To create this
-## image, run: make create-docker-image
+## image, clone the repository https://github.com/Compilerbau/DockerImage
+## and run: make
 ##
 ## Note: LaTeX needs to be called in the folder of the .tex file to
 ## be processed. In the target "$(ALGORITHM)", the variable "$<" is
@@ -153,10 +154,6 @@ PHONY: new_assignment
 new_assignment:
 	$(HUGO) new -c "$(ORIG_CONTENT)/" -k assignment $(TOPIC)
 
-## Build Docker image "alpine-pandoc-hugo"
-.PHONY: create-docker-image
-create-docker-image:
-	cd .github/actions/alpine-pandoc-hugo && make clean all
 
 ## Clean up
 .PHONY: clean
