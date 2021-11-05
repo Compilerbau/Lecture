@@ -88,7 +88,7 @@ Sprache legt fest, in welcher Reihenfolge Scopes zu durchsuchen sind, wenn auf e
 Bezeichner Bezug genommen wird, der nicht im aktuellen Scope definiert ist.
 
 Insgesamt bilden die Scopes oft eine Baumstruktur, wobei jeder Knoten einen Scope
-repräsentiert und seine Söhne die direkt in ihm enthaltenen Scopes sind. Dabei ist
+repräsentiert und seine Kinder die direkt in ihm enthaltenen Scopes sind. Dabei ist
 es in der Regel so, dass Scopes sich entweder vollständig überlappen oder gar nicht.
 Wenn ein Bezeichner nicht im aktuellen Scope vorhanden ist, muss er in der Regel in
 umschließenden Scopes gesucht werden. Hier wird oft ein Stack aller "offenen" Scopes
@@ -135,14 +135,13 @@ Symboltabelle wird typischerweise mit allen Schlüsselwörtern initialisiert.
 
 ### Klassenhierarchie für Scopes
 
-Für die Scopes wird ein Interface `Scope` definiert mit den Methoden `bind()` (zum
+Für die Scopes wird eine Klasse `Scope` definiert mit den Methoden `bind()` (zum
 Definieren von Symbolen im Scope) und `resolve()` (zum Abrufen von Symbolen aus
-dem Scope oder dem umgebenden Scope). Außerdem ist die Methode `getEnclosingScope`
-vorgesehen, um später den Eltern-Scope abrufen zu können.
+dem Scope oder dem umgebenden Scope).
 
-Die Klasse `BaseScope` implementiert das Interface. Zur Unterscheidung zwischen globalen
-und lokalen Scopes kann man noch weitere Klassen `GlobalScope` und `LocalScope`
-ableiten.
+Für lokale Scopes wird eine Instanz dieser Klasse angelegt, die eine Referenz auf
+den einschließenden Scope im Attribut `enclosingScope` hält. Für den globalen Scope
+ist diese Referenz einfach leer (`none`).
 
 ### Klassen und Interfaces für Symbole
 
