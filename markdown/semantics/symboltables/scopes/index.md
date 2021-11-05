@@ -185,7 +185,21 @@ class Scope:
 
     def bind(symbol):
         symbols[symbol.name] = symbol
+        symbol.scope = self     # track the scope in each symbol
 ```
+
+::: notes
+**Anmerkung**: In der Klasse `Symbol` kann man ein Feld `scope` vom Typ `Scope`
+implementieren. Damit "weiss" jedes Symbol, in welchem Scope es bekannt ist und
+man muss sich auf der Suche nach dem Scope eines Symbols ggf. nicht erst durch
+die Baumstruktur hangeln. Aus technischer Sicht verhindert das Attribut das
+Aufräumen eines lokalen Scopes durch den Garbage Collector, wenn man den lokalen
+Scope wieder verlässt: Jeder Scope hat eine Referenz auf den umgebenden (Eltern-)
+Scope (Feld `enclosingScope`). Wenn man den aktuellen Scope "nach oben" verlässt,
+würde der eben verlassene lokale Scope bei nächster Gelegenheit aufgeräumt, wenn
+es keine weiteren Referenzen auf diesen gäbe. Da nun aber die Symbole, die in
+diesem Scope definiert wurden, auf diesen verweisen, passiert das nicht :)
+:::
 
 
 ## Nested Scopes: Listener
