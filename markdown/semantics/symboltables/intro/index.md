@@ -46,6 +46,7 @@ x = f(x);
 :::
 ::::::
 
+::::::::: notes
 Nach der Syntaxanalyse braucht der Compiler für die  darauf folgenden Phasen
 **semantische Analyse**, Optimierung und Codegenerierung **Informationen
 über Bezeichner**, z.B.
@@ -63,7 +64,6 @@ des AST kümmern können.
 <!-- TODO: an den jeweiligen Stellen platzieren -->
 **Quellen-Hinweis**: Für diese Vorlesung wird eine überarbeitete und erweiterte Version
 der ursprünglichen in [Parr2014] vorgestellten Strukturen für Symboltabellen eingesetzt.
-
 
 ### Logische Compilierungsphasen
 
@@ -103,6 +103,7 @@ Oft werden gar nicht alle Phasen und alle Zwischendarstellungen benötigt.
 ## Semantische Analyse und Symboltabellen
 
 ![](images/architektur_cb.png)
+
 
 ## Syntax und Semantik
 
@@ -159,13 +160,12 @@ Die semantische Analyse überprüft die Gültigkeit eines syntaktisch korrekten 
 bzgl. statischer semantischer Eigenschaften und liefert die Grundlage für die (Zwischen-)
 Codeerzeugung und -optimierung. Insbesondere wird hier die Typkonsistenz (in Ausdrücken,
 von Parametern, ...) überprüft, und  implizite Typumwandlungen werden vorgenommen. Oft
-müssen Typen automatisch bestimmt werden (z.B. bei Polymorphie, Typinferenz siehe
-VL ["Typprüfungen, Attributgrammatiken"](Typpruefungen_Attributgrammatiken.pdf). Damit
+müssen Typen automatisch bestimmt werden (z.B. bei Polymorphie, Typinferenz). Damit
 Typen bestimmt oder angepasst werden können, müssen Bezeichner zunächst identifiziert
 werden, d.h. bei namensgleichen Bezeichnern der richtige Bezug bestimmt werden.
 
 Zu Annotationen/Attributen, Typen und Type-Checks siehe VL
-["Typprüfungen, Attributgrammatiken"](Typpruefungen_Attributgrammatiken.pdf)!
+`["Typprüfungen, Attributgrammatiken"]({{<ref "/semantics/attribgrammars" >}})`{=markdown}!
 :::
 
 \bigskip
@@ -185,7 +185,6 @@ Welche Informationen zu einem Bezeichner gespeichert und ermittelt werden, ist d
 abhängig von der Klasse des Bezeichners.
 :::
 
-
 ::: notes
 ### Validieren der Nutzung von Symbolen
 
@@ -199,15 +198,13 @@ Konvertierungen vorgenommen werden, etwa bei `3+4.1` ...
 *   Variablen werden nicht als Funktionen genutzt
 *   Funktionen werden nicht als Variablen genutzt
 
-=> Verweis auf VL ["Typprüfungen, Attributgrammatiken"](Typpruefungen_Attributgrammatiken.pdf)
-
+=> Verweis auf VL `["Typprüfungen, Attributgrammatiken"]({{<ref "/semantics/attribgrammars" >}})`{=markdown}
 
 Da Funktionen bereits vor dem Bekanntmachen der Definition aufgerufen werden dürfen, bietet
 sich ein **zweimaliger Durchlauf** (*pass*) an: Beim ersten Traversieren des AST werden alle
 Definitionen in der Symboltabelle gesammelt. Beim zweiten Durchlauf werden dann die Referenzen
 aufgelöst.
 :::
-
 
 ::: notes
 ### Das Mittel der Wahl: Tabellen für die Symbole (= Bezeichner)
@@ -268,9 +265,9 @@ Bezeichner für Variablen.
 *   Scanner übergibt dem Parser das erkannte Token und einen Verweis auf den
     Symboltabelleneintrag
 
-Die Symboltabelle könnte hier eine (Hash-) Tabelle oder eine einfache verkettete Liste
-sein.
+Die Symboltabelle könnte hier eine (Hash-) Tabelle oder eine einfache verkettete Liste sein.
 :::
+
 
 ## Was kann jetzt weiter passieren?
 
@@ -329,7 +326,6 @@ Datei liegt, kann man die Definition des Objekts gleichzeitig als Deklaration de
 => Parse Tree und AST enthalten Verweise auf Symboltabelleneinträge
 
 ::: notes
-
 *   Im Parse Tree enthält der Knoten für einen Bezeichner einen Verweis auf den
     Symboltabelleneintrag.
 *   Parser und semantische Analyse (AST) vervollständigen die Einträge.
@@ -385,8 +381,4 @@ und anschließend dereferenziert wird.
 ![](https://licensebuttons.net/l/by-sa/4.0/88x31.png)
 
 Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
-
-### Exceptions
-
-*   TODO (what, where, license)
 :::
