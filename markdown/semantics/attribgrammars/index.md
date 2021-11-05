@@ -285,14 +285,14 @@ S-attributierte SDD sind eine Teilmenge von L-attributierten SDD.
 | `t : D ;`        | `t.val = D.lexval`          |
 
 
-## Beispiel: Annotierter Syntaxbaum für `3*5+4`
+## Beispiel: Annotierter Syntaxbaum für `5*8+2`
 
 ::: center
 ![Annotierter Parse-Tree](images/annotatedparsetree.png){height="90%"}\
 :::
 
 
-## Erzeugung des AST aus dem Parse-Tree für `3*5+4`
+## Erzeugung des AST aus dem Parse-Tree für `5*8+2`
 
 \small
 
@@ -314,7 +314,7 @@ S-attributierte SDD sind eine Teilmenge von L-attributierten SDD.
 
 ::: notes
 
-Teil der vorigen SDD zum Parsen und Berechnen von Ausdrücken wie `3*5+4`, hier umformuliert ohne Links-Rekursion
+Teil der vorigen SDD zum Parsen und Berechnen von Ausdrücken wie `5*8+2`, hier umformuliert ohne Links-Rekursion
 und mit berechneten und geerbten Attributen:
 
 :::
@@ -337,7 +337,7 @@ und mit berechneten und geerbten Attributen:
 :::::: columns
 ::: {.column width="10%"}
 \vspace{20mm}
-**`3*5`** \blueArrow\
+**`5*8`** \blueArrow\
 :::
 ::: {.column width="45%"}
 ![Annotierter Parse-Tree mit berechneten und geerbten Attributen (nur Multiplikation)](images/annotatedparsetree2.png)\
@@ -569,10 +569,10 @@ werden soll, übersetzt Bison die Regel `xxx` in zwei Regeln, wobei `dosomething
 ## Beispiel:
 
 ```
-xxx : A { $$ = 17; } B C { printf("%d", $2); } ;
+xxx : A { $$ = 42; } B C { printf("%d", $2); } ;
 ```
 
-\blueArrow Hier wird "17" ausgegeben, da mit `$2` auf den Wert der
+\blueArrow Hier wird "42" ausgegeben, da mit `$2` auf den Wert der
 eingebetteten Aktion zugegriffen wird.
 
 `$3`: Der Wert von `B`

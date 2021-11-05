@@ -13,14 +13,14 @@ digraph annotatedparsetree2 {
     
     t3 -> eps
 
-    t1 [label="term.syn=15"];
-    t2 [label="term'.inh=3\nterm'.syn=15"];
-    t3 [label="term'.inh=15\nterm'.syn=15"];
+    t1 [label="term.syn=40"];
+    t2 [label="term'.inh=5\nterm'.syn=40"];
+    t3 [label="term'.inh=40\nterm'.syn=40"];
     
     eps [label="ε"];
     
-    d1 [label="DIGIT.lexval=3"];
-    d2 [label="DIGIT.lexval=5"];
+    d1 [label="DIGIT.lexval=5"];
+    d2 [label="DIGIT.lexval=8"];
     
     m1 [label="'*'"];
 }

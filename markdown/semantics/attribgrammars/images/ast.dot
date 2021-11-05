@@ -12,8 +12,8 @@ digraph ast {
     e1 [label="+"];
     e2 [label="*"];
     
-    t1 [label="DIGIT, 4"];
-    t2 [label="DIGIT, 3"];
-    t3 [label="DIGIT, 5"];
+    t1 [label="DIGIT, 2"];
+    t2 [label="DIGIT, 5"];
+    t3 [label="DIGIT, 8"];
 }
 

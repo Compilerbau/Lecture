@@ -15,16 +15,16 @@ digraph annotatedparsetree {
     t2 -> d2
     t3 -> d1
 
-    e1 [label="expr.val=19"];
-    e2 [label="expr.val=15"];
+    e1 [label="expr.val=42"];
+    e2 [label="expr.val=40"];
     
-    t1 [label="term.val=4"];
-    t2 [label="term.val=15"];
-    t3 [label="term.val=3"];
+    t1 [label="term.val=2"];
+    t2 [label="term.val=40"];
+    t3 [label="term.val=5"];
     
-    d1 [label="DIGIT.lexval=3"];
-    d2 [label="DIGIT.lexval=5"];
-    d3 [label="DIGIT.lexval=4"];
+    d1 [label="DIGIT.lexval=5"];
+    d2 [label="DIGIT.lexval=8"];
+    d3 [label="DIGIT.lexval=2"];
     
     m1 [label="'*'"];
     p1 [label="'+'"];
