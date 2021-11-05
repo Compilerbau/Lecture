@@ -137,21 +137,21 @@ exprList : expr (',' expr)* ;
 \vspace{-2mm}
 
 ``` {.python size="footnotesize"}
-def enterFuncDecl(CParser.FuncDeclContext ctx):
+def enterFuncDecl(Parser.FuncDeclContext ctx):
     def name = ctx.ID().getText()
     def type = scope.resolve(ctx.type().getText())
     def func = Function(name, type, scope)
     scope.bind(func)
     scope = func # current scope is now function scope
 
-def exitFuncDecl(CParser.FuncDeclContext ctx):
+def exitFuncDecl(Parser.FuncDeclContext ctx):
     scope = scope.getEnclosingScope()
-def exitParam(CParser.ParamContext ctx):
+def exitParam(Parser.ParamContext ctx):
     def t = scope.resolve(ctx.type().getText())
     def var = Variable(ctx.ID().getText(), t)
     scope.bind(var)
 
-def exitCall(CParser.CallContext ctx):
+def exitCall(Parser.CallContext ctx):
     def name = ctx.ID().getText()
     def func = scope.resolve(name)
     if (func == null):
@@ -179,8 +179,11 @@ gespeichert werden (weiteres Feld/Attribut in `Function`)!
 ## Wrap-Up
 
 *   Symboltabellen: Verwaltung von Symbolen und Typen (Informationen über Bezeichner)
-    *   Funktionen: Nested Scopes => hierarchische Organisation
-    *   Umgang mit dem Funktionsnamen, den Parametern und dem Funktionskörper
+
+\smallskip
+
+*   Funktionen: Nested Scopes => hierarchische Organisation
+*   Umgang mit dem Funktionsnamen, den Parametern und dem Funktionskörper
 
 
 
