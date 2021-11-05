@@ -24,7 +24,7 @@ fhmedia:
 ## Was passiert nach der Syntaxanalyse?
 
 :::::: columns
-::: {.column width="36%"}
+::: {.column width="30%"}
 
 \vspace{2mm}
 
@@ -166,7 +166,7 @@ Zu Annotationen/Attributen, Typen und Type-Checks siehe VL
 \bigskip
 \bigskip
 
-=> [Ein wichtiges]{.notes} Hilfsmittel dazu sind **Symboltabellen**.
+=> [Ein wichtiges]{.notes} Hilfsmittel dazu sind **Symboltabellen**
 
 ::: notes
 ### Identifizierung von Objekten
@@ -230,9 +230,6 @@ enthält dann statt der Namen Verweise in diese (Hash-) Tabelle.
 
 :::::: columns
 ::: {.column width="40%"}
-
-\vspace{2mm}
-
 ```c
 int x = 0;
 int i = 0;
@@ -241,9 +238,9 @@ for (i=0; i<10; i++) {
     x++;
 }
 ```
-
 :::
-::: {.column width="24%"}
+::: {.column width="20%"}
+\vspace{6mm}
 ![](images/simpletable.png)
 :::
 ::::::
