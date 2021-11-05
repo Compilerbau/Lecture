@@ -68,7 +68,7 @@ while(f[i] > 100)
 	i = 0
 L1: t1 = i * 8
 	t2 = f + t1
-	if t2 ≤ 100 goto L2
+	if t2 <= 100 goto L2
 	t3 = i + 1
 	i = t3
 	goto L1
