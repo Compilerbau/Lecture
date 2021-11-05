@@ -46,8 +46,6 @@ verwechselt.
 :::::: columns
 ::: {.column width="40%"}
 
-\vspace{4mm}
-
 ```c
 int x = 42;
 float y;
@@ -64,12 +62,14 @@ float y;
 
 \pause
 
+\vspace{4mm}
 ![](images/nestedscopes.png)
 
 :::
 ::::::
 
 \pause
+\bigskip
 \bigskip
 
 **Aufgaben**:
@@ -172,7 +172,7 @@ können.
 
 ```python
 class Scope:
-    Scope enclosingScope  # None if global (outermost) scope
+    Scope enclosingScope    # None if global (outermost) scope
     Symbol<String, Symbol> symbols
 
     def resolve(name):
@@ -180,9 +180,9 @@ class Scope:
         s = symbols[name]
         if (s != None) return s
         # if not here, check any enclosing scope
-        if (enclosingScope != None) return
-        enclosingScope.resolve(name)
-        return None # not found
+        if (enclosingScope != None) return enclosingScope.resolve(name)
+        # not found
+        return None
 
     def bind(symbol):
         symbols[symbol.name] = symbol
@@ -244,25 +244,25 @@ expr:   expr ('*'|'/') expr
 \vspace{-2mm}
 
 ``` {.python size="footnotesize"}
-class MyListener(CBaseListener):
+class MyListener(BaseListener):
     private Scope scope
 
-    def enterFile(CParser.FileContext ctx):
+    def enterFile(Parser.FileContext ctx):
         def globals = Scope()
         globals.bind(BuiltInTypeSymbol("int"))
         globals.bind(BuiltInTypeSymbol("float"))
         scope = globals
 
-    def enterBlock(CParser.BlockContext ctx):
+    def enterBlock(Parser.BlockContext ctx):
         scope = Scope(scope)
-    def exitBlock(CParser.BlockContext ctx):
+    def exitBlock(Parser.BlockContext ctx):
         scope = scope.getEnclosingScope()
 
-    def exitVarDecl(CParser.VarDeclContext ctx):
+    def exitVarDecl(Parser.VarDeclContext ctx):
         def t = scope.resolve(ctx.type().getText())
         def var = VariableSymbol(ctx.ID().getText(), t)
         scope.bind(var)
-    def exitVar(CParser.VarContext ctx):
+    def exitVar(Parser.VarContext ctx):
         def name = ctx.ID().getText()
         def var = scope.resolve(name)
         if (var == null): error("no such var: " + name)
