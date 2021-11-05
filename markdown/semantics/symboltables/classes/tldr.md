@@ -5,8 +5,6 @@ hidden: true
 ---
 
 
-![](images/architektur_cb.png)
-
 Strukturen und Klassen bilden jeweils einen eigenen verschachtelten Scope, worin
 die Attribute und Methoden definiert werden.
 

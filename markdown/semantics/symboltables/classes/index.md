@@ -30,7 +30,6 @@ struct A {
     int x;
     struct B {int x;};
     B b;
-    struct C {int z;};
 };
 A a;
 void f() {
@@ -48,8 +47,6 @@ void f() {
 
 :::
 ::::::
-
-[Quelle: nach [@Parr2010, S.156]]{.origin}
 
 
 ## Strukturen: Erweiterung der Symbole und Scopes
@@ -155,8 +152,6 @@ public
 
 :::
 ::::::
-
-[Quelle: nach [@Parr2010, S.159]]{.origin}
 
 
 ## Klassen: Erweiterung der Symbole und Scopes
@@ -264,7 +259,4 @@ Klassen (Methoden) auf globale Variablen verweisen ...
 ![](https://licensebuttons.net/l/by-sa/4.0/88x31.png)
 
 Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
-
-### Exceptions
-*   TODO (what, where, license)
 :::
