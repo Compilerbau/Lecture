@@ -42,6 +42,7 @@ void f() {
 ::: {.column width="68%"}
 
 \pause
+\vspace{8mm}
 
 ![](images/structscopes.png)
 
@@ -60,25 +61,6 @@ auszulagern.
 
 Zusätzlich stellt eine Struktur (-definition) aber auch einen neuen Typ
 dar, weshalb `Struct` auch noch das Interface `Type` "implementiert".
-
-**Anmerkung**: In der Klasse `Symbol` ist noch ein Feld `scope` vom Typ `Scope`
-hinzugekommen. Damit "weiss" jedes Symbol, in welchem Scope es bekannt ist und
-man muss sich auf der Suche nach dem Scope eines Symbols ggf. nicht erst durch
-die Baumstruktur hangeln. Aus technischer Sicht verhindert das Attribut das
-Aufräumen eines lokalen Scopes durch den Garbage Collector, wenn man den lokalen
-Scope wieder verlässt: Jeder Scope hat eine Referenz auf den umgebenden (Eltern-)
-Scope (Feld `enclosingScope`). Wenn man den aktuellen Scope "nach oben" verlässt,
-würde der eben verlassene lokale Scope bei nächster Gelegenheit aufgeräumt, wenn
-es keine weiteren Referenzen auf diesen gäbe. Da nun aber die Symbole, die in
-diesem Scope definiert wurden, auf diesen verweisen, passiert das nicht :)
-
-Entsprechend muss man die `bind()`-Methode ergänzen:
-
-```python
-def bind(symbol):
-    symbols[symbol.name] = symbol
-    symbol.scope = self     # track the scope in each symbol
-```
 :::
 
 
@@ -103,6 +85,7 @@ class Struct(Scope, Symbol, Type):
 ::::::::: slides
 :::::: columns
 ::: {.column width="13%"}
+\vspace{-1mm}
 ``` {.c size="tiny"}
 struct A {
     int b;
@@ -165,9 +148,9 @@ hinzu (in der Superklasse ist der Wert `null`).
 
 ## Klassen: Auflösen von Namen
 
-``` python
+``` {.python size="footnotesize"}
 class Clazz(Struct):
-    Clazz parent # None if base class
+    Clazz parent    # None if base class
 
     def resolve(name):
         # do we know "name" here?
@@ -177,7 +160,8 @@ class Clazz(Struct):
         if (parent != None) return parent.resolve(name)
         # ... or enclosing scope if base class
         if (enclosingScope != None) return enclosingScope.resolve(name)
-        return None # not found
+        # not found
+        return None
 
     def resolveMember(name):
         s = symbols[name]
