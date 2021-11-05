@@ -53,7 +53,29 @@ readings:
 *   bedingte und unbedingte Sprünge
 *   Pointerarithmetik für Indizierung
 
-TODO: Beispiel do-while-Schleife (Aho2008)
+\bigskip
+
+:::::: columns
+::: {.column width="40%"}
+```
+i = 0
+while(f[i] > 100)
+	i = i + 1;
+```
+:::
+::: {.column width="40%"}
+```
+	i = 0
+L1: t1 = i * 8
+	t2 = f + t1
+	if t2 ≤ 100 goto L2
+	t3 = i + 1
+	i = t3
+	goto L1
+L2: ...
+```
+:::
+::::::
 
 # Optimierungen
 <!-- 20 Minuten: 7 Folien (3 Minuten je Folie) -->
@@ -197,8 +219,8 @@ Diese Umformungen können zusätzlich mittels Peephole-Optimierung in späteren 
 *   "*Constant Folding*": Auswerten von Konstanten zur Compile-Zeit
 
     ```
-    x = 2 + 4       =>      x = 6
-    if 2>0 jump L   =>      jump L
+    x = 6 * 7         =>      x = 43
+    if 2 > 0 jump L   =>      jump L
     ```
 
 \bigskip
@@ -211,7 +233,7 @@ Diese Umformungen können zusätzlich mittels Peephole-Optimierung in späteren 
     ```
     x = y + z
     ...
-    w = y + z
+    a = y + z
     ```
     :::
     ::: {.column width="31%"}
@@ -222,7 +244,7 @@ Diese Umformungen können zusätzlich mittels Peephole-Optimierung in späteren 
     ```
     x = y + z
     ...
-    w = x
+    a = x
     ```
     :::
     ::::::
@@ -296,9 +318,9 @@ Wenn auf *a* vor seiner nächsten Zuweisung nicht mehr lesend zugegriffen wird, 
 *   Elimination of unreachable code
 
     ```
-         goto L1                        L1: d = e+f
-         a = b+c
-     L1: d = e+f
+         goto L1                        L1: a = b+c
+         ...
+     L1: a = b+c
     ```
 
 
@@ -436,8 +458,8 @@ Zunächst ist $out(B_n) = \emptyset$, danach ist $out(B_i) = \bigcap in(B_j)$ mi
 
 \bigskip
 ```
-        goto L1           goto L2
-        ...               ...
+        goto L1         goto L2
+        ...             ...
     L1: goto L2     L1: goto L2
 ```
 
@@ -449,19 +471,19 @@ Zunächst ist $out(B_n) = \emptyset$, danach ist $out(B_i) = \bigcap in(B_j)$ mi
 ::: {.column width="35%"}
 \vspace{10mm}
 ```
-a = b + d
-e = a + b
-f = e - 1
+a = b + c
+d = a + b
+e = d - 1
 ```
 :::
 ::: {.column width="35%"}
 
-`a`, `e`, `f` können auf **ein** Register abgebildet werden!
+`a`, `d`, `e` können auf **ein** Register abgebildet werden!
 
 ```
 r1 = r2 + r3
 r1 = r1 + r2
-r1 = r1 - r1
+r1 = r1 - 1
 ```
 :::
 ::::::
