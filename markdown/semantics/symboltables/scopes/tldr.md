@@ -5,8 +5,6 @@ hidden: true
 ---
 
 
-![](images/architektur_cb.png)
-
 In Symboltabellen werden Informationen über Bezeichner verwaltet. Wenn es in der zu
 übersetzenden Sprache *Nested Scopes* gibt, spiegelt sich dies in den Symboltabellen
 wider: Auch hier wird eine entsprechende hierarchische Organisation notwendig. In der

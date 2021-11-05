@@ -105,6 +105,7 @@ Elements oder Bezeichners definiert wird, gehört in den Scope des Elements
 oder Bezeichners.
 :::
 
+
 ## Nested Scopes: Symbole und Scopes
 
 ::::::::: notes
@@ -153,7 +154,6 @@ können.
 
 ![](images/nestedscopesuml.png)
 
-
 ::: notes
 ### Alternative Implementierung über einen Stack
 
@@ -172,7 +172,7 @@ können.
 
 ```python
 class Scope:
-    Scope enclosingScope # None if global (outermost) scope
+    Scope enclosingScope  # None if global (outermost) scope
     Symbol<String, Symbol> symbols
 
     def resolve(name):
@@ -315,8 +315,4 @@ noch gebraucht werden.
 ![](https://licensebuttons.net/l/by-sa/4.0/88x31.png)
 
 Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
-
-### Exceptions
-
-*   TODO (what, where, license)
 :::
