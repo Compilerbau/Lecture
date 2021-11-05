@@ -219,7 +219,7 @@ Diese Umformungen können zusätzlich mittels Peephole-Optimierung in späteren 
 *   "*Constant Folding*": Auswerten von Konstanten zur Compile-Zeit
 
     ```
-    x = 6 * 7         =>      x = 43
+    x = 6 * 7         =>      x = 42
     if 2 > 0 jump L   =>      jump L
     ```
 
