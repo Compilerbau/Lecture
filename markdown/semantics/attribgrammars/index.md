@@ -247,8 +247,8 @@ Die Abhängigkeiten der Attribute lassen sich im sog. *Abhängigkeitsgraphen* da
 | :---------------------- | :---------------------------- |
 | `t : D t' ;`            | `t'.inh = D.lexval`           |
 |                         | `t.syn = t'.syn`              |
-| `t' : '*' D t1' ;`      | `t1'.inh = t'.inh * D.lexval` |
-|                         | `t'.syn = t1'.syn`            |
+| `t' : '*' D t'1 ;`      | `t'1.inh = t'.inh * D.lexval` |
+|                         | `t'.syn = t'1.syn`            |
 | `t' :` $\epsilon$ `;`   | `t'.syn = t'.inh`             |
 
 
@@ -325,8 +325,8 @@ und mit berechneten und geerbten Attributen:
 | :---------------------- | :---------------------------- |
 | `t : D t' ;`            | `t'.inh = D.lexval`           |
 |                         | `t.syn = t'.syn`              |
-| `t' : '*' D t1' ;`      | `t1'.inh = t'.inh * D.lexval` |
-|                         | `t'.syn = t1'.syn`            |
+| `t' : '*' D t'1 ;`      | `t'1.inh = t'.inh * D.lexval` |
+|                         | `t'.syn = t'1.syn`            |
 | `t' :` $\epsilon$ `;`   | `t'.syn = t'.inh`             |
 
 :::
@@ -407,15 +407,14 @@ t : D         {t.val = D.lexval;} ;
 | :---------------------- | :---------------------------- |
 | `t : D t' ;`            | `t'.inh = D.lexval`           |
 |                         | `t.syn = t'.syn`              |
-| `t' : '*' D t1' ;`      | `t1'.inh = t'.inh * D.lexval` |
-|                         | `t'.syn = t1'.syn`            |
+| `t' : '*' D t'1 ;`      | `t'1.inh = t'.inh * D.lexval` |
+|                         | `t'.syn = t'1.syn`            |
 | `t' :` $\epsilon$ `;`   | `t'.syn = t'.inh`             |
 
-<!--  -->
 
 ```
 t  : D {t'.inh = D.lexval;} t' {t.syn = t'.syn;} ;
-t' : '*' D {t1'.inh = t'.inh * D.lexval;} t1' {t'.syn = t1'.syn;} ;
+t' : '*' D {t'1.inh = t'.inh * D.lexval;} t'1 {t'.syn = t'1.syn;} ;
 t' : e {t'.syn = t'.inh;} ;
 ```
 
