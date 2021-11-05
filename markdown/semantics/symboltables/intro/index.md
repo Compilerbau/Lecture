@@ -57,13 +57,8 @@ Nach der Syntaxanalyse braucht der Compiler für die  darauf folgenden Phasen
 Auf dem Weg zum Interpreter/Compiler müssen die Symbole im AST korrekt zugeordnet
 werden. Dies geschieht über Symboltabellen. Im Folgenden werden wir verschiedene
 Aspekte von Symboltabellen betrachten und eine mögliche Implementierung erarbeiten,
-bevor wir uns (in ["Interpreter"](cb_interpreter1.html)) um die Auswertung (Interpretation)
-des AST kümmern können.
-
-
-<!-- TODO: an den jeweiligen Stellen platzieren -->
-**Quellen-Hinweis**: Für diese Vorlesung wird eine überarbeitete und erweiterte Version
-der ursprünglichen in [Parr2014] vorgestellten Strukturen für Symboltabellen eingesetzt.
+bevor wir uns (in `["Interpreter"]({{<ref "/interpretation/syntaxdriven" >}})`{=markdown})
+um die Auswertung (Interpretation) des AST kümmern können.
 
 ### Logische Compilierungsphasen
 
@@ -284,7 +279,7 @@ a = 42;
 
 ::: notes
 In vielen Sprachen muss überprüft werden, ob es ein definierendes Vorkommen des Bezeichners oder
-ein angewandtes ist.
+ein angewandtes Vorkommen ist.
 
 ### Definitionen und Deklarationen von Bezeichnern
 
@@ -357,11 +352,11 @@ und anschließend dereferenziert wird.
 ## Wrap-Up
 
 *   Semantische Analyse:
-*   Identifikation und Sammlung der Bezeichner
-*   Zuordnung zur richtigen Ebene (Scopes)
-*   Validieren der Nutzung von Symbolen
-*   Typ-Inferenz
-*   Typkonsistenz (Ausdrücke, Funktionsaufrufe, ...)
+    *   Identifikation und Sammlung der Bezeichner
+    *   Zuordnung zur richtigen Ebene (Scopes)
+    *   Validieren der Nutzung von Symbolen
+    *   Typ-Inferenz
+    *   Typkonsistenz (Ausdrücke, Funktionsaufrufe, ...)
 
 \smallskip
 
