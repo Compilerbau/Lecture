@@ -82,9 +82,9 @@ void g(int z){}
 
 ``` python
 class Function(Scope, Symbol):
-    def __init__(name, retType, enclosingScope):
+    def __init__(name, retType, enclScope):
         Symbol.__init__(name, retType)      # we are "Symbol" ...
-        enclosingScope = enclosingScope)    # ... and "Scope"
+        enclosingScope = enclScope          # ... and "Scope"
 ```
 
 ## Funktionen: Listener
@@ -142,7 +142,7 @@ def enterFuncDecl(Parser.FuncDeclContext ctx):
     def type = scope.resolve(ctx.type().getText())
     def func = Function(name, type, scope)
     scope.bind(func)
-    scope = func # current scope is now function scope
+    scope = func    # current scope is now function scope
 
 def exitFuncDecl(Parser.FuncDeclContext ctx):
     scope = scope.getEnclosingScope()
