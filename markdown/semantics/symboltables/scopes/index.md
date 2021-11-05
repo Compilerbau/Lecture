@@ -297,6 +297,9 @@ noch gebraucht werden.
 ## Wrap-Up
 
 *   Symboltabellen: Verwaltung von Symbolen und Typen (Informationen über Bezeichner)
+
+\smallskip
+
 *   Blöcke: Nested Scopes => hierarchische Organisation
 *   Binden von Bezeichner gleichen Namens an ihren jeweiligen Scope => `bind()`
 *   Abrufen von Bezeichnern aus dem aktuellen Scope oder den Elternscopes => `resolve()`
