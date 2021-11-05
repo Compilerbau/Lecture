@@ -258,7 +258,7 @@ expr:   expr ('*'|'/') expr
 
 ``` {.python size="footnotesize"}
 class MyListener(BaseListener):
-    private Scope scope
+    Scope scope
 
     def enterFile(Parser.FileContext ctx):
         def globals = Scope()
