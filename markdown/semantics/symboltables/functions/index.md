@@ -75,7 +75,9 @@ void g(int z){}
 
 ## Erweiterung des Klassendiagramms für Funktions-Scopes
 
-![](images/functionscopesuml.png)
+![](images/functionscopesuml.png){width="80%"}
+
+[Quelle: Eigene Modellierung nach einer Idee in [@Parr2010, S. 147]]{.origin}
 
 
 ## Funktionen sind Symbole *und* Scopes
@@ -108,55 +110,57 @@ Den Listener zum Aufbau der Scopes könnte man entsprechend erweitern:
 :::
 
 :::::: columns
-::: {.column width="38%"}
+::: {.column width="46%"}
 
 \vspace{4mm}
 
 ``` {.yacc size="footnotesize"}
-funcDecl
-    :   type ID '(' params? ')'
-        block
-    ;
-params
-    :   param (',' param)*
-    ;
-param
-    :   type ID
-    ;
+funcDecl : type ID '(' params? ')' block ;
+params   : param (',' param)* ;
+param    : type ID ;
 
-call:   ID '(' exprList? ')'
-    ;
+call     : ID '(' exprList? ')' ;
 exprList : expr (',' expr)* ;
 ```
 
 [Relevanter Ausschnitt aus der Grammatik]{.notes}
 
-:::
-::: {.column width="62%"}
+\bigskip
 
-\vspace{-2mm}
+``` {.c size="footnotesize"}
+int f(int x) {
+    int y = 9;
+}
+
+int x = f(x);
+```
+:::
+::: {.column width="54%"}
+
+\vspace{-4mm}
 
 ``` {.python size="footnotesize"}
 def enterFuncDecl(Parser.FuncDeclContext ctx):
-    def name = ctx.ID().getText()
-    def type = scope.resolve(ctx.type().getText())
-    def func = Function(name, type, scope)
+    name = ctx.ID().getText()
+    type = scope.resolve(ctx.type().getText())
+    func = Function(name, type, scope)
     scope.bind(func)
-    scope = func    # current scope is now function scope
+    # change current scope to function scope
+    scope = func
 
 def exitFuncDecl(Parser.FuncDeclContext ctx):
-    scope = scope.getEnclosingScope()
+    scope = scope.enclosingScope
 def exitParam(Parser.ParamContext ctx):
-    def t = scope.resolve(ctx.type().getText())
-    def var = Variable(ctx.ID().getText(), t)
+    t = scope.resolve(ctx.type().getText())
+    var = Variable(ctx.ID().getText(), t)
     scope.bind(var)
 
 def exitCall(Parser.CallContext ctx):
-    def name = ctx.ID().getText()
-    def func = scope.resolve(name)
-    if (func == null):
+    name = ctx.ID().getText()
+    func = scope.resolve(name)
+    if func == None:
         error("no such function: " + name)
-    if (func instanceof Variable):
+    if func instanceof Variable:
         error(name + " is not a function")
 ```
 
