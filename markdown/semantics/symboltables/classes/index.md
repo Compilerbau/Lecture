@@ -52,12 +52,13 @@ void f() {
 
 ## Strukturen: Erweiterung der Symbole und Scopes
 
-![](images/structscopesuml.png)
+![](images/structscopesuml.png){width="80%"}
+
+[Quelle: Eigene Modellierung nach einer Idee in [@Parr2010, S. 162]]{.origin}
+
 
 ::: notes
 Strukturen stellen wie Funktionen sowohl einen Scope als auch ein Symbol dar.
-Deshalb lohnt es sich, den gemeinsamen Code in die Zwischenklasse `ScopedSymbol`
-auszulagern.
 
 Zusätzlich stellt eine Struktur (-definition) aber auch einen neuen Typ
 dar, weshalb `Struct` auch noch das Interface `Type` "implementiert".
@@ -66,20 +67,25 @@ dar, weshalb `Struct` auch noch das Interface `Type` "implementiert".
 
 ## Strukturen: Auflösen von Namen
 
-```python
+``` python
 class Struct(Scope, Symbol, Type):
     def resolveMember(name):
         return symbols[name]
 ```
-\bigskip
+\smallskip
 
 => Auflösen von "`a.b`"[\ (im Listener in `exitMember()`)]{.notes}:
 
 *   `a` im "normalen" Modus mit `resolve()` über den aktuellen Scope
 *   Typ von `a` ist `Struct` mit Verweis auf den eigenen Scope
-*   `b` nur innerhalb des Struktur-Scopes mit `resolveMember()`
+*   `b` nur innerhalb des `Struct`-Scopes mit `resolveMember()`
 
-\bigskip
+::: notes
+In der Grammatik würde es eine Regel `member` geben, die auf eine Struktur
+der Art `ID.ID` anspricht (d.h. eigentlich den Teil `.ID`), und entsprechend
+zu Methoden `enterMember()` und `exitMember()` im Listener führt.
+:::
+
 \bigskip
 
 ::::::::: slides
@@ -100,7 +106,8 @@ void f() {
 ![](images/structscopes.png)
 :::
 ::: {.column width="54%"}
-![](images/structscopesuml.png)
+![](images/structscopesuml.png){width="90%"}
+[Quelle: Eigene Modellierung nach einer Idee in [@Parr2010, S. 162]]{.origin}
 :::
 ::::::
 :::::::::
@@ -139,11 +146,13 @@ public
 
 ## Klassen: Erweiterung der Symbole und Scopes
 
-![](images/classscopesuml.png)
+![](images/classscopesuml.png){width="80%"}
+
+[Quelle: Eigene Modellierung nach einer Idee in [@Parr2010, S. 167]]{.origin}
 
 ::: notes
 Bei Klassen kommt in den Tabellen ein weiterer Pointer `parent` auf die Elternklasse
-hinzu (in der Superklasse ist der Wert `null`).
+hinzu (in der Superklasse ist der Wert `None`).
 :::
 
 ## Klassen: Auflösen von Namen
@@ -154,22 +163,21 @@ class Clazz(Struct):
 
     def resolve(name):
         # do we know "name" here?
-        s = symbols[name]
-        if (s != None) return s
+        if symbols[name]: return symbols[name]
         # NEW: if not here, check any parent class ...
-        if (parent != None) return parent.resolve(name)
+        if parent != None: return parent.resolve(name)
         # ... or enclosing scope if base class
-        if (enclosingScope != None) return enclosingScope.resolve(name)
-        # not found
-        return None
+        try: return enclosingScope.resolve(name)
+        except: return None     # not found
 
     def resolveMember(name):
-        s = symbols[name]
-        if (s != None) return s
+        if symbols[name]: return symbols[name]
         # NEW: check parent class
-        if (parent != None) return parent.resolveMember(name)
-        return None
+        try: return parent.resolveMember(name)
+        except: return None
 ```
+
+[Quelle: Eigene Implementierung nach einer Idee in [@Parr2010, S. 172]]{.origin}
 
 ::: notes
 Beim Auflösen von Attributen oder Methoden muss zunächst in der Klasse selbst gesucht werden,
@@ -212,9 +220,9 @@ Hier würde `wuppie` als Symbol im globalen Scope definiert werden. Beim Verarbe
 `int z = x+y+wuppie;` würde mit `resolve()` nach `wuppie` gesucht: Zuerst im lokalen Scope
 unterhalb der Funktion, dann im Funktions-Scope, dann im Klassen-Scope von `B`. Hier sucht
 `resolve()` auch zunächst lokal, geht dann aber die Vererbungshierarchie entlang (sofern
-vorhanden). Erst in der Superklasse (wenn der `parent`-Zeiger `null` ist), löst `resolve()`
-wieder normal auf und sucht um umgebenden Scope. Auf diese Weise kann man wie gezeigt in
-Klassen (Methoden) auf globale Variablen verweisen ...
+wie hier vorhanden). Erst in der Superklasse (wenn der `parent`-Zeiger `null` ist), löst
+`resolve()` wieder normal auf und sucht um umgebenden Scope. Auf diese Weise kann man wie
+gezeigt in Klassen (Methoden) auf globale Variablen verweisen ...
 
 
 *Anmerkung*: Durch dieses Vorgehen wird im Prinzip in Methoden aus dem Zugriff auf ein Feld
