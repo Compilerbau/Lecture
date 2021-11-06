@@ -62,7 +62,7 @@ float y;
 
 \pause
 
-\vspace{4mm}
+\vspace{6mm}
 ![](images/nestedscopes.png)
 
 :::
@@ -91,8 +91,8 @@ Insgesamt bilden die Scopes oft eine Baumstruktur, wobei jeder Knoten einen Scop
 repräsentiert und seine Kinder die direkt in ihm enthaltenen Scopes sind. Dabei ist
 es in der Regel so, dass Scopes sich entweder vollständig überlappen oder gar nicht.
 Wenn ein Bezeichner nicht im aktuellen Scope vorhanden ist, muss er in der Regel in
-umschließenden Scopes gesucht werden. Hier wird oft ein Stack aller "offenen" Scopes
-benutzt.
+umschließenden Scopes gesucht werden. Hier kann ein Stack aller "offenen" Scopes
+benutzt werden.
 :::
 
 ::: notes
@@ -141,7 +141,7 @@ dem Scope oder dem umgebenden Scope).
 
 Für lokale Scopes wird eine Instanz dieser Klasse angelegt, die eine Referenz auf
 den einschließenden Scope im Attribut `enclosingScope` hält. Für den globalen Scope
-ist diese Referenz einfach leer (`none`).
+ist diese Referenz einfach leer (`None`).
 
 ### Klassen und Interfaces für Symbole
 
@@ -151,7 +151,9 @@ ein "Marker-Interface" `Type` erstellt, um Variablen- und Typ-Symbole unterschei
 können.
 :::::::::
 
-![](images/nestedscopesuml.png)
+![](images/nestedscopesuml.png){width="80%"}
+
+[Quelle: Eigene Modellierung nach einer Idee in [@Parr2010, S. 142]]{.origin}
 
 ::: notes
 ### Alternative Implementierung über einen Stack
@@ -169,28 +171,28 @@ können.
 
 ## Nested Scopes: Definieren und Auflösen von Namen
 
-```python
+``` python
 class Scope:
     Scope enclosingScope    # None if global (outermost) scope
     Symbol<String, Symbol> symbols
 
     def resolve(name):
         # do we know "name" here?
-        s = symbols[name]
-        if (s != None) return s
+        if symbols[name]: return symbols[name]
         # if not here, check any enclosing scope
-        if (enclosingScope != None) return enclosingScope.resolve(name)
-        # not found
-        return None
+        try: return enclosingScope.resolve(name)
+        except: return None     # not found
 
     def bind(symbol):
         symbols[symbol.name] = symbol
         symbol.scope = self     # track the scope in each symbol
 ```
 
+[Quelle: Eigene Implementierung nach einer Idee in [@Parr2010, S. 169]]{.origin}
+
 ::: notes
 **Anmerkung**: In der Klasse `Symbol` kann man ein Feld `scope` vom Typ `Scope`
-implementieren. Damit "weiss" jedes Symbol, in welchem Scope es bekannt ist und
+implementieren. Damit "weiss" jedes Symbol, in welchem Scope es definiert ist und
 man muss sich auf der Suche nach dem Scope eines Symbols ggf. nicht erst durch
 die Baumstruktur hangeln. Aus technischer Sicht verhindert das Attribut das
 Aufräumen eines lokalen Scopes durch den Garbage Collector, wenn man den lokalen
@@ -207,7 +209,7 @@ diesem Scope definiert wurden, auf diesen verweisen, passiert das nicht :)
 ::: notes
 Mit einem passenden Listener kann man damit die nötigen Scopes aufbauen:
 
-*   `enterFile`:
+*   `enterStart`:
     *   erzeuge neuen globalen Scope
     *   definiere und pushe die eingebauten Typen
 *   `exitVarDecl`:
@@ -223,62 +225,60 @@ Mit einem passenden Listener kann man damit die nötigen Scopes aufbauen:
 :::
 
 :::::: columns
-::: {.column width="35%"}
+::: {.column width="42%"}
 
-\vspace{4mm}
+\vspace{8mm}
 
 ``` {.yacc size="footnotesize"}
-file:   stat+ ;
+start   :   stat+ ;
 
-varDecl
-    :   type ID ('=' expr)? ';'
-    ;
-var : ID ;
-type:   'float' | 'int' ;
+stat    : block | varDecl | expr ';' ;
+block   : '{' stat* '}' ;
 
-block:  '{' stat* '}' ;
-stat:   block
-    |   varDecl
-    |   expr ';'
-    ;
-expr:   expr ('*'|'/') expr
-    |   expr ('+'|'-') expr
-    |   expr '==' expr
-    |   var '=' expr
-    |   var
-    |   INT
-    ;
+varDecl : type ID ('=' expr)? ';' ;
+expr    : var '=' INT ;
+
+var     : ID ;
+type    : 'float' | 'int' ;
 ```
 
 [Relevanter Ausschnitt aus der Grammatik]{.notes}
-:::
-::: {.column width="65%"}
 
-\vspace{-2mm}
+\bigskip
+
+``` {.c size="footnotesize"}
+int x = 42;
+
+{ int y = 9; }
+```
+:::
+::: {.column width="58%"}
+
+\vspace{-4mm}
 
 ``` {.python size="footnotesize"}
 class MyListener(BaseListener):
     Scope scope
 
-    def enterFile(Parser.FileContext ctx):
+    def enterStart(Parser.FileContext ctx):
         def globals = Scope()
-        globals.bind(BuiltInTypeSymbol("int"))
-        globals.bind(BuiltInTypeSymbol("float"))
+        globals.bind(BuiltIn("int"))
+        globals.bind(BuiltIn("float"))
         scope = globals
 
     def enterBlock(Parser.BlockContext ctx):
         scope = Scope(scope)
     def exitBlock(Parser.BlockContext ctx):
-        scope = scope.getEnclosingScope()
+        scope = scope.enclosingScope
 
     def exitVarDecl(Parser.VarDeclContext ctx):
         def t = scope.resolve(ctx.type().getText())
-        def var = VariableSymbol(ctx.ID().getText(), t)
+        def var = Variable(ctx.ID().getText(), t)
         scope.bind(var)
     def exitVar(Parser.VarContext ctx):
         def name = ctx.ID().getText()
         def var = scope.resolve(name)
-        if (var == null): error("no such var: " + name)
+        if var == None: error("no such var: " + name)
 ```
 
 [*Anmerkung*: Um den Code auf die Folie zu bekommen, ist dies ein Mix aus Java und Python geworden. Sry ;)]{.notes}
