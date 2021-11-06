@@ -261,7 +261,7 @@ class MyListener(BaseListener):
     Scope scope
 
     def enterStart(Parser.FileContext ctx):
-        def globals = Scope()
+        globals = Scope()
         globals.bind(BuiltIn("int"))
         globals.bind(BuiltIn("float"))
         scope = globals
@@ -272,12 +272,12 @@ class MyListener(BaseListener):
         scope = scope.enclosingScope
 
     def exitVarDecl(Parser.VarDeclContext ctx):
-        def t = scope.resolve(ctx.type().getText())
-        def var = Variable(ctx.ID().getText(), t)
+        t = scope.resolve(ctx.type().getText())
+        var = Variable(ctx.ID().getText(), t)
         scope.bind(var)
     def exitVar(Parser.VarContext ctx):
-        def name = ctx.ID().getText()
-        def var = scope.resolve(name)
+        name = ctx.ID().getText()
+        var = scope.resolve(name)
         if var == None: error("no such var: " + name)
 ```
 
