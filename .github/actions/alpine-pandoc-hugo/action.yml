@@ -7,6 +7,6 @@ inputs:
     default: 'make'
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'ghcr.io/compilerbau/alpine-pandoc-hugo:latest'
   args:
     - export DOCKER=false; ${{ inputs.make-target }}

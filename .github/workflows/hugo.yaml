@@ -11,18 +11,22 @@ jobs:
   # build gh-page
   gh-page:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/compilerbau/alpine-pandoc-hugo:latest
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: true
-      - run: |
-          export DOCKER=false; make web
-      - uses: peaceiris/actions-gh-pages@v3
+
+      - name: Pull docker image
+        run: |
+          docker pull ghcr.io/compilerbau/alpine-pandoc-hugo:latest
+
+      - name: Build website
+        uses: ./.github/actions/alpine-pandoc-hugo
+        with:
+          make-target: 'make web'
+
+      - name: Publish website
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages

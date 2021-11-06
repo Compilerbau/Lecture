@@ -15,18 +15,29 @@ jobs:
   single-slide:
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/compilerbau/alpine-pandoc-hugo:latest
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: true
-      - run: |
-          export DOCKER=false; make ${{ github.head_ref }}
-      - uses: actions/upload-artifact@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull docker image
+        run: |
+          docker pull ghcr.io/compilerbau/alpine-pandoc-hugo:latest
+
+      - name: Generate single slide set
+        uses: ./.github/actions/alpine-pandoc-hugo
+        with:
+          make-target: 'make ${{ github.head_ref }}'
+
+      - name: Upload generated slides
+        uses: actions/upload-artifact@v2
         with:
           path: pdf/
           retention-days: 1
@@ -35,18 +46,29 @@ jobs:
   all-slidedesks:
     if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/compilerbau/alpine-pandoc-hugo:latest
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: true
-      - run: |
-          export DOCKER=false; make slides
-      - uses: actions/upload-artifact@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull docker image
+        run: |
+          docker pull ghcr.io/compilerbau/alpine-pandoc-hugo:latest
+
+      - name: Generate all slides
+        uses: ./.github/actions/alpine-pandoc-hugo
+        with:
+          make-target: 'make slides'
+
+      - name: Upload generated slides
+        uses: actions/upload-artifact@v2
         with:
           path: pdf/
           retention-days: 1
