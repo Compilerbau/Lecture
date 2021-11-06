@@ -11,6 +11,7 @@ type    : 'float' | 'int' ;
 block   : '{' stat* '}' ;
 stat    : block
         | varDecl
+        | funcDecl
         | expr ';'
         | 'return' expr ';'
         ;

@@ -13,7 +13,7 @@ EXAMPLES = Demo
 
 
 $(EXAMPLES): %: %.tokens
-	$(GRUN) $@ start -tokens
+	$(GRUN) $@ start -tree
 
 %.tokens: %.g4
 	$(ANTLR) $<
