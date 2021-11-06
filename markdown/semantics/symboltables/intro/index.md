@@ -41,7 +41,7 @@ x = f(x);
 :::
 ::: {.column width="70%"}
 
-![](images/parsetree.png)
+![](images/parsetree.png){width="80%"}
 
 :::
 ::::::
@@ -97,7 +97,7 @@ Oft werden gar nicht alle Phasen und alle Zwischendarstellungen benötigt.
 
 ## Semantische Analyse und Symboltabellen
 
-![](images/architektur_cb.png)
+![](images/architektur_cb.png){width="80%"}
 
 
 ## Syntax und Semantik
@@ -230,6 +230,7 @@ enthält dann statt der Namen Verweise in diese (Hash-) Tabelle.
 
 :::::: columns
 ::: {.column width="40%"}
+\vspace{4mm}
 ```c
 int x = 0;
 int i = 0;
@@ -240,8 +241,12 @@ for (i=0; i<10; i++) {
 ```
 :::
 ::: {.column width="20%"}
-\vspace{6mm}
-![](images/simpletable.png)
+::: slides
+![](images/simpletable.png){width="80%"}
+:::
+::: notes
+![](images/simpletable.png){width="20%"}
+:::
 :::
 ::::::
 
