@@ -42,7 +42,7 @@ term : term '*' DIGIT
 DIGIT : [0-9] ;
 ```
 
-\blueArrow Wie den Ausdruck **ausrechnen**?
+=> Wie den Ausdruck **ausrechnen**?
 
 ::: notes
 
@@ -331,7 +331,7 @@ und mit berechneten und geerbten Attributen:
 :::::: columns
 ::: {.column width="10%"}
 \vspace{20mm}
-**`5*8`** \blueArrow\
+**`5*8`** =>
 :::
 ::: {.column width="45%"}
 ![Annotierter Parse-Tree mit berechneten und geerbten Attributen (nur Multiplikation)](images/annotatedparsetree2.png)\
@@ -566,7 +566,7 @@ werden soll, übersetzt Bison die Regel `xxx` in zwei Regeln, wobei `dosomething
 xxx : A { $$ = 42; } B C { printf("%d", $2); } ;
 ```
 
-\blueArrow Hier wird "42" ausgegeben, da mit `$2` auf den Wert der
+=> Hier wird "42" ausgegeben, da mit `$2` auf den Wert der
 eingebetteten Aktion zugegriffen wird.
 
 `$3`: Der Wert von `B`
