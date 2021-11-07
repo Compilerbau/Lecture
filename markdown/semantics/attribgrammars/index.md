@@ -53,12 +53,6 @@ werden.
 :::
 
 
-## Einordnung: Dritte Phase in Compiler-Pipeline
-
-![Compiler-Pipeline](images/architektur_cb_sdt.png)
-
-
-
 # Semantische Analyse: Die Symboltabellen nutzen
 
 ## Das haben wir bis jetzt (1/2)
