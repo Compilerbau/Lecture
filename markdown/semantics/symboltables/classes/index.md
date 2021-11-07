@@ -85,6 +85,10 @@ class Struct(Scope, Symbol, Type):
 In der Grammatik würde es eine Regel `member` geben, die auf eine Struktur
 der Art `ID.ID` anspricht (d.h. eigentlich den Teil `.ID`), und entsprechend
 zu Methoden `enterMember()` und `exitMember()` im Listener führt.
+
+Das Symbol für `a` hat als `type`-Attribut eine Referenz auf die `Struct`,
+die ja einen eigenen Scope hat (`symbols`-Map). Darin muss dann `b` aufgelöst
+werden.
 :::
 
 \bigskip
@@ -152,21 +156,21 @@ public
 [Quelle: Eigene Modellierung nach einer Idee in [@Parr2010, S. 167]]{.origin}
 
 ::: notes
-Bei Klassen kommt in den Tabellen ein weiterer Pointer `parent` auf die Elternklasse
-hinzu (in der Superklasse ist der Wert `None`).
+Bei Klassen kommt in den Tabellen ein weiterer Pointer `parentClazz` auf die
+Elternklasse hinzu (in der Superklasse ist der Wert `None`).
 :::
 
 ## Klassen: Auflösen von Namen
 
 ``` {.python size="footnotesize"}
 class Clazz(Struct):
-    Clazz parent    # None if base class
+    Clazz parentClazz   # None if base class
 
     def resolve(name):
         # do we know "name" here?
         if symbols[name]: return symbols[name]
         # NEW: if not here, check any parent class ...
-        if parent != None: return parent.resolve(name)
+        if parentClazz != None: return parentClazz.resolve(name)
         # ... or enclosing scope if base class
         try: return enclosingScope.resolve(name)
         except: return None     # not found
@@ -174,7 +178,7 @@ class Clazz(Struct):
     def resolveMember(name):
         if symbols[name]: return symbols[name]
         # NEW: check parent class
-        try: return parent.resolveMember(name)
+        try: return parentClazz.resolveMember(name)
         except: return None
 ```
 
@@ -221,9 +225,9 @@ Hier würde `wuppie` als Symbol im globalen Scope definiert werden. Beim Verarbe
 `int z = x+y+wuppie;` würde mit `resolve()` nach `wuppie` gesucht: Zuerst im lokalen Scope
 unterhalb der Funktion, dann im Funktions-Scope, dann im Klassen-Scope von `B`. Hier sucht
 `resolve()` auch zunächst lokal, geht dann aber die Vererbungshierarchie entlang (sofern
-wie hier vorhanden). Erst in der Superklasse (wenn der `parent`-Zeiger `null` ist), löst
-`resolve()` wieder normal auf und sucht um umgebenden Scope. Auf diese Weise kann man wie
-gezeigt in Klassen (Methoden) auf globale Variablen verweisen ...
+wie hier vorhanden). Erst in der Superklasse (wenn der `parentClazz`-Zeiger `None` ist),
+löst `resolve()` wieder normal auf und sucht um umgebenden Scope. Auf diese Weise kann man
+wie gezeigt in Klassen (Methoden) auf globale Variablen verweisen ...
 
 
 *Anmerkung*: Durch dieses Vorgehen wird im Prinzip in Methoden aus dem Zugriff auf ein Feld
