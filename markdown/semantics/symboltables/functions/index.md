@@ -160,7 +160,7 @@ def exitCall(Parser.CallContext ctx):
     func = scope.resolve(name)
     if func == None:
         error("no such function: " + name)
-    if func instanceof Variable:
+    if func.type == Variable:
         error(name + " is not a function")
 ```
 
