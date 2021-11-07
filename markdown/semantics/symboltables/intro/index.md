@@ -146,7 +146,6 @@ sein!
     -   Vermeidung von Mehrfachdefinition
     -   Zugriff auf nicht definierte Bezeichner
     -   (Lesender) Zugriff auf nicht initialisierte Bezeichner
-    -   Kein Zugriff auf definierte Bezeichner
     -   Funktionen werden nicht als Variablen genutzt
     -   ...
 
