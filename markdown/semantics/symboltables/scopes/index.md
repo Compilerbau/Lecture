@@ -249,7 +249,7 @@ type    : 'float' | 'int' ;
 ``` {.c size="footnotesize"}
 int x = 42;
 
-{ int y = 9; }
+{ int y = 9; x = 7; }
 ```
 :::
 ::: {.column width="58%"}
