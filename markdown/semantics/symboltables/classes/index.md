@@ -30,6 +30,7 @@ struct A {
     int x;
     struct B {int x;};
     B b;
+    struct C {int z;};
 };
 A a;
 void f() {
