@@ -113,8 +113,9 @@ Der Typ eines Ausdrucks wird mit Hilfe der Typen seiner Unterausdrücke bestimmt
 Dabei kann man ein Kalkül mit sog. Inferenzregeln der Form
 
 $$\frac{f:s \rightarrow t\ \ \ \ \ x:s}{f(x) : t}$$
+
 *(Wenn f den Typ $s \rightarrow t$ hat und x den Typ s,
-dann hat der Ausdruck f(x) den Typ t.) *
+dann hat der Ausdruck f(x) den Typ t.)*
 
 benutzen. So wird dann z. B. auch Überladung aufgelöst und Polymorphie zur Laufzeit.
 
@@ -282,7 +283,7 @@ S-attributierte SDD sind eine Teilmenge von L-attributierten SDD.
 ## Beispiel: Annotierter Syntaxbaum für `5*8+2`
 
 ::: center
-![Annotierter Parse-Tree](images/annotatedparsetree.png){height="90%"}\
+![Annotierter Parse-Tree](images/annotatedparsetree.png){height="90%"}
 :::
 
 
@@ -300,7 +301,7 @@ S-attributierte SDD sind eine Teilmenge von L-attributierten SDD.
 \normalsize
 
 ::: center
-![AST](images/ast.png){width="40%"}\
+![AST](images/ast.png){width="40%"}
 :::
 
 
@@ -334,7 +335,7 @@ und mit berechneten und geerbten Attributen:
 **`5*8`** =>
 :::
 ::: {.column width="45%"}
-![Annotierter Parse-Tree mit berechneten und geerbten Attributen (nur Multiplikation)](images/annotatedparsetree2.png)\
+![Annotierter Parse-Tree mit berechneten und geerbten Attributen (nur Multiplikation)](images/annotatedparsetree2.png)
 :::
 ::::::
 :::::::::
