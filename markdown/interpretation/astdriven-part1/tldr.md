@@ -4,6 +4,7 @@ disableToc: true
 hidden: true
 ---
 
+
 Ein AST-basierter Interpreter besteht oft aus einem "Visitor-Dispatcher": Man traversiert
 mit einer `eval()`-Funktion den AST und ruft je nach Knotentyp die passende Funktion auf.
 Dabei werden bei Ausdrücken (*Expressions*) Werte berechnet und zurückgegeben, d.h. hier
