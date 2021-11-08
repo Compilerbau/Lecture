@@ -16,30 +16,20 @@ readings:
     comment: "Kapitel 6"
   - key: "Mogensen2017"
     comment: "Kapitel 4"
-quizzes:
-  - link: XYZ
-    name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
 assignments:
-  - topic: blatt01
+  - topic: sheet05
 youtube:
-  - id: XYZ (ID)
-  - link: https://youtu.be/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
+  - id: TODO
 fhmedia:
-  - link: https://www.fh-bielefeld.de/medienportal/m/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
-sketch: true
+  - link: "TODO"
+    name: "Direktlink FH-Medienportal: CB Syntaxgesteuerte Interpreter"
 ---
 
-
-## Motivation
-Lorem Ipsum. Starte mit H2-Level.
-...
 
 ## Überblick Interpreter
 
 ::: center
-![Interpreter](images/interpreter){width="80%"}\
+![](images/interpreter.png){width="80%"}
 :::
 
 ::: notes
@@ -505,7 +495,4 @@ public class TestMyVisitor {
 ![](https://licensebuttons.net/l/by-sa/4.0/88x31.png)
 
 Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
-
-### Exceptions
-*   TODO (what, where, license)
 :::
