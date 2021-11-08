@@ -17,25 +17,15 @@ readings:
     comment: "Kapitel 6"
   - key: "Mogensen2017"
     comment: "Kapitel 4"
-quizzes:
-  - link: XYZ
-    name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
 assignments:
-  - topic: blatt01
+  - topic: sheet05
 youtube:
-  - id: XYZ (ID)
-  - link: https://youtu.be/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
+  - id: TODO
 fhmedia:
-  - link: https://www.fh-bielefeld.de/medienportal/m/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
-sketch: true
+  - link: "TODO"
+    name: "Direktlink FH-Medienportal: CB Syntaxgesteuerte Interpreter"
 ---
 
-
-## Motivation
-Lorem Ipsum. Starte mit H2-Level.
-...
 
 ## Funktionen
 
@@ -112,7 +102,7 @@ Void funcDecl(AST t) {
 
 :::
 ::: {.column width="35%"}
-![Klasse `Fun`](images/fun)\
+![](images/fun.png)
 :::
 ::::::
 
@@ -321,7 +311,7 @@ Zugriff auf das Attribut in der Klasse (bzw. der Instanz) angelegt werden.
 
 ## Klassen und Instanzen II
 
-![Erzeugen von Instanzen](images/classes)\
+![](images/classes.png)
 
 :::notes
 ```java

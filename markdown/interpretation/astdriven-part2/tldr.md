@@ -4,6 +4,7 @@ disableToc: true
 hidden: true
 ---
 
+
 Üblicherweise können Funktionen auf die Umgebung zurückgreifen, in der die Definition der
 Funktion erfolgt ist ("*Closure*"). Deshalb wird beim Interpretieren einer Funktionsdefinition
 der jeweilige AST-Knoten (mit dem Block des Funktionskörpers) und der aktuellen Umgebung in
