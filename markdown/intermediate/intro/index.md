@@ -12,29 +12,19 @@ readings:
     comment: "Kapitel 7"
   - key: "Parr2010"
     comment: "Kapitel 11"
-quizzes:
-  - link: XYZ
-    name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
 assignments:
-  - topic: blatt01
+  - topic: sheet04
 youtube:
-  - id: XYZ (ID)
-  - link: https://youtu.be/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
+  - id: TODO
 fhmedia:
-  - link: https://www.fh-bielefeld.de/medienportal/m/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
-sketch: true
+  - link: "TODO"
+    name: "Direktlink FH-Medienportal: CB Überblick Zwischencode"
 ---
 
 
-## Motivation
-Lorem Ipsum. Starte mit H2-Level.
-...
-
 ## Einordnung
 
-![Compiler-Pipeline](images/architektur_cb)\
+![](images/architektur_cb.png)
 
 ::: notes
 Die Schritte in der letzten Phase der Compiler-Pipeline können *sehr* unterschiedlich
@@ -57,7 +47,7 @@ das eher eine Art Ausblick :)
 Häufig wird der AST selbst als Zwischencode verwendet. Ein Beispiel dafür ist Pandoc.
 :::
 
-![Pandoc Toolchain](images/pandoc)\
+![](images/pandoc.png)
 
 ::: notes
 ```markdown
@@ -124,7 +114,6 @@ Ergebnisses. Weiterhin gibt es bedingte und unbedingte Sprünge und Prozedur-Auf
 
 Index-Zugriffe werden über Pointerarithmetik aufgelöst (s.u.).
 
-
 Eine Spezialform ist die sogenannte "Static Single-Assignment"-Form (*SSA*). Hierbei wird für jede
 Zuweisung eine neue temporäre Variable generiert, d.h. jede im IR-Code verwendete Adresse (temporäre
 Variable) hat genau eine Zuweisung. Dies wirkt sich günstig auf spezielle Optimierungen aus.
@@ -136,10 +125,6 @@ Variable) hat genau eine Zuweisung. Dies wirkt sich günstig auf spezielle Optim
 ## LLVM IR
 
 **L**ow **L**evel **V**irtual **M**achine
-<!-- XXX
-https://llvm.org/
-https://blog.regehr.org/archives/1453
--->
 
 \bigskip
 
@@ -215,7 +200,9 @@ der Addition aus `%4` und dem Wert `35` in eine weitere neue Variable `%5`
 geschrieben. Der Wert dieser Variablen wird dann auf dem Stack in `%3` gespeichert
 (`y = x+35`).
 
-Vgl. auch [LLVM Language Reference Manual](http://llvm.org/docs/LangRef.html).
+Vgl. auch [LLVM Language Reference Manual](http://llvm.org/docs/LangRef.html) und
+[blog.regehr.org/archives/1453](https://blog.regehr.org/archives/1453).
+
 :::
 
 
@@ -268,11 +255,6 @@ das Ergebnis wieder auf den Stack. Mit `STORE_NAME 1` wird der Wert in `co_value
 
 
 ## Bytecode (Beispiel Java)
-
-<!-- XXX
-https://dzone.com/articles/introduction-to-java-bytecode
-https://www.beyondjava.net/java-programmers-guide-java-byte-code
--->
 
 :::::: columns
 ::: {.column width="30%"}
@@ -333,16 +315,13 @@ Operationen sowie deren Zwischenergebnisse hinterlegt werden.
 
 Die Konstanten `n` für `iconst_` funktionieren nur für kleinere Integer. Größere Werte
 muss man mit `bipush` auf den Stack pushen.
+
+Vgl. auch [dzone.com/articles/introduction-to-java-bytecode](https://dzone.com/articles/introduction-to-java-bytecode)
+und [www.beyondjava.net/java-programmers-guide-java-byte-code](https://www.beyondjava.net/java-programmers-guide-java-byte-code).
 :::
 
 
 ## Assembler
-
-<!-- XXX
-https://cs.brown.edu/courses/cs033/docs/guides/x64_cheatsheet.pdf
-http://www.hep.wisc.edu/~pinghc/x86AssmTutorial.htm
-https://en.wikibooks.org/wiki/X86_Assembly/GAS_Syntax
--->
 
 :::::: columns
 ::: {.column width="35%"}
@@ -407,6 +386,11 @@ Ansonsten kann man die Bedeutung erraten:
 `movl -8(%rbp), %eax` entspricht `eax = mem[rbp-8]`,
 `addl $35, %eax` entspricht `eax = eax + 35`,
 `movl %eax, -4(%rbp)` entspricht `mem[rbp-4] = eax`.
+
+Vgl. auch
+[cs.brown.edu/courses/cs033/docs/guides/x64_cheatsheet.pdf](https://cs.brown.edu/courses/cs033/docs/guides/x64_cheatsheet.pdf),
+[www.hep.wisc.edu/~pinghc/x86AssmTutorial.htm](http://www.hep.wisc.edu/~pinghc/x86AssmTutorial.htm)
+und [en.wikibooks.org/wiki/X86_Assembly/GAS_Syntax](https://en.wikibooks.org/wiki/X86_Assembly/GAS_Syntax).
 :::
 
 
@@ -429,7 +413,4 @@ Ansonsten kann man die Bedeutung erraten:
 ![](https://licensebuttons.net/l/by-sa/4.0/88x31.png)
 
 Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
-
-### Exceptions
-*   TODO (what, where, license)
 :::
