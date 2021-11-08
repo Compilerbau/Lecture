@@ -17,25 +17,15 @@ readings:
     comment: "Kapitel 6"
   - key: "Mogensen2017"
     comment: "Kapitel 4"
-quizzes:
-  - link: XYZ
-    name: "Testquizz (URL from `'`{=markdown}Invite more Players`'`{=markdown})"
 assignments:
-  - topic: blatt01
+  - topic: sheet05
 youtube:
-  - id: XYZ (ID)
-  - link: https://youtu.be/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
+  - id: TODO
 fhmedia:
-  - link: https://www.fh-bielefeld.de/medienportal/m/XYZ
-    name: "Use This As Link Text (Link from `'share'`{=markdown}-Button)"
-sketch: true
+  - link: "TODO"
+    name: "Direktlink FH-Medienportal: CB Syntaxgesteuerte Interpreter"
 ---
 
-
-## Motivation
-Lorem Ipsum. Starte mit H2-Level.
-...
 
 ## Aufgaben im Interpreter
 
@@ -63,9 +53,9 @@ x = f(x);
 
 \vspace{3mm}
 
-*   Aufbauen des AST  [... \blueArrow Lexer+Parser]{.notes}
-*   Auflösen von Symbolen/Namen  [... \blueArrow Symboltabellen, Resolving]{.notes}
-*   Type-Checking und -Inference  [... \blueArrow Semantische Analyse (auf Symboltabellen)]{.notes}
+*   Aufbauen des AST  [... => Lexer+Parser]{.notes}
+*   Auflösen von Symbolen/Namen  [... => Symboltabellen, Resolving]{.notes}
+*   Type-Checking und -Inference  [... => Semantische Analyse (auf Symboltabellen)]{.notes}
 
 \smallskip
 
@@ -132,7 +122,7 @@ verarbeitete Eingaben zurückgreifen können. Durch die Form der Schleife
 
 ## Auswertung von Literalen und Ausdrücken
 
-*   Typen mappen: Zielsprache \blueArrow Implementierungssprache
+*   Typen mappen: Zielsprache => Implementierungssprache
 
     ::: notes
     Die in der Zielsprache verwendeten (primitiven) Typen müssen
@@ -245,7 +235,8 @@ float y;
 
 \pause
 
-![Nested Environments](images/nested_envs)\
+![](images/nested_envs.png)
+<!-- TODO (Quelle?) -->
 
 :::
 ::::::
