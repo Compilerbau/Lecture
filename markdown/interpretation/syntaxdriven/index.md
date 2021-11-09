@@ -9,7 +9,7 @@ readings:
   - key: "Parr2014"
     comment: "Kapitel 6.4 und 8.4"
   - key: "Nystrom2018"
-    comment: "Kapitel "A Tree-Walk Interpreter" "
+    comment: "Kapitel 'A Tree-Walk Interpreter' "
   - key: "Parr2010"
     comment: "Kapitel 8 und 9"
   - key: "Grune2012"
