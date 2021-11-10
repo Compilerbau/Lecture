@@ -130,22 +130,18 @@ latex-clean:
 #create-docker-image:
 #	cd .github/actions/alpine-pandoc-hugo && make clean all
 
-.PHONY: test
-test:
-	@echo "$(IMAGE_TARGETS)\n"
-
-# Rule for image files generated from tex files
+## Create images from tex files
 $(TEX_TARGETS): $(OUTPUT_DIR)%.png: $(SRC_DIR)%.tex
 	mkdir -p $(dir $@)
 	$(LATEX) $(LATEX_ARGS) $(notdir $<)
 	cp $(<:.tex=.png) $@
 
-## Rule for image files generated from dot files
+## Create images from dot files
 $(DOT_TARGETS): $(OUTPUT_DIR)%.png: $(SRC_DIR)%.dot
 	mkdir -p $(dir $@)
 	$(DOT) $(DOT_ARGS) $< -o $@
 
-## Rule for standalone image files (just copy)
+## Copy standalone image files
 $(PNG_TARGETS): $(OUTPUT_DIR)%: $(SRC_DIR)%
 	mkdir -p $(dir $@)
 	cp $< $@
