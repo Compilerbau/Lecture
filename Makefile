@@ -99,6 +99,10 @@ IMAGE_FOLDERS = $(patsubst $(SRC_DIR)/%,%,$(shell find $(SRC_DIR) -type d -iname
 ## All target for image files
 IMAGE_TARGETS = $(TEX_TARGETS) $(DOT_TARGETS) $(PNG_TARGETS)
 
+## Markdown source and target files
+MARKDOWN_SOURCES = $(shell find $(SRC_DIR) -type f -iname '*.md')
+MARKDOWN_TARGETS = $(MARKDOWN_SOURCES:$(SRC_DIR)%=$(OUTPUT_DIR)%)
+
 #-------------------------------------------------------------------------
 # Special files
 #-------------------------------------------------------------------------
@@ -145,6 +149,11 @@ $(DOT_TARGETS): $(OUTPUT_DIR)%.png: $(SRC_DIR)%.dot
 $(PNG_TARGETS): $(OUTPUT_DIR)%: $(SRC_DIR)%
 	mkdir -p $(dir $@)
 	cp $< $@
+
+## Process markdown with pandoc (preprocessing for hugo)
+$(MARKDOWN_TARGETS): $(OUTPUT_DIR)/%: $(SRC_DIR)/%
+	mkdir -p $(dir $@)
+	$(PANDOC) $(PANDOC_DIRS) -d hugo $< -o $@
 
 ## TODO: Explain secondary expansion (what and why)
 .SECONDEXPANSION:
