@@ -107,6 +107,10 @@ IMAGE_TARGETS = $(TEX_TARGETS) $(DOT_TARGETS) $(PNG_TARGETS)
 READINGS = data/readings.yaml
 BIBTEX   = cb.bib
 
+## Create readings data template
+$(READINGS): $(BIBTEX)
+	$(PANDOC) -s -f biblatex -t markdown $< -o $@
+
 #-------------------------------------------------------------------------
 # Rules/Targets
 #-------------------------------------------------------------------------
