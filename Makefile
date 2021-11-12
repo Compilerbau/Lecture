@@ -171,6 +171,16 @@ $(WEB_MARKDOWN_TARGETS): $(WEB_OUTPUT_DIR)/%: $(SRC_DIR)/%
 ## of automatic variables like '$@' in the prerequisite definitions.
 .SECONDEXPANSION:
 
-## TODO: Explain how this rule works
+## Generate pdf slides
+## Prerequisites are the lessons 'index.md' and theimages that may have to
+## be created from source in the 'images' subfolder.
+## NOTE: The prerequisites for the images must be added after the 'index.md'
+## so that '$<' gives the right input file for pandoc.
+$(SLIDES_PDF_TARGETS): $$(patsubst $(SLIDES_OUTPUT_DIR)/%.pdf,$(SRC_DIR)/%/index.md, $$(subst _,/,$$@))
+	mkdir -p $(SLIDES_OUTPUT_DIR)
+	$(PANDOC) $(PANDOC_DIRS) -d slides $< -o $@
+$(SLIDES_PDF_TARGETS): $$(filter $$(patsubst $(SLIDES_OUTPUT_DIR)/%.pdf,%/images, $$(subst _,/,$$@)), $(IMAGE_FOLDERS))
+
+## Group related image targets (same folder) into one phony target
 .PHONY: $(IMAGE_FOLDERS)
 $(IMAGE_FOLDERS): $$(filter $(OUTPUT_DIR)/$$@/%, $(IMAGE_TARGETS))
