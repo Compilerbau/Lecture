@@ -2,6 +2,11 @@
 #
 ##########################################################################
 
+## TODO
+##	- pdf files use relative path as name ('/' replaced by '_')
+##	- must be reversable for rule generation
+##	- therefore folder names containing '_' are NOT allowed
+
 #-------------------------------------------------------------------------
 # Tools
 #-------------------------------------------------------------------------
@@ -13,10 +18,10 @@
 ## Launch the tools directly:              export DOCKER=false; make TARGET
 ##
 ## Note: LaTeX needs to be called in the folder of the .tex file to
-## be processed. In the target "$(ALGORITHM)", the variable "$<" is            <--- Rename target
-## set to the current .tex file (incl. path in the working directory).
-## Therefore, the working directory for the Docker container is set
-## to the folder of the current .tex file. When called directly, we
+## be processed. In the rule that generates images from tex files, the
+## variable "$<" is set to the current .tex file (incl. path in the working
+## directory). Therefore, the working directory for the Docker container is
+## set to the folder of the current .tex file. When called directly, we
 ## need to first change-dir to this folder.
 ifneq ($(DOCKER), false)
 PANDOC = docker run --rm -i -v "$(shell pwd):/data" -w "/data"          -u "$(shell id -u):$(shell id -g)" --entrypoint="pandoc" alpine-pandoc-hugo
