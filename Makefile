@@ -183,4 +183,4 @@ $(SLIDES_PDF_TARGETS): $$(filter $$(patsubst $(SLIDES_OUTPUT_DIR)/%.pdf,%/images
 
 ## Group related image targets (same folder) into one phony target
 .PHONY: $(IMAGE_FOLDERS)
-$(IMAGE_FOLDERS): $$(filter $(OUTPUT_DIR)/$$@/%, $(IMAGE_TARGETS))
+$(IMAGE_FOLDERS): $$(filter $(SRC_DIR)/$$@/%, $(SLIDES_IMAGE_TARGETS))
