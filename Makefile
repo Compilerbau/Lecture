@@ -167,7 +167,8 @@ $(WEB_MARKDOWN_TARGETS): $(WEB_OUTPUT_DIR)/%: $(SRC_DIR)/%
 	mkdir -p $(dir $@)
 	$(PANDOC) $(PANDOC_DIRS) -d hugo $< -o $@
 
-## TODO: Explain secondary expansion (what and why)
+## Enable secondary expansion for subseqent targets. This allows the use
+## of automatic variables like '$@' in the prerequisite definitions.
 .SECONDEXPANSION:
 
 ## TODO: Explain how this rule works
