@@ -136,10 +136,10 @@ $(READINGS): $(BIBTEX)
 
 ## Clean up
 .PHONY: clean
-clean:
-	rm -rf $(OUTPUT_DIR)
+clean: latex-clean
+	rm -rf $(WEB_OUTPUT_DIR) $(SLIDES_OUTPUT_DIR) $(SLIDES_IMAGE_TARGETS) $(READINGS)
 
-## Clean up intermidiate latex files
+## Clean up intermediate latex files
 .PHONY: latex-clean
 latex-clean:
 	rm -f $(shell find $(SRC_DIR) -type f \( -iname "*.aux" -o -iname "*.dvi" -o -iname "*.log" -o -iname "*.ps" \))
