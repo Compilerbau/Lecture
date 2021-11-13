@@ -137,7 +137,7 @@ $(READINGS): $(BIBTEX)
 ## Clean up
 .PHONY: clean
 clean: latex-clean
-	rm -rf $(WEB_OUTPUT_DIR) $(SLIDES_OUTPUT_DIR) $(SLIDES_IMAGE_TARGETS) $(READINGS)
+	rm -rf $(WEB_OUTPUT_DIR) $(SLIDES_OUTPUT_DIR) $(HUGO_OUTPUT_DIR) $(SLIDES_IMAGE_TARGETS) $(READINGS)
 
 ## Clean up intermediate latex files
 .PHONY: latex-clean
@@ -172,7 +172,7 @@ $(WEB_MARKDOWN_TARGETS): $(WEB_OUTPUT_DIR)/%: $(SRC_DIR)/%
 .SECONDEXPANSION:
 
 ## Generate pdf slides
-## Prerequisites are the lessons 'index.md' and theimages that may have to
+## Prerequisites are the lessons 'index.md' and the images that may have to
 ## be created from source in the 'images' subfolder.
 ## NOTE: The prerequisites for the images must be added after the 'index.md'
 ## so that '$<' gives the right input file for pandoc.
@@ -184,3 +184,17 @@ $(SLIDES_PDF_TARGETS): $$(filter $$(patsubst $(SLIDES_OUTPUT_DIR)/%.pdf,%/images
 ## Group related image targets (same folder) into one phony target
 .PHONY: $(IMAGE_FOLDERS)
 $(IMAGE_FOLDERS): $$(filter $(SRC_DIR)/$$@/%, $(SLIDES_IMAGE_TARGETS))
+
+## Make everything
+.PHONY: all
+all: slides web
+
+## Creata all slides
+.PHONY: slides
+slides: $(SLIDES_PDF_TARGETS)
+
+## Create website
+.PHONY: web
+web: $(WEB_MARKDOWN_TARGETS) $(WEB_IMAGE_TARGETS) $(READINGS)
+	$(HUGO) $(HUGO_ARGS)
+
