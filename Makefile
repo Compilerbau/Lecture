@@ -79,6 +79,7 @@ SRC   += parsing/cfg
 SRC   += parsing/ll-parser
 SRC   += parsing/ll-advanced
 SRC   += parsing/lr-part
+SRC   += parsing/parsercombinator
 SRC   += parsing/recovery
 SRC   += parsing/finalwords
 SRC   += semantics/symboltables/intro
