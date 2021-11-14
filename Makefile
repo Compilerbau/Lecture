@@ -99,11 +99,6 @@ PNG_SOURCES       := $(filter-out $(TEX_SOURCES:.tex=.png) $(DOT_SOURCES:.dot=.p
 WEB_PNG_TARGETS    = $(PNG_SOURCES:$(SRC_DIR)%=$(WEB_OUTPUT_DIR)%)
 SLIDES_PNG_TARGETS = $(PNG_SOURCES)
 
-## Relative paths of all 'images' folders under $(SRC_DIR). Used to
-## define phony targets that bundle generating all image files associated
-## with that folder.
-#IMAGE_FOLDERS = $(patsubst $(SRC_DIR)/%,%,$(shell find $(SRC_DIR) -type d -iname 'images'))
-
 ## Image targets for web and slides
 WEB_IMAGE_TARGETS    = $(WEB_TEX_TARGETS) $(WEB_DOT_TARGETS) $(WEB_PNG_TARGETS)
 SLIDES_IMAGE_TARGETS = $(SLIDES_TEX_TARGETS) $(SLIDES_DOT_TARGETS) $(SLIDES_PNG_TARGETS)
@@ -119,21 +114,26 @@ SLIDES_EXCLUDE_FOLDERS  = $(dir $(shell find $(SRC_DIR) -type f -iname '.noslide
 SLIDES_MARKDOWN_SOURCES = $(filter-out $(addsuffix %, $(SLIDES_EXCLUDE_FOLDERS)), $(shell find $(SRC_DIR) -type f -iname 'index.md'))
 SLIDES_PDF_TARGETS      = $(addprefix $(SLIDES_OUTPUT_DIR)/,$(subst /,_, $(patsubst $(SRC_DIR)/%/index.md,%.pdf, $(SLIDES_MARKDOWN_SOURCES))))
 
-#-------------------------------------------------------------------------
-# Special files
-#-------------------------------------------------------------------------
-
 ## Readings data template
 READINGS = data/readings.yaml
 BIBTEX   = cb.bib
 
-## Create readings data template
-$(READINGS): $(BIBTEX)
-	$(PANDOC) -s -f biblatex -t markdown $< -o $@
+#-------------------------------------------------------------------------
+# Phony Targets
+#-------------------------------------------------------------------------
 
-#-------------------------------------------------------------------------
-# Rules/Targets
-#-------------------------------------------------------------------------
+## Make everything
+.PHONY: all
+all: slides web
+
+## Creata all slides
+.PHONY: slides
+slides: $(SLIDES_PDF_TARGETS)
+
+## Create website
+.PHONY: web
+web: $(WEB_MARKDOWN_TARGETS) $(WEB_IMAGE_TARGETS) $(READINGS)
+	$(HUGO) $(HUGO_ARGS)
 
 ## Clean up
 .PHONY: clean
@@ -146,9 +146,17 @@ latex-clean:
 	rm -f $(shell find $(SRC_DIR) -type f \( -iname "*.aux" -o -iname "*.dvi" -o -iname "*.log" -o -iname "*.ps" \))
 
 ## Build Docker image "alpine-pandoc-hugo"
-#.PHONY: create-docker-image
-#create-docker-image:
-#	cd .github/actions/alpine-pandoc-hugo && make clean all
+.PHONY: create-docker-image
+create-docker-image:
+	cd .github/actions/alpine-pandoc-hugo && make clean all
+
+#-------------------------------------------------------------------------
+# File Targets
+#-------------------------------------------------------------------------
+
+## Create readings data template
+$(READINGS): $(BIBTEX)
+	$(PANDOC) -s -f biblatex -t markdown $< -o $@
 
 ## Create images from tex files
 $(SLIDES_TEX_TARGETS): %.png: %.tex
@@ -186,21 +194,3 @@ $(SLIDES_PDF_TARGETS): $$(patsubst $(SLIDES_OUTPUT_DIR)/%.pdf,$(SRC_DIR)/%/index
 	mkdir -p $(SLIDES_OUTPUT_DIR)
 	$(PANDOC) $(PANDOC_DIRS) -d slides $< -o $@
 $(SLIDES_PDF_TARGETS): $$(filter $$(patsubst $(SLIDES_OUTPUT_DIR)/%.pdf,$(SRC_DIR)/%, $$(subst _,/,$$@))%, $(SLIDES_IMAGE_TARGETS))
-
-## Group related image targets (same folder) into one phony target
-#.PHONY: $(IMAGE_FOLDERS)
-#$(IMAGE_FOLDERS): $$(filter $(SRC_DIR)/$$@/%, $(SLIDES_IMAGE_TARGETS))
-
-## Make everything
-.PHONY: all
-all: slides web
-
-## Creata all slides
-.PHONY: slides
-slides: $(SLIDES_PDF_TARGETS)
-
-## Create website
-.PHONY: web
-web: $(WEB_MARKDOWN_TARGETS) $(WEB_IMAGE_TARGETS) $(READINGS)
-	$(HUGO) $(HUGO_ARGS)
-
