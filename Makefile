@@ -94,18 +94,19 @@ SLIDES_DOT_TARGETS = $(DOT_SOURCES:.dot=.png)
 ##	(the simple expansion with ':=' is important here because we use the
 ##	same variable on both sides. Using a recursive expansion with '='
 ##	would result in an error.)
-PNG_SOURCES      = $(shell find $(SRC_DIR) -type f -iname '*.png')
-PNG_SOURCES     := $(filter-out $(TEX_SOURCES:.tex=.png) $(DOT_SOURCES:.dot=.png), $(PNG_SOURCES))
-WEB_PNG_TARGETS  = $(PNG_SOURCES:$(SRC_DIR)%=$(WEB_OUTPUT_DIR)%)
+PNG_SOURCES        = $(shell find $(SRC_DIR) -type f -iname '*.png')
+PNG_SOURCES       := $(filter-out $(TEX_SOURCES:.tex=.png) $(DOT_SOURCES:.dot=.png), $(PNG_SOURCES))
+WEB_PNG_TARGETS    = $(PNG_SOURCES:$(SRC_DIR)%=$(WEB_OUTPUT_DIR)%)
+SLIDES_PNG_TARGETS = $(PNG_SOURCES)
 
 ## Relative paths of all 'images' folders under $(SRC_DIR). Used to
 ## define phony targets that bundle generating all image files associated
 ## with that folder.
-IMAGE_FOLDERS = $(patsubst $(SRC_DIR)/%,%,$(shell find $(SRC_DIR) -type d -iname 'images'))
+#IMAGE_FOLDERS = $(patsubst $(SRC_DIR)/%,%,$(shell find $(SRC_DIR) -type d -iname 'images'))
 
 ## Image targets for web and slides
 WEB_IMAGE_TARGETS    = $(WEB_TEX_TARGETS) $(WEB_DOT_TARGETS) $(WEB_PNG_TARGETS)
-SLIDES_IMAGE_TARGETS = $(SLIDES_TEX_TARGETS) $(SLIDES_DOT_TARGETS)
+SLIDES_IMAGE_TARGETS = $(SLIDES_TEX_TARGETS) $(SLIDES_DOT_TARGETS) $(SLIDES_PNG_TARGETS)
 
 ## Markdown source and target files
 WEB_MARKDOWN_SOURCES = $(shell find $(SRC_DIR) -type f -iname '*.md')
@@ -137,7 +138,7 @@ $(READINGS): $(BIBTEX)
 ## Clean up
 .PHONY: clean
 clean: latex-clean
-	rm -rf $(WEB_OUTPUT_DIR) $(SLIDES_OUTPUT_DIR) $(HUGO_OUTPUT_DIR) $(SLIDES_IMAGE_TARGETS) $(READINGS)
+	rm -rf $(WEB_OUTPUT_DIR) $(SLIDES_OUTPUT_DIR) $(HUGO_OUTPUT_DIR) $(SLIDES_TEX_TARGETS) $(SLIDES_DOT_TARGETS) $(READINGS)
 
 ## Clean up intermediate latex files
 .PHONY: latex-clean
@@ -156,6 +157,11 @@ $(SLIDES_TEX_TARGETS): %.png: %.tex
 ## Create images from dot files
 $(SLIDES_DOT_TARGETS): %.png: %.dot
 	$(DOT) $(DOT_ARGS) $< -o $@
+
+## Nothing to do for standalone images but we need the targets to use them
+## as prerequisites. This way make can rebuild dependend targets if the
+## files are changed manually.
+$(SLIDES_PNG_TARGETS): ;
 
 ## Copy image files to $(WEB_OUTPUT_DIR)
 $(WEB_IMAGE_TARGETS): $(WEB_OUTPUT_DIR)/%: $(SRC_DIR)/%
@@ -179,11 +185,11 @@ $(WEB_MARKDOWN_TARGETS): $(WEB_OUTPUT_DIR)/%: $(SRC_DIR)/%
 $(SLIDES_PDF_TARGETS): $$(patsubst $(SLIDES_OUTPUT_DIR)/%.pdf,$(SRC_DIR)/%/index.md, $$(subst _,/,$$@))
 	mkdir -p $(SLIDES_OUTPUT_DIR)
 	$(PANDOC) $(PANDOC_DIRS) -d slides $< -o $@
-$(SLIDES_PDF_TARGETS): $$(filter $$(patsubst $(SLIDES_OUTPUT_DIR)/%.pdf,%/images, $$(subst _,/,$$@)), $(IMAGE_FOLDERS))
+$(SLIDES_PDF_TARGETS): $$(filter $$(patsubst $(SLIDES_OUTPUT_DIR)/%.pdf,$(SRC_DIR)/%, $$(subst _,/,$$@))%, $(SLIDES_IMAGE_TARGETS))
 
 ## Group related image targets (same folder) into one phony target
-.PHONY: $(IMAGE_FOLDERS)
-$(IMAGE_FOLDERS): $$(filter $(SRC_DIR)/$$@/%, $(SLIDES_IMAGE_TARGETS))
+#.PHONY: $(IMAGE_FOLDERS)
+#$(IMAGE_FOLDERS): $$(filter $(SRC_DIR)/$$@/%, $(SLIDES_IMAGE_TARGETS))
 
 ## Make everything
 .PHONY: all
