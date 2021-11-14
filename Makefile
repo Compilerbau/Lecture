@@ -115,9 +115,10 @@ WEB_MARKDOWN_TARGETS = $(WEB_MARKDOWN_SOURCES:$(SRC_DIR)%=$(WEB_INTERMEDIATE_DIR
 
 ## Source and target files for slides
 ## NOTE: The name for the target pdf file is generated from the relative
-## path under $(SRC_DIR) with '/' substituted by '_'.
-SLIDES_EXCLUDE_FOLDERS  = $(dir $(shell find $(SRC_DIR) -type f -iname '.noslides'))
-SLIDES_MARKDOWN_SOURCES = $(filter-out $(addsuffix %, $(SLIDES_EXCLUDE_FOLDERS)), $(shell find $(SRC_DIR) -type f -iname 'index.md'))
+## path under $(SRC_DIR) with '/' substituted by '_'. Directories containing
+## a .noslides file will not be considerd for slides generation.
+SLIDES_EXCLUDE_DIRS     = $(dir $(shell find $(SRC_DIR) -type f -iname '.noslides'))
+SLIDES_MARKDOWN_SOURCES = $(filter-out $(addsuffix %, $(SLIDES_EXCLUDE_DIRS)), $(shell find $(SRC_DIR) -type f -iname 'index.md'))
 SLIDES_PDF_TARGETS      = $(addprefix $(SLIDES_OUTPUT_DIR)/,$(subst /,_, $(patsubst $(SRC_DIR)/%/index.md,%.pdf, $(SLIDES_MARKDOWN_SOURCES))))
 
 ## Readings data template
