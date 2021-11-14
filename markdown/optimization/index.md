@@ -31,12 +31,6 @@ readings:
 ```
 
 
-## Themen für heute: Letzte Phase in Compiler-Pipeline
-
-![Compiler-Pipeline](images/architektur_cb.png)\
-
-
-
 # Zwischencode ist eine gute Idee
 
 ## Eine Sprache, viele Maschinen vs. viele Sprachen, eine Maschine
