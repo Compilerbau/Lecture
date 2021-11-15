@@ -92,8 +92,8 @@
 
 - week: "KW49"
   lecture:
-     - topic: "/parsing/parsercombinator"
-       leader: "BC"
+    - topic: "/parsing/parsercombinator"
+      leader: "BC"
   misc_lecture:
     - notes: "~~Vortrag: PEG-Parser, Pratt-Parser und Parser Combinators~~"
   assignment:
