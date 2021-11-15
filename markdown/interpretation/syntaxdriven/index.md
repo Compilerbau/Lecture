@@ -50,14 +50,14 @@ Es gibt verschiedene Varianten, beispielsweise:
     *   Keine Symboltabellen, d.h. auch keine Typprüfung oder Vorwärtsdeklarationen o.ä.
         (d.h. erlaubt nur vergleichsweise einfache Sprachen)
     *   Beispiel: siehe nächste Folie
-    :::
+	:::
 
 *   AST-basierte Interpreter
 
     ::: notes
     *   Nutzt den AST und Symboltabellen
     *   Beispiel: siehe weiter unten
-    :::
+	:::
 
 *   Stack-basierte Interpreter
 
@@ -65,7 +65,7 @@ Es gibt verschiedene Varianten, beispielsweise:
     *   Simuliert eine *Stack Machine*, d.h. hält alle (temporären) Werte auf einem Stack
     *   Arbeitet typischerweise auf bereits stark vereinfachtem Zwischencode (IR),
         etwa Bytecode
-    :::
+	:::
 
 *   Register-basierte Interpreter
 
@@ -74,7 +74,7 @@ Es gibt verschiedene Varianten, beispielsweise:
         Prozessor-Registern
     *   Arbeitet typischerweise auf bereits stark vereinfachtem Zwischencode (IR),
         etwa Bytecode
-    :::
+	:::
 
 ::: notes
 Weiterhin kann man Interpreter danach unterscheiden, ob sie interaktiv sind oder nicht.
@@ -358,6 +358,8 @@ public static class MyListener extends calc2BaseListener {
 }
 ```
 
+![](images/ParseTreeListener.png)
+
 ::: notes
 Anschließend baut man das alles in eine Traversierung des Parse-Trees ein:
 
@@ -451,6 +453,8 @@ public static class MyVisitor extends calc2BaseVisitor<Integer> {
     }
 }
 ```
+
+![](images/ParseTreeVisitor.png)
 
 ::: notes
 Anschließend baut man das alles in eine manuelle Traversierung des Parse-Trees ein:
