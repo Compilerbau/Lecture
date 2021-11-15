@@ -65,7 +65,7 @@ Es gibt verschiedene Varianten, beispielsweise:
     *   Simuliert eine *Stack Machine*, d.h. hält alle (temporären) Werte auf einem Stack
     *   Arbeitet typischerweise auf bereits stark vereinfachtem Zwischencode (IR),
         etwa Bytecode
-        :::
+    :::
 
 *   Register-basierte Interpreter
 
@@ -74,7 +74,7 @@ Es gibt verschiedene Varianten, beispielsweise:
         Prozessor-Registern
     *   Arbeitet typischerweise auf bereits stark vereinfachtem Zwischencode (IR),
         etwa Bytecode
-        :::
+    :::
 
 ::: notes
 Weiterhin kann man Interpreter danach unterscheiden, ob sie interaktiv sind oder nicht.
@@ -210,10 +210,7 @@ public static class FieldContext extends ParserRuleContext {
     ...
 }
 ```
-
-::: {.column width="35%"}
 ![](images/ParserRuleContext.png)
-:::
 
 ::: notes
 Jede Regel liefert ein passend zu dieser Regel generiertes Kontext-Objekt zurück. Darüber kann man das/die
@@ -237,9 +234,7 @@ public static class IncContext extends ParserRuleContext {
 }
 ```
 
-::: {.column width="35%"}
 ![](images/ParserRuleContext2.png)
-:::
 
 **Anmerkung**: ANTLR generiert nur dann Felder für die Regel-Elemente im Kontextobjekt,
 wenn diese in irgendeiner Form referenziert werden. Dies kann beispielsweise durch
@@ -268,9 +263,7 @@ public static class ReturnContext extends StatContext {
 public static class BreakContext extends StatContext { ... }
 ```
 
-::: {.column width="35%"}
 ![](images/ParserRuleContext3.png)
-:::
 
 Mit `value=e` wird der Aufruf der Regel `e` mit dem Label `value` belegt, d.h. man kann
 mit `$e.text` oder `$value.text` auf das `text`-Attribut von `e` zugreifen. Falls es in
