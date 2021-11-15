@@ -275,10 +275,7 @@ public class Interpreter extends BaseVisitor<Object> {
 
 [[Quelle: nach [@Nystrom2018], Kapitel "Functions"]{.origin}]{.notes}
 
-::: {.column width="35%"}
 ![](images/interpreter.png)
-:::
-
 
 ## Ausführen einer Variablendeklaration
 
