@@ -124,7 +124,7 @@
 
 - week: "KW01"
   misc_lecture:
-    - notes: "Vortrag: Generierung von Maschinencode"
+    - notes: "~~Vortrag: Generierung von Maschinencode~~"
     - notes: "Wiederholung (BC, cagi)"
     - notes: ">> Alles Gute im neuen Jahr!"
   assignment:
@@ -135,6 +135,7 @@
   misc_lecture:
     - notes: "Vortrag: VM und Bytecode"
     - notes: "Vortrag: Garbage Collection"
+  lecture:
     - topic: "/machinecode"
       leader: "cagi"
        
