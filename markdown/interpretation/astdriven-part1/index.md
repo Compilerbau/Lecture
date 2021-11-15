@@ -190,7 +190,7 @@ ifstat: 'if' expr 'then' s1=stat ('else' s2=stat)? ;
 \bigskip
 
 ```java
-void ifstat(AST t) {
+Void ifstat(AST t) {
     if (eval(t.expr())) {
         eval(t.s1());
     } else {
@@ -289,7 +289,7 @@ varDecl: "var" ID ("=" expr)? ";" ;
 \bigskip
 
 ```java
-void varDecl(AST t) {
+Void varDecl(AST t) {
     // jede deklarierte Variable in aktuelles Environment packen
     String name = t.ID().getText();
 
@@ -318,7 +318,7 @@ assign: ID "=" expr;
 \bigskip
 
 ```java
-void assign(AST t) {
+Void assign(AST t) {
     String lhs = t.ID().getText();
     Object value = eval(t.expr());
 
@@ -366,7 +366,7 @@ block:  '{' stat* '}' ;
 \bigskip
 
 ```java
-void block(AST t) {
+Void block(AST t) {
     Environment prev = env;
     try {
         env = new Environment(env);
