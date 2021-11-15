@@ -254,6 +254,12 @@ Object funcCall(AST t) {
 ::: notes
 [Quelle: nach [@Nystrom2018], Kapitel "Functions"]{.origin}
 
+::: {.column width="35%"}
+![](images/callFun.png)
+:::
+
+
+
 Normalerweise wird beim Interpretieren eines Funktionsaufrufs der
 Funktionskörper (repräsentiert durch den entsprechenden AST-Teilbaum)
 durch einen rekursiven Aufruf von `eval` ausgewertet.
@@ -311,8 +317,6 @@ Zugriff auf das Attribut in der Klasse (bzw. der Instanz) angelegt werden.
 
 ## Klassen und Instanzen II
 
-![](images/classes.png)
-
 :::notes
 ```java
 class Klass implements Callable {
@@ -360,6 +364,10 @@ class Instance {
 ```
 
 [Quelle: nach [@Nystrom2018], Kapitel "Classes"]{.origin}
+
+::: {.column width="35%"}
+![](images/classesWOfunBind.png)
+:::
 
 Instanzen einer Klasse werden durch den funktionsartigen Aufruf der Klassen
 angelegt (parameterloser Konstruktor). Eine Instanz hält die Attribute
@@ -427,6 +435,10 @@ class Fun implements Callable {
 ```
 
 [[Hinweis: Python "`self`"]{.bsp}]{.slides}
+
+::: {.column width="35%"}
+![](images/classes.png)
+:::
 
 ::: notes
 [Quelle: nach [@Nystrom2018], Kapitel "Classes"]{.origin}

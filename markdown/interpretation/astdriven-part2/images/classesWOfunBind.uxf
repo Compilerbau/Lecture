@@ -25,7 +25,7 @@ set(name: String, value: Object): void
       <x>410</x>
       <y>380</y>
       <w>390</w>
-      <h>100</h>
+      <h>90</h>
     </coordinates>
     <panel_attributes>*Fun*
 --
@@ -33,7 +33,6 @@ decl: AST
 closure: Environment
 --
 call(interpr: Interpreter, args: List&lt;Object&gt;): Object
-bind(instance: Instance): Fun
 </panel_attributes>
     <additional_attributes/>
   </element>
