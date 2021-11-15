@@ -190,7 +190,7 @@ ifstat: 'if' expr 'then' s1=stat ('else' s2=stat)? ;
 \bigskip
 
 ```java
-Void ifstat(AST t) {
+void ifstat(AST t) {
     if (eval(t.expr())) {
         eval(t.s1());
     } else {
@@ -275,6 +275,10 @@ public class Interpreter extends BaseVisitor<Object> {
 
 [[Quelle: nach [@Nystrom2018], Kapitel "Functions"]{.origin}]{.notes}
 
+::: {.column width="35%"}
+![](images/interpreter.png)
+:::
+
 
 ## Ausführen einer Variablendeklaration
 
@@ -285,7 +289,7 @@ varDecl: "var" ID ("=" expr)? ";" ;
 \bigskip
 
 ```java
-Void varDecl(AST t) {
+void varDecl(AST t) {
     // jede deklarierte Variable in aktuelles Environment packen
     String name = t.ID().getText();
 
@@ -362,7 +366,7 @@ block:  '{' stat* '}' ;
 \bigskip
 
 ```java
-Void block(AST t) {
+void block(AST t) {
     Environment prev = env;
     try {
         env = new Environment(env);
