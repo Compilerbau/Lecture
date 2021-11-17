@@ -10,7 +10,7 @@ readings:
   - key: "Parr2014"
     comment: "Kapitel 6.4 und 8.4"
   - key: "Nystrom2018"
-    comment: "Kapitel 'A Tree-Walk Interpreter' "
+    comment: "Kapitel 'Functions' "
   - key: "Parr2010"
     comment: "Kapitel 8 und 9"
   - key: "Grune2012"
@@ -273,7 +273,7 @@ public class Interpreter extends BaseVisitor<Object> {
 }
 ```
 
-[[Quelle: nach [@Nystrom2018], Kapitel "Functions"]{.origin}]{.notes}
+[[Quelle: nach [@Nystrom2018], Kapitel "Functions", [Interpreter.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Interpreter.java)]{.origin}]
 
 ![](images/interpreter.png)
 
