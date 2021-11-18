@@ -65,7 +65,7 @@ Es gibt verschiedene Varianten, beispielsweise:
     *   Simuliert eine *Stack Machine*, d.h. hält alle (temporären) Werte auf einem Stack
     *   Arbeitet typischerweise auf bereits stark vereinfachtem Zwischencode (IR),
         etwa Bytecode
-	    :::
+	:::
 
 *   Register-basierte Interpreter
 
@@ -74,7 +74,7 @@ Es gibt verschiedene Varianten, beispielsweise:
         Prozessor-Registern
     *   Arbeitet typischerweise auf bereits stark vereinfachtem Zwischencode (IR),
         etwa Bytecode
-	    :::
+	:::
 
 ::: notes
 Weiterhin kann man Interpreter danach unterscheiden, ob sie interaktiv sind oder nicht.
