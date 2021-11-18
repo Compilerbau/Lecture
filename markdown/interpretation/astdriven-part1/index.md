@@ -9,8 +9,8 @@ readings:
     comment: "Kapitel 6"
   - key: "Parr2014"
     comment: "Kapitel 6.4 und 8.4"
-  - key: "Nystrom2018"
-    comment: "Kapitel 'Functions' "
+  - key: "Nystrom2021"
+    comment: "Kapitel 10 Functions "
   - key: "Parr2010"
     comment: "Kapitel 8 und 9"
   - key: "Grune2012"
@@ -236,7 +236,6 @@ float y;
 \pause
 
 ![](images/nested_envs.png)
-<!-- TODO (Quelle?) -->
 
 :::
 ::::::
@@ -273,7 +272,8 @@ public class Interpreter extends BaseVisitor<Object> {
 }
 ```
 
-[[Quelle: nach [@Nystrom2018], Kapitel "Functions", [Interpreter.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Interpreter.java)]{.origin}]
+[Quelle: nach [@Nystrom2021], [`Interpreter.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Interpreter.java#L21) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
+
 
 ![](images/interpreter.png)
 
@@ -332,7 +332,7 @@ class Environment {
 ```
 
 ::: notes
-[Quelle: nach [@Parr2010, S.235], nach [@Nystrom2018], Kapitel "Statements and State"]{.origin}
+[Quelle: nach [@Parr2010, S.235], nach [@Nystrom2021], [`Environment.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Environment.java#L38) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE)){.origin}
 
 Wenn wir bei der Traversierung des AST mit `eval()` bei einer Zuweisung
 vorbeikommen, also etwa `x = 7;` oder `x = wuppie + fluppie;`, dann wird
@@ -376,7 +376,7 @@ Void block(AST t) {
 ```
 
 ::: notes
-[Quelle: nach [@Nystrom2018], Kapitel "Statements and State"]{.origin}
+[Quelle: nach [@Nystrom2021], [`Interpreter.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Interpreter.java#L92) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
 Beim Interpretieren von Blöcken muss man einfach nur eine weitere
 Verschachtelungsebene für die Environments anlegen und darin dann
