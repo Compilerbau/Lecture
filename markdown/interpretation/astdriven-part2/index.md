@@ -9,8 +9,8 @@ readings:
     comment: "Kapitel 6"
   - key: "Parr2014"
     comment: "Kapitel 6.4 und 8.4"
-  - key: "Nystrom2018"
-    comment: "Kapitel 'A Tree-Walk Interpreter' "
+  - key: "Nystrom2021"
+    comment: "Kapitel Functions und Classes"
   - key: "Parr2010"
     comment: "Kapitel 8 und 9"
   - key: "Grune2012"
@@ -67,7 +67,8 @@ counter(); // "2".
 ::::::
 
 ::: notes
-[Quelle: nach [@Nystrom2018], Kapitel "Functions"]{.origin}
+[Quelle: nach [@Nystrom2021], Kapitel "Functions" ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
+
 
 Die Funktionsdeklaration muss im aktuellen Kontext abgelegt werden,
 dazu wird der AST-Teilbaum der Deklaration benötigt.
@@ -107,7 +108,7 @@ Void funcDecl(AST t) {
 ::::::
 
 ::: notes
-[Quelle: nach [@Nystrom2018], Kapitel "Functions"]{.origin}
+[Quelle: nach [@Nystrom2021], Kapitel "Functions", [`Function.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxFunction.java#L6)  ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
 Man definiert im aktuellen Environment den Funktionsnamen und hält dazu
 den aktuellen Kontext (aktuelles Environment) sowie den AST-Knoten mit
@@ -147,7 +148,8 @@ Object funcCall(AST t) {
 ```
 
 ::: notes
-[Quelle: nach [@Nystrom2018], Kapitel "Functions"]{.origin}
+
+[Quelle: nach [@Nystrom2021], [`Function.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxFunction.java#L57) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
 Zunächst wird die `ID` im aktuellen Kontext ausgewertet. In der obigen Grammatik
 ist dies tatsächlich nur ein Funktionsname, aber man könnte über diesen Mechanismus
@@ -212,7 +214,8 @@ Object funcCall(AST t) {
 ::::::
 
 ::: notes
-[Quelle: nach [@Nystrom2018], Kapitel "Functions"]{.origin}
+
+[Quelle: nach [@Nystrom2021], [`Return.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Return.java#L4), [`Function.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxFunction.java#L74) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
 Rückgabewerte für den Funktionsaufruf werden innerhalb von `block` berechnet,
 wo eine Reihe von Anweisungen interpretiert werden, weshalb `block` ursprünglich
@@ -252,7 +255,8 @@ Object funcCall(AST t) {
 ```
 
 ::: notes
-[Quelle: nach [@Nystrom2018], Kapitel "Functions"]{.origin}
+
+[Quelle: nach [@Nystrom2021], [`Callable.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxCallable.java#L6), [`Function.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxFunction.java#L6) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
 ![](images/callFun.png)
 
@@ -296,17 +300,17 @@ public Void classDef(AST t) {
         methods.put(m.ID().getText(), fn);
     }
 
-    Klass klass = new Klass(t.ID().getText(), methods);
-    env.define(t.ID().getText(), klass);
+    Clazz clazz = new Clazz(t.ID().getText(), methods);
+    env.define(t.ID().getText(), clazz);
 
     return null;
 }
 ```
 
 ::: notes
-[Quelle: nach [@Nystrom2018], Kapitel "Classes"]{.origin}
+[Quelle: nach [@Nystrom2021], [`Parser.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Parser.java#L78), ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
-**Anmerkung**: Diese Darstellung ist angelehnt an [@Nystrom2018, Kapitel "Classes"].
+**Anmerkung**: Diese Darstellung ist angelehnt an [@Nystrom2021, Kapitel "Classes"].
 Bei dieser Formulierung wird davon ausgegangen, dass Attribute zur Laufzeit durch
 Zugriff auf das Attribut in der Klasse (bzw. der Instanz) angelegt werden.
 :::
@@ -316,11 +320,11 @@ Zugriff auf das Attribut in der Klasse (bzw. der Instanz) angelegt werden.
 
 :::notes
 ```java
-class Klass implements Callable {
+class Clazz implements Callable {
     String name;
     Map<String, Fun> methods;
 
-    Klass(String name, Fun> methods) {
+    Clazz(String name, Fun> methods) {
         this.name = name;
         this.methods = methods;
     }
@@ -337,11 +341,11 @@ class Klass implements Callable {
     }
 }
 class Instance {
-    Klass klass;
+    Clazz clazz;
     Map<String, Object> fields = new HashMap<>();
 
-    Instance(Klass klass) {
-        this.klass = klass;
+    Instance(Clazz clazz) {
+        this.clazz = clazz;
     }
 
     Object get(String name) {
@@ -349,7 +353,7 @@ class Instance {
             return fields.get(name);
         }
 
-        Fun method = klass.findMethod(name);
+        Fun method = clazz.findMethod(name);
         if (method != null) return method.bind(this);
 
         throw new RuntimeError(name, "Undefined property");
@@ -360,7 +364,7 @@ class Instance {
 }
 ```
 
-[Quelle: nach [@Nystrom2018], Kapitel "Classes"]{.origin}
+[Quelle: nach [@Nystrom2021], [`Class.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxClass.java#L11), [`Instance.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxInstance.java#L7) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
 ![](images/classes.png)
 
@@ -406,10 +410,11 @@ Object setExpr(AST t) {
     return value;
 }
 ```
+[Quelle: nach [@Nystrom2021], Kapitel "Classes"]{.origin}
+
 :::
 
 ::: notes
-[Quelle: nach [@Nystrom2018], Kapitel "Classes"]{.origin}
 
 Beim Zugriff auf Attribute muss das Objekt im aktuellen Kontext evaluiert
 werden. Falls es eine Instanz von `Instance` ist, wird auf das Feld per
@@ -431,8 +436,9 @@ class Fun implements Callable {
 
 [[Hinweis: Python "`self`"]{.bsp}]{.slides}
 
+[Quelle: nach [@Nystrom2021], [`Function.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxFunction.java#L31), ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
+
 ::: notes
-[Quelle: nach [@Nystrom2018], Kapitel "Classes"]{.origin}
 
 Nach dem Interpretieren von Klassendefinitionen sind die Methoden in der Klasse
 selbst gespeichert, wobei der jeweilige `closure` auf den Klassenkontext zeigt.
