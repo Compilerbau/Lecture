@@ -8,7 +8,7 @@ readings:
     comment: "Kapitel 6"
   - key: "Parr2014"
     comment: "Kapitel 6.4 und 8.4"
-  - key: "Nystrom2018"
+  - key: "Nystrom2021"
     comment: "Kapitel 'A Tree-Walk Interpreter' "
   - key: "Parr2010"
     comment: "Kapitel 8 und 9"
@@ -65,7 +65,7 @@ Es gibt verschiedene Varianten, beispielsweise:
     *   Simuliert eine *Stack Machine*, d.h. hält alle (temporären) Werte auf einem Stack
     *   Arbeitet typischerweise auf bereits stark vereinfachtem Zwischencode (IR),
         etwa Bytecode
-	:::
+	    :::
 
 *   Register-basierte Interpreter
 
@@ -74,7 +74,7 @@ Es gibt verschiedene Varianten, beispielsweise:
         Prozessor-Registern
     *   Arbeitet typischerweise auf bereits stark vereinfachtem Zwischencode (IR),
         etwa Bytecode
-	:::
+	    :::
 
 ::: notes
 Weiterhin kann man Interpreter danach unterscheiden, ob sie interaktiv sind oder nicht.
