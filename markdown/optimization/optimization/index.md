@@ -496,8 +496,8 @@ r1 = r1 - 1
 
 Es wird ein Graph $G = (V, E)$ erzeugt mit
 
-$V = \{v \ \vert \ v\ ist\ eine\ benötigte\ Variable\}$ und
-$E = \{(v_1, v_2)\ \vert \ v_1\ und\ v_2\ sind \ zur \ selben\ Zeit \ "lebendig"\}$
+$V = \{v \ \vert \ v \text{ ist eine benötigte Variable}\}$ und
+$E = \{(v_1, v_2)\ \vert \ v_1  \text{ und } v_2 \text{ sind zur selben Zeit "lebendig"}\}$
 
 Heuristisch wird jetzt die minimale Anzahl von Farben für Knoten bestimmt, bei der benachbarte Knoten nicht dieselbe Farbe bekommen.
 
