@@ -3,7 +3,7 @@ type: lecture-bc
 title: "Optimierung und Datenflussanalyse"
 menuTitle: "Optimierung"
 author: "BC George (FH Bielefeld)"
-weight: 6
+weight: 1
 readings:
   - key: "Güting1999"
     comment: "Kapitel 8"
