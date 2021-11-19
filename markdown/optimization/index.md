@@ -250,7 +250,7 @@ Diese Umformungen können zusätzlich mittels Peephole-Optimierung in späteren 
 
 Hier werden sog. *DAG*s benötigt:
 
-Ein DAG  *directed acyclic graph * ist ein gerichteter, kreisfreier Graph.
+Ein DAG  *directed acyclic graph* ist ein gerichteter, kreisfreier Graph.
 
 DAGs werden für Berechnungen in Basisblöcken generiert, um gemeinsame Teilausdrücke zu erkennen.
 
