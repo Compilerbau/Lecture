@@ -13,6 +13,9 @@ readings:
     comment: "Kapitel 9"
   - key: "Mogensen2017"
     comment: "Kapitel 8, 10 und 11"
+attachments:
+  - link: "https://github.com/Compilerbau/AnnotatedSlides/blob/master/optimization.ann.pdf"
+    name: "Annotierte Folien: Optimierung und Datenflussanalyse"
 ---
 
 
