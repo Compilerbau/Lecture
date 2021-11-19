@@ -1,7 +1,7 @@
 ---
 type: lecture-bc
 title: "Optimierung und Datenflussanalyse"
-menuTitle: "Optimierung"
+menuTitle: "Optimierung u. Datenflussanalyse"
 author: "BC George (FH Bielefeld)"
 weight: 1
 readings:
