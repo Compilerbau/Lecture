@@ -35,16 +35,14 @@ der anderen Seite könnte aus dem AST ein **Zwischenformat** erzeugt werden, dar
 Optimierungen vorgenommen werden, daraus ein weiteres Zwischenformat erzeugt werden,
 darauf weitere Optimierungen vorgenommen werden, ..., bis schließlich nach mehreren
 Zwischenstufen das Zielformat erzeugt wird.
-
-Typischerweise verbringt man mit diesem Teil alleine ganze Semester ... Für uns ist
-das eher eine Art Ausblick :)
 :::
 
 
-## AST (Beispiel Pandoc)
+## AST als Zwischencode (Beispiel Pandoc)
 
 ::: notes
-Häufig wird der AST selbst als Zwischencode verwendet. Ein Beispiel dafür ist Pandoc.
+Häufig wird der AST selbst als Zwischencode verwendet. Ein Beispiel dafür ist
+[Pandoc](https://pandoc.org/).
 :::
 
 ![](images/pandoc.png)
