@@ -238,9 +238,8 @@ der Addition aus `%4` und dem Wert `35` in eine weitere neue Variable `%5`
 geschrieben. Der Wert dieser Variablen wird dann auf dem Stack in `%3` gespeichert
 (`y = x+35`).
 
-Vgl. auch [LLVM Language Reference Manual](http://llvm.org/docs/LangRef.html) und
+Vgl. auch [LLVM Language Reference Manual](https://llvm.org/docs/LangRef.html) und
 [blog.regehr.org/archives/1453](https://blog.regehr.org/archives/1453).
-
 :::
 
 
