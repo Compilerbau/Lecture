@@ -120,7 +120,44 @@ Zuweisung eine neue temporäre Variable generiert, d.h. jede im IR-Code verwende
 Variable) hat genau eine Zuweisung. Dies wirkt sich günstig auf spezielle Optimierungen aus.
 :::
 
-**TODO CODE**
+:::::: columns
+::: {.column width="40%"}
+```
+i = i+1;
+if (a[i] >= v) {
+    i = 0;
+}
+```
+:::
+::: {.column width="40%"}
+```
+    t1 = i + 1
+    i  = t1
+    t2 = i * 8
+    t3 = a + t2
+    if t3 >= v goto L1
+    goto L2
+L1: i  = 0
+L2: ...
+```
+:::
+::::::
+
+::: notes
+Im obigen Beispiel wurde davon ausgegangen, dass die Einträge im Array `a` 8 Bit breit sind. Das
+muss der Compiler wissen, um jeweils den korrekten Offset zu benutzen.
+
+Außerdem könnte man den Code gleich noch optimieren und die Anzahl der Sprünge reduzieren:
+```
+    t1 = i + 1
+    i  = t1
+    t2 = i * 8
+    t3 = a + t2
+    if t3 < v goto L
+    i  = 0
+L:  ...
+```
+:::
 
 
 ## LLVM IR
