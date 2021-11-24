@@ -35,6 +35,9 @@ der anderen Seite könnte aus dem AST ein **Zwischenformat** erzeugt werden, dar
 Optimierungen vorgenommen werden, daraus ein weiteres Zwischenformat erzeugt werden,
 darauf weitere Optimierungen vorgenommen werden, ..., bis schließlich nach mehreren
 Zwischenstufen das Zielformat erzeugt wird.
+
+Nachfolgend betrachten wir verschiedene Beispiele, wie das Zwischenformat aussehen
+kann.
 :::
 
 
