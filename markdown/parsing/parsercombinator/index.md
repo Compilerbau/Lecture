@@ -14,84 +14,70 @@ attachments:
 
 
 # PEG Parser
+
 ## Generative Systeme vs Recognition basierte Systeme
 
--   Generative Systeme:
-    -   Sprachen definiert durch Regeln, die rekursiv Sätze/Strings
-        der Sprache generieren
-    -   weit verbreitet in der theoretischen Modellierung
-        (Chomsky-Hierarchie, CFG, reguläre Ausdrücke)
-    -   Einsatz auch in der Informatik (Ausdrucksstärke)
-    -   Nachteil:
-        -   maschinenorientierte Sprachen sollten präzise und eindeutig
-            sein
-        -   Mehrdeutigkeiten lassen sich in CFGs oft nicht verhindern
-        -   generelles Parsen von CFGs nicht in linearer Zeit möglich
--   Recognition basierte Systeme:
-    -   Sprachen definiert in Form von Regeln/Prädikaten, die
-        entscheiden ob ein gegebener String Teil der Sprache ist
-    -   Beispiele:
-        -   Parsing Expression Grammar (PEG)
+- Generative Systeme:
+    - formale Definition von Sprachen durch Regeln, die rekursive
+      angewendet Sätze/Strings der Sprache generieren
+	- Beispiel: Sprachen aus der Chomsky Hierarchie definiert durch
+      kontextfreie Grammatiken (CFGs) und reguläre Ausdrücke (REs)
+- Recognition basierte Systeme:
+    - Sprachen definiert in Form von Regeln/Prädikaten, die
+      entscheiden ob ein gegebener String Teil der Sprache ist
+    - Beispiel: Parsing Expression Grammar (PEG)
+- Beispiel:
+    - generative: $\lbrace s in \mathrm{a}^{\ast} | s = (\mathrm{aa})^{n}\rbrace$
+    - recognition-based: $\lbrace s in \mathrm{a}^{\ast} | \left| s \right| \mod 2 = 0 \rbrace$
+    - gleiche Sprache
+    - Unterschied eher subtil
 
-## Eigenschaften
+## Motivation
 
--   CFGs sind unter Umständen mehrdeutig
-    -   C++ Syntax enthält z.B. Mehrdeutigkeiten, die sich mit einer
-        CFG nicht auflösen lassen
-    -   Lambda abstractions, `let` expressions und conditionals in
-        Haskell
--   PEGs haben keine Mehrdeutigkeiten
--   formal ähnlich zu CFG mit RE-Features (EBNF)
--   **Kernunterschied**: priorisierter Auswahloperator (`/` statt `|`)
-    -   wählt immer den ersten Match
--   formale Beschreibung eines TD Parsers
-    -   PEG Parser sind meist Recursive-Decent-Parser
--   parsebar in linearer Zeit (Tabellen,Memoisierung) mit
-    unbegrenztem Lookahead
-    -   Packrat Parsing
-    -   beliebiges Backtracking
--   benötigen mehr Speicher
-    -   Packrat Parsing lädt gesamtes Programm in den Speicher
-    -   Speicher ist heute aber keine so große Einschränkung mehr
-    -   zu parsende Programme meist im sub-MB Bereich
--   PEGs sind wahrscheinlich andere Sprachklasse als CFGs
-    -   PEGs können manche nicht-CFG Sprachen darstellen (\(a^n b^n
-                c^n\))
-    -   PEGs können alle det. LR(k)-Sprachen darstellen
-    -   ungelöste Frage: Sind alle CFGs durch PEGs darstellbar?
--   bietet neue Möglichkeiten für das Syntax-Design von Sprachen
-    -   aber auch neue Möglichkeiten für Fehler durch Unachtsamkeit
--   Syntaxbeschreibung: keine Unterscheidung zwischen Hierarchie und
-    lexikalischen Elementen nötig
-    -   für gewöhnlich Hierarchie durch CFG und lex. Elem. durch RE
-        beschrieben
-        -   CFGs ungeeignet für lex. Elemente (keine Greedy-Matching,
-            keine 'negative' Syntax)
-        -   REs: keine rekursive Syntax
-    -   Tokens können hierarchische Eigenschaften haben
-        (verschachtelte Kommentare)
-    -   beliebige Escape-Sequenzen möglich
--   Herausfordrung bei PEGs:
-    -   sind Alternativen vertauschbar ohne die Sprache zu ändern?
-    -   Analog zur Frage der Mehrdeutihkeit bei CFGs
+- Chomsky (CFGs + REs):
+    - ursprünglich für natürliche Sprachen
+    - adaptiert für maschinenorientierte Sprachen (Eleganz,
+      Ausdrucksstärke)
+    - Nachteile:
+    	- maschinenorientierte Sprachen sollten präzise und eindeutig sein
+        - CFGs erlauben mehrdeutige Syntax (gut für natürliche Sprachen)
+        - Mehrdeutigkeiten schwer oder gar nicht zu verhindern
+          (z.B. C++ Syntax, Lambda abstractions, `let` expressions und
+          conditionals in Haskell)
+        - Parsing generell nur in super-linearer Zeit
+
+- PEG:
+    - Stilistisch ähnlich zu CFGs mit REs (EBNF)
+    - **Kernunterschied**: priorisierter Auswahloperator (`/` statt `|`)
+        - Alternative Muster werden der Reihe nach getestet
+        - erste passende Alternative wird verwendet
+        - Mehrdeutigkeiten werden dadurch unmöglich
+    - Beispiel:
+        - EBNF: $A \rightarrow a\;b\; |\; a$ und $A \rightarrow a\;
+          |\; a\; b$ sind äquivalent
+        - PEG: $A \leftarrow a\;b\; /\; a$ und $A \leftarrow a\;
+          /\; a\; b$ sind verschieden
+    - nähe an der Funktionsweise von Parsern (Erkennen von Eingaben)
+        - PEGs können als formale Beschreibung eines Top-Down-Parsers
+          betrachtet werden
 
 ## Definition
 
 **Definition**: Eine Parsing Expression Grammar (PEG) ist ein
  4-Tuple \(G = (V_N, V_T, R, e_S)\) mit
 
--   \(V_N\) eine endliche Menge von Nicht-Terminalen
--   \(V_T\) eine endliche Menge von Terminalen
--   \(R\) eine endliche Menge von Regeln
--   \(e_S\) eine `Parsing Expression`, die als `Start Expression`
-    bezeichnet wird.
+- \(V_N\) eine endliche Menge von Nicht-Terminalen
+- \(V_T\) eine endliche Menge von Terminalen
+- \(R\) eine endliche Menge von Regeln
+- \(e_S\) eine *Parsing Expression*, die als *Start Expression*
+  bezeichnet wird.
 
 Weiterhin gilt \(V_N \cap V_T = \emptyset\). Jede Regel \(e \in R\)
 ist ein Paar \((A,e)\) geschrieben als \(A \leftarrow e\) mit \(A \in
-    V_N\) und \(e\) eine `Parsing Expression`. Für jedes Nicht-Terminal
+    V_N\) und \(e\) eine *Parsing Expression*. Für jedes Nicht-Terminal
 \(A\) existierte genau ein \(e\) mit \(A \leftarrow e \in R\).
 
-`Parsing Expression` werden rekursiv definiert: Seien \(e\), \(e_1\)
+*Parsing Expressions* werden rekursiv definiert: Seien \(e\), \(e_1\)
 und \(e_2\) Parsing Expressions, dann gilt dies auch für
 
 1.  den leeren String \(\varepsilon\)
@@ -105,9 +91,40 @@ und \(e_2\) Parsing Expressions, dann gilt dies auch für
 Operatoren wie `.`, `+`, `?` und `&` lassen sind syntaktischer
 Zucker und lassen sich auf die obigen Definitionen zurückführen.
 
-## Beispiele
+## PEG Eigenschaften
 
+- parsebar in linearer Zeit mit unbegrenztem Lookahead (Packrat
+  Parsing)
+- benötigen mehr Speicher
+    - Packrat Parsing lädt gesamtes Programm in den Speicher
+    - Speicher ist heute aber keine so große Einschränkung mehr
+- PEGs sind wahrscheinlich andere Sprachklasse als CFGs
+    - PEGs können manche nicht-CFG Sprachen darstellen (\(a^n b^n
+      c^n\))
+    - PEGs können alle det. LR(k)-Sprachen darstellen
+    - ungelöste Frage: Sind alle CFGs durch PEGs darstellbar?
+- bietet neue Möglichkeiten für das Syntax-Design von Sprachen
+    - aber auch neue Möglichkeiten für Fehler durch Unachtsamkeit
+- Syntaxbeschreibung: keine Unterscheidung zwischen Hierarchie und
+  lexikalischen Elementen nötig
+    - für gewöhnlich Hierarchie durch CFG und lex. Elem. durch RE
+      beschrieben
+        - CFGs ungeeignet für lex. Elemente (keine Greedy-Matching,
+          keine 'negative' Syntax)
+        - REs: keine rekursive Syntax
+    - Tokens können hierarchische Eigenschaften haben (verschachtelte
+      Kommentare)
+    - beliebige Escape-Sequenzen möglich
+- Herausfordrung bei PEGs:
+    - sind Alternativen vertauschbar ohne die Sprache zu ändern?
+    - Analog zur Frage der Mehrdeutihkeit bei CFGs
+
+## Beispiele
 ### PEG Syntax als PEG
+
+Selbstbeschreibung der PEG ASCII-Syntax. Die Grammatik besteht aus
+Regeln der Form $A \leftarrow e$ wobei $A$ ein Nichtterminal und $e$
+eine *Parsing Expression* ist.
 
 ```
 # Hierarchical syntax
@@ -170,11 +187,16 @@ EndOfLine  <- '\r
 ```
 
 ### Verschachtelte Kommentare
+
+Verschachtelte Kommentare wie in *Pascal* sind möglich, da die lexikalische Syntax von PEGs nicht auf REs beschränkt ist:
+
 ```
 Comment <- '(*' (Comment / !'*)' .)* '*)'
 ```
 
 ### Beliebige Escape-Sequenzen
+Escape-Sequenzen haben meist nur eine stark eingeschränkte Syntax. Eine PEG kann beliebige Ausdrücke in eine Escape-Sequenz erlauben:
+
 ```
 Expression <- ...
 Primary    <- Literal / ...
@@ -183,7 +205,9 @@ Char       <- '\\(' Expression ')'
             / !'\\' .
 ```
 
-### C++ Templates
+Zum Beispiel könnte man dadurch in einer Escape-Sequenz auf Variablen zugreifen: `\(var)`.
+
+### Verschachtelte Template Typen in C++
 
 Bekanntes Problem mit Template-Definitionen in C++: Leerzeichen zwischen Winkelklammern notig um Interpretation als Pipe-Operator (`>>`) zu verhindern:
 ```
@@ -204,7 +228,10 @@ RSHIFT    <- '>>' Spacing
 
 ### Dangling-Else
 
-In CFGs sind verschachtelte if-then(-else) Ausdrücke mehrdeutig (Shift-Reduce-Konflikt). Dies wird häufig durch informelle Meta-Regeln oder Erweiterung der Syntax aufgelöst. In PEGs sorgt der prioriserende Auswahloperator für das korrekte Verhalten.
+In CFGs sind verschachtelte if-then(-else) Ausdrücke mehrdeutig
+(Shift-Reduce-Konflikt). Dies wird häufig durch informelle Meta-Regeln
+oder Erweiterung der Syntax aufgelöst. In PEGs sorgt der prioriserende
+Auswahloperator für das korrekte Verhalten.
 
 ```
 Statement <- IF Cond THEN Statement ELSE Statement
@@ -214,7 +241,8 @@ Statement <- IF Cond THEN Statement ELSE Statement
 
 ### Nicht-CFG-Sprachen
 
-Ein klassisches Beispiel einer nicht-CFG Sprache ist $a^n b^n c^n$. Diese Sprache lässt sich mit der folgenden PEG darstellen:
+Ein klassisches Beispiel einer nicht-CFG Sprache ist $a^n b^n
+c^n$. Diese Sprache lässt sich mit der folgenden PEG darstellen:
 
 \(G = (\lbrace A,B,D \rbrace, \lbrace a,b,c \rbrace, R, D)\)
     
@@ -224,10 +252,13 @@ Ein klassisches Beispiel einer nicht-CFG Sprache ist $a^n b^n c^n$. Diese Sprach
    D &\leftarroe& \& (A\; !b)\; a^{\ast}\; B\; !.
 \end{eqnarray*}
 
-Regel D lässt sich dabei wie folgt lesen: Matche und Verbrauche eine beliebig lange Sequenz von a's ($a^{\ast}$) gefolgt von einer Sequenz, die von Regel B gematcht wird und danach keine weiteren Zeichen hat ($!.$) aber nur wenn die Sequenz auch von \(A\; !b\) gematcht wird. Der erste Teil trifft zu wenn in der Sequenz auf $n$ b's gleich viele c's folgen während der zweite Teil zutrifft wenn $n$ b's auf $n$ a's folgen.
-
-
-
+Regel D lässt sich dabei wie folgt lesen: Matche und Verbrauche eine
+beliebig lange Sequenz von a's ($a^{\ast}$) gefolgt von einer Sequenz,
+die von Regel B gematcht wird und danach keine weiteren Zeichen hat
+($!.$) aber nur wenn die Sequenz auch von \(A\; !b\) gematcht
+wird. Der erste Teil trifft zu wenn in der Sequenz auf $n$ b's gleich
+viele c's folgen während der zweite Teil zutrifft wenn $n$ b's auf $n$
+a's folgen.
 
 ## Links
 
