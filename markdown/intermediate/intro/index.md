@@ -371,33 +371,33 @@ int main() {
 }
 ```
 :::
-::: {.column width="45%"}
-```{.gnuassembler size="footnotesize"}
-	.file	"hello.c"
-	.text
-	.globl	main
-	.type	main, @function
+::: {.column width="55%"}
+```{.gnuassembler size="scriptsize"}
+    .file   "hello.c"
+    .text
+    .globl  main
+    .type   main, @function
 main:
 .LFB0:
-	.cfi_startproc
-	pushq	%rbp
-	.cfi_def_cfa_offset 16
-	.cfi_offset 6, -16
-	movq	%rsp, %rbp
-	.cfi_def_cfa_register 6
-	movl	$7, -8(%rbp)
-	movl	-8(%rbp), %eax
-	addl	$35, %eax
-	movl	%eax, -4(%rbp)
-	movl	$0, %eax
-	popq	%rbp
-	.cfi_def_cfa 7, 8
-	ret
-	.cfi_endproc
+    .cfi_startproc
+    pushq   %rbp
+    .cfi_def_cfa_offset 16
+    .cfi_offset 6, -16
+    movq    %rsp, %rbp
+    .cfi_def_cfa_register 6
+    movl    $7, -8(%rbp)
+    movl    -8(%rbp), %eax
+    addl    $35, %eax
+    movl    %eax, -4(%rbp)
+    movl    $0, %eax
+    popq    %rbp
+    .cfi_def_cfa 7, 8
+    ret
+    .cfi_endproc
 .LFE0:
-	.size	main, .-main
-	.ident	"GCC: (Ubuntu 7.3.0-27ubuntu1~18.04) 7.3.0"
-	.section	.note.GNU-stack,"",@progbits
+    .size       main, .-main
+    .ident      "GCC: (Ubuntu 7.3.0-27ubuntu1~18.04) 7.3.0"
+    .section    .note.GNU-stack,"",@progbits
 ```
 :::
 ::::::
@@ -425,19 +425,19 @@ Ansonsten kann man die Bedeutung erraten:
 `movl %eax, -4(%rbp)` entspricht `mem[rbp-4] = eax`.
 
 Vgl. auch
-[cs.brown.edu/courses/cs033/docs/guides/x64_cheatsheet.pdf](https://cs.brown.edu/courses/cs033/docs/guides/x64_cheatsheet.pdf),
-[www.hep.wisc.edu/~pinghc/x86AssmTutorial.htm](http://www.hep.wisc.edu/~pinghc/x86AssmTutorial.htm)
+[cs.brown.edu/courses/cs033/docs/guides/x64_cheatsheet.pdf](https://cs.brown.edu/courses/cs033/docs/guides/x64_cheatsheet.pdf)
 und [en.wikibooks.org/wiki/X86_Assembly/GAS_Syntax](https://en.wikibooks.org/wiki/X86_Assembly/GAS_Syntax).
 :::
 
 
 ## Wrap-Up
 
-*   Compiler generieren aus AST Zwischencode (*IC*)
+*   Compiler generieren aus AST Zwischencode ("*IC*" oder "*IR*")
 *   Kein allgemein definiertes Format, große Bandbreite:
+    -   AST als IR
     -   LLVM IR
-    -   Diverse Arten von Bytecode
     -   Drei-Adressen-Code
+    -   Diverse Arten von Bytecode
     -   Assemblercode
 
 
