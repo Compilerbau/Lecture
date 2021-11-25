@@ -263,16 +263,10 @@ a's folgen.
 ## Links
 
 - [Wiki](https://en.wikipedia.org/wiki/Parsing_expression_grammar)
-
 - [Urspr. Veröffentlichung](https://bford.info/pub/lang/peg.pdf)
-
 - [PEG Parsers](https://medium.com/@gvanrossum_83706/peg-parsers-7ed72462f97c) (Guido van Rossum)
-
 - [New PEG Parser for CPython](https://www.python.org/dev/peps/pep-0617/) (Python Enhancement Proposal)
-
 - [Parsing Expression Grammars: A Recognition-Based Syntactic Foundation](https://bford.info/pub/lang/peg/)
-
-  
 
 # Operator Precedence Parsing
 
