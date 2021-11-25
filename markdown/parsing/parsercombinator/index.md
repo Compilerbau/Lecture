@@ -262,11 +262,17 @@ a's folgen.
 
 ## Links
 
--   [Wiki](https://en.wikipedia.org/wiki/Parsing_expression_grammar)
--   [Urspr. Veröffentlichung](https://bford.info/pub/lang/peg.pdf)
--   [PEG Parsers](https://medium.com/@gvanrossum_83706/peg-parsers-7ed72462f97c) (Guido van Rossum)
--   [New PEG Parser for CPython](https://www.python.org/dev/peps/pep-0617/) (Python Enhancement Proposal)
--   [Parsing Expression Grammars: A Recognition-Based Syntactic Foundation](https://bford.info/pub/lang/peg/)
+- [Wiki](https://en.wikipedia.org/wiki/Parsing_expression_grammar)
+
+- [Urspr. Veröffentlichung](https://bford.info/pub/lang/peg.pdf)
+
+- [PEG Parsers](https://medium.com/@gvanrossum_83706/peg-parsers-7ed72462f97c) (Guido van Rossum)
+
+- [New PEG Parser for CPython](https://www.python.org/dev/peps/pep-0617/) (Python Enhancement Proposal)
+
+- [Parsing Expression Grammars: A Recognition-Based Syntactic Foundation](https://bford.info/pub/lang/peg/)
+
+  
 
 # Operator Precedence Parsing
 
@@ -286,26 +292,34 @@ a's folgen.
     -   Effizienz (Backtracking)
 -   Überleitung zu Operator Precedence
     -   benutzt sowohl Rekursion als auch Schleifen
+    -   verbesserung zu RD
 
 ## Prinzip und Eigenschaften
 
 Prinzip:
 
 -   [Wikipedia](https://en.wikipedia.org/wiki/Pratt_parser)
--   [Simple but Powerful Pratt Parsing](https://matklad.github.io/2020/04/13/simple-but-powerful-pratt-parsing.html) (Rust)
 -   [Pratt Parsing](https://dev.to/jrop/pratt-parsing)
 
 Eigenschaften:
 
 -   Recognition basiert (insofern das der Parser nicht aus einer
     Grammatik generiert sondern von Hand geschrieben wird)
--   Verwendet Vorschautoken
+    
+- Verwendet Vorschautoken
+
 -   Interpretiert [Operator-Precedence Grammatik](https://en.wikipedia.org/wiki/Operator-precedence_grammar)
     -   Untermenge der deterministischen kontextfreien Grammatiken
+    
+- Simple zu Programmieren und kann die Operator-Tabelle während der Programmlaufzeit konsultieren
+
+- Verwendet eine Reihenfolge(precedence) für die Operatoren
+
+  
 
 ## Methoden
 
-1.  Klassische Methode
+1.  Klassische Methode (RD)
 
     -   siehe [Parsing Expressions by Recursive Descent](https://www.engr.mun.ca/~theo/Misc/exp_parsing.htm)
     -   neues Nicht-Terminal für jeden Precedence-Level
@@ -314,46 +328,187 @@ Eigenschaften:
             Geschwindigkeit des Parsers
         -   Operatoren und Precedence Levels fest in Grammatik eingebaut
 
-2.  Dijkstras Shunting Yard Algorithmus (SY)
+2. Dijkstras Shunting Yard Algorithmus (SY)
 
-    -   [Shunting-yard algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm) (Wikipedia)
-    -   Beispiel: [A recursive descent parser with an infix expression evaluator](https://eli.thegreenplace.net/2009/03/20/a-recursive-descent-parser-with-an-infix-expression-evaluator) (Python)
-    -   Verwendet Stacks für Operatoren und Argumente anstatt Rekursion
+   - [Shunting-yard algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm) (Wikipedia)
 
-3.  Top Down Operator Precedence (TDOP)
+   - Beispiel: [A recursive descent parser with an infix expression evaluator](https://eli.thegreenplace.net/2009/03/20/a-recursive-descent-parser-with-an-infix-expression-evaluator) (Python)
 
-    -   [Operator-precedence parser](https://en.wikipedia.org/wiki/Operator-precedence_parser) (Wikipedia)
-    -   [Pratt Parsing Index and Updates](https://www.oilshell.org/blog/2017/03/31.html) (Sammlung von Artikeln/Posts)
-    -   Beispiel: [Top-Down operator precedence parsing](https://eli.thegreenplace.net/2010/01/02/top-down-operator-precedence-parsing/) (Python)
-    -   Generalisierung von Precedence Climbing
+   - Verwendet Stacks für Operatoren und Argumente anstatt Rekursion![Shunting Yard Beispiel](images/Shunting_yard.png)
 
-4.  Precedence Climbing (PC)
+   - ```
+     while there are tokens to be read:
+         read a token
+         if the token is:
+         - a number:
+             put it into the output queue
+         - a function:
+             push it onto the operator stack 
+         - an operator o1:
+             while (
+                 there is an operator o2 other than the left parenthesis at the top
+                 of the operator stack, and (o2 has greater precedence than o1
+                 or they have the same precedence and o1 is left-associative)
+             ):
+                 pop o2 from the operator stack into the output queue
+             push o1 onto the operator stack
+         - a left parenthesis (i.e. "("):
+             push it onto the operator stack
+         - a right parenthesis (i.e. ")"):
+             while the operator at the top of the operator stack is not a left parenthesis:
+                 {assert the operator stack is not empty}
+                 /* If the stack runs out without finding a left parenthesis, then there are mismatched 				parentheses. */
+                 pop the operator from the operator stack into the output queue
+             {assert there is a left parenthesis at the top of the operator stack}
+             pop the left parenthesis from the operator stack and discard it
+             if there is a function token at the top of the operator stack, then:
+                 pop the function from the operator stack into the output queue
+     /* After the while loop, pop the remaining items from the operator stack into the output queue. */
+     while there are tokens on the operator stack:
+         /* If the operator token on the top of the stack is a parenthesis, then there are mismatched parentheses. */
+         {assert the operator on top of the stack is not a (left) parenthesis}
+         pop the operator from the operator stack onto the output queue
+     ```
 
-    -   Beispiel: [Parsing expressions by precedence climbing](https://eli.thegreenplace.net/2012/08/02/parsing-expressions-by-precedence-climbing) (Python)
-    -   [Precedence Climbing is Widely Used](http://www.oilshell.org/blog/2017/03/30.html)
-    -   Climb **down** the precedence levels (Norvell)
+     
 
-5.  Vergleich
+3. Top Down Operator Precedence (TDOP) Pratt Parsing
 
-    -   Shunting Yard, TDOP und Precedence Climbing sind im
-        wesentlichen der gleiche Algorithmus:
-        -   [From Precedence Climbing to Pratt Parsing](https://www.engr.mun.ca/~theo/Misc/pratt_parsing.htm) (Norvell)
-        -   [Pratt Parsing and Precedence Climbing Are the Same Algorithm](https://www.oilshell.org/blog/2016/11/01.html)
-    -   Im Gegensatz zum klassichen RD ist das Hinzufügen/Ändern von
-        Operatoren einfach
-        -   RD: Hinzufügen/Ändern von Funktionen im Parser
-        -   SY/TDOP/PC: Daten liegen in Tabellenform vor
-    -   Mischformen möglich (siehe Shunting Yard in [Parsing Expressions by Recursive Descent](https://www.engr.mun.ca/~theo/Misc/exp_parsing.htm))
-    -   Precedence Climbing wird am häufigsten eingesetzt
+   - [Operator-precedence parser](https://en.wikipedia.org/wiki/Operator-precedence_parser) (Wikipedia)
+
+   - [Pratt Parsing Index and Updates](https://www.oilshell.org/blog/2017/03/31.html) (Sammlung von Artikeln/Posts)
+
+   - [Simple but Powerful Pratt Parsing](https://matklad.github.io/2020/04/13/simple-but-powerful-pratt-parsing.html) (Rust)
+
+   - Generalisierung von Precedence Climbing
+
+   - Verwendet eine Gewichtung (binding Power) statt einer Reihenfolge (precedence)
+
+   - infix notation: a = b - c
+
+     -   led (left denotation)
+
+   - prefix from: a = -b
+
+     -   nud (Null denotation)
+
+   - hat eine Handler für jede Operation
+
+     -   operator_add_token, operator_mul_token, operator_sub_token, operator_pow_token
+     -   operator_lparen_token, operator_rparen_token
+
+   - Beispiel: [Top-Down operator precedence parsing](https://eli.thegreenplace.net/2010/01/02/top-down-operator-precedence-parsing/) (Python)
+
+   - ```
+     def expression(rbp=0):
+         global token
+         t = token
+         token = next()
+         left = t.nud()
+         while rbp < token.lbp:  # TERMINATION CONDITION
+             t = token
+             token = next()
+             left = t.led(left)  # results in recursive call
+         return left
+     ```
+
+   - right Associactive Operators?
+
+     -   Der Parser behandelt die folgende Potenzierungsoperatoren als Unterausdrücke des ersten
+     -   indem wir den Ausdruck im Handler der Potenzierung mit einem rbp aufrufen, der niedriger ist als der lbp der Potenzierung
+
+     ```
+     class operator_pow_token(object):
+         lbp = 30
+         def led(self, left):
+            return left ** expression(30 - 1)  # RECURSIVE CALL
+     ```
+
+   -   [Pratt Parsing and Precedence Climbing Are the Same Algorithm](https://www.oilshell.org/blog/2016/11/01.html)
+
+4. Precedence Climbing (PC)
+
+   - Beispiel: [Parsing expressions by precedence climbing](https://eli.thegreenplace.net/2012/08/02/parsing-expressions-by-precedence-climbing) (Python)
+
+   - [Precedence Climbing is Widely Used](http://www.oilshell.org/blog/2017/03/30.html)
+
+   - Climb **down** the precedence levels (Norvell)
+
+   - Die Operatoren stehen mit Gewicht und Association (left, right) in einer Tabelle
+
+   - Pseudocode
+   
+     - ```
+       compute_expr(min_prec):
+         result = compute_atom()    // Atom ist eine Nummer oder eine eingeklammerte Expression
+         curtoken = next()	
+         while curtoken is a binary operator with precedence >= min_prec:
+           prec, assoc = precedence and associativity of current token
+           if assoc is left:
+             next_min_prec = prec + 1
+           else:
+             next_min_prec = prec
+           rhs = compute_expr(next_min_prec)
+           result = compute operator(result, rhs)
+       
+         return result
+       ```
+     
+     - ```
+       2 + 3 ^ 2 * 3 + 4
+       ```
+     
+     -   ```
+         * compute_expr(1)                # Initial call on the whole expression
+           * compute_atom() --> 2
+           * compute_expr(2)              # Loop entered, operator '+'
+             * compute_atom() --> 3
+             * compute_expr(3)
+               * compute_atom() --> 2
+               * result --> 2             # Loop not entered for '*' (prec < '^')
+             * result = 3 ^ 2 --> 9
+             * compute_expr(3)
+               * compute_atom() --> 3
+               * result --> 3             # Loop not entered for '+' (prec < '*')
+             * result = 9 * 3 --> 27
+           * result = 2 + 27 --> 29
+           * compute_expr(2)              # Loop entered, operator '+'
+             * compute_atom() --> 4
+             * result --> 4               # Loop not entered - end of expression
+           * result = 29 + 4 --> 33
+         ```
+
+5. Vergleich
+
+   -   Shunting Yard, TDOP und Precedence Climbing sind im
+       wesentlichen der gleiche Algorithmus:
+   -   Im Gegensatz zum klassichen RD ist das Hinzufügen/Ändern von
+       Operatoren einfach
+       -   RD: Hinzufügen/Ändern von Funktionen im Parser
+       -   SY/TDOP/PC: Daten liegen in Tabellenform vor
+   -   Mischformen möglich (siehe Shunting Yard in [Parsing Expressions by Recursive Descent](https://www.engr.mun.ca/~theo/Misc/exp_parsing.htm))
+   -   Shunting Yard verwendet einen Stack anstatt Rekrusive 
+   -   Precedence Climbing wird am häufigsten eingesetzt
+   -   Pratt Parsing vs. Precedence Climbing
+       -   [Pratt Parsing and Precedence Climbing Are the Same Algorithm](https://www.oilshell.org/blog/2016/11/01.html)
+       -   [From Precedence Climbing to Pratt Parsing](https://www.engr.mun.ca/~theo/Misc/pratt_parsing.htm) (Norvell)
+       -   Eine While Schleife mit rekursiven Aufruf mit Abbruchbedingung (binding Power/precedence)
+       -   Rechts Assoziativität 
+           -   In precedence climbing: next_min_prec = prec + 1
+           -   In Pratt Parsing: rechte binding power rbp auf lbp-1 gesetzt und der rekursive Aufruf mit ihr durchgeführt
+       -   Klammern
+           -   In precedence climbing in der rekursiven Parsing Funktion behandelt (siehe _gen_tokens() und compute_atom())
+           -   In Pratt Parsing können sie als nud-Funktion für das Token ( behandelt werden
 
 ## Anwendung
 
 -   [Haskell](https://en.wikipedia.org/wiki/Haskell_(programming_language))
     -   Benutzerdefinierte Infix-Operatoren mit individueller
         Assoziativität und Vorrang-Regeln
+    -   Ein Beispiel für das konsultieren der Operator während der Laufzeit
 -   [Raku](https://en.wikipedia.org/wiki/Raku_(programming_language))
     -   im Verbund mit zwei weiteren Parsern (Speed-up beim Parsen von
-        arithmetischen Ausfrücken)
+        arithmetischen Ausdrücken)
 -   Taschenrechner
     -   Umwandlung Infix-Notation (menschenlesbar) in umgekehrte
         polnische Notation (optimiert für Auswertung)
@@ -365,15 +520,31 @@ Eigenschaften:
 -   [Pratt Parsers: Expression Parsing Made Easy](http://journal.stuffwithstuff.com/2011/03/19/pratt-parsers-expression-parsing-made-easy/) (Java)
 -   [Top Down Operator Precedence](http://crockford.com/javascript/tdop/tdop.html) (JavaScript)
 
-
 # Parser Kombinatoren
+
+## Prinzip 
+
++ High-order Funktion
+  + Funktionen als Parameter
+  + Funktion als Rückgabewert
+  + Programmiersprachen mit first-class functions
++ Verwendet mehrere Parser als Input und gibt einen Kombinierten Parser output als Rückgabewert zurück
+  + parse Tree
+  + Indice der Stelle im String die zum stoppen des Parsers geführt hat
++ Die Output der verwendeten Parser:
+  + Success: {result, restString}
+  + failure: Error Message und Position
++ Beispiel:
+  + eine Produktionsregel einer kontextfreien Grammatik kann meherer Alternativen haben, diese Alternativen können aus einer Folge von Nichtterminalen und/oder Terminalen bestehen oder auch nur aus einem einzigen Nichtterminalen und/oder Terminalen oder aus einem leeren String. 
+  + Wenn nun ein Simpler Parser für jede Alternative verfügbar ist kann man diese miteinander Kombinieren, um alle Alternativen abzudecken
+
+​	
 
 ## Links
 
 -   [Wiki](https://en.wikipedia.org/wiki/Parser_combinator)
 -   [Introduction to parser combinators](https://gist.github.com/yelouafi/556e5159e869952335e01f6b473c4ec1)
 -   [Parser Combinators: a Walkthrough](https://hasura.io/blog/parser-combinators-walkthrough/)
-
 
 
 
