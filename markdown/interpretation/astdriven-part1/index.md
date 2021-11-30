@@ -260,7 +260,7 @@ public class Interpreter extends BaseVisitor<Object> {
 }
 ```
 
-[Quelle: Idee nach [@Nystrom2021] und angepasst auf ANTLR-Visitoren, [Interpreter.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Interpreter.java#L21) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
+[Quelle: Eigener Code basierend auf einer Idee nach [@Nystrom2021] und angepasst auf ANTLR-Visitoren, [Interpreter.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Interpreter.java#L21) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
 
 ## Ausführen einer Variablendeklaration
@@ -314,7 +314,7 @@ class Environment:
         else: raise RuntimeError("Undefined variable '" + n + "'.")
 ```
 
-[Quelle: Idee nach [@Nystrom2021], [Environment.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Environment.java#L38) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
+[Quelle: Eigener Code basierend auf einer Idee nach [@Nystrom2021], [Environment.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Environment.java#L38) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
 ::: notes
 Wenn wir bei der Traversierung des AST mit `eval()` bei einer Zuweisung
@@ -358,7 +358,7 @@ def block(AST t):
     return None;
 ```
 
-[Quelle: Idee nach [@Nystrom2021], [Interpreter.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Interpreter.java#L92) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
+[Quelle: Eigener Code basierend auf einer Idee nach [@Nystrom2021], [Interpreter.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Interpreter.java#L92) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
 ::: notes
 Beim Interpretieren von Blöcken muss man einfach nur eine weitere
