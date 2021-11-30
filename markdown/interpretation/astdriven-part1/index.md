@@ -1,7 +1,7 @@
 ---
 type: lecture-cg
 title: "AST-basierte Interpreter: Basics"
-menuTitle: "AST-basierte Interpreter: Basics"
+menuTitle: "AST-basierte Interpreter 1"
 author: "Carsten Gips (FH Bielefeld)"
 weight: 2
 readings:
