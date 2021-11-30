@@ -7,7 +7,7 @@ hidden: true
 
 Üblicherweise können Funktionen auf die Umgebung zurückgreifen, in der die Definition der
 Funktion erfolgt ist ("*Closure*"). Deshalb wird beim Interpretieren einer Funktionsdefinition
-der jeweilige AST-Knoten (mit dem Block des Funktionskörpers) und der aktuellen Umgebung in
+der jeweilige AST-Knoten (mit dem Block des Funktionskörpers) und die aktuelle Umgebung in
 einer Struktur zusammengefasst. Zusätzlich muss in der aktuellen Umgebung der Name der Funktion
 zusammen mit der eben erzeugten Struktur ("Funktionsobjekt") als Wert definiert werden.
 
@@ -32,5 +32,5 @@ Instanzobjekt wird in dieser Umgebung definiert als "`this`" oder "`self`". Ansc
 ein neues Funktionsobjekt mit der eben erzeugten Umgebung und dem Funktions-AST erzeugt und
 zurückgeliefert. Dieses neue Funktionsobjekt wird dann wie eine normale Funktion aufgerufen
 (interpretiert, s.o.). Der Zugriff in der Methode auf die Attribute der Klasse erfolgt dann
-über `this`, welches in der Closure der Funktion nun definiert ist und auf das Instanzobjekt
-mit den Attributen verweist.
+über `this` bzw. `self`, welche in der Closure der Funktion nun definiert sind und auf das
+Instanzobjekt mit den Attributen verweisen.
