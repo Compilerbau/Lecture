@@ -27,8 +27,8 @@ attachments:
       entscheiden ob ein gegebener String Teil der Sprache ist
     - Beispiel: Parsing Expression Grammar (PEG)
 - Beispiel:
-    - generative: $\lbrace s in \mathrm{a}^{\ast} | s = (\mathrm{aa})^{n}\rbrace$
-    - recognition-based: $\lbrace s in \mathrm{a}^{\ast} | \left| s \right| \mod 2 = 0 \rbrace$
+    - generative: $\lbrace s \in \mathrm{a}^{\ast} | s = (\mathrm{aa})^{n}\rbrace$
+    - recognition-based: $\lbrace s \in \mathrm{a}^{\ast} | \left| s \right| \mod 2 = 0 \rbrace$
     - gleiche Sprache
     - Unterschied eher subtil
 
@@ -64,32 +64,31 @@ attachments:
 ## Definition
 
 **Definition**: Eine Parsing Expression Grammar (PEG) ist ein
- 4-Tuple \(G = (V_N, V_T, R, e_S)\) mit
+ 4-Tuple $G = (V_N, V_T, R, e_S)$ mit
 
-- \(V_N\) eine endliche Menge von Nicht-Terminalen
-- \(V_T\) eine endliche Menge von Terminalen
-- \(R\) eine endliche Menge von Regeln
-- \(e_S\) eine *Parsing Expression*, die als *Start Expression*
+- $V_N$ eine endliche Menge von Nicht-Terminalen
+- $V_T$ eine endliche Menge von Terminalen
+- $R$ eine endliche Menge von Regeln
+- $e_S$ eine *Parsing Expression*, die als *Start Expression*
   bezeichnet wird.
 
-Weiterhin gilt \(V_N \cap V_T = \emptyset\). Jede Regel \(e \in R\)
-ist ein Paar \((A,e)\) geschrieben als \(A \leftarrow e\) mit \(A \in
-    V_N\) und \(e\) eine *Parsing Expression*. Für jedes Nicht-Terminal
-\(A\) existierte genau ein \(e\) mit \(A \leftarrow e \in R\).
+Weiterhin gilt $V_N \cap V_T = \emptyset$. Jede Regel $e \in R$
+ist ein Paar $(A,e)$ geschrieben als $A \leftarrow e$ mit $A \in
+    V_N$ und $e$ eine *Parsing Expression*. Für jedes Nicht-Terminal
+$A$ existierte genau ein $e$ mit $A \leftarrow e \in R$.
 
-*Parsing Expressions* werden rekursiv definiert: Seien \(e\), \(e_1\)
-und \(e_2\) Parsing Expressions, dann gilt dies auch für
+*Parsing Expressions* werden rekursiv definiert: Seien $e$, $e_1$
+und $e_2$ Parsing Expressions, dann gilt dies auch für
 
-1.  den leeren String \(\varepsilon\)
-2.  jedes Terminal \(a \in V_T\)
-3.  jedes Nicht-Terminal \(A \in V_N\)
-4.  die Sequenz \(e_1 e_2\)
-5.  die priorisierte Option \(e_1 / e_2\)
-6.  beliebige Wiederholungen \(e^{\ast}\)
-7.  Nicht-Pradikate \(!e\)
+1.  den leeren String $\varepsilon$
+2.  jedes Terminal $a \in V_T$
+3.  jedes Nicht-Terminal $A \in V_N$
+4.  die Sequenz $e_1 e_2$
+5.  die priorisierte Option $e_1 / e_2$
+6.  beliebige Wiederholungen $e^{\ast}$
+7.  Nicht-Pradikate $!e$
 
-Operatoren wie `.`, `+`, `?` und `&` lassen sind syntaktischer
-Zucker und lassen sich auf die obigen Definitionen zurückführen.
+Operatoren wie `.`, `+`, `?` und `&` sind syntaktischer Zucker und lassen sich auf die obigen Definitionen zurückführen.
 
 ## PEG Eigenschaften
 
@@ -244,18 +243,18 @@ Statement <- IF Cond THEN Statement ELSE Statement
 Ein klassisches Beispiel einer nicht-CFG Sprache ist $a^n b^n
 c^n$. Diese Sprache lässt sich mit der folgenden PEG darstellen:
 
-\(G = (\lbrace A,B,D \rbrace, \lbrace a,b,c \rbrace, R, D)\)
-    
-\begin{eqnarray*}
-   A &\leftarroe& a\;A\;b\; /\; \varepsilon\\
-   B &\leftarroe& b\;B\;c\; /\; \varepsilon\\
-   D &\leftarroe& \& (A\; !b)\; a^{\ast}\; B\; !.
-\end{eqnarray*}
+$G = (\lbrace A,B,D \rbrace, \lbrace a,b,c \rbrace, R, D)$
+
+$A \leftarrow a\;A\;b\; /\; \varepsilon$
+
+$B \leftarrow b\;B\;c\; /\; \varepsilon$
+
+$D \leftarrow \& (A\; !b)\; a^{\ast}\; B\; !.$
 
 Regel D lässt sich dabei wie folgt lesen: Matche und Verbrauche eine
 beliebig lange Sequenz von a's ($a^{\ast}$) gefolgt von einer Sequenz,
 die von Regel B gematcht wird und danach keine weiteren Zeichen hat
-($!.$) aber nur wenn die Sequenz auch von \(A\; !b\) gematcht
+($!.$) aber nur wenn die Sequenz auch von $A\; !b$ gematcht
 wird. Der erste Teil trifft zu wenn in der Sequenz auf $n$ b's gleich
 viele c's folgen während der zweite Teil zutrifft wenn $n$ b's auf $n$
 a's folgen.
