@@ -53,7 +53,7 @@ x = f(x);
 
 \smallskip
 
-*   Speichern von Daten: Name+Wert vs. Adresse+Wert  [Erinnerung: Data-Segment und Stack im virtuellen Speicher]{.notes}
+*   Speichern von Daten: Name+Wert vs. Adresse+Wert  [(Erinnerung: Data-Segment und Stack im virtuellen Speicher)]{.notes}
 *   Ausführen von Anweisungen  [Text-Segment im virtuellen Speicher; hier über den AST]{.notes}
 *   Aufruf von Funktionen und Methoden  [Kontextwechsel nötig: Was ist von wo aus sichtbar?]{.notes}
 
@@ -63,23 +63,19 @@ x = f(x);
 
 ## AST-basierte Interpreter: Visitor-Dispatcher
 
-```java
-public Object eval(AST t) {
-    switch ( t.getType() ) {
-        case Parser.BLOCK : block(t); break;
-        case Parser.ASSIGN : assign(t); break;
-        case Parser.RETURN : ret(t); break;
-        case Parser.IF : ifstat(t); break;
-        case Parser.CALL : return call(t);
-        case Parser.ADD : return add(t);
-        case Parser.MUL : return op(t);
-        case Parser.INT : return Integer.parseInt(t.getText());
-        case Parser.ID : return load(t);
-        default : // catch unhandled node types
-            ...
-    }
-    return null;
-}
+```python
+def eval(AST t):
+    if   t.type == Parser.BLOCK  : block(t)
+    elif t.type == Parser.ASSIGN : assign(t)
+    elif t.type == Parser.RETURN : ret(t)
+    elif t.type == Parser.IF     : ifstat(t)
+    elif t.type == Parser.CALL   : return call(t)
+    elif t.type == Parser.ADD    : return add(t)
+    elif t.type == Parser.MUL    : return mul(t)
+    elif t.type == Parser.INT    : return Integer.parseInt(t.getText())
+    elif t.type == Parser.ID     : return load(t)
+    else : ...  # catch unhandled node types
+    return None;
 ```
 
 [[Hinweis "Read-Eval-Print-Loop" (REPL)]{.bsp}]{.slides}
@@ -102,7 +98,7 @@ genutzt. Allerdings liefern Ausdrücke einen Wert zurück (erkennbar am `return`
 im jeweiligen `switch/case`-Zweig), während Anweisungen keinen Wert liefern.
 
 
-In den Beispielen auf den Folien wird davon ausgegangen, dass ein komplettes
+In den folgenden Beispielen wird davon ausgegangen, dass ein komplettes
 Programm eingelesen, geparst, vorverarbeitet und dann interpretiert wird.
 
 Für einen interaktiven Interpreter würde man in einer Schleife die Eingaben
@@ -129,7 +125,7 @@ verarbeitete Eingaben zurückgreifen können. Durch die Form der Schleife
     mappen.
     :::
 
-\smallskip
+\bigskip
 
 *   Literale auswerten:
 
@@ -137,8 +133,8 @@ verarbeitete Eingaben zurückgreifen können. Durch die Form der Schleife
     INT: [0-9]+ ;
     ```
 
-    ```java
-    case Parser.INT : return Integer.parseInt(t.getText());
+    ```python
+    elif t.type == Parser.INT : return Integer.parseInt(t.getText())
     ```
 
     ::: notes
@@ -148,7 +144,7 @@ verarbeitete Eingaben zurückgreifen können. Durch die Form der Schleife
     werden.
     :::
 
-\smallskip
+\bigskip
 
 *   Ausdrücke auswerten:
 
@@ -156,12 +152,11 @@ verarbeitete Eingaben zurückgreifen können. Durch die Form der Schleife
     add: e1=expr "+" e2=expr ;
     ```
 
-    ```java
-    Object add(AST t) {
-        Object lhs = eval(t.e1());
-        Object rhs = eval(t.e2());
-        return (double)lhs + (double)rhs;
-    }
+    ```python
+    def add(AST t):
+        lhs = eval(t.e1())
+        rhs = eval(t.e2())
+        return (double)lhs + (double)rhs
     ```
 
     ::: notes
@@ -183,16 +178,11 @@ ifstat: 'if' expr 'then' s1=stat ('else' s2=stat)? ;
 
 \bigskip
 
-```java
-Void ifstat(AST t) {
-    if (eval(t.expr())) {
-        eval(t.s1());
-    } else {
-        if (t.s2() != null) {
-            eval(t.s2());
-        }
-    }
-}
+```python
+def ifstat(AST t):
+    if eval(t.expr()): eval(t.s1())
+    else:
+        if t.s2(): eval(t.s2())
 ```
 
 ::: notes
@@ -250,14 +240,18 @@ Strukturen für das Halten von Variablen und Werten aufzubauen.
 ::: notes
 Eine mögliche Implementierung für einen Interpreter basierend auf einem
 ANTLR-Visitor ist nachfolgend gezeigt.
+
+**Hinweis**: Bei der Ableitung des `BaseVisitor<T>` muss der Typ `T`
+festgelegt werden. Dieser fungiert als Rückgabetyp für die Visitor-Methoden.
+Entsprechend können alle Methoden nur einen gemeinsamen (Ober-) Typ zurückliefern,
+weshalb man sich an der Stelle oft mit `Object` behilft und dann manuell
+den konkreten Typ abfragen und korrekt casten muss.
 :::
 
 ```java
 public class Interpreter extends BaseVisitor<Object> {
     private AST root;
-
-    final Environment globals = new Environment();
-    private Environment env = globals;
+    private Environment env = new Environment();
 
     public Interpreter(AST t) {
         super();
@@ -266,10 +260,8 @@ public class Interpreter extends BaseVisitor<Object> {
 }
 ```
 
-[Quelle: nach [@Nystrom2021], [`Interpreter.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Interpreter.java#L21) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
+[Quelle: Idee nach [@Nystrom2021] und angepasst auf ANTLR-Visitoren, [`Interpreter.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Interpreter.java#L21) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
-
-![](images/interpreter.png)
 
 ## Ausführen einer Variablendeklaration
 
@@ -279,18 +271,17 @@ varDecl: "var" ID ("=" expr)? ";" ;
 
 \bigskip
 
-```java
-Void varDecl(AST t) {
-    // jede deklarierte Variable in aktuelles Environment packen
-    String name = t.ID().getText();
+```python
+def varDecl(AST t):
+    # deklarierte Variable (String)
+    name = t.ID().getText()
 
-    Object value = null; // TODO: Typ der Variablen beachten (Defaultwert)
-    if (t.expr() != null) value = eval(t.expr());
+    value = None;  # TODO: Typ der Variablen beachten (Defaultwert)
+    if t.expr(): value = eval(t.expr())
 
-    env.define(name, value);
+    env.define(name, value)
 
-    return null;
-}
+    return None
 ```
 
 ::: notes
@@ -308,26 +299,24 @@ assign: ID "=" expr;
 
 \bigskip
 
-```java
-Void assign(AST t) {
-    String lhs = t.ID().getText();
-    Object value = eval(t.expr());
+```python
+def assign(AST t):
+    lhs = t.ID().getText()
+    value = eval(t.expr())
 
-    env.assign(lhs, value);
+    env.assign(lhs, value)  # Semantik!
 }
 
-class Environment {
-    void assign(String n, Object v) {
-        if (values.containsKey(n)) { values.put(n, v); return; }
-        if (enclosing != null) { enclosing.assign(n, v); return; }
-        throw new RuntimeError("Undefined variable '" + n + "'.");
-    }
-}
+class Environment:
+    def assign(String n, Object v):
+        if values[n]: values[n] = v
+        elif enclosing: enclosing.assign(n, v)
+        else: raise RuntimeError("Undefined variable '" + n + "'.")
 ```
 
-::: notes
-[Quelle: nach [@Parr2010, S.235], nach [@Nystrom2021], [`Environment.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Environment.java#L38) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE)){.origin}
+[Quelle: Idee nach [@Nystrom2021], [`Environment.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Environment.java#L38) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE)){.origin}
 
+::: notes
 Wenn wir bei der Traversierung des AST mit `eval()` bei einer Zuweisung
 vorbeikommen, also etwa `x = 7;` oder `x = wuppie + fluppie;`, dann wird
 zunächst im aktuellen Environment die rechte Seite der Zuweisung ausgewertet
@@ -356,22 +345,22 @@ block:  '{' stat* '}' ;
 
 \bigskip
 
-```java
-Void block(AST t) {
-    Environment prev = env;
-    try {
-        env = new Environment(env);
-        for (AST s : t.stat()) {
-            eval(s);
-        }
-    } finally { env = prev; }
-    return null;
-}
+```python
+def block(AST t):
+    Environment prev = env
+    AST s
+
+    try:
+        env = Environment(env)
+        for s in t.stat(): eval(s)
+    finally: env = prev
+
+    return None;
 ```
 
-::: notes
-[Quelle: nach [@Nystrom2021], [`Interpreter.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Interpreter.java#L92) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
+[Quelle: Idee nach [@Nystrom2021], [`Interpreter.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Interpreter.java#L92) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
+::: notes
 Beim Interpretieren von Blöcken muss man einfach nur eine weitere
 Verschachtelungsebene für die Environments anlegen und darin dann
 die Anweisungen eines Blockes auswerten ...
@@ -407,7 +396,4 @@ werden (`finally`-Block).
 ![](https://licensebuttons.net/l/by-sa/4.0/88x31.png)
 
 Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
-
-### Exceptions
-*   TODO (what, where, license)
 :::
