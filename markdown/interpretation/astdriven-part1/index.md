@@ -64,7 +64,7 @@ x = f(x);
 ## AST-basierte Interpreter: Visitor-Dispatcher
 
 ```python
-def eval(AST t):
+def eval(self, AST t):
     if   t.type == Parser.BLOCK  : block(t)
     elif t.type == Parser.ASSIGN : assign(t)
     elif t.type == Parser.RETURN : ret(t)
@@ -153,10 +153,10 @@ verarbeitete Eingaben zurückgreifen können. Durch die Form der Schleife
     ```
 
     ```python
-    def add(AST t):
+    def add(self, AST t):
         lhs = eval(t.e1())
         rhs = eval(t.e2())
-        return (double)lhs + (double)rhs
+        return (double)lhs + (double)rhs  # Semantik!
     ```
 
     ::: notes
@@ -179,7 +179,7 @@ ifstat: 'if' expr 'then' s1=stat ('else' s2=stat)? ;
 \bigskip
 
 ```python
-def ifstat(AST t):
+def ifstat(self, AST t):
     if eval(t.expr()): eval(t.s1())
     else:
         if t.s2(): eval(t.s2())
@@ -248,16 +248,12 @@ weshalb man sich an der Stelle oft mit `Object` behilft und dann manuell
 den konkreten Typ abfragen und korrekt casten muss.
 :::
 
-```java
-public class Interpreter extends BaseVisitor<Object> {
-    private AST root;
-    private Environment env = new Environment();
-
-    public Interpreter(AST t) {
-        super();
-        root = t;
-    }
-}
+```python
+class Interpreter(BaseVisitor<Object>):
+    __init__(self, AST t):
+        BaseVisitor<Object>.__init__(self)
+        self.root = t
+        self.env = Environment()
 ```
 
 [Quelle: Eigener Code basierend auf einer Idee nach [@Nystrom2021] und angepasst auf ANTLR-Visitoren, [Interpreter.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Interpreter.java#L21) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
@@ -272,14 +268,14 @@ varDecl: "var" ID ("=" expr)? ";" ;
 \bigskip
 
 ```python
-def varDecl(AST t):
+def varDecl(self, AST t):
     # deklarierte Variable (String)
     name = t.ID().getText()
 
     value = None;  # TODO: Typ der Variablen beachten (Defaultwert)
     if t.expr(): value = eval(t.expr())
 
-    env.define(name, value)
+    self.env.define(name, value)
 
     return None
 ```
@@ -300,18 +296,18 @@ assign: ID "=" expr;
 \bigskip
 
 ```python
-def assign(AST t):
+def assign(self, AST t):
     lhs = t.ID().getText()
     value = eval(t.expr())
 
-    env.assign(lhs, value)  # Semantik!
+    self.env.assign(lhs, value)  # Semantik!
 }
 
 class Environment:
-    def assign(String n, Object v):
-        if values[n]: values[n] = v
-        elif enclosing: enclosing.assign(n, v)
-        else: raise RuntimeError("Undefined variable '" + n + "'.")
+    def assign(self, String n, Object v):
+        if self.values[n]: self.values[n] = v
+        elif self.enclosing: self.enclosing.assign(n, v)
+        else: raise RuntimeError(n, "undefined variable")
 ```
 
 [Quelle: Eigener Code basierend auf einer Idee nach [@Nystrom2021], [Environment.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Environment.java#L38) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
@@ -346,14 +342,13 @@ block:  '{' stat* '}' ;
 \bigskip
 
 ```python
-def block(AST t):
-    Environment prev = env
-    AST s
+def block(self, AST t):
+    prev = self.env
 
     try:
-        env = Environment(env)
+        self.env = Environment(self.env)
         for s in t.stat(): eval(s)
-    finally: env = prev
+    finally: self.env = prev
 
     return None;
 ```
