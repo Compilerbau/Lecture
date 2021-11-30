@@ -84,9 +84,9 @@ funcCall : ID '(' exprList? ')' ;
 ::: {.column width="55%"}
 
 ```python
-def funcDecl(AST t):
-    fn = Fun(t, env)
-    env.define(t.ID().getText(), fn)
+def funcDecl(self, AST t):
+    fn = Fun(t, self.env)
+    self.env.define(t.ID().getText(), fn)
 ```
 
 :::
@@ -126,16 +126,16 @@ funcCall : ID '(' exprList? ')' ;
 \bigskip
 
 ```python
-def funcCall(AST t):
+def funcCall(self, AST t):
     fn = (Fun)eval(t.ID())
     args = [eval(a)  for a in t.exprList()]
 
-    prev = env;  env = Environment(fn.closure)
+    prev = self.env;  self.env = Environment(fn.closure)
     for i in range(args.size()):
-        env.define(fn.decl.params()[i].getText(), args[i])
+        self.env.define(fn.decl.params()[i].getText(), args[i])
 
     eval(fn.decl.block())
-    env = prev
+    self.env = prev
 ```
 
 [Quelle: Eigener Code basierend auf einer Idee nach [@Nystrom2021], [LoxFunction.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxFunction.java#L57) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
@@ -166,7 +166,7 @@ Funktionsauswertung zurück.
 \vspace{28mm}
 
 ```python
-def funcCall(AST t):
+def funcCall(self, AST t):
     ...
 
     eval(fn.decl.block())
@@ -184,10 +184,10 @@ def funcCall(AST t):
 class ReturnEx(RuntimeException):
     __init__(self, v): self.value = v
 
-def return(AST t):
+def return(self, AST t):
     raise ReturnEx(eval(t.expr()))
 
-def funcCall(AST t):
+def funcCall(self, AST t):
     ...
     erg = None
     try: eval(fn.decl.block())
@@ -221,25 +221,23 @@ die Exception erneut werfen.
 
 ```python
 class Callable:
-    def call(Interpreter i, List<Object> a): pass
+    def call(self, Interpreter i, List<Object> a): pass
 class Fun(Callable): ...
-
 class NativePrint(Fun):
-    def call(Interpreter i, List<Object> a):
+    def call(self, Interpreter i, List<Object> a):
         for o in a: print a  # nur zur Demo, hier sinnvoller Code :-)
 
-# Im Interpreter:
-env.define("print", NativePrint())
+# Im Interpreter (Initialisierung):
+self.env.define("print", NativePrint())
 
-def funcCall(AST t):
+def funcCall(self, AST t):
     ...
-#    prev = env;  env = Environment(fn.closure)
+#    prev = self.env;  self.env = Environment(fn.closure)
 #    for i in range(args.size()): ...
-#    eval(fn.decl.block()); env = prev
+#    eval(fn.decl.block()); self.env = prev
     fn.call(self, args)
     ...
 ```
-
 
 [Quelle: Eigener Code basierend auf einer Idee nach [@Nystrom2021], [LoxCallable.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxCallable.java#L6), [LoxFunction.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxFunction.java#L6) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
@@ -278,14 +276,14 @@ classDef : "class" ID "{" funcDecl* "}" ;
 \bigskip
 
 ```python
-def classDef(AST t):
+def classDef(self, AST t):
     methods = HashMap<String, Fun>()
     for m in t.funcDecl():
-        fn = Fun(m, env)
+        fn = Fun(m, self.env)
         methods[m.ID().getText()] = fn
 
-    clazz = Clazz(t.ID().getText(), methods)
-    env.define(t.ID().getText(), clazz)
+    clazz = Clazz(methods)
+    self.env.define(t.ID().getText(), clazz)
 ```
 
 [Quelle: Eigener Code basierend auf einer Idee nach [@Nystrom2021], [Interpreter.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Interpreter.java#L115), ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
@@ -298,15 +296,13 @@ Für Attribute müssten ähnliche Konstrukte implementiert werden.
 
 ## Klassen und Instanzen II
 
-:::notes
-```python
+``` {.python size="footnotesize"}
 class Clazz(Callable):
-    __init__(self, String name, Map<String, Fun> methods):
-        self.name = name
+    __init__(self, Map<String, Fun> methods):
         self.methods = methods
 
     def call(self, Interpreter i, List<Object> a):
-        self.inst = Instance(self);  return self.inst
+        return Instance(self)
 
     def findMethod(self, String name):
         return self.methods[name]
@@ -315,17 +311,15 @@ class Instance:
     __init__(self, Clazz clazz):
         self.clazz = clazz
 
-    def get(String name):
+    def get(self, String name):
         method = self.clazz.findMethod(name)
         if method != None: return method.bind(self)
-
-        raise RuntimeError(name, "Undefined property")
+        raise RuntimeError(name, "undefined method")
 ```
 
 [Quelle: Eigener Code basierend auf einer Idee nach [@Nystrom2021], [LoxClass.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxClass.java#L11), [LoxInstance.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxInstance.java#L7) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
-![](images/classes.png)
-
+:::notes
 Instanzen einer Klasse werden durch den funktionsartigen "Aufruf" der Klassen
 angelegt (parameterloser Konstruktor). Eine Instanz hält die Attribute (hier
 nicht gezeigt) und eine Referenz auf die Klasse, um später an die Methoden
@@ -342,7 +336,7 @@ getExpr : obj "." ID ;
 \bigskip
 
 ```python
-def getExpr(AST t):
+def getExpr(self, AST t):
     obj = eval(t.obj())
 
     if isinstance(obj, Instance):
@@ -362,7 +356,7 @@ interner Hash-Map zugriffen; sonst Exception.
 
 ```python
 class Fun(Callable):
-    def bind(Instance i):
+    def bind(self, Instance i):
         e = Environment(self.closure)
         e.define("this", i)
         e.define("self", i)
