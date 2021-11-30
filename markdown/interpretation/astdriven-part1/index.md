@@ -45,7 +45,7 @@ x = f(x);
 :::
 ::: {.column width="70%"}
 
-\vspace{3mm}
+\vspace{7mm}
 
 *   Aufbauen des AST  [... => Lexer+Parser]{.notes}
 *   Auflösen von Symbolen/Namen  [... => Symboltabellen, Resolving]{.notes}
@@ -93,7 +93,7 @@ Hier wird passend zum aktuellen AST-Knoten die passende Methode des Interpreters
 aufgerufen.
 
 **Hinweis**: Im obigen Beispiel wird nicht zwischen der Auswertung von
-Ausdrücken und Anweisungen unterschieden, es wird die selbe Methode `eval`
+Ausdrücken und Anweisungen unterschieden, es wird die selbe Methode `eval()`
 genutzt. Allerdings liefern Ausdrücke einen Wert zurück (erkennbar am `return`
 im jeweiligen `switch/case`-Zweig), während Anweisungen keinen Wert liefern.
 
@@ -125,7 +125,7 @@ verarbeitete Eingaben zurückgreifen können. Durch die Form der Schleife
     mappen.
     :::
 
-\bigskip
+\smallskip
 
 *   Literale auswerten:
 
@@ -144,7 +144,7 @@ verarbeitete Eingaben zurückgreifen können. Durch die Form der Schleife
     werden.
     :::
 
-\bigskip
+\smallskip
 
 *   Ausdrücke auswerten:
 
@@ -201,7 +201,7 @@ müsste.
 :::::: columns
 ::: {.column width="25%"}
 
-\vspace{4mm}
+\vspace{1mm}
 
 ```c
 int x = 42;
