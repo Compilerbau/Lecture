@@ -328,42 +328,28 @@ Eigenschaften:
 
    - Beispiel: [A recursive descent parser with an infix expression evaluator](https://eli.thegreenplace.net/2009/03/20/a-recursive-descent-parser-with-an-infix-expression-evaluator) (Python)
 
-   - Verwendet Stacks für Operatoren und Argumente anstatt Rekursion![Shunting Yard Beispiel](images/Shunting_yard.png)
+   - Verwendet Stacks für Operatoren und Argumente anstatt Rekursion![Shunting Yard Beispiel](images/shuntingyardStack.png)
 
    - ```
      while there are tokens to be read:
          read a token
-         if the token is:
-         - a number:
-             put it into the output queue
-         - a function:
-             push it onto the operator stack 
-         - an operator o1:
-             while (
-                 there is an operator o2 other than the left parenthesis at the top
-                 of the operator stack, and (o2 has greater precedence than o1
-                 or they have the same precedence and o1 is left-associative)
-             ):
-                 pop o2 from the operator stack into the output queue
-             push o1 onto the operator stack
-         - a left parenthesis (i.e. "("):
-             push it onto the operator stack
-         - a right parenthesis (i.e. ")"):
-             while the operator at the top of the operator stack is not a left parenthesis:
-                 {assert the operator stack is not empty}
-                 /* If the stack runs out without finding a left parenthesis, then there are mismatched 				parentheses. */
-                 pop the operator from the operator stack into the output queue
-             {assert there is a left parenthesis at the top of the operator stack}
-             pop the left parenthesis from the operator stack and discard it
-             if there is a function token at the top of the operator stack, then:
-                 pop the function from the operator stack into the output queue
-     /* After the while loop, pop the remaining items from the operator stack into the output queue. */
-     while there are tokens on the operator stack:
-         /* If the operator token on the top of the stack is a parenthesis, then there are mismatched parentheses. */
-         {assert the operator on top of the stack is not a (left) parenthesis}
-         pop the operator from the operator stack onto the output queue
+         if the token is a number:
+           output.add(token)
+         if the token is an operator:
+           if operator is a bracket:
+           	if left bracket:
+           		stack.put(token)
+           	else:
+           		check if left bracket is in stack
+           		while stack.top != left bracket:
+           			output.add(stack.pop())	
+           		output.add(stack.pop())	 // pop left bracket
+           else:
+              if token.precedence < stack.top.precedence:
+                  output.add(stack.pop())        
+              stack.put(token)         
      ```
-
+     
      
 
 3. Top Down Operator Precedence (TDOP) Pratt Parsing
@@ -378,15 +364,34 @@ Eigenschaften:
 
    - Verwendet eine Gewichtung (binding Power) statt einer Reihenfolge (precedence)
 
-   - infix notation: a = b - c
+     - lbp = left Binding Power
+     - rbp= Right Binding Power
 
-     -   led (left denotation)
+   - Die Tokenhandler behandeln Notationen unterschiedlich
 
-   - prefix from: a = -b
+     - infix notation: a = b - c
 
-     -   nud (Null denotation)
+       - led (left denotation)
 
-   - hat eine Handler für jede Operation
+     - prefix from: a = -b
+
+       - nud (Null denotation)
+
+     - ```
+       class operator_sub_token(object):
+           lbp = 10
+           def nud(self):
+               return -expression(100)
+           def led(self, left):
+               return left - expression(10)
+               
+       class operator_mul_token(object):
+           lbp = 20
+           def led(self, left):
+               return left * expression(20)
+       ```
+
+   - hat eine Tokenhandler für jede Operation
 
      -   operator_add_token, operator_mul_token, operator_sub_token, operator_pow_token
      -   operator_lparen_token, operator_rparen_token
@@ -403,7 +408,7 @@ Eigenschaften:
              t = token
              token = next()
              left = t.led(left)  # results in recursive call
-         return left
+         return left     
      ```
 
    - right Associactive Operators?
@@ -431,12 +436,12 @@ Eigenschaften:
    - Die Operatoren stehen mit Gewicht und Association (left, right) in einer Tabelle
 
    - Pseudocode
-   
+
      - ```
        compute_expr(min_prec):
-         result = compute_atom()    // Atom ist eine Nummer oder eine eingeklammerte Expression
+         result = compute_atom()    // Atom is a number or a expression in brackets
          curtoken = next()	
-         while curtoken is a binary operator with precedence >= min_prec:
+         while curtoken precedence > min_prec:
            prec, assoc = precedence and associativity of current token
            if assoc is left:
              next_min_prec = prec + 1
@@ -449,27 +454,23 @@ Eigenschaften:
        ```
      
      - ```
-       2 + 3 ^ 2 * 3 + 4
+       6 + 3 * 4 + 2
        ```
      
      -   ```
-         * compute_expr(1)                # Initial call on the whole expression
-           * compute_atom() --> 2
-           * compute_expr(2)              # Loop entered, operator '+'
-             * compute_atom() --> 3
-             * compute_expr(3)
-               * compute_atom() --> 2
-               * result --> 2             # Loop not entered for '*' (prec < '^')
-             * result = 3 ^ 2 --> 9
-             * compute_expr(3)
-               * compute_atom() --> 3
-               * result --> 3             # Loop not entered for '+' (prec < '*')
-             * result = 9 * 3 --> 27
-           * result = 2 + 27 --> 29
-           * compute_expr(2)              # Loop entered, operator '+'
-             * compute_atom() --> 4
-             * result --> 4               # Loop not entered - end of expression
-           * result = 29 + 4 --> 33
+         * compute_expr(1)
+         	* compute_atom() --> 6
+         	* compute_expr(2) 					# Loop with '+' left assoc
+         		* compute_atom() --> 3
+         		* compute_expr(3)				# Loop with '*' left assoc
+         			* compute_atom() --> 4
+               		* result --> 4	 			# Loop not enterd '+ < *'
+                 * result = 3 * 4 --> 12
+         		* compute_expr(2)				# Loop with '+' left assoc
+         			* compute_atom() --> 2
+         			* result --> 2				# Loop not enterd - end of expression
+         		* result = 12 + 2 --> 14
+             * result = 6 + 14 --> 20 
          ```
 
 5. Vergleich
@@ -491,7 +492,7 @@ Eigenschaften:
            -   In precedence climbing: next_min_prec = prec + 1
            -   In Pratt Parsing: rechte binding power rbp auf lbp-1 gesetzt und der rekursive Aufruf mit ihr durchgeführt
        -   Klammern
-           -   In precedence climbing in der rekursiven Parsing Funktion behandelt (siehe _gen_tokens() und compute_atom())
+           -   In precedence climbing in der rekursiven Parsing Funktion behandelt 
            -   In Pratt Parsing können sie als nud-Funktion für das Token ( behandelt werden
 
 ## Anwendung
