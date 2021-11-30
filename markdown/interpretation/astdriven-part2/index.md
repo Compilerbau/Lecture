@@ -5,14 +5,8 @@ menuTitle: "AST-basierte Interpreter 2"
 author: "Carsten Gips (FH Bielefeld)"
 weight: 3
 readings:
-  - key: "Levine2009: Bison"
-    comment: "Kapitel 6"
-  - key: "Parr2014"
-    comment: "Kapitel 6.4 und 8.4"
   - key: "Nystrom2021"
-    comment: "Kapitel Functions und Classes"
-  - key: "Parr2010"
-    comment: "Kapitel 8 und 9"
+    comment: "Kapitel Kapitel: A Tree-Walk Interpreter, insb. 10. Functions u. 12. Classes"
   - key: "Grune2012"
     comment: "Kapitel 6"
   - key: "Mogensen2017"
@@ -23,7 +17,7 @@ youtube:
   - id: TODO
 fhmedia:
   - link: "TODO"
-    name: "Direktlink FH-Medienportal: CB Syntaxgesteuerte Interpreter"
+    name: "Direktlink FH-Medienportal: CB AST-basierte Interpreter (Funktionen, Klassen)"
 ---
 
 
