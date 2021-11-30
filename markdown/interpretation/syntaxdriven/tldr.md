@@ -33,5 +33,8 @@ Normalerweise traversiert man in Interpretern aber den AST, etwa mit dem Listene
 oder Visitor-Pattern. Die in dieser Sitzung gezeigten einfachen Beispiele der
 syntaxgesteuerten Interpreter werden erweitert auf die jeweilige Traversierung mit
 dem Listener- bzw. Visitor-Pattern. Für nicht so einfache Fälle braucht man aber
-zusätzlich noch Speicherstrukturen, die wir in ["AST-Traversierung I"](cb_interpreter2.html)
-und ["AST-Traversierung II"](cb_interpreter3.html) betrachten.
+zusätzlich noch Speicherstrukturen, die wir in
+["AST-basierte Interpreter: Basics"]({{<ref "/interpretation/astdriven-part1" >}})
+und
+["AST-basierte Interpreter: Funktionen und Klassen"]({{<ref "/interpretation/astdriven-part2" >}})
+betrachten.
