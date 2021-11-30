@@ -26,7 +26,7 @@ fhmedia:
 :::::: columns
 ::: {.column width="50%"}
 
-\vspace{20mm}
+\vspace{16mm}
 
 ```java
 int foo(int a, int b, int c) {
@@ -41,27 +41,23 @@ foo(1, 2, 3);
 
 \pause
 
-```java
-fun makeCounter() {
-    var i = 0;
-    fun count() {
-        i = i + 1;
-        print i;
-    }
-
+```python
+def makeCounter():
+    var i = 0
+    def count():
+        i = i + 1
+        print i
     return count;
-}
 
-var counter = makeCounter();
-counter(); // "1".
-counter(); // "2".
+counter = makeCounter()
+counter()   # "1"
+counter()   # "2"
 ```
 
 :::
 ::::::
 
 ::: notes
-[Quelle: nach [@Nystrom2021], Kapitel "Functions" ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
 
 Die Funktionsdeklaration muss im aktuellen Kontext abgelegt werden,
@@ -71,7 +67,7 @@ Beim Aufruf muss man das Funktionssymbol im aktuellen Kontext
 suchen, die Argumente auswerten, einen neuen lokalen Kontext
 anlegen und darin die Parameter definieren (mit den eben ausgewerteten
 Werten) und anschließend den AST-Teilbaum des Funktionskörpers im
-Interpreter mit `eval` auswerten ...
+Interpreter mit `eval()` auswerten ...
 :::
 
 
@@ -87,23 +83,25 @@ funcCall : ID '(' exprList? ')' ;
 :::::: columns
 ::: {.column width="55%"}
 
-```java
-Void funcDecl(AST t) {
-    Fun fn = new Fun(t, env);
-    env.define(t.ID().getText(), fn);
-    return null;
-}
+```python
+def funcDecl(AST t):
+    fn = Fun(t, env)
+    env.define(t.ID().getText(), fn)
 ```
 
 :::
-::: {.column width="35%"}
+::: {.column width="25%"}
+
+\vspace{3mm}
+
 ![](images/fun.png)
+
 :::
 ::::::
 
-::: notes
-[Quelle: nach [@Nystrom2021], Kapitel "Functions", [`Function.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxFunction.java#L6)  ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
+[Quelle: Eigener Code basierend auf einer Idee nach [@Nystrom2021], [LoxFunction.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxFunction.java#L6) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
+::: notes
 Man definiert im aktuellen Environment den Funktionsnamen und hält dazu
 den aktuellen Kontext (aktuelles Environment) sowie den AST-Knoten mit
 der eigentlichen Funktionsdefinition fest.
@@ -120,31 +118,29 @@ Scope (Environment).
 
 ## Ausführen eines Funktionsaufrufs
 
-```java
-Object funcCall(AST t) {
-    Fun fn = (Fun)eval(t.ID());
-
-    List<Object> args = new ArrayList<>();
-    for (AST a : t.exprList()) {
-        args.add(eval(a));
-    }
-
-    Environment prev = env;  env = new Environment(fn.closure);
-    for (int i=0; i<args.size(); i++) {
-        env.define(fn.decl.params().get(i).getText(), args.get(i));
-    }
-
-    eval(fn.decl.block());
-
-    env = prev;
-    return null;
-}
+```yacc
+funcDecl : type ID '(' params? ')' block ;
+funcCall : ID '(' exprList? ')' ;
 ```
 
+\bigskip
+
+```python
+def funcCall(AST t):
+    fn = (Fun)eval(t.ID())
+    args = [eval(a)  for a in t.exprList()]
+
+    prev = env;  env = Environment(fn.closure)
+    for i in range(args.size()):
+        env.define(fn.decl.params()[i].getText(), args[i])
+
+    eval(fn.decl.block())
+    env = prev
+```
+
+[Quelle: Eigener Code basierend auf einer Idee nach [@Nystrom2021], [LoxFunction.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxFunction.java#L57) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
+
 ::: notes
-
-[Quelle: nach [@Nystrom2021], [`Function.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxFunction.java#L57) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
-
 Zunächst wird die `ID` im aktuellen Kontext ausgewertet. In der obigen Grammatik
 ist dies tatsächlich nur ein Funktionsname, aber man könnte über diesen Mechanismus
 auch Ausdrücke erlauben und damit Funktionspointer bzw. Funktionsreferenzen
@@ -167,17 +163,16 @@ Funktionsauswertung zurück.
 :::::: columns
 ::: {.column width="45%"}
 
-\vspace{35.5mm}
+\vspace{28mm}
 
-```java
-Object funcCall(AST t) {
+```python
+def funcCall(AST t):
     ...
 
-    eval(fn.decl.block());
+    eval(fn.decl.block())
 
     ...
-    return null;
-}
+    return None  # (Wirkung)
 ```
 
 :::
@@ -185,23 +180,20 @@ Object funcCall(AST t) {
 
 \pause
 
-```java
-class Return extends RuntimeException {
-    Object value;
-    Return(Object v) { value = v; }
-}
+```python
+class ReturnEx(RuntimeException):
+    __init__(self, v): self.value = v
 
-Void return(AST t) {
-    throw new Return(eval(t.expr()));
-}
-Object funcCall(AST t) {
+def return(AST t):
+    raise ReturnEx(eval(t.expr()))
+
+def funcCall(AST t):
     ...
-    Object erg = null;
-    try { eval(fn.decl.block()); }
-    catch (Return r) { erg = r.value; }
+    erg = None
+    try: eval(fn.decl.block())
+    except ReturnEx as r: erg = r.value
     ...
     return erg;
-}
 ```
 
 :::
@@ -209,7 +201,7 @@ Object funcCall(AST t) {
 
 ::: notes
 
-[Quelle: nach [@Nystrom2021], [`Return.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Return.java#L4), [`Function.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxFunction.java#L74) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
+[Quelle: Eigener Code basierend auf einer Idee nach [@Nystrom2021], [Return.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Return.java#L4), [LoxFunction.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxFunction.java#L74) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
 Rückgabewerte für den Funktionsaufruf werden innerhalb von `block` berechnet,
 wo eine Reihe von Anweisungen interpretiert werden, weshalb `block` ursprünglich
@@ -227,34 +219,31 @@ die Exception erneut werfen.
 
 ## Native Funktionen
 
-```java
-interface Callable { Object call(Interpreter i, List<Object> a); }
-Interpreter() {
-    globals.define("print", new Callable() {
-        public Object call(Interpreter i, List<Object> a) {
-            for (Object o : a) { System.out.println(a); }
-            return null;
-        }
-    });
-}
-class Fun implements Callable { ... }
-Object funcCall(AST t) {
+```python
+class Callable:
+    def call(Interpreter i, List<Object> a): pass
+class Fun(Callable): ...
+
+class NativePrint(Fun):
+    def call(Interpreter i, List<Object> a):
+        for o in a: print a  # nur zur Demo, hier sinnvoller Code :-)
+
+# Im Interpreter:
+env.define("print", NativePrint())
+
+def funcCall(AST t):
     ...
-//  Environment prev = env;  env = new Environment(fn.closure);
-//  for (int i=0; i<args.size(); i++) { ... }
-//  eval(fn.decl.block());  env = prev;
-    fn.call(this, args);
+#    prev = env;  env = Environment(fn.closure)
+#    for i in range(args.size()): ...
+#    eval(fn.decl.block()); env = prev
+    fn.call(self, args)
     ...
-}
 ```
 
+
+[Quelle: Eigener Code basierend auf einer Idee nach [@Nystrom2021], [LoxCallable.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxCallable.java#L6), [LoxFunction.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxFunction.java#L6) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
+
 ::: notes
-
-[Quelle: nach [@Nystrom2021], [`Callable.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxCallable.java#L6), [`Function.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxFunction.java#L6) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
-
-![](images/callFun.png)
-
-
 Normalerweise wird beim Interpretieren eines Funktionsaufrufs der
 Funktionskörper (repräsentiert durch den entsprechenden AST-Teilbaum)
 durch einen rekursiven Aufruf von `eval` ausgewertet.
@@ -262,17 +251,19 @@ durch einen rekursiven Aufruf von `eval` ausgewertet.
 Für native Funktionen, die im Interpreter eingebettet sind, klappt
 das nicht mehr, da hier kein AST vorliegt.
 
-Man erstellt ein neues Interface `Callable` mit der Hauptmethode `call`
-und leitet die frühere Klasse `Fun` davon ab: `class Fun implements Callable`.
-Die Methode `funcCall` ruft nun statt der `eval`-Methode die `call`-Methode
-des Funktionsobjekts auf und übergibt den Interpreter (== Zustand) und
-die Argumente. Die `call`-Methode der Klasse `Fun` muss nun ihrerseits
-im Normalfall den im Funktionsobjekt referenzierten AST-Teilbaum des
-Funktionskörpers mit dem Aufruf von `eval` interpretieren ...
+Man erstellt ein neues Interface `Callable` mit der Hauptmethode `call()`
+und leitet die frühere Klasse `Fun` davon ab: `class Fun(Callable)`.
+Die Methode `funcCall()` des Interpreters ruft nun statt der `eval()`-Methode
+die `call()`-Methode des Funktionsobjekts auf und übergibt den Interpreter
+(== Zustand) und die Argumente. Die `call()`-Methode der Klasse `Fun` muss
+nun ihrerseits im Normalfall den im Funktionsobjekt referenzierten AST-Teilbaum
+des Funktionskörpers mit dem Aufruf von `eval()` interpretieren ...
 
-Für die nativen Funktionen leitet man einfach eine anonyme Klasse
+![](images/callFun.png)
+
+Für die nativen Funktionen leitet man einfach eine (anonyme) Klasse
 ab und speichert sie unter dem gewünschten Namen im globalen Kontext
-des Interpreters. Die `call`-Methode wird dann entsprechend der
+des Interpreters. Die `call()`-Methode wird dann entsprechend der
 gewünschten Funktion implementiert, d.h. hier erfolgt kein weiteres
 Auswerten des AST.
 :::
@@ -286,154 +277,101 @@ classDef : "class" ID "{" funcDecl* "}" ;
 
 \bigskip
 
-```java
-public Void classDef(AST t) {
-    Map<String, Fun> methods = new HashMap<>();
-    for (AST m : t.funcDecl()) {
-        Fun fn = new Fun(m, env);
-        methods.put(m.ID().getText(), fn);
-    }
+```python
+def classDef(AST t):
+    methods = HashMap<String, Fun>()
+    for m in t.funcDecl():
+        fn = Fun(m, env)
+        methods[m.ID().getText()] = fn
 
-    Clazz clazz = new Clazz(t.ID().getText(), methods);
-    env.define(t.ID().getText(), clazz);
-
-    return null;
-}
+    clazz = Clazz(t.ID().getText(), methods)
+    env.define(t.ID().getText(), clazz)
 ```
 
-::: notes
-[Quelle: nach [@Nystrom2021], [`Parser.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Parser.java#L78), ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
+[Quelle: Eigener Code basierend auf einer Idee nach [@Nystrom2021], [Interpreter.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Interpreter.java#L115), ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
-**Anmerkung**: Diese Darstellung ist angelehnt an [@Nystrom2021, Kapitel "Classes"].
-Bei dieser Formulierung wird davon ausgegangen, dass Attribute zur Laufzeit durch
-Zugriff auf das Attribut in der Klasse (bzw. der Instanz) angelegt werden.
+::: notes
+**Anmerkung**: In dieser Darstellung wird der Einfachheit halber nur auf Methoden eingegangen.
+Für Attribute müssten ähnliche Konstrukte implementiert werden.
 :::
 
 
 ## Klassen und Instanzen II
 
 :::notes
-```java
-class Clazz implements Callable {
-    String name;
-    Map<String, Fun> methods;
+```python
+class Clazz(Callable):
+    __init__(self, String name, Map<String, Fun> methods):
+        self.name = name
+        self.methods = methods
 
-    Clazz(String name, Fun> methods) {
-        this.name = name;
-        this.methods = methods;
-    }
+    def call(self, Interpreter i, List<Object> a):
+        self.inst = Instance(self);  return self.inst
 
-    Object call(Interpreter i, List<Object> a) {
-        Instance inst = new Instance(this);  return inst;
-    }
+    def findMethod(self, String name):
+        return self.methods[name]
 
-    Fun findMethod(String name) {
-        if (methods.containsKey(name)) {
-            return methods.get(name);
-        }
-        return null;
-    }
-}
-class Instance {
-    Clazz clazz;
-    Map<String, Object> fields = new HashMap<>();
+class Instance:
+    __init__(self, Clazz clazz):
+        self.clazz = clazz
 
-    Instance(Clazz clazz) {
-        this.clazz = clazz;
-    }
+    def get(String name):
+        method = self.clazz.findMethod(name)
+        if method != None: return method.bind(self)
 
-    Object get(String name) {
-        if (fields.containsKey(name)) {
-            return fields.get(name);
-        }
-
-        Fun method = clazz.findMethod(name);
-        if (method != null) return method.bind(this);
-
-        throw new RuntimeError(name, "Undefined property");
-    }
-     void set(String name, Object value) {
-        fields.put(name, value);
-    }
-}
+        raise RuntimeError(name, "Undefined property")
 ```
 
-[Quelle: nach [@Nystrom2021], [`Class.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxClass.java#L11), [`Instance.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxInstance.java#L7) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
+[Quelle: Eigener Code basierend auf einer Idee nach [@Nystrom2021], [LoxClass.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxClass.java#L11), [LoxInstance.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxInstance.java#L7) ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
 ![](images/classes.png)
 
-Instanzen einer Klasse werden durch den funktionsartigen Aufruf der Klassen
-angelegt (parameterloser Konstruktor). Eine Instanz hält die Attribute
-und eine Referenz auf die Klasse, um später an die Methoden heranzukommen.
+Instanzen einer Klasse werden durch den funktionsartigen "Aufruf" der Klassen
+angelegt (parameterloser Konstruktor). Eine Instanz hält die Attribute (hier
+nicht gezeigt) und eine Referenz auf die Klasse, um später an die Methoden
+heranzukommen.
 :::
 
 
-## Attribute
+## Zugriff auf Methoden (und Attribute)
 
 ```yacc
 getExpr : obj "." ID ;
-setExpr : obj "." ID = expr ;
 ```
 
 \bigskip
 
-```java
-Object getExpr(AST t) {
-    Object obj = eval(t.obj());
+```python
+def getExpr(AST t):
+    obj = eval(t.obj())
 
-    if (obj instanceof Instance) {
-        return ((Instance)obj).get(t.ID().getText());
-    }
+    if isinstance(obj, Instance):
+        return ((Instance)obj).get(t.ID().getText())
 
-    throw new RuntimeError(t.obj().getText(), "no object");
-}
+    raise RuntimeError(t.obj().getText(), "no object")
 ```
 
 ::: notes
-```java
-Object setExpr(AST t) {
-    Object obj = eval(t.obj());
-
-    if (!(obj instanceof Instance)) {
-        throw new RuntimeError(t.obj().getText(), "no object");
-    }
-
-    Object value = eval(t.expr());
-    ((Instance)obj).set(t.ID().getText(), value);
-
-    return value;
-}
-```
-[Quelle: nach [@Nystrom2021], Kapitel "Classes"]{.origin}
-
-:::
-
-::: notes
-
 Beim Zugriff auf Attribute muss das Objekt im aktuellen Kontext evaluiert
 werden. Falls es eine Instanz von `Instance` ist, wird auf das Feld per
 interner Hash-Map zugriffen; sonst Exception.
 :::
 
 
-## Methoden und *this*
+## Methoden und *this* oder *self*
 
-```java
-class Fun implements Callable {
-    Fun bind(Instance i) {
-        Environment e = new Environment(closure);
-        e.define("this", i);
-        return new Fun(decl, e);
-    }
-}
+```python
+class Fun(Callable):
+    def bind(Instance i):
+        e = Environment(self.closure)
+        e.define("this", i)
+        e.define("self", i)
+        return Fun(self.decl, e)
 ```
 
-[[Hinweis: Python "`self`"]{.bsp}]{.slides}
-
-[Quelle: nach [@Nystrom2021], [`Function.java`](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxFunction.java#L31), ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
+[Quelle: Eigener Code basierend auf einer Idee nach [@Nystrom2021], [LoxFunction.java](https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/LoxFunction.java#L31), ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
 ::: notes
-
 Nach dem Interpretieren von Klassendefinitionen sind die Methoden in der Klasse
 selbst gespeichert, wobei der jeweilige `closure` auf den Klassenkontext zeigt.
 
@@ -478,7 +416,4 @@ TODO
 ![](https://licensebuttons.net/l/by-sa/4.0/88x31.png)
 
 Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
-
-### Exceptions
-*   TODO (what, where, license)
 :::
