@@ -6,10 +6,12 @@ weight: 1
 readings:
   - key: "Nystrom2021"
     comment: "Kapitel: A Tree-Walk Interpreter"
-  - key: "Grune2012"
+  - key: "Levine2009: Bison"
     comment: "Kapitel 6"
-  - key: "Mogensen2017"
-    comment: "Kapitel 4"
+  - key: "Parr2014"
+    comment: "Kapitel 6.4 und 8.4"
+  - key: "Parr2010"
+    comment: "Kapitel 8 und 9"
 assignments:
   - topic: sheet05
 youtube:
