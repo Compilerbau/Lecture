@@ -72,13 +72,10 @@ attachments:
 - $e_S$ eine *Parsing Expression*, die als *Start Expression*
   bezeichnet wird.
 
-Weiterhin gilt $V_N \cap V_T = \emptyset$. Jede Regel $e \in R$
-ist ein Paar $(A,e)$ geschrieben als $A \leftarrow e$ mit $A \in
-    V_N$ und $e$ eine *Parsing Expression*. Für jedes Nicht-Terminal
-$A$ existierte genau ein $e$ mit $A \leftarrow e \in R$.
+Weiterhin gilt $V_N \cap V_T = \emptyset$. Jede Regel $e \in R$ ist ein Paar $(A,e)$ geschrieben als $A \leftarrow e$ mit $A \in
+    V_N$ und $e$ eine *Parsing Expression*. Für jedes Nicht-Terminal $A$ existierte genau ein $e$ mit $A \leftarrow e \in R$.
 
-*Parsing Expressions* werden rekursiv definiert: Seien $e$, $e_1$
-und $e_2$ Parsing Expressions, dann gilt dies auch für
+*Parsing Expressions* werden rekursiv definiert: Seien $e$, $e_1$ und $e_2$ Parsing Expressions, dann gilt dies auch für
 
 1.  den leeren String $\varepsilon$
 2.  jedes Terminal $a \in V_T$
@@ -98,8 +95,8 @@ Operatoren wie `.`, `+`, `?` und `&` sind syntaktischer Zucker und lassen sich a
     - Packrat Parsing lädt gesamtes Programm in den Speicher
     - Speicher ist heute aber keine so große Einschränkung mehr
 - PEGs sind wahrscheinlich andere Sprachklasse als CFGs
-    - PEGs können manche nicht-CFG Sprachen darstellen (\(a^n b^n
-      c^n\))
+    - PEGs können manche nicht-CFG Sprachen darstellen $(a^n b^n
+      c^n$)
     - PEGs können alle det. LR(k)-Sprachen darstellen
     - ungelöste Frage: Sind alle CFGs durch PEGs darstellbar?
 - bietet neue Möglichkeiten für das Syntax-Design von Sprachen
@@ -114,7 +111,7 @@ Operatoren wie `.`, `+`, `?` und `&` sind syntaktischer Zucker und lassen sich a
     - Tokens können hierarchische Eigenschaften haben (verschachtelte
       Kommentare)
     - beliebige Escape-Sequenzen möglich
-- Herausfordrung bei PEGs:
+- Herausforderung bei PEGs:
     - sind Alternativen vertauschbar ohne die Sprache zu ändern?
     - Analog zur Frage der Mehrdeutihkeit bei CFGs
 
