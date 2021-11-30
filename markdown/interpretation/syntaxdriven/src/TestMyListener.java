@@ -5,11 +5,11 @@ import java.util.*;
 
 public class TestMyListener {
     public static void main(String[] args) throws Exception {
-        calc2Lexer lexer = new calc2Lexer(CharStreams.fromStream(System.in));
+        calcLexer lexer = new calcLexer(CharStreams.fromStream(System.in));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        calc2Parser parser = new calc2Parser(tokens);
+        calcParser parser = new calcParser(tokens);
 
-        ParseTree tree = parser.r();    // Start-Regel
+        ParseTree tree = parser.s();    // Start-Regel
         System.out.println(tree.toStringTree(parser));
 
         ParseTreeWalker walker = new ParseTreeWalker();
@@ -18,22 +18,22 @@ public class TestMyListener {
         System.out.println(eval.stack.pop());
     }
 
-    public static class MyListener extends calc2BaseListener {
+    public static class MyListener extends calcBaseListener {
         Stack<Integer> stack = new Stack<Integer>();
 
-        public void exitMULT(calc2Parser.MULTContext ctx) {
+        public void exitMULT(calcParser.MULTContext ctx) {
             int right = stack.pop();
             int left = stack.pop();
             stack.push(left * right);   // {$v = $e1.v * $e2.v;}
         }
 
-        public void exitADD(calc2Parser.ADDContext ctx) {
+        public void exitADD(calcParser.ADDContext ctx) {
             int right = stack.pop();
             int left = stack.pop();
             stack.push(left + right);   // {$v = $e1.v + $e2.v;}
         }
 
-        public void exitZAHL(calc2Parser.ZAHLContext ctx) {
+        public void exitZAHL(calcParser.ZAHLContext ctx) {
             stack.push(Integer.valueOf(ctx.DIGIT().getText()));
         }
     }

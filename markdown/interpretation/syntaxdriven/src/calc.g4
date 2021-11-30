@@ -1,6 +1,6 @@
 grammar calc;
 
-start : expr ;
+s     : expr ;
 
 expr  : e1=expr '*' e2=expr     # MULT
       | e1=expr '+' e2=expr     # ADD
