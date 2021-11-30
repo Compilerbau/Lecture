@@ -23,7 +23,7 @@ fhmedia:
 ## Überblick Interpreter
 
 ::: center
-![](images/interpreter.png){width="80%"}
+![](images/interpreter.png){width="60%"}
 :::
 
 ::: notes
@@ -80,37 +80,43 @@ abarbeiten. Letztlich kommen dabei aber die oben dargestellten Varianten zum Ein
 ## Syntaxgesteuerte Interpreter: Attributierte Grammatiken
 
 ```yacc
+start : expr                    {System.err.println($expr.v);} ;
+
 expr returns [int v]
-    : e1=expr '*' e2=expr  {$v = $e1.v * $e2.v;}
-    | e1=expr '+' e2=expr  {$v = $e1.v + $e2.v;}
-    | DIGIT                {$v = $DIGIT.int;}
-    ;
+      : e1=expr '*' e2=expr     {$v = $e1.v * $e2.v;}
+      | e1=expr '+' e2=expr     {$v = $e1.v + $e2.v;}
+      | DIGIT                   {$v = $DIGIT.int;}
+      ;
 
 DIGIT : [0-9] ;
 ```
 
 ::: notes
-[Beispiel: calc.g4]{.bsp}
-
 Die einfachste Form des Interpreters wird direkt beim Parsen ausgeführt und kommt ohne AST aus.
 Der Nachteil ist, dass der AST dabei nicht vorverarbeitet werden kann, insbesondere entfallen
 semantische Prüfungen weitgehend.
+
+Über `returns [int v]` fügt man der Regel `expr` ein Attribut `v` (Integer) hinzu, welches
+man im jeweiligen Kontext abfragen bzw. setzen kann (agiert als Rückgabewert der generierten
+Methode). Auf diesen Wert kann in den Aktionen mit `$v` zugegriffen werden.
+
+Da in den Alternativen der Regel `expr` jeweils zwei "Aufrufe" dieser Regel auftauchen, muss
+man per "`e1=expr`" bzw. "`e2=expr`" eindeutige Namen für die "Aufrufe" vergeben, hier `e1`
+und `e2`.
 :::
 
 
 ## Eingebettete Aktionen in ANTLR I
 
 ::: notes
-Erinnerung: ANTLR generiert einen LL-Parser, d.h. es wird zu jeder Regel eine entsprechende Methode
-generiert.
+Erinnerung: ANTLR generiert einen LL-Parser, d.h. es wird zu jeder Regel eine entsprechende
+Methode generiert.
 
-Mit Hilfe von `returns [int v]` definiert man den Rückgabewert der Regel (Methode) `expr()`, d.h. es wird
-eine lokale Variable `int v` angelegt. Auf diese kann in den Aktionen mit `$v` zugegriffen werden.
-
-Analog kann auf die Eigenschaften der Token und Sub-Regeln zugegriffen werden: `$name.eigenschaft`. Dabei gibt
-es bei Token Eigenschaften wie `text` (gematchter Text bei Token), `type` (Typ eines Tokens), `int` (Integerwert
-eines Tokens, entspricht `Integer.valueOf($Token.text)`). Parser-Regeln haben u.a. ein `text`-Attribut und ein
-spezielles Kontext-Objekt (`ctx`).
+Analog zum Rückgabewert der Regel (Methode) `expr()` kann auf die Eigenschaften der Token und
+Sub-Regeln zugegriffen werden: `$name.eigenschaft`. Dabei gibt es bei Token Eigenschaften wie
+`text` (gematchter Text bei Token), `type` (Typ eines Tokens), `int` (Integerwert eines Tokens,
+entspricht `Integer.valueOf($Token.text)`). Parser-Regeln haben u.a. ein `text`-Attribut und
+ein spezielles Kontext-Objekt (`ctx`).
 
 Die allgemeine Form lautet:
 :::
@@ -120,7 +126,8 @@ rulename[args] returns [retvals] locals [localvars] : ... ;
 ```
 
 ::: notes
-Dabei werden die in `[...]` genannten Parameter mit Komma getrennt (Achtung: Abhängig von Zielsprache!).
+Dabei werden die in "`[...]`" genannten Parameter mit Komma getrennt (Achtung: Abhängig von
+Zielsprache!).
 
 Beispiel:
 :::
@@ -129,8 +136,7 @@ Beispiel:
 \bigskip
 
 ```yacc
-// Return the argument plus the integer value of the INT token
-add[int x] returns [int result] : '+=' INT {$result = $x + $INT.int;} ;
+add[int x] returns [int r] : '+=' INT {$r = $x + $INT.int;} ;
 ```
 
 
@@ -141,22 +147,22 @@ add[int x] returns [int result] : '+=' INT {$result = $x + $INT.int;} ;
     int count = 0;
 }
 
-list
-    @after {System.out.println(count);}
-    : INT {count++;} (',' INT {count++;} )*
-    ;
+expr returns [int v]
+      @after {System.out.println(count);}
+      : e1=expr '*' e2=expr     {$v = $e1.v * $e2.v; count++;}
+      | e1=expr '+' e2=expr     {$v = $e1.v + $e2.v; count++;}
+      | DIGIT                   {$v = $DIGIT.int;}
+      ;
 
-INT : [0-9]+ ;
-WS  : [ \r\t\n]+ -> skip ;
+DIGIT : [0-9] ;
 ```
 
 ::: notes
-[Beispiel: count.g4]{.bsp}
+Mit `@members { ... }` können im generierten Parser weitere Attribute angelegt
+werden, die in den Regeln normal genutzt werden können.
 
-Mit `@members { ... }` können im generierten Parser weitere Attribute angelegt werden, die in den Regeln normal
-genutzt werden können.
-
-Die mit `@after` markierte Aktion wird am Ende der Regel `list` ausgeführt. Analog existiert `@init`.
+Die mit `@after` markierte Aktion wird am Ende der Regel `list` ausgeführt. Analog
+existiert `@init`.
 :::
 
 
@@ -183,7 +189,7 @@ Die Techniken sollen im Folgenden kurz vorgestellt werden.
 :::
 
 ```{.yacc size="footnotesize"}
-s     : field {List<EContext> x = $field.ctx.e();} ;
+s     : field           {List<EContext> x = $field.ctx.e();} ;
 field : e '.' e ;
 ```
 
@@ -199,21 +205,21 @@ public static class SContext extends ParserRuleContext {
     ...
 }
 public static class FieldContext extends ParserRuleContext {
-    public EContext e(int i) { ... }  // get ith e context
-    public List<EContext> e() { ... } // return ALL e contexts
+    public EContext e(int i) { ... }    // get ith e context
+    public List<EContext> e() { ... }   // return ALL e contexts
     ...
 }
 ```
 ![](images/ParserRuleContext.png)
 
 ::: notes
-Jede Regel liefert ein passend zu dieser Regel generiertes Kontext-Objekt zurück. Darüber kann man das/die
-Kontextobjekt(e) der Sub-Regeln abfragen.
+Jede Regel liefert ein passend zu dieser Regel generiertes Kontext-Objekt
+zurück. Darüber kann man das/die Kontextobjekt(e) der Sub-Regeln abfragen.
 
 In der Aktion fragt man das Kontextobjekt über `ctx` ab.
 
-Für einfache Regel-Aufrufe liefert die parameterlose Methode nur ein Kontextobjekt (statt einer Liste)
-zurück:
+Für einfache Regel-Aufrufe liefert die parameterlose Methode nur ein
+Kontextobjekt (statt einer Liste) zurück:
 
 ```yacc
 inc   : e '++' ;
@@ -223,17 +229,17 @@ inc   : e '++' ;
 public final IncContext inc() throws RecognitionException { ... }
 
 public static class IncContext extends ParserRuleContext {
-    public EContext e() { ... } // return context object associated with e
+    public EContext e() { ... }     // return context object associated with e
     ...
 }
 ```
 
 ![](images/ParserRuleContext2.png)
 
-**Anmerkung**: ANTLR generiert nur dann Felder für die Regel-Elemente im Kontextobjekt,
-wenn diese in irgendeiner Form referenziert werden. Dies kann beispielsweise durch
-Benennung (Definition eines Labels, siehe nächste Folie) oder durch Nutzung in einer
-Aktion geschehen.
+**Anmerkung**: ANTLR generiert nur dann Felder für die Regel-Elemente im
+Kontextobjekt, wenn diese in irgendeiner Form referenziert werden. Dies
+kann beispielsweise durch Benennung (Definition eines Labels, siehe nächste
+Folie) oder durch Nutzung in einer Aktion geschehen.
 :::
 
 
@@ -241,8 +247,8 @@ Aktion geschehen.
 ### ANTLR: Benannte Regel-Elemente oder Alternativen
 
 ```yacc
-stat  : 'return' value=e ';'  # Return
-      | 'break' ';'           # Break
+stat  : 'return' value=e ';'    # Return
+      | 'break' ';'             # Break
       ;
 ```
 
@@ -259,10 +265,11 @@ public static class BreakContext extends StatContext { ... }
 
 ![](images/ParserRuleContext3.png)
 
-Mit `value=e` wird der Aufruf der Regel `e` mit dem Label `value` belegt, d.h. man kann
-mit `$e.text` oder `$value.text` auf das `text`-Attribut von `e` zugreifen. Falls es in
-einer Produktion mehrere Aufrufe einer anderen Regel gibt, *muss* man für den Zugriff
-auf die Attribute eindeutige Label vergeben.
+Mit `value=e` wird der Aufruf der Regel `e` mit dem Label `value` belegt,
+d.h. man kann mit `$e.text` oder `$value.text` auf das `text`-Attribut von
+`e` zugreifen. Falls es in einer Produktion mehrere Aufrufe einer anderen
+Regel gibt, **muss** man für den Zugriff auf die Attribute eindeutige Label
+vergeben.
 
 Analog wird für die beiden Alternativen je ein eigener Kontext erzeugt.
 :::
@@ -277,19 +284,21 @@ Analog wird für die beiden Alternativen je ein eigener Kontext erzeugt.
 :::
 
 ::: notes
-ANTLR (generiert auf Wunsch) zur Grammatik passende Listener (Interface und leere Basisimplementierung).
-Beim Traversieren mit dem Default-`ParseTreeWalker` wird der Parse-Tree mit Tiefensuche abgelaufen und
-jeweils beim Eintritt in bzw. beim Austritt aus einen/m Knoten der passende Listener mit dem passenden
+ANTLR (generiert auf Wunsch) zur Grammatik passende Listener (Interface und
+leere Basisimplementierung). Beim Traversieren mit dem Default-`ParseTreeWalker`
+wird der Parse-Tree mit Tiefensuche abgelaufen und jeweils beim Eintritt in
+bzw. beim Austritt aus einen/m Knoten der passende Listener mit dem passenden
 Kontext-Objekt aufgerufen.
 
-Damit kann man die Grammatik "für sich" halten, d.h. unabhängig von einer konkreten Zielsprache
-und die Aktionen über die Listener (oder Visitors, s.u.) ausführen.
+Damit kann man die Grammatik "für sich" halten, d.h. unabhängig von einer
+konkreten Zielsprache und die Aktionen über die Listener (oder Visitors, s.u.)
+ausführen.
 :::
 
 ```{.yacc size="footnotesize"}
-expr : e1=expr '*' e2=expr  # MULT
-     | e1=expr '+' e2=expr  # ADD
-     | DIGIT                # ZAHL
+expr : e1=expr '*' e2=expr      # MULT
+     | e1=expr '+' e2=expr      # ADD
+     | DIGIT                    # ZAHL
      ;
 ```
 
@@ -379,7 +388,7 @@ public class TestMyListener {
 }
 ```
 
-[Konsole: TestMyListener.java und calc2.g4]{.bsp}
+[Beispiel: TestMyListener.java und calc.g4]{.bsp}
 :::
 
 
@@ -392,15 +401,17 @@ public class TestMyListener {
 :::
 
 ::: notes
-ANTLR (generiert ebenfalls auf Wunsch) zur Grammatik passende Visitoren (Interface und leere Basisimplementierung).
-Hier muss man allerdings selbst für eine geeignete Traversierung des Parse-Trees sorgen. Dafür hat man mehr
-Freiheiten im Vergleich zum Listener-Pattern, insbesondere im Hinblick auf Rückgabewerte.
+ANTLR (generiert ebenfalls auf Wunsch) zur Grammatik passende Visitoren
+(Interface und leere Basisimplementierung). Hier muss man allerdings selbst
+für eine geeignete Traversierung des Parse-Trees sorgen. Dafür hat man mehr
+Freiheiten im Vergleich zum Listener-Pattern, insbesondere im Hinblick auf
+Rückgabewerte.
 :::
 
 ```{.yacc size="footnotesize"}
-expr : e1=expr '*' e2=expr  # MULT
-     | e1=expr '+' e2=expr  # ADD
-     | DIGIT                # ZAHL
+expr : e1=expr '*' e2=expr      # MULT
+     | e1=expr '+' e2=expr      # ADD
+     | DIGIT                    # ZAHL
      ;
 ```
 
@@ -473,7 +484,7 @@ public class TestMyVisitor {
 }
 ```
 
-[Konsole: TestMyVisitor.java und calc2.g4]{.bsp}
+[Beispiel: TestMyVisitor.java und calc2.g4]{.bsp}
 :::
 
 
@@ -484,7 +495,7 @@ public class TestMyVisitor {
 \smallskip
 
 *   Syntaxgesteuerter Interpreter (attributierte Grammatiken)
-*   Beispiel ANTLR4: Eingebettete Aktionen, Kontextobjekte, Visitors/Listeners [(AST-Traversierung)]{.notes}
+*   Beispiel ANTLR4: Eingebettete Aktionen, Kontextobjekte, Visitors/Listeners (AST-Traversierung)
 
 
 
