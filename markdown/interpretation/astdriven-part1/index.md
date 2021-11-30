@@ -6,7 +6,7 @@ author: "Carsten Gips (FH Bielefeld)"
 weight: 2
 readings:
   - key: "Nystrom2021"
-    comment: "Kapitel Kapitel: A Tree-Walk Interpreter, insb. 10 Functions"
+    comment: "Kapitel Kapitel: A Tree-Walk Interpreter, insb. 8. Statements and State"
   - key: "Grune2012"
     comment: "Kapitel 6"
   - key: "Mogensen2017"
