@@ -5,7 +5,7 @@ author: "Carsten Gips (FH Bielefeld)"
 weight: 1
 readings:
   - key: "Nystrom2021"
-    comment: "Kapitel 'A Tree-Walk Interpreter' "
+    comment: "Kapitel: A Tree-Walk Interpreter"
   - key: "Grune2012"
     comment: "Kapitel 6"
   - key: "Mogensen2017"
@@ -35,6 +35,7 @@ werden.
 Es gibt verschiedene Varianten, beispielsweise:
 :::
 
+\bigskip
 \bigskip
 
 *   Syntaxgesteuerte Interpreter
@@ -80,7 +81,7 @@ abarbeiten. Letztlich kommen dabei aber die oben dargestellten Varianten zum Ein
 ## Syntaxgesteuerte Interpreter: Attributierte Grammatiken
 
 ```yacc
-start : expr                    {System.err.println($expr.v);} ;
+s     : expr                    {System.err.println($expr.v);} ;
 
 expr returns [int v]
       : e1=expr '*' e2=expr     {$v = $e1.v * $e2.v;}
@@ -188,50 +189,30 @@ Die Techniken sollen im Folgenden kurz vorgestellt werden.
 ## ANTLR: Kontext-Objekte für Parser-Regeln
 :::
 
-```{.yacc size="footnotesize"}
-s     : field           {List<EContext> x = $field.ctx.e();} ;
-field : e '.' e ;
+```yacc
+s    : expr         {List<EContext> x = $expr.ctx.e();} ;
+expr : e '*' e ;
 ```
 
 \bigskip
+\bigskip
 
-```{.java size="footnotesize"}
-public final SContext s() throws RecognitionException { ... }
-public final FieldContext field() throws RecognitionException { ... }
-
-public static class SContext extends ParserRuleContext {
-    public FieldContext field;
-    public FieldContext field() { ... }
-    ...
-}
-public static class FieldContext extends ParserRuleContext {
-    public EContext e(int i) { ... }    // get ith e context
-    public List<EContext> e() { ... }   // return ALL e contexts
-    ...
-}
-```
 ![](images/ParserRuleContext.png)
 
 ::: notes
 Jede Regel liefert ein passend zu dieser Regel generiertes Kontext-Objekt
 zurück. Darüber kann man das/die Kontextobjekt(e) der Sub-Regeln abfragen.
 
+Die Regel `s()` liefert entsprechend ein `SContext`-Objekt und die Regel
+`expr()` liefert ein `ExprContext`-Objekt zurück.
+
 In der Aktion fragt man das Kontextobjekt über `ctx` ab.
 
 Für einfache Regel-Aufrufe liefert die parameterlose Methode nur ein
-Kontextobjekt (statt einer Liste) zurück:
+einziges Kontextobjekt (statt einer Liste) zurück:
 
 ```yacc
 inc   : e '++' ;
-```
-
-```java
-public final IncContext inc() throws RecognitionException { ... }
-
-public static class IncContext extends ParserRuleContext {
-    public EContext e() { ... }     // return context object associated with e
-    ...
-}
 ```
 
 ![](images/ParserRuleContext2.png)
@@ -239,7 +220,7 @@ public static class IncContext extends ParserRuleContext {
 **Anmerkung**: ANTLR generiert nur dann Felder für die Regel-Elemente im
 Kontextobjekt, wenn diese in irgendeiner Form referenziert werden. Dies
 kann beispielsweise durch Benennung (Definition eines Labels, siehe nächste
-Folie) oder durch Nutzung in einer Aktion geschehen.
+Folie) oder durch Nutzung in einer Aktion (siehe obiges Beispiel) geschehen.
 :::
 
 
@@ -262,8 +243,6 @@ public static class ReturnContext extends StatContext {
 }
 public static class BreakContext extends StatContext { ... }
 ```
-
-![](images/ParserRuleContext3.png)
 
 Mit `value=e` wird der Aufruf der Regel `e` mit dem Label `value` belegt,
 d.h. man kann mit `$e.text` oder `$value.text` auf das `text`-Attribut von
@@ -305,79 +284,51 @@ expr : e1=expr '*' e2=expr      # MULT
 \smallskip
 
 ::: notes
-ANTLR kann zu dieser Grammatik einen passenden Listener (Interface) generieren:
+ANTLR kann zu dieser Grammatik einen passenden Listener (Interface `calcListener`)
+generieren. Weiterhin generiert ANTLR eine leere Basisimplementierung (Klasse
+`calcBaseListener`):
 
-```java
-public interface calc2Listener extends ParseTreeListener {
-    void enterADD(calc2Parser.ADDContext ctx);
-    void exitADD(calc2Parser.ADDContext ctx);
-    void enterZAHL(calc2Parser.ZAHLContext ctx);
-    void exitZAHL(calc2Parser.ZAHLContext ctx);
-    void enterMULT(calc2Parser.MULTContext ctx);
-    void exitMULT(calc2Parser.MULTContext ctx);
-}
-```
-
-Weiterhin generiert ANTLR eine leere Basisimplementierung:
-
-```java
-public class calc2BaseListener implements calc2Listener {
-    @Override public void enterR(calc2Parser.RContext ctx) { }
-    @Override public void exitR(calc2Parser.RContext ctx) { }
-    @Override public void enterADD(calc2Parser.ADDContext ctx) { }
-    @Override public void exitADD(calc2Parser.ADDContext ctx) { }
-    @Override public void enterZAHL(calc2Parser.ZAHLContext ctx) { }
-    @Override public void exitZAHL(calc2Parser.ZAHLContext ctx) { }
-    @Override public void enterMULT(calc2Parser.MULTContext ctx) { }
-    @Override public void exitMULT(calc2Parser.MULTContext ctx) { }
-    @Override public void enterEveryRule(ParserRuleContext ctx) { }
-    @Override public void exitEveryRule(ParserRuleContext ctx) { }
-    @Override public void visitTerminal(TerminalNode node) { }
-    @Override public void visitErrorNode(ErrorNode node) { }
-}
-```
+![](images/ParseTreeListener.png)
 
 Von dieser Basisklasse leitet man einen eigenen Listener ab und implementiert
 die Methoden, die man benötigt.
 :::
 
 ```{.java size="footnotesize"}
-public static class MyListener extends calc2BaseListener {
+public static class MyListener extends calcBaseListener {
     Stack<Integer> stack = new Stack<Integer>();
 
-    public void exitMULT(calc2Parser.MULTContext ctx) {
+    public void exitMULT(calcParser.MULTContext ctx) {
         int right = stack.pop();
         int left = stack.pop();
         stack.push(left * right);   // {$v = $e1.v * $e2.v;}
     }
-    public void exitADD(calc2Parser.ADDContext ctx) {
+    public void exitADD(calcParser.ADDContext ctx) {
         int right = stack.pop();
         int left = stack.pop();
         stack.push(left + right);   // {$v = $e1.v + $e2.v;}
     }
-    public void exitZAHL(calc2Parser.ZAHLContext ctx) {
+    public void exitZAHL(calcParser.ZAHLContext ctx) {
         stack.push(Integer.valueOf(ctx.DIGIT().getText()));
     }
 }
 ```
-
-![](images/ParseTreeListener.png)
 
 ::: notes
 Anschließend baut man das alles in eine Traversierung des Parse-Trees ein:
 
 ```java
 public class TestMyListener {
-    public static class MyListener extends calc2BaseListener {
+    public static class MyListener extends calcBaseListener {
         ...
     }
 
     public static void main(String[] args) throws Exception {
-        calc2Lexer lexer = new calc2Lexer(CharStreams.fromStream(System.in));
+        calcLexer lexer = new calcLexer(CharStreams.fromStream(System.in));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        calc2Parser parser = new calc2Parser(tokens);
+        calcParser parser = new calcParser(tokens);
 
-        ParseTree tree = parser.r();    // Start-Regel
+        ParseTree tree = parser.s();    // Start-Regel
         System.out.println(tree.toStringTree(parser));
 
         ParseTreeWalker walker = new ParseTreeWalker();
@@ -418,27 +369,11 @@ expr : e1=expr '*' e2=expr      # MULT
 \bigskip
 
 ::: notes
-ANTLR kann zu dieser Grammatik einen passenden Visitor (Interface) generieren:
+ANTLR kann zu dieser Grammatik einen passenden Visitor (Interface `calcVisitor<T>`)
+generieren. Weiterhin generiert ANTLR eine leere Basisimplementierung (Klasse
+`calcBaseVisitor<T>`):
 
-```java
-public interface calc2Visitor<T> extends ParseTreeVisitor<T> {
-    T visitR(calc2Parser.RContext ctx);
-    T visitADD(calc2Parser.ADDContext ctx);
-    T visitZAHL(calc2Parser.ZAHLContext ctx);
-    T visitMULT(calc2Parser.MULTContext ctx);
-}
-```
-
-Weiterhin generiert ANTLR eine leere Basisimplementierung:
-
-```java
-public class calc2BaseVisitor<T> extends AbstractParseTreeVisitor<T> implements calc2Visitor<T> {
-    @Override public T visitR(calc2Parser.RContext ctx) { return visitChildren(ctx); }
-    @Override public T visitADD(calc2Parser.ADDContext ctx) { return visitChildren(ctx); }
-    @Override public T visitZAHL(calc2Parser.ZAHLContext ctx) { return visitChildren(ctx); }
-    @Override public T visitMULT(calc2Parser.MULTContext ctx) { return visitChildren(ctx); }
-}
-```
+![](images/ParseTreeVisitor.png)
 
 Von dieser Basisklasse leitet man einen eigenen Visitor ab und überschreibt
 die Methoden, die man benötigt. Wichtig ist, dass man selbst für das "Besuchen"
@@ -446,36 +381,34 @@ der Kindknoten sorgen muss (rekursiver Aufruf der geerbten Methode `visit()`).
 :::
 
 ```{.java size="footnotesize"}
-public static class MyVisitor extends calc2BaseVisitor<Integer> {
-    public Integer visitMULT(calc2Parser.MULTContext ctx) {
+public static class MyVisitor extends calcBaseVisitor<Integer> {
+    public Integer visitMULT(calcParser.MULTContext ctx) {
         return visit(ctx.e1) * visit(ctx.e2);   // {$v = $e1.v * $e2.v;}
     }
-    public Integer visitADD(calc2Parser.ADDContext ctx) {
+    public Integer visitADD(calcParser.ADDContext ctx) {
         return visit(ctx.e1) + visit(ctx.e2);   // {$v = $e1.v + $e2.v;}
     }
-    public Integer visitZAHL(calc2Parser.ZAHLContext ctx) {
+    public Integer visitZAHL(calcParser.ZAHLContext ctx) {
         return Integer.valueOf(ctx.DIGIT().getText());
     }
 }
 ```
-
-![](images/ParseTreeVisitor.png)
 
 ::: notes
 Anschließend baut man das alles in eine manuelle Traversierung des Parse-Trees ein:
 
 ```java
 public class TestMyVisitor {
-    public static class MyVisitor extends calc2BaseVisitor<Integer> {
+    public static class MyVisitor extends calcBaseVisitor<Integer> {
         ...
     }
 
     public static void main(String[] args) throws Exception {
-        calc2Lexer lexer = new calc2Lexer(CharStreams.fromStream(System.in));
+        calcLexer lexer = new calcLexer(CharStreams.fromStream(System.in));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        calc2Parser parser = new calc2Parser(tokens);
+        calcParser parser = new calcParser(tokens);
 
-        ParseTree tree = parser.r();    // Start-Regel
+        ParseTree tree = parser.s();    // Start-Regel
         System.out.println(tree.toStringTree(parser));
 
         MyVisitor eval = new MyVisitor();
@@ -484,7 +417,7 @@ public class TestMyVisitor {
 }
 ```
 
-[Beispiel: TestMyVisitor.java und calc2.g4]{.bsp}
+[Beispiel: TestMyVisitor.java und calc.g4]{.bsp}
 :::
 
 
