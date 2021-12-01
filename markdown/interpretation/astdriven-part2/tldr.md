@@ -6,10 +6,11 @@ hidden: true
 
 
 Üblicherweise können Funktionen auf die Umgebung zurückgreifen, in der die Definition der
-Funktion erfolgt ist ("*Closure*"). Deshalb wird beim Interpretieren einer Funktionsdefinition
-der jeweilige AST-Knoten (mit dem Block des Funktionskörpers) und die aktuelle Umgebung in
-einer Struktur zusammengefasst. Zusätzlich muss in der aktuellen Umgebung der Name der Funktion
-zusammen mit der eben erzeugten Struktur ("Funktionsobjekt") als Wert definiert werden.
+Funktion erfolgt ist (["**Closure**"](https://en.wikipedia.org/wiki/Closure_(computer_programming))).
+Deshalb wird beim Interpretieren einer Funktionsdefinition der jeweilige AST-Knoten (mit
+dem Block des Funktionskörpers) und die aktuelle Umgebung in einer Struktur zusammengefasst.
+Zusätzlich muss in der aktuellen Umgebung der Name der Funktion zusammen mit der eben erzeugten
+Struktur ("Funktionsobjekt") als Wert definiert werden.
 
 Beim Funktionsaufruf löst man den Funktionsnamen in der aktuellen Umgebung auf und erhält
 das Funktionsobjekt mit dem AST der Funktion und der Closure. Die Funktionsparameter werden
