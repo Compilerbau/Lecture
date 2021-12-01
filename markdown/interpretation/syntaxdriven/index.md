@@ -15,9 +15,9 @@ readings:
 assignments:
   - topic: sheet05
 youtube:
-  - id: TODO
+  - id: s5wvvoYsxe4
 fhmedia:
-  - link: "TODO"
+  - link: "https://www.fh-bielefeld.de/medienportal/m/0e4ffb9743823767da26cf83c54fa2c87293bb9974ccb5b62e9111cccf01954b96fd29a449fc96097f0b8c549d93c720aed4c3fe079795dbe6246081b7c20a8f"
     name: "Direktlink FH-Medienportal: CB Syntaxgesteuerte Interpreter"
 ---
 
@@ -430,7 +430,7 @@ public class TestMyVisitor {
 \smallskip
 
 *   Syntaxgesteuerter Interpreter (attributierte Grammatiken)
-*   Beispiel ANTLR4: Eingebettete Aktionen, Kontextobjekte, Visitors/Listeners (AST-Traversierung)
+*   Beispiel ANTLR: Eingebettete Aktionen, Kontextobjekte, Visitors/Listeners (AST-Traversierung)
 
 
 
