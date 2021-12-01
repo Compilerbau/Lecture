@@ -14,9 +14,9 @@ readings:
 assignments:
   - topic: sheet05
 youtube:
-  - id: TODO
+  - id: lupQ0f3Tp7A
 fhmedia:
-  - link: "TODO"
+  - link: "https://www.fh-bielefeld.de/medienportal/m/18b6c77bbd5ecc90730df421e3ed175ae4670f56dd8b1a7bdd517066a2b1e7669e074c8f473e88f7f6073f2bd25092ceca16eee95953412a7f9fa5597a7acd9a"
     name: "Direktlink FH-Medienportal: CB AST-basierte Interpreter (Basics)"
 ---
 
