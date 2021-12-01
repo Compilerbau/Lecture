@@ -211,13 +211,7 @@ Die Regel `s()` liefert entsprechend ein `SContext`-Objekt und die Regel
 In der Aktion fragt man das Kontextobjekt über `ctx` ab.
 
 Für einfache Regel-Aufrufe liefert die parameterlose Methode nur ein
-einziges Kontextobjekt (statt einer Liste) zurück:
-
-```yacc
-inc   : e '++' ;
-```
-
-![](images/ParserRuleContext2.png)
+einziges Kontextobjekt (statt einer Liste) zurück.
 
 **Anmerkung**: ANTLR generiert nur dann Felder für die Regel-Elemente im
 Kontextobjekt, wenn diese in irgendeiner Form referenziert werden. Dies

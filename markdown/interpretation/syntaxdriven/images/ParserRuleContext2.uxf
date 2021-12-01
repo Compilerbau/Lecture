@@ -1,7 +1,0 @@
-<diagram program="umletino" version="14.3.0"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>320</x><y>110</y><w>210</w><h>30</h></coordinates><panel_attributes>ParserRuleContext</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>320</x><y>220</y><w>210</w><h>70</h></coordinates><panel_attributes>IncContext
---
---
-e(): EContext</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>420</x><y>130</y><w>30</w><h>110</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;90</additional_attributes></element><element><id>UMLNote</id><coordinates><x>610</x><y>180</y><w>190</w><h>60</h></coordinates><panel_attributes>Note..
-bg=light_gray
-
-e(): EContext    // context for e</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>520</x><y>200</y><w>110</w><h>70</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;50;90;10</additional_attributes></element></diagram>
