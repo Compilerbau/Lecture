@@ -309,7 +309,7 @@ Eigenschaften:
 
 ## Methoden
 
-1.  Klassische Methode (RD)
+###  Klassische Methode (RD)
 
     -   siehe [Parsing Expressions by Recursive Descent](https://www.engr.mun.ca/~theo/Misc/exp_parsing.htm)
     -   neues Nicht-Terminal für jeden Precedence-Level
@@ -318,7 +318,7 @@ Eigenschaften:
             Geschwindigkeit des Parsers
         -   Operatoren und Precedence Levels fest in Grammatik eingebaut
 
-2. Dijkstras Shunting Yard Algorithmus (SY)
+### Dijkstras Shunting Yard Algorithmus (SY)
 
    - [Shunting-yard algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm) (Wikipedia)
 
@@ -348,7 +348,7 @@ Eigenschaften:
      
      
 
-3. Top Down Operator Precedence (TDOP) Pratt Parsing
+### Top Down Operator Precedence (TDOP) Pratt Parsing
 
    - [Operator-precedence parser](https://en.wikipedia.org/wiki/Operator-precedence_parser) (Wikipedia)
 
@@ -421,7 +421,7 @@ Eigenschaften:
 
    -   [Pratt Parsing and Precedence Climbing Are the Same Algorithm](https://www.oilshell.org/blog/2016/11/01.html)
 
-4. Precedence Climbing (PC)
+### Precedence Climbing (PC)
 
    - Beispiel: [Parsing expressions by precedence climbing](https://eli.thegreenplace.net/2012/08/02/parsing-expressions-by-precedence-climbing) (Python)
 
@@ -469,27 +469,27 @@ Eigenschaften:
              * result = 6 + 14 --> 20 
          ```
 
-5. Vergleich
+## Vergleich
 
-   -   Shunting Yard, TDOP und Precedence Climbing sind im
-       wesentlichen der gleiche Algorithmus:
-   -   Im Gegensatz zum klassichen RD ist das Hinzufügen/Ändern von
-       Operatoren einfach
-       -   RD: Hinzufügen/Ändern von Funktionen im Parser
-       -   SY/TDOP/PC: Daten liegen in Tabellenform vor
-   -   Mischformen möglich (siehe Shunting Yard in [Parsing Expressions by Recursive Descent](https://www.engr.mun.ca/~theo/Misc/exp_parsing.htm))
-   -   Shunting Yard verwendet einen Stack anstatt Rekrusive 
-   -   Precedence Climbing wird am häufigsten eingesetzt
-   -   Pratt Parsing vs. Precedence Climbing
-       -   [Pratt Parsing and Precedence Climbing Are the Same Algorithm](https://www.oilshell.org/blog/2016/11/01.html)
-       -   [From Precedence Climbing to Pratt Parsing](https://www.engr.mun.ca/~theo/Misc/pratt_parsing.htm) (Norvell)
-       -   Eine While Schleife mit rekursiven Aufruf mit Abbruchbedingung (binding Power/precedence)
-       -   Rechts Assoziativität 
-           -   In precedence climbing: next_min_prec = prec + 1
-           -   In Pratt Parsing: rechte binding power rbp auf lbp-1 gesetzt und der rekursive Aufruf mit ihr durchgeführt
-       -   Klammern
-           -   In precedence climbing in der rekursiven Parsing Funktion behandelt 
-           -   In Pratt Parsing können sie als nud-Funktion für das Token ( behandelt werden
+-   Shunting Yard, TDOP und Precedence Climbing sind im
+    wesentlichen der gleiche Algorithmus:
+-   Im Gegensatz zum klassichen RD ist das Hinzufügen/Ändern von
+    Operatoren einfach
+    -   RD: Hinzufügen/Ändern von Funktionen im Parser
+    -   SY/TDOP/PC: Daten liegen in Tabellenform vor
+-   Mischformen möglich (siehe Shunting Yard in [Parsing Expressions by Recursive Descent](https://www.engr.mun.ca/~theo/Misc/exp_parsing.htm))
+-   Shunting Yard verwendet einen Stack anstatt Rekrusive 
+-   Precedence Climbing wird am häufigsten eingesetzt
+-   Pratt Parsing vs. Precedence Climbing
+    -   [Pratt Parsing and Precedence Climbing Are the Same Algorithm](https://www.oilshell.org/blog/2016/11/01.html)
+    -   [From Precedence Climbing to Pratt Parsing](https://www.engr.mun.ca/~theo/Misc/pratt_parsing.htm) (Norvell)
+    -   Eine While Schleife mit rekursiven Aufruf mit Abbruchbedingung (binding Power/precedence)
+    -   Rechts Assoziativität 
+        -   In precedence climbing: next_min_prec = prec + 1 für left Assoziativität 
+        -   In Pratt Parsing: rechte binding power rbp auf lbp-1 gesetzt und der rekursive Aufruf mit ihr durchgeführt
+    -   Klammern
+        -   In precedence climbing in der rekursiven Parsing Funktion behandelt 
+        -   In Pratt Parsing können sie als nud-Funktion für das Token ( behandelt werden
 
 ## Anwendung
 
@@ -521,7 +521,7 @@ Eigenschaften:
   + Programmiersprachen mit first-class functions
 + Verwendet mehrere Parser als Input und gibt einen Kombinierten Parser output als Rückgabewert zurück
   + parse Tree
-  + Indice der Stelle im String die zum stoppen des Parsers geführt hat
+  + Index der Stelle im String die zum Stoppen des Parsers geführt hat
 + Die Output der verwendeten Parser:
   + Success: {result, restString}
   + failure: Error Message und Position
