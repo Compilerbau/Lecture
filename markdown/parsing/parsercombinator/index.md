@@ -308,7 +308,7 @@ Eigenschaften:
 
 ## Methoden
 
-###  Klassische Methode (RD)
+##  Klassische Methode (RD)
 
 -   siehe [Parsing Expressions by Recursive Descent](https://www.engr.mun.ca/~theo/Misc/exp_parsing.htm)
 -   neues Nicht-Terminal für jeden Precedence-Level
@@ -316,7 +316,7 @@ Eigenschaften:
 	-   Anzahl der Precedence Level bestimmt Größe und Geschwindigkeit des Parsers
 	-   Operatoren und Precedence Levels fest in Grammatik eingebaut
 
-### Dijkstras Shunting Yard Algorithmus (SY)
+## Dijkstras Shunting Yard Algorithmus (SY)
 
    - [Shunting-yard algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm) (Wikipedia)
 
@@ -346,7 +346,7 @@ Eigenschaften:
      
      
 
-### Top Down Operator Precedence (TDOP) Pratt Parsing
+## Top Down Operator Precedence (TDOP) Pratt Parsing
 
    - [Operator-precedence parser](https://en.wikipedia.org/wiki/Operator-precedence_parser) (Wikipedia)
 
@@ -419,7 +419,7 @@ Eigenschaften:
 
    -   [Pratt Parsing and Precedence Climbing Are the Same Algorithm](https://www.oilshell.org/blog/2016/11/01.html)
 
-### Precedence Climbing (PC)
+## Precedence Climbing (PC)
 
    - Beispiel: [Parsing expressions by precedence climbing](https://eli.thegreenplace.net/2012/08/02/parsing-expressions-by-precedence-climbing) (Python)
 
