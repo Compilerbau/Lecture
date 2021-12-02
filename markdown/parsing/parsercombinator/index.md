@@ -305,18 +305,16 @@ Eigenschaften:
 
 - Verwendet eine Reihenfolge(precedence) für die Operatoren
 
-  
 
 ## Methoden
 
 ###  Klassische Methode (RD)
 
-    -   siehe [Parsing Expressions by Recursive Descent](https://www.engr.mun.ca/~theo/Misc/exp_parsing.htm)
-    -   neues Nicht-Terminal für jeden Precedence-Level
-    -   Nachteile:
-        -   Anzahl der Precedence Level bestimmt Größe und
-            Geschwindigkeit des Parsers
-        -   Operatoren und Precedence Levels fest in Grammatik eingebaut
+-   siehe [Parsing Expressions by Recursive Descent](https://www.engr.mun.ca/~theo/Misc/exp_parsing.htm)
+-   neues Nicht-Terminal für jeden Precedence-Level
+-   Nachteile:
+	-   Anzahl der Precedence Level bestimmt Größe und Geschwindigkeit des Parsers
+	-   Operatoren und Precedence Levels fest in Grammatik eingebaut
 
 ### Dijkstras Shunting Yard Algorithmus (SY)
 
@@ -529,6 +527,8 @@ Eigenschaften:
 
 [Introduction to parser combinators](https://gist.github.com/yelouafi/556e5159e869952335e01f6b473c4ec1)
 
+### Simple Parser
+
 Simple Parser, die nachher als Inputparameter für einen Kombinierten Parser verwendet werden.
 
 ```
@@ -557,6 +557,8 @@ function eof(input) {
   return failure("end of input", input);
 }
 ```
+
+### Kombinierter Parser
 
 Der Kombinierte Parser sieht wie folgt aus:
 
@@ -593,6 +595,8 @@ const plusExpr = apply((num1, _, num2) => num1 + num2, [
 ```
 
 Diese Zusammensetzung der Parser überprüft eine plus expression mit Integern. Wichtig hierbei ist die richtige Reihenfolge der Parser.
+
+### Verwendung der Parsers
 
 Nun muss noch eine parse Funktion geschrieben werden, um die Kombinierten Parser auszuführen.
 
