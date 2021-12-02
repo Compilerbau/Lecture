@@ -8,10 +8,11 @@ readings:
   - key: "aho2013compilers"
     comment: "Kapitel 2 und 3"
   - key: "Mogensen2017"
+  - key: "Ford2004Peg"
+  - key: "Ford2004Proceedings"
 attachments:
   - link: "https://www.fh-bielefeld.de"
 ---
-
 
 # PEG Parser
 
@@ -20,51 +21,57 @@ attachments:
 - Generative Systeme:
     - formale Definition von Sprachen durch Regeln, die rekursive
       angewendet Sätze/Strings der Sprache generieren
-	- Beispiel: Sprachen aus der Chomsky Hierarchie definiert durch
+    - Sprachen aus der Chomsky Hierarchie definiert durch
       kontextfreie Grammatiken (CFGs) und reguläre Ausdrücke (REs)
+
 - Recognition basierte Systeme:
     - Sprachen definiert in Form von Regeln/Prädikaten, die
       entscheiden ob ein gegebener String Teil der Sprache ist
-    - Beispiel: Parsing Expression Grammar (PEG)
-- Beispiel:
-    - generative: $\lbrace s \in \mathrm{a}^{\ast} | s = (\mathrm{aa})^{n}\rbrace$
-    - recognition-based: $\lbrace s \in \mathrm{a}^{\ast} | \left| s \right| \mod 2 = 0 \rbrace$
-    - gleiche Sprache
-    - Unterschied eher subtil
+    - Parsing Expression Grammar (PEG)
 
-## Motivation
 
-- Chomsky (CFGs + REs):
-    - ursprünglich für natürliche Sprachen
-    - adaptiert für maschinenorientierte Sprachen (Eleganz,
-      Ausdrucksstärke)
-    - Nachteile:
-    	- maschinenorientierte Sprachen sollten präzise und eindeutig sein
-        - CFGs erlauben mehrdeutige Syntax (gut für natürliche Sprachen)
-        - Mehrdeutigkeiten schwer oder gar nicht zu verhindern
-          (z.B. C++ Syntax, Lambda abstractions, `let` expressions und
-          conditionals in Haskell)
-        - Parsing generell nur in super-linearer Zeit
+## Beispiel:
 
-- PEG:
-    - Stilistisch ähnlich zu CFGs mit REs (EBNF)
-    - **Kernunterschied**: priorisierter Auswahloperator (`/` statt `|`)
-        - Alternative Muster werden der Reihe nach getestet
-        - erste passende Alternative wird verwendet
-        - Mehrdeutigkeiten werden dadurch unmöglich
-    - Beispiel:
-        - EBNF: $A \rightarrow a\;b\; |\; a$ und $A \rightarrow a\;
-          |\; a\; b$ sind äquivalent
-        - PEG: $A \leftarrow a\;b\; /\; a$ und $A \leftarrow a\;
-          /\; a\; b$ sind verschieden
+Sprache $L = \lbrace \varepsilon,\, \mathrm{aa},\, \mathrm{aaaa},\, \ldots \rbrace$:
+
+- generativ:   $L =\lbrace s \in \mathrm{a}^{\ast} \mid s = (\mathrm{aa})^{n},\, n \geq 0\rbrace$
+
+- recognition: $L = \lbrace s \in \mathrm{a}^{\ast} \mid \left| s \right| \mod 2 = 0 \rbrace$
+
+
+## Motivation (1/2)
+
+Chomsky (CFGs + REs):
+
+- ursprünglich für natürliche Sprachen
+- adaptiert für maschinenorientierte Sprachen (Eleganz, Ausdrucksstärke)
+- Nachteile:
+    - maschinenorientierte Sprachen sollten präzise und eindeutig sein
+    - CFGs erlauben mehrdeutige Syntax (gut für natürliche Sprachen)
+    - Mehrdeutigkeiten schwer oder gar nicht zu verhindern
+        - C++ Syntax
+        - Lambda abstractions, `let` expressions und conditionals in Haskell
+    - generelles Parsen nur in super-linearer Zeit
+
+## Motivation (2/2)
+PEG:
+
+- Stilistisch ähnlich zu CFGs mit REs (EBNF)
+
+- **Kernunterschied**: priorisierender Auswahloperator (`/` statt `|`)
+    - Alternative Muster werden der Reihe nach getestet
+    - erste passende Alternative wird verwendet
+    - Mehrdeutigkeiten werden dadurch unmöglich
     - nähe an der Funktionsweise von Parsern (Erkennen von Eingaben)
-        - PEGs können als formale Beschreibung eines Top-Down-Parsers
-          betrachtet werden
+        - PEGs können als formale Beschreibung eines Top-Down-Parsers betrachtet werden
 
-## Definition
+- Beispiel:
+    - EBNF: $A \rightarrow a\;b\; |\; a$ und $A \rightarrow a\; |\; a\; b$ sind äquivalent
+    - PEG: $A \leftarrow a\;b\; /\; a$ und $A \leftarrow a\; /\; a\; b$ sind verschieden
 
-**Definition**: Eine Parsing Expression Grammar (PEG) ist ein
- 4-Tuple $G = (V_N, V_T, R, e_S)$ mit
+## Definition PEG
+
+Eine Parsing Expression Grammar (PEG) ist ein 4-Tuple $G = (V_N, V_T, R, e_S)$ mit
 
 - $V_N$ eine endliche Menge von Nicht-Terminalen
 - $V_T$ eine endliche Menge von Terminalen
@@ -72,125 +79,120 @@ attachments:
 - $e_S$ eine *Parsing Expression*, die als *Start Expression*
   bezeichnet wird.
 
-Weiterhin gilt $V_N \cap V_T = \emptyset$. Jede Regel $e \in R$ ist ein Paar $(A,e)$ geschrieben als $A \leftarrow e$ mit $A \in
-    V_N$ und $e$ eine *Parsing Expression*. Für jedes Nicht-Terminal $A$ existierte genau ein $e$ mit $A \leftarrow e \in R$.
+Weiterhin gilt:
 
-*Parsing Expressions* werden rekursiv definiert: Seien $e$, $e_1$ und $e_2$ Parsing Expressions, dann gilt dies auch für
+- $V_N \cap V_T = \emptyset$.
+- jede Regel $e \in R$ ist ein Paar $(A,e)$ geschrieben als $A \leftarrow e$ mit $A \in V_N$ und $e$ eine **Parsing Expression**
+- für jedes Nicht-Terminal $A$ existierte genau ein $e$ mit $A \leftarrow e \in R$.
 
-1.  den leeren String $\varepsilon$
-2.  jedes Terminal $a \in V_T$
-3.  jedes Nicht-Terminal $A \in V_N$
-4.  die Sequenz $e_1 e_2$
-5.  die priorisierte Option $e_1 / e_2$
-6.  beliebige Wiederholungen $e^{\ast}$
-7.  Nicht-Pradikate $!e$
+## Definition Parsing Expression
+**Parsing Expressions** werden rekursiv definiert: Seien $e$, $e_1$ und $e_2$ Parsing Expressions, dann gilt dies auch für
 
-Operatoren wie `.`, `+`, `?` und `&` sind syntaktischer Zucker und lassen sich auf die obigen Definitionen zurückführen.
+- den leeren String $\varepsilon$
+- jedes Terminal $a \in V_T$
+- jedes Nicht-Terminal $A \in V_N$
+- die Sequenz $e_1 e_2$
+- die priorisierte Option $e_1 / e_2$
+- beliebige Wiederholungen $e^{\ast}$
+- Nicht-Pradikate $!e$
+
+## Operatoren für Parsing Expression
+
+Folgende Operatoren sind für die Konstruktion von **Parsing Expressions** erlaubt:
+
+| Operator | Priorität | Beschreibung           |
+|:--------:|:---------:|:-----------------------|
+| ' '      |     5     | String-Literal         |
+| " "      |     5     | String-Literal         |
+| [ ]      |     5     | Zeichenklasse          |
+| .        |     5     | belibieges Zeichen     |
+| (e)      |     5     | Gruppierung            |
+| e?       |     4     | Optional               |
+| e*       |     4     | Kein-oder-mehr         |
+| e+       |     4     | Ein-oder-mehr          |
+| &e       |     3     | Und-Prädikat           |
+| !e       |     3     | Nicht-Prädikat         |
+| e1 e2    |     2     | Sequenz                |
+| e1 / e2  |     1     | priorisierende Auswahl |
+
+:::notes
+Die Operatoren `.`, `+`, `?` und `&` sind syntaktischer Zucker und lassen sich auf ander Operatoren zurückführen.
+
+Die Operatoren `!` und `&` sind zentral für die Ausdrücksstärke von PEGs
+
+Beispiel: `&e` versucht das Muster `e` zu erkennen und kehrt dann an den Anfangspunkt zurück ohne Zeichen aus dem Eingabestrom zu verbrauchen.
+Nur das Wissen über Erfolg oder Miserfolg wird gespeichert (siehe Beispiel zu Nicht-CFG-Sprachen).
+:::
 
 ## PEG Eigenschaften
 
+- wahrscheinlich andere Sprachklasse als CFGs
+
+:::notes
+    - PEGs können alle deterministischen LR(k)-Sprachen darstellen
+    - PEGs können manche nicht-CFG Sprachen darstellen (z.B. $a^n b^n c^n$)
+    - ungelöste Frage: Sind alle CFGs durch PEGs darstellbar?
+:::
+
 - parsebar in linearer Zeit mit unbegrenztem Lookahead (Packrat
   Parsing)
-- benötigen mehr Speicher
-    - Packrat Parsing lädt gesamtes Programm in den Speicher
-    - Speicher ist heute aber keine so große Einschränkung mehr
-- PEGs sind wahrscheinlich andere Sprachklasse als CFGs
-    - PEGs können manche nicht-CFG Sprachen darstellen $(a^n b^n
-      c^n$)
-    - PEGs können alle det. LR(k)-Sprachen darstellen
-    - ungelöste Frage: Sind alle CFGs durch PEGs darstellbar?
-- bietet neue Möglichkeiten für das Syntax-Design von Sprachen
+    - Nachteil: gesamter zu parsender Text muss im Speicher gehalten werden
+
+:::notes
+    - Speicherplatz ist heute aber keine große Einschränkung mehr
+    - Quellcode-Dateien sind meist nur im KB-Bereich
+:::
+
+- neue Möglichkeiten für das Syntax-Design von Sprachen
+
+:::notes
     - aber auch neue Möglichkeiten für Fehler durch Unachtsamkeit
+:::
+
 - Syntaxbeschreibung: keine Unterscheidung zwischen Hierarchie und
   lexikalischen Elementen nötig
-    - für gewöhnlich Hierarchie durch CFG und lex. Elem. durch RE
-      beschrieben
-        - CFGs ungeeignet für lex. Elemente (keine Greedy-Matching,
-          keine 'negative' Syntax)
+
+:::notes
+    - für gewöhnlich Hierarchie durch CFG und lex. Elem. durch RE beschrieben
+        - CFGs ungeeignet für lex. Elemente (keine Greedy-Matching, keine 'negative' Syntax)
         - REs: keine rekursive Syntax
-    - Tokens können hierarchische Eigenschaften haben (verschachtelte
-      Kommentare)
+    - Tokens können hierarchische Eigenschaften haben (verschachtelte Kommentare)
     - beliebige Escape-Sequenzen möglich
+:::
+
 - Herausforderung bei PEGs:
     - sind Alternativen vertauschbar ohne die Sprache zu ändern?
     - Analog zur Frage der Mehrdeutihkeit bei CFGs
 
-## Beispiele
-### PEG Syntax als PEG
-
-Selbstbeschreibung der PEG ASCII-Syntax. Die Grammatik besteht aus
-Regeln der Form $A \leftarrow e$ wobei $A$ ein Nichtterminal und $e$
-eine *Parsing Expression* ist.
+## Beispiel: Formeln
 
 ```
-# Hierarchical syntax
-Grammar    <- Spacing Definition+ EndOfFile
-Definition <- Identifier LEFTARROW Expression
-
-Expression <- Sequence (SLASH Sequence)*
-Sequence   <- Prefix*
-Prefix     <- (AND / NOT)? Suffix
-Suffix     <- Primary (QUESTION / STAR / PLUS)?
-Primary    <- Identifier !LEFTARROW
-	    / OPEN Expression CLOSE
-	    / Literal / Class / DOT
-
-# Lexical syntaxq
-Identifier <- IdentStart IdentCont* Spacing
-IdentStart <- [a-zA-Z_]
-IdentCont  <- IdentStart / [0-9]
-
-Literal    <- ['] (!['] Char)* ['] Spacing
-	    / ["] (!["] Char)* ["] Spacing
-Class      <- '[' (!']' Range)* ']' Spacing
-Range      <- Char '-' Char / Char
-Char       <- '\\' [nrt'"\[\]\\]
-	    / '\\' [0-2][0-7][0-7]
-	    / '\\' [0-7][0-7]?
-	    / !'\\' .
-
-LEFTARROW  <- '<-' Spacing
-SLASH      <- '/' Spacing
-AND        <- '&' Spacing
-NOT        <- '!' Spacing
-QUESTION   <- '?' Spacing
-STAR       <- '*' Spacing
-PLUS       <- '+' Spacing
-OPEN       <- '(' Spacing
-CLOSE      <- ')' Spacing
-DOT        <- '.' Spacing
-Spacing    <- (Space / Comment)*
-Comment    <- '#' (!EndOfLine .)* EndOfLine
-Space      <- ' ' / '\t' / EndOfLine
-EndOfLine  <- '\r
+Expr   <- Term ([-+] Term)*
+Term   <- Factor ([*/] Factor)*
+Factor <- '(' Expr ')' / [0-9]+
 ```
 
-```
-| Operator | Type         | Precedence | Description        |
-|----------+--------------+------------+--------------------|
-| ' '      | primary      |          5 | Literal string     |
-| " "      | primary      |          5 | Literal string     |
-| [ ]      | primary      |          5 | Character class    |
-| .        | primary      |          5 | Any character      |
-| (e)      | primary      |          5 | Grouping           |
-| e?       | unary suffix |          4 | Optional           |
-| e*       | unary suffix |          4 | Zero-or-more       |
-| e+       | unary suffix |          4 | One-or-more        |
-| &e       | unary prefix |          3 | And-predicate      |
-| !e       | unary prefix |          3 | Not-predicate      |
-| e1 e2    | binary       |          2 | Sequence           |
-| e1 / e2  | binary       |          1 | Prioritized Choice |
-```
+Achtung: Grammatik ist rechtsassoziativ
 
-### Verschachtelte Kommentare
+## Beispiel: Verschachtelte Kommentare
 
-Verschachtelte Kommentare wie in *Pascal* sind möglich, da die lexikalische Syntax von PEGs nicht auf REs beschränkt ist:
+Verschachtelte Kommentare sind möglich, da die lexikalische Syntax von PEGs nicht auf REs beschränkt ist:
 
 ```
-Comment <- '(*' (Comment / !'*)' .)* '*)'
+Comment       <- CommentStart CommentBody* CommentEnd
+CommentStart  <- '/*'
+CommentEnd    <- '*/'
+CommentBody   <- Comment / (!CommentEnd AnySingleChar)
+AnySingleChar <- .
 ```
 
-### Beliebige Escape-Sequenzen
+oder in Kurzform
+
+```
+Comment <- '/*' (Comment / !'*/' .)* '*/'
+```
+
+## Beispiel: Beliebige Escape-Sequenzen
 Escape-Sequenzen haben meist nur eine stark eingeschränkte Syntax. Eine PEG kann beliebige Ausdrücke in eine Escape-Sequenz erlauben:
 
 ```
@@ -203,11 +205,11 @@ Char       <- '\\(' Expression ')'
 
 Zum Beispiel könnte man dadurch in einer Escape-Sequenz auf Variablen zugreifen: `\(var)`.
 
-### Verschachtelte Template Typen in C++
+## Beispiel: Verschachtelte Template Typen in C++
 
-Bekanntes Problem mit Template-Definitionen in C++: Leerzeichen zwischen Winkelklammern notig um Interpretation als Pipe-Operator (`>>`) zu verhindern:
+Bekanntes Problem mit Template-Definitionen in C++: Leerzeichen zwischen Winkelklammern nötig um Interpretation als Pipe-Operator (`>>`) zu verhindern:
 ```
-vector<vector<float> > MyMatrix;
+TypeA<TypeB<TypeC> > MyVar;
 ```
 
 PEG erlaubt kontextsensitive Interpretation:
@@ -222,7 +224,7 @@ LSHIFT    <- '<<' Spacing
 RSHIFT    <- '>>' Spacing
 ```
 
-### Dangling-Else
+## Beispiel: Dangling-Else
 
 In CFGs sind verschachtelte if-then(-else) Ausdrücke mehrdeutig
 (Shift-Reduce-Konflikt). Dies wird häufig durch informelle Meta-Regeln
@@ -235,34 +237,22 @@ Statement <- IF Cond THEN Statement ELSE Statement
            / ...
 ```
 
-### Nicht-CFG-Sprachen
+## Beispiel: Nicht-CFG-Sprachen
 
-Ein klassisches Beispiel einer nicht-CFG Sprache ist $a^n b^n
-c^n$. Diese Sprache lässt sich mit der folgenden PEG darstellen:
+Ein klassisches Beispiel einer nicht-CFG Sprache ist $a^n b^n c^n$. Diese Sprache lässt sich mit der folgenden PEG darstellen:
 
-$G = (\lbrace A,B,D \rbrace, \lbrace a,b,c \rbrace, R, D)$
+$G = (\lbrace A,B,S \rbrace, \lbrace a,b,c \rbrace, R, S)$
 
 $A \leftarrow a\;A\;b\; /\; \varepsilon$
 
 $B \leftarrow b\;B\;c\; /\; \varepsilon$
 
-$D \leftarrow \& (A\; !b)\; a^{\ast}\; B\; !.$
+$S \leftarrow \& (A\; !b)\; a^{\ast}\; B\; !.$
 
-Regel D lässt sich dabei wie folgt lesen: Matche und Verbrauche eine
-beliebig lange Sequenz von a's ($a^{\ast}$) gefolgt von einer Sequenz,
-die von Regel B gematcht wird und danach keine weiteren Zeichen hat
-($!.$) aber nur wenn die Sequenz auch von $A\; !b$ gematcht
-wird. Der erste Teil trifft zu wenn in der Sequenz auf $n$ b's gleich
-viele c's folgen während der zweite Teil zutrifft wenn $n$ b's auf $n$
-a's folgen.
+:::notes
+Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig lange Sequenz von a's ($a^{\ast}$) gefolgt von einer Sequenz, die von Regel B erkannt wird und danach keine weiteren Zeichen hat ($!.$) aber nur dann wenn die Sequenz auch von durch $A\; !b$ erkannt wird. Der erste Teil trifft zu wenn in der Sequenz auf $n$ b's gleich viele c's folgen während der zweite Teil zutrifft wenn $n$ b's auf $n$ a's folgen.
+:::
 
-## Links
-
-- [Wiki](https://en.wikipedia.org/wiki/Parsing_expression_grammar)
-- [Urspr. Veröffentlichung](https://bford.info/pub/lang/peg.pdf)
-- [PEG Parsers](https://medium.com/@gvanrossum_83706/peg-parsers-7ed72462f97c) (Guido van Rossum)
-- [New PEG Parser for CPython](https://www.python.org/dev/peps/pep-0617/) (Python Enhancement Proposal)
-- [Parsing Expression Grammars: A Recognition-Based Syntactic Foundation](https://bford.info/pub/lang/peg/)
 
 # Operator Precedence Parsing
 
