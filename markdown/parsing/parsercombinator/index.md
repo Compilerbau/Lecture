@@ -450,7 +450,7 @@ Eigenschaften:
        ```
      
      - ```
-       6 + 3 * 4 + 2
+       6 + 3 * 4
        ```
      
      -   ```
@@ -462,11 +462,7 @@ Eigenschaften:
          			* compute_atom() --> 4
                		* result --> 4	 			# Loop not enterd '+ < *'
                  * result = 3 * 4 --> 12
-         		* compute_expr(2)				# Loop with '+' left assoc
-         			* compute_atom() --> 2
-         			* result --> 2				# Loop not enterd - end of expression
-         		* result = 12 + 2 --> 14
-             * result = 6 + 14 --> 20 
+             * result = 6 + 12 --> 18 
          ```
 
 ## Vergleich
@@ -529,12 +525,108 @@ Eigenschaften:
   + eine Produktionsregel einer kontextfreien Grammatik kann meherer Alternativen haben, diese Alternativen können aus einer Folge von Nichtterminalen und/oder Terminalen bestehen oder auch nur aus einem einzigen Nichtterminalen und/oder Terminalen oder aus einem leeren String. 
   + Wenn nun ein Simpler Parser für jede Alternative verfügbar ist kann man diese miteinander Kombinieren, um alle Alternativen abzudecken
 
-​	
+## Code Beispiel
+
+[Introduction to parser combinators](https://gist.github.com/yelouafi/556e5159e869952335e01f6b473c4ec1)
+
+Simple Parser, die nachher als Inputparameter für einen Kombinierten Parser verwendet werden.
+
+```
+// Simple Integer Parser
+function integer(input) {
+  // note we removed $ from the end of the regular expression
+  const match = /^\d+/.exec(input);
+  if (match != null) {
+    const matchedText = match[0];
+    return success(+matchedText, input.slice(matchedText.length));
+  }
+  return failure("an integer", input);
+}
+
+// Simple plus operator Parser
+function plus(input) {
+  if (input[0] === "+") {
+    return success("+", input.slice(1));
+  }
+  return failure("'+'", input);
+}
+
+// Simple endofLine Parser
+function eof(input) {
+  if (input.length === 0) return success(null, input);
+  return failure("end of input", input);
+}
+```
+
+Der Kombinierte Parser sieht wie folgt aus:
+
+```
+// Combined Parser
+function apply(func, parsers) {
+  return function applyParser(input) {
+    const accData = [];
+    let currentInput = input;
+
+    for (const parser of parsers) {
+      const result = parser(currentInput);
+      if (result.isFailure) return result;
+      accData.push(result.data);
+      currentInput = result.rest;
+    }
+
+    return success(func(...accData), currentInput);
+  };
+}
+```
+
+Nun kann über den Parameter func eine Funktionsweise angegeben werden und über den Parameter parsers kann ein Array an Simpleren Parsern übergeben werden. Die Parser müssen dabei in der richtigen Reihenfolge aufgerufen werden. In der Variable accData werden alle Parser Ergebnisse gespeichert, um sie nachher in der der func zu verwenden. Der currentInput enthält im ersten druchlauf den gesamten Input. Jeder Parser schreibt dann den Rest (der nicht parsbare Teil) in die currentInput für den nächsten Parser. 
+
+Der Kombinierte Parser kann nun so definiert werden:
+
+```
+const plusExpr = apply((num1, _, num2) => num1 + num2, [
+  integer,
+  plus,
+  integer,
+  eof
+]);
+```
+
+Diese Zusammensetzung der Parser überprüft eine plus expression mit Integern. Wichtig hierbei ist die richtige Reihenfolge der Parser.
+
+Nun muss noch eine parse Funktion geschrieben werden, um die Kombinierten Parser auszuführen.
+
+```
+// And for our main parsing, we'll invoke this function
+function parse(parser, input) {
+  const result = parser(input);
+  if (result.isFailure) {
+    throw new Error(`Parse error.
+		expected ${result.expected}.
+		instead found '${result.actual}'
+	`);
+  } else {
+    return result;
+  }
+}
+
+```
+Führt man nun den Parser aus kann es wie folgt aussehen.
+```
+parse(plusExpr, "12+34")
+  >> {data: 46, rest: ""}
+  
+parse(plusExpr, "12+34rest")
+  >> Uncaught Error: Parse error.
+		expected end of input.
+		instead found 'rest'
+```
+
+
 
 ## Links
 
 -   [Wiki](https://en.wikipedia.org/wiki/Parser_combinator)
--   [Introduction to parser combinators](https://gist.github.com/yelouafi/556e5159e869952335e01f6b473c4ec1)
 -   [Parser Combinators: a Walkthrough](https://hasura.io/blog/parser-combinators-walkthrough/)
 
 
