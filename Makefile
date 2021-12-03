@@ -100,14 +100,14 @@ SLIDES_DOT_TARGETS = $(DOT_SOURCES:.dot=.png)
 ##	(the simple expansion with ':=' is important here because we use the
 ##	same variable on both sides. Using a recursive expansion with '='
 ##	would result in an error.)
-PNG_SOURCES        = $(shell find $(SRC_DIR) -type f -iname '*.png')
-PNG_SOURCES       := $(filter-out $(TEX_SOURCES:.tex=.png) $(DOT_SOURCES:.dot=.png), $(PNG_SOURCES))
-WEB_PNG_TARGETS    = $(PNG_SOURCES:$(SRC_DIR)%=$(WEB_INTERMEDIATE_DIR)%)
-SLIDES_PNG_TARGETS = $(PNG_SOURCES)
+STANDALONE_SOURCES  = $(shell find $(SRC_DIR) -type f -iname '*.png')
+STANDALONE_SOURCES := $(filter-out $(TEX_SOURCES:.tex=.png) $(DOT_SOURCES:.dot=.png), $(STANDALONE_SOURCES))
+WEB_STANDALONE_TARGETS     = $(STANDALONE_SOURCES:$(SRC_DIR)%=$(WEB_INTERMEDIATE_DIR)%)
+SLIDES_STANDALONE_TARGETS  = $(STANDALONE_SOURCES)
 
 ## Image targets for web and slides
-WEB_IMAGE_TARGETS    = $(WEB_TEX_TARGETS) $(WEB_DOT_TARGETS) $(WEB_PNG_TARGETS)
-SLIDES_IMAGE_TARGETS = $(SLIDES_TEX_TARGETS) $(SLIDES_DOT_TARGETS) $(SLIDES_PNG_TARGETS)
+WEB_IMAGE_TARGETS    = $(WEB_TEX_TARGETS) $(WEB_DOT_TARGETS) $(WEB_STANDALONE_TARGETS)
+SLIDES_IMAGE_TARGETS = $(SLIDES_TEX_TARGETS) $(SLIDES_DOT_TARGETS) $(SLIDES_STANDALONE_TARGETS)
 
 ## Markdown source and target files
 WEB_MARKDOWN_SOURCES = $(shell find $(SRC_DIR) -type f -iname '*.md')
@@ -215,7 +215,7 @@ $(SLIDES_DOT_TARGETS): %.png: %.dot
 ## Nothing to do for standalone images but we need the targets in order to
 ## use them as prerequisites. This way make can rebuild dependent targets
 ## if the files are manually changed or replaced.
-$(SLIDES_PNG_TARGETS): ;
+$(SLIDES_STANDALONE_TARGETS): ;
 
 ## Copy image files to $(WEB_INTERMEDIATE_DIR)
 $(WEB_IMAGE_TARGETS): $(WEB_INTERMEDIATE_DIR)/%: $(SRC_DIR)/%
