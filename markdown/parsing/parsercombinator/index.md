@@ -105,7 +105,7 @@ Folgende Operatoren sind für die Konstruktion von **Parsing Expressions** erlau
 | ' '      |     5     | String-Literal         |
 | " "      |     5     | String-Literal         |
 | [ ]      |     5     | Zeichenklasse          |
-| .        |     5     | beliebiges Zeichen     |
+| .        |     5     | belibieges Zeichen     |
 | (e)      |     5     | Gruppierung            |
 | e?       |     4     | Optional               |
 | e*       |     4     | Kein-oder-mehr         |
@@ -196,13 +196,14 @@ Comment <- '/*' (Comment / !'*/' .)* '*/'
 Escape-Sequenzen haben meist nur eine stark eingeschränkte Syntax. Eine PEG kann beliebige Ausdrücke in eine Escape-Sequenz erlauben:
 
 ```
-Expression  <- ...
-Literal     <- ["] (!["] [Character EscSequence])* ["]
-Character   <- !'\\' .
-EscSequence <- '\\(' Expression ')'    
+Expression <- ...
+Primary    <- Literal / ...
+Literal    <- ["] (!["] Char)* ["]
+Char       <- '\\(' Expression ')'
+            / !'\\' .
 ```
 
-Zum Beispiel könnte man dadurch in einer Escape-Sequenz auf Variablen zugreifen (`\(var)`) oder arithmetische Ausdrücke verarbeiten (`\(1+2)`).
+Zum Beispiel könnte man dadurch in einer Escape-Sequenz auf Variablen zugreifen: `\(var)`.
 
 ## Beispiel: Verschachtelte Template Typen in C++
 
@@ -213,16 +214,14 @@ TypeA<TypeB<TypeC> > MyVar;
 
 PEG erlaubt kontextsensitive Interpretation:
 ```
-Expression      <- ...
-TemplateType    <- PrimaryType (LEFTANGLE TemplateType RIGHTANGLE)?
-ShiftExpression <- Expression (ShiftOperator Expression)*
-ShiftOperator   <- LEFTSHIFT / RIGHTSHIFT
-Spacing         <- any number of spaces, tabs, newlines or comments
+TemplType <- PrimType (LANGLE TemplType RANGLE)?
+ShiftExpr <- PrimExpr (ShiftOper PrimExpr)*
+ShiftOper <- LSHIFT / RSHIFT
         
-LEFTANGLE       <- '<' Spacing
-RIGHTANGLE      <- '>' Spacing
-LEFTSHIFT       <- '<<' Spacing
-RIGHTSHIFT      <- '>>' Spacing
+LANGLE    <- '<' Spacing
+RANGLE    <- '>' Spacing
+LSHIFT    <- '<<' Spacing
+RSHIFT    <- '>>' Spacing
 ```
 
 ## Beispiel: Dangling-Else
@@ -233,8 +232,8 @@ oder Erweiterung der Syntax aufgelöst. In PEGs sorgt der prioriserende
 Auswahloperator für das korrekte Verhalten.
 
 ```
-Statement <- IF Cond Statement ELSE Statement
-           / IF Cond Statement
+Statement <- IF Cond THEN Statement ELSE Statement
+           / IF Cond THEN Statement
            / ...
 ```
 
@@ -293,10 +292,16 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
 
 ## Dijkstras Shunting Yard Algorithmus (SY)
 
-   - Verwendet Stacks für Operatoren und Argumente anstatt Rekursion![Shunting Yard Beispiel](images/shuntingyardStack.png)
+::: notes
 
-### Code Beispiel
+   - Verwendet Stacks für Operatoren und Argumente anstatt Rekursion
 
+::: 
+
+![](images/shuntingyardStack.png){width="50%"}
+
+## Dijkstras Shunting Yard Algorithmus-Beispiel
+```
     while there are tokens to be read:
          read a token
          if the token is a number:
@@ -314,9 +319,7 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
               if token.precedence < stack.top.precedence:
                   output.add(stack.pop())        
               stack.put(token)
-
-
-​    
+```
 
 ## Precedence Climbing (PC)
 
@@ -326,20 +329,20 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
 
         - Jeder Unterausdruck enthält das gemeinsame precedence level
 
-- ```
+```
   2 + 3 * 4 * 5 - 6
   
   |---------------|   : prec 1
       |-------|       : prec 2
-  ```
+```
 
  - Die Operatoren stehen mit Gewicht und Association (left, right) in einer Tabelle
 
    
 
-### Beispiel
+## Precedence Climbing-Beispiel
 
-- ```
+```
   compute_expr(min_prec):
     result = compute_atom()    // Atom is a number or a expression in brackets
     curtoken = next()	
@@ -353,13 +356,15 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
       result = compute operator(result, rhs)
   
     return result
-  ```
+```
 
-- ```
+::: notes
+
+```
   6 + 3 * 4
-  ```
+```
 
--   ```
+```
     * compute_expr(1)
     	* compute_atom() --> 6
     	* compute_expr(2) 					# Loop with '+' left assoc
@@ -369,9 +374,11 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
           		* result --> 4	 			# Loop not enterd '+ < *'
             * result = 3 * 4 --> 12
         * result = 6 + 12 --> 18 
-    ```
+```
 
 * Beispiel: [Parsing expressions by precedence climbing](https://eli.thegreenplace.net/2012/08/02/parsing-expressions-by-precedence-climbing) (Python)
+
+:::
 
 ## Top Down Operator Precedence (TDOP) Pratt Parsing
 
@@ -382,7 +389,7 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
      - lbp = left Binding Power
      - rbp= Right Binding Power
 
-### Tokenhandler
+## Tokenhandler
    - Die Tokenhandler behandeln Notationen unterschiedlich
 
      - infix notation: a = b - c
@@ -393,7 +400,7 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
 
        - nud (Null denotation)
 
-- ```
+```
   class operator_sub_token(object):
       lbp = 10
       def nud(self):
@@ -405,18 +412,18 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
       lbp = 20
       def led(self, left):
           return left * expression(20)
-  ```
-  
-   - hat eine Tokenhandler für jede Operation
+```
 
-     - operator_add_token, operator_mul_token, operator_sub_token, operator_pow_token
+::: notes
+ - hat eine Tokenhandler für jede Operation
 
-     - operator_lparen_token, operator_rparen_token
+   - operator_add_token, operator_mul_token, operator_sub_token, operator_pow_token
+- operator_lparen_token, operator_rparen_token
+:::
 
+## Top Down Operator Precedence-Beispiel
 
-### Beispiel
-
-   - ```
+```
      def expression(rbp=0):
          global token
          t = token
@@ -427,11 +434,12 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
              token = next()
              left = t.led(left)  # results in recursive call
          return left     
-     ```
+```
+::: notes
+- Beispiel: [Top-Down operator precedence parsing](https://eli.thegreenplace.net/2010/01/02/top-down-operator-precedence-parsing/) (Python)
+:::
 
-   - Beispiel: [Top-Down operator precedence parsing](https://eli.thegreenplace.net/2010/01/02/top-down-operator-precedence-parsing/) (Python)
-
-### Right Associative
+## Right Associative TDOP
 
 -   Der Parser behandelt die folgende Potenzierungsoperatoren als Unterausdrücke des ersten Unterausdruck
 -   Dies wird erreicht, indem wir den Ausdruck im Handler der Potenzierung mit einem rbp aufrufen, der niedriger ist als der lbp der Potenzierung
@@ -456,7 +464,9 @@ class operator_pow_token(object):
 -   Mischformen möglich (siehe Shunting Yard in [Parsing Expressions by Recursive Descent](https://www.engr.mun.ca/~theo/Misc/exp_parsing.htm))
 -   Shunting Yard verwendet einen Stack anstatt Rekrusive 
 -   Precedence Climbing wird am häufigsten eingesetzt
--   Pratt Parsing vs. Precedence Climbing
+
+## Vergleich TDOP vs. Precedence Climbing
+-   TDOP(Pratt Parsing) vs. Precedence Climbing
     -   [Pratt Parsing and Precedence Climbing Are the Same Algorithm](https://www.oilshell.org/blog/2016/11/01.html)
     -   [From Precedence Climbing to Pratt Parsing](https://www.engr.mun.ca/~theo/Misc/pratt_parsing.htm) (Norvell)
     -   Eine While Schleife mit rekursiven Aufruf mit Abbruchbedingung (binding Power/precedence)
@@ -508,15 +518,8 @@ class operator_pow_token(object):
 + Die Output der verwendeten Parser:
   + Success: {result, restString}
   + failure: Error Message und Position
-+ Beispiel:
-  + eine Produktionsregel einer kontextfreien Grammatik kann meherer Alternativen haben, diese Alternativen können aus einer Folge von Nichtterminalen und/oder Terminalen bestehen oder auch nur aus einem einzigen Nichtterminalen und/oder Terminalen oder aus einem leeren String. 
-  + Wenn nun ein Simpler Parser für jede Alternative verfügbar ist kann man diese miteinander Kombinieren, um alle Alternativen abzudecken
 
-## Code Beispiel
-
-[Introduction to parser combinators](https://gist.github.com/yelouafi/556e5159e869952335e01f6b473c4ec1)
-
-### Simple Parser
+## Simple Parser
 
 Simple Parser, die nachher als Inputparameter für einen Kombinierten Parser verwendet werden.
 
@@ -532,6 +535,9 @@ function integer(input) {
   return failure("an integer", input);
 }
 
+```
+::: notes
+```
 // Simple plus operator Parser
 function plus(input) {
   if (input[0] === "+") {
@@ -546,8 +552,9 @@ function eof(input) {
   return failure("end of input", input);
 }
 ```
+:::
 
-### Kombinierter Parser
+## Kombinierter Parser
 
 Der Kombinierte Parser sieht wie folgt aus:
 
@@ -569,9 +576,11 @@ function apply(func, parsers) {
   };
 }
 ```
-
+::: notes
 Nun kann über den Parameter func eine Funktionsweise angegeben werden und über den Parameter parsers kann ein Array an Simpleren Parsern übergeben werden. Die Parser müssen dabei in der richtigen Reihenfolge aufgerufen werden. In der Variable accData werden alle Parser Ergebnisse gespeichert, um sie nachher in der der func zu verwenden. Der currentInput enthält im ersten druchlauf den gesamten Input. Jeder Parser schreibt dann den Rest (der nicht parsbare Teil) in die currentInput für den nächsten Parser. 
+:::
 
+## Kombinierte Parser definieren
 Der Kombinierte Parser kann nun so definiert werden:
 
 ```
@@ -585,7 +594,7 @@ const plusExpr = apply((num1, _, num2) => num1 + num2, [
 
 Diese Zusammensetzung der Parser überprüft eine plus expression mit Integern. Wichtig hierbei ist die richtige Reihenfolge der Parser.
 
-### Verwendung der Parsers
+## Verwendung der Parsers
 
 Nun muss noch eine parse Funktion geschrieben werden, um die Kombinierten Parser auszuführen.
 
@@ -604,6 +613,9 @@ function parse(parser, input) {
 }
 
 ```
+
+## Ausführung des Kombinierten Parsers
+
 Führt man nun den Parser aus kann es wie folgt aussehen.
 ```
 parse(plusExpr, "12+34")
@@ -621,7 +633,7 @@ parse(plusExpr, "12+34rest")
 
 -   [Wiki](https://en.wikipedia.org/wiki/Parser_combinator)
 -   [Parser Combinators: a Walkthrough](https://hasura.io/blog/parser-combinators-walkthrough/)
-
+- 	[Introduction to parser combinators](https://gist.github.com/yelouafi/556e5159e869952335e01f6b473c4ec1)
 
 
 
