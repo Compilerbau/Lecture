@@ -59,7 +59,8 @@ DOT_ARGS = -Tpng
 
 ## Define options to be used by Hugo
 ## local.yaml allows to override settings in config.yaml
-HUGO_ARGS = --config config.yaml,$(wildcard local.yaml)
+HUGO_LOCAL = $(wildcard local.yaml)
+HUGO_ARGS  = --config config.yaml,$(HUGO_LOCAL)
 
 #-------------------------------------------------------------------------
 # I/O Directories
@@ -152,6 +153,9 @@ slides: $(SLIDES_PDF_TARGETS) ## Create all slides
 .PHONY: web
 web: $(WEB_MARKDOWN_TARGETS) $(WEB_IMAGE_TARGETS) $(READINGS) ## Create website
 	$(HUGO) $(HUGO_ARGS)
+ifneq ($(HUGO_LOCAL),"")
+web: $(HUGO_LOCAL)
+endif
 
 ## Build Docker image "alpine-pandoc-hugo"
 .PHONY: docker
