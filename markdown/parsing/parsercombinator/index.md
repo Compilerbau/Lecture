@@ -105,7 +105,7 @@ Folgende Operatoren sind für die Konstruktion von **Parsing Expressions** erlau
 | ' '      |     5     | String-Literal         |
 | " "      |     5     | String-Literal         |
 | [ ]      |     5     | Zeichenklasse          |
-| .        |     5     | belibieges Zeichen     |
+| .        |     5     | beliebiges Zeichen     |
 | (e)      |     5     | Gruppierung            |
 | e?       |     4     | Optional               |
 | e*       |     4     | Kein-oder-mehr         |
