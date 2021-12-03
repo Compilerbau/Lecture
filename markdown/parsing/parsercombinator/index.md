@@ -196,14 +196,13 @@ Comment <- '/*' (Comment / !'*/' .)* '*/'
 Escape-Sequenzen haben meist nur eine stark eingeschränkte Syntax. Eine PEG kann beliebige Ausdrücke in eine Escape-Sequenz erlauben:
 
 ```
-Expression <- ...
-Primary    <- Literal / ...
-Literal    <- ["] (!["] Char)* ["]
-Char       <- '\\(' Expression ')'
-            / !'\\' .
+Expression  <- ...
+Literal     <- ["] (!["] [Character EscSequence])* ["]
+Character   <- !'\\' .
+EscSequence <- '\\(' Expression ')'    
 ```
 
-Zum Beispiel könnte man dadurch in einer Escape-Sequenz auf Variablen zugreifen: `\(var)`.
+Zum Beispiel könnte man dadurch in einer Escape-Sequenz auf Variablen zugreifen (`\(var)`) oder arithmetische Ausdrücke verarbeiten (`\(1+2)`).
 
 ## Beispiel: Verschachtelte Template Typen in C++
 
@@ -214,14 +213,16 @@ TypeA<TypeB<TypeC> > MyVar;
 
 PEG erlaubt kontextsensitive Interpretation:
 ```
-TemplType <- PrimType (LANGLE TemplType RANGLE)?
-ShiftExpr <- PrimExpr (ShiftOper PrimExpr)*
-ShiftOper <- LSHIFT / RSHIFT
+Expression      <- ...
+TemplateType    <- PrimaryType (LEFTANGLE TemplateType RIGHTANGLE)?
+ShiftExpression <- Expression (ShiftOperator Expression)*
+ShiftOperator   <- LEFTSHIFT / RIGHTSHIFT
+Spacing         <- any number of spaces, tabs, newlines or comments
         
-LANGLE    <- '<' Spacing
-RANGLE    <- '>' Spacing
-LSHIFT    <- '<<' Spacing
-RSHIFT    <- '>>' Spacing
+LEFTANGLE       <- '<' Spacing
+RIGHTANGLE      <- '>' Spacing
+LEFTSHIFT       <- '<<' Spacing
+RIGHTSHIFT      <- '>>' Spacing
 ```
 
 ## Beispiel: Dangling-Else
@@ -232,8 +233,8 @@ oder Erweiterung der Syntax aufgelöst. In PEGs sorgt der prioriserende
 Auswahloperator für das korrekte Verhalten.
 
 ```
-Statement <- IF Cond THEN Statement ELSE Statement
-           / IF Cond THEN Statement
+Statement <- IF Cond Statement ELSE Statement
+           / IF Cond Statement
            / ...
 ```
 
