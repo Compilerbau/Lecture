@@ -270,33 +270,17 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
     -   Vorrangregeln (Precedence/Binding Power) und Assoziativität
         von Operatoren
     -   Effizienz (Backtracking)
--   Überleitung zu Operator Precedence
-    -   benutzt sowohl Rekursion als auch Schleifen
-    -   verbesserung zu RD
 
-## Prinzip und Eigenschaften
-
-Prinzip:
-
--   [Wikipedia](https://en.wikipedia.org/wiki/Pratt_parser)
--   [Pratt Parsing](https://dev.to/jrop/pratt-parsing)
-
-Eigenschaften:
+## Eigenschaften
 
 -   Recognition basiert (insofern das der Parser nicht aus einer
     Grammatik generiert sondern von Hand geschrieben wird)
-    
-- Verwendet Vorschautoken
-
+-   Verwendet Vorschautoken
+-   benutzt sowohl Rekursion als auch Schleifen
 -   Interpretiert [Operator-Precedence Grammatik](https://en.wikipedia.org/wiki/Operator-precedence_grammar)
     -   Untermenge der deterministischen kontextfreien Grammatiken
-    
-- Simple zu Programmieren und kann die Operator-Tabelle während der Programmlaufzeit konsultieren
-
+-   Simple zu Programmieren und kann die Operator-Tabelle während der Programmlaufzeit konsultieren
 - Verwendet eine Reihenfolge(precedence) für die Operatoren
-
-
-## Methoden
 
 ##  Klassische Methode (RD)
 
@@ -308,14 +292,11 @@ Eigenschaften:
 
 ## Dijkstras Shunting Yard Algorithmus (SY)
 
-   - [Shunting-yard algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm) (Wikipedia)
-
-   - Beispiel: [A recursive descent parser with an infix expression evaluator](https://eli.thegreenplace.net/2009/03/20/a-recursive-descent-parser-with-an-infix-expression-evaluator) (Python)
-
    - Verwendet Stacks für Operatoren und Argumente anstatt Rekursion![Shunting Yard Beispiel](images/shuntingyardStack.png)
 
-   - ```
-     while there are tokens to be read:
+### Code Beispiel
+
+    while there are tokens to be read:
          read a token
          if the token is a number:
            output.add(token)
@@ -331,18 +312,67 @@ Eigenschaften:
            else:
               if token.precedence < stack.top.precedence:
                   output.add(stack.pop())        
-              stack.put(token)         
-     ```
-     
-     
+              stack.put(token)
+
+
+​    
+
+## Precedence Climbing (PC)
+
+   - Climb **down** the precedence levels (Norvell)
+
+   - Behandelt eine Expression wie verschachtelte Unterausdrücke
+
+        - Jeder Unterausdruck enthält das gemeinsame precedence level
+
+- ```
+  2 + 3 * 4 * 5 - 6
+  
+  |---------------|   : prec 1
+      |-------|       : prec 2
+  ```
+
+ - Die Operatoren stehen mit Gewicht und Association (left, right) in einer Tabelle
+
+   
+
+### Beispiel
+
+- ```
+  compute_expr(min_prec):
+    result = compute_atom()    // Atom is a number or a expression in brackets
+    curtoken = next()	
+    while curtoken precedence > min_prec:
+      prec, assoc = precedence and associativity of current token
+      if assoc is left:
+        next_min_prec = prec + 1
+      else:
+        next_min_prec = prec
+      rhs = compute_expr(next_min_prec)
+      result = compute operator(result, rhs)
+  
+    return result
+  ```
+
+- ```
+  6 + 3 * 4
+  ```
+
+-   ```
+    * compute_expr(1)
+    	* compute_atom() --> 6
+    	* compute_expr(2) 					# Loop with '+' left assoc
+    		* compute_atom() --> 3
+    		* compute_expr(3)				# Loop with '*' left assoc
+    			* compute_atom() --> 4
+          		* result --> 4	 			# Loop not enterd '+ < *'
+            * result = 3 * 4 --> 12
+        * result = 6 + 12 --> 18 
+    ```
+
+* Beispiel: [Parsing expressions by precedence climbing](https://eli.thegreenplace.net/2012/08/02/parsing-expressions-by-precedence-climbing) (Python)
 
 ## Top Down Operator Precedence (TDOP) Pratt Parsing
-
-   - [Operator-precedence parser](https://en.wikipedia.org/wiki/Operator-precedence_parser) (Wikipedia)
-
-   - [Pratt Parsing Index and Updates](https://www.oilshell.org/blog/2017/03/31.html) (Sammlung von Artikeln/Posts)
-
-   - [Simple but Powerful Pratt Parsing](https://matklad.github.io/2020/04/13/simple-but-powerful-pratt-parsing.html) (Rust)
 
    - Generalisierung von Precedence Climbing
 
@@ -351,6 +381,7 @@ Eigenschaften:
      - lbp = left Binding Power
      - rbp= Right Binding Power
 
+### Tokenhandler
    - Die Tokenhandler behandeln Notationen unterschiedlich
 
      - infix notation: a = b - c
@@ -361,26 +392,28 @@ Eigenschaften:
 
        - nud (Null denotation)
 
-     - ```
-       class operator_sub_token(object):
-           lbp = 10
-           def nud(self):
-               return -expression(100)
-           def led(self, left):
-               return left - expression(10)
-               
-       class operator_mul_token(object):
-           lbp = 20
-           def led(self, left):
-               return left * expression(20)
-       ```
-
+- ```
+  class operator_sub_token(object):
+      lbp = 10
+      def nud(self):
+          return -expression(100)
+      def led(self, left):
+          return left - expression(10)
+          
+  class operator_mul_token(object):
+      lbp = 20
+      def led(self, left):
+          return left * expression(20)
+  ```
+  
    - hat eine Tokenhandler für jede Operation
 
-     -   operator_add_token, operator_mul_token, operator_sub_token, operator_pow_token
-     -   operator_lparen_token, operator_rparen_token
+     - operator_add_token, operator_mul_token, operator_sub_token, operator_pow_token
 
-   - Beispiel: [Top-Down operator precedence parsing](https://eli.thegreenplace.net/2010/01/02/top-down-operator-precedence-parsing/) (Python)
+     - operator_lparen_token, operator_rparen_token
+
+
+### Beispiel
 
    - ```
      def expression(rbp=0):
@@ -395,63 +428,21 @@ Eigenschaften:
          return left     
      ```
 
-   - right Associactive Operators?
+   - Beispiel: [Top-Down operator precedence parsing](https://eli.thegreenplace.net/2010/01/02/top-down-operator-precedence-parsing/) (Python)
 
-     -   Der Parser behandelt die folgende Potenzierungsoperatoren als Unterausdrücke des ersten
-     -   indem wir den Ausdruck im Handler der Potenzierung mit einem rbp aufrufen, der niedriger ist als der lbp der Potenzierung
+### Right Associative
 
-     ```
-     class operator_pow_token(object):
-         lbp = 30
-         def led(self, left):
-            return left ** expression(30 - 1)  # RECURSIVE CALL
-     ```
+-   Der Parser behandelt die folgende Potenzierungsoperatoren als Unterausdrücke des ersten Unterausdruck
+-   Dies wird erreicht, indem wir den Ausdruck im Handler der Potenzierung mit einem rbp aufrufen, der niedriger ist als der lbp der Potenzierung
 
-   -   [Pratt Parsing and Precedence Climbing Are the Same Algorithm](https://www.oilshell.org/blog/2016/11/01.html)
+```
+class operator_pow_token(object):
+    lbp = 30
+    def led(self, left):
+       return left ** expression(30 - 1)  # RECURSIVE CALL
+```
 
-## Precedence Climbing (PC)
-
-   - Beispiel: [Parsing expressions by precedence climbing](https://eli.thegreenplace.net/2012/08/02/parsing-expressions-by-precedence-climbing) (Python)
-
-   - [Precedence Climbing is Widely Used](http://www.oilshell.org/blog/2017/03/30.html)
-
-   - Climb **down** the precedence levels (Norvell)
-
-   - Die Operatoren stehen mit Gewicht und Association (left, right) in einer Tabelle
-
-   - Pseudocode
-
-     - ```
-       compute_expr(min_prec):
-         result = compute_atom()    // Atom is a number or a expression in brackets
-         curtoken = next()	
-         while curtoken precedence > min_prec:
-           prec, assoc = precedence and associativity of current token
-           if assoc is left:
-             next_min_prec = prec + 1
-           else:
-             next_min_prec = prec
-           rhs = compute_expr(next_min_prec)
-           result = compute operator(result, rhs)
-       
-         return result
-       ```
-     
-     - ```
-       6 + 3 * 4
-       ```
-     
-     -   ```
-         * compute_expr(1)
-         	* compute_atom() --> 6
-         	* compute_expr(2) 					# Loop with '+' left assoc
-         		* compute_atom() --> 3
-         		* compute_expr(3)				# Loop with '*' left assoc
-         			* compute_atom() --> 4
-               		* result --> 4	 			# Loop not enterd '+ < *'
-                 * result = 3 * 4 --> 12
-             * result = 6 + 12 --> 18 
-         ```
+   - Wenn expression zum nächsten ^ in seiner Schleife gelangt, stellt er fest, dass noch rbp < token.lbp ist und gibt das Ergebnis nicht sofort zurück, sondern sammelt zunächst den Wert des Unterausdrucks.
 
 ## Vergleich
 
@@ -494,6 +485,13 @@ Eigenschaften:
     Dokumentation)
 -   [Pratt Parsers: Expression Parsing Made Easy](http://journal.stuffwithstuff.com/2011/03/19/pratt-parsers-expression-parsing-made-easy/) (Java)
 -   [Top Down Operator Precedence](http://crockford.com/javascript/tdop/tdop.html) (JavaScript)
+-   [Operator-precedence parser](https://en.wikipedia.org/wiki/Operator-precedence_parser) (Wikipedia)
+-   [Pratt Parsing Index and Updates](https://www.oilshell.org/blog/2017/03/31.html) (Sammlung von Artikeln/Posts)
+-   [Simple but Powerful Pratt Parsing](https://matklad.github.io/2020/04/13/simple-but-powerful-pratt-parsing.html) (Rust)
+-   [Precedence Climbing is Widely Used](http://www.oilshell.org/blog/2017/03/30.html)
+-   [Shunting-yard algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm) (Wikipedia)
+-   [Pratt Parsing and Precedence Climbing Are the Same Algorithm](https://www.oilshell.org/blog/2016/11/01.html)
+-   Beispiel: [A recursive descent parser with an infix expression evaluator](https://eli.thegreenplace.net/2009/03/20/a-recursive-descent-parser-with-an-infix-expression-evaluator) (Python)
 
 # Parser Kombinatoren
 
