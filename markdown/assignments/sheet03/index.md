@@ -9,7 +9,7 @@ weight: 3
 
 ## A3.1: Konstruktion Kontrollflussgraph
 
-Konstruieren Sie aus Ihrem AST einen Kontrollflussgraph. Ergänzen Sie Ihre Ausgabefunktion, so dass auch
+Konstruieren Sie aus Ihrem AST einen Kontrollflussgraphen. Ergänzen Sie Ihre Ausgabefunktion, so dass auch
 der Kontrollflussgraph als DOT-Code formatiert ausgegeben wird.
 
 Hinweis: Geben Sie sowohl den ursprünglichen Kontrollflussgraphen als auch den Kontrollflussgraphen nach 
