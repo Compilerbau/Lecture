@@ -30,10 +30,16 @@
 ## set to the folder of the current .tex file. When called directly, we
 ## need to first change-dir to this folder.
 ifneq ($(DOCKER), false)
-PANDOC = docker run --rm -i -v "$(shell pwd):/data" -w "/data"          -u "$(shell id -u):$(shell id -g)" --entrypoint="pandoc" alpine-pandoc-hugo
-HUGO   = docker run --rm -i -v "$(shell pwd):/data" -w "/data"          -u "$(shell id -u):$(shell id -g)" --entrypoint="hugo"   alpine-pandoc-hugo
-DOT    = docker run --rm -i -v "$(shell pwd):/data" -w "/data"          -u "$(shell id -u):$(shell id -g)" --entrypoint="dot"    alpine-pandoc-hugo
-LATEX  = docker run --rm -i -v "$(dir $(realpath $<)):/data" -w "/data" -u "$(shell id -u):$(shell id -g)" --entrypoint="latex"  alpine-pandoc-hugo
+DOCKER_IMAGE      = alpine-pandoc-hugo
+DOCKER_COMMAND    = docker run --rm -i
+DOCKER_USER       = -u "$(shell id -u):$(shell id -g)"
+DOCKER_VOLUME     = -v "$(shell pwd):/data" -w "/data"
+DOCKER_TEX_VOLUME = -v "$(dir $(realpath $<)):/data" -w "/data"
+
+PANDOC = $(DOCKER_COMMAND) $(DOCKER_VOLUME)     $(DOCKER_USER) --entrypoint="pandoc" $(DOCKER_IMAGE)
+HUGO   = $(DOCKER_COMMAND) $(DOCKER_VOLUME)     $(DOCKER_USER) --entrypoint="hugo"   $(DOCKER_IMAGE)
+DOT    = $(DOCKER_COMMAND) $(DOCKER_VOLUME)     $(DOCKER_USER) --entrypoint="dot"    $(DOCKER_IMAGE)
+LATEX  = $(DOCKER_COMMAND) $(DOCKER_TEX_VOLUME) $(DOCKER_USER) --entrypoint="latex"  $(DOCKER_IMAGE)
 else
 PANDOC = pandoc
 HUGO   = hugo
