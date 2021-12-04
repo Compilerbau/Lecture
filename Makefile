@@ -43,8 +43,8 @@ LATEX  = $(DOCKER_COMMAND) $(DOCKER_TEX_VOLUME) $(DOCKER_USER) --entrypoint="lat
 else
 PANDOC = pandoc
 HUGO   = hugo
-LATEX  = cd $(dir $<) && latex
-DOT    = cd $(dir $<) && dot
+LATEX  = cd $(dir $(realpath $<)) && latex
+DOT    = dot
 endif
 
 ## Data-Dir: Path to the Git submodule of Pandoc-Lecture
