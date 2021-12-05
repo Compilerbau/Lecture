@@ -19,14 +19,14 @@ attachments:
 ## Generative Systeme vs Recognition basierte Systeme
 
 - Generative Systeme:
-    - formale Definition von Sprachen durch Regeln, die rekursive
+    - formale Definition von Sprachen durch Regeln, die rekursiv
       angewendet Sätze/Strings der Sprache generieren
     - Sprachen aus der Chomsky Hierarchie definiert durch
       kontextfreie Grammatiken (CFGs) und reguläre Ausdrücke (REs)
 
-- Recognition basierte Systeme:
+- Recognition-basierte Systeme:
     - Sprachen definiert in Form von Regeln/Prädikaten, die
-      entscheiden ob ein gegebener String Teil der Sprache ist
+      entscheiden, ob ein gegebener String Teil der Sprache ist
     - Parsing Expression Grammar (PEG)
 
 
@@ -56,13 +56,13 @@ Chomsky (CFGs + REs):
 ## Motivation (2/2)
 PEG:
 
-- Stilistisch ähnlich zu CFGs mit REs (EBNF)
+- stilistisch ähnlich zu CFGs mit REs (EBNF)
 
 - **Kernunterschied**: priorisierender Auswahloperator (`/` statt `|`)
-    - Alternative Muster werden der Reihe nach getestet
+    - alternative Muster werden der Reihe nach getestet
     - erste passende Alternative wird verwendet
     - Mehrdeutigkeiten werden dadurch unmöglich
-    - nähe an der Funktionsweise von Parsern (Erkennen von Eingaben)
+    - nahe an der Funktionsweise von Parsern (Erkennen von Eingaben)
         - PEGs können als formale Beschreibung eines Top-Down-Parsers betrachtet werden
 
 - Beispiel:
@@ -82,7 +82,7 @@ Eine Parsing Expression Grammar (PEG) ist ein 4-Tuple $G = (V_N, V_T, R, e_S)$ m
 Weiterhin gilt:
 
 - $V_N \cap V_T = \emptyset$.
-- jede Regel $e \in R$ ist ein Paar $(A,e)$ geschrieben als $A \leftarrow e$ mit $A \in V_N$ und $e$ eine **Parsing Expression**
+- jede Regel $e \in R$ ist ein Paar $(A,e)$, geschrieben als $A \leftarrow e$ mit $A \in V_N$, und $e$ eine **Parsing Expression**
 - für jedes Nicht-Terminal $A$ existierte genau ein $e$ mit $A \leftarrow e \in R$.
 
 ## Definition Parsing Expression
@@ -92,7 +92,7 @@ Weiterhin gilt:
 - jedes Terminal $a \in V_T$
 - jedes Nicht-Terminal $A \in V_N$
 - die Sequenz $e_1 e_2$
-- die priorisierte Option $e_1 / e_2$
+- die priorisierende Option $e_1 / e_2$
 - beliebige Wiederholungen $e^{\ast}$
 - Nicht-Pradikate $!e$
 
@@ -126,7 +126,7 @@ Nur das Wissen über Erfolg oder Miserfolg wird gespeichert (siehe Beispiel zu N
 
 ## PEG Eigenschaften
 
-- wahrscheinlich andere Sprachklasse als CFGs
+- andere Sprachklasse als CFGs
 
 :::notes
     - PEGs können alle deterministischen LR(k)-Sprachen darstellen
@@ -161,8 +161,8 @@ Nur das Wissen über Erfolg oder Miserfolg wird gespeichert (siehe Beispiel zu N
 :::
 
 - Herausforderung bei PEGs:
-    - sind Alternativen vertauschbar ohne die Sprache zu ändern?
-    - Analog zur Frage der Mehrdeutihkeit bei CFGs
+    - sind Alternativen vertauschbar, ohne die Sprache zu ändern?
+    - Analog zur Frage der Mehrdeutigkeit bei CFGs
 
 ## Beispiel: Formeln
 
@@ -262,26 +262,26 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
 -   Probleme mit [CFG und BNF](https://matklad.github.io/2020/04/13/simple-but-powerful-pratt-parsing.html)
 -   [Recursive Decent Parser](https://eli.thegreenplace.net/2008/09/26/recursive-descent-ll-and-predictive-parsers/) (RD)
     -   Modelliere Grammatik(-regeln) durch rekursive Funktionen
-    -   top-down Ansatz
+    -   Top-Down-Ansatz
     -   i.d.R. LL(1) Parser (handgeschrieben)
     -   Generatoren: [ANTLR](http://www.antlr.org/), [Boost.Spirit](http://spirit.sourceforge.net/)
 -   [Probleme](https://eli.thegreenplace.net/2009/03/14/some-problems-of-recursive-descent-parsers/) mit RD
     -   Linksrekursion (für handgeschriebene Parser von gringer
-        Bedeutung; Ersetzbar durch Schleife, EBNF)
+        Bedeutung; ersetzbar durch Schleife, EBNF)
     -   Vorrangregeln (Precedence/Binding Power) und Assoziativität
         von Operatoren
     -   Effizienz (Backtracking)
 
 ## Eigenschaften
 
--   Recognition basiert (insofern das der Parser nicht aus einer
-    Grammatik generiert sondern von Hand geschrieben wird)
--   Verwendet Vorschautoken
+-   Recognition-basiert (insofern als der Parser nicht aus einer
+    Grammatik generiert, sondern von Hand geschrieben wird)
+-   verwendet Vorschautoken
 -   benutzt sowohl Rekursion als auch Schleifen
--   Interpretiert [Operator-Precedence Grammatik](https://en.wikipedia.org/wiki/Operator-precedence_grammar)
+-   interpretiert [Operator-Precedence Grammatik](https://en.wikipedia.org/wiki/Operator-precedence_grammar)
     -   Untermenge der deterministischen kontextfreien Grammatiken
--   Simple zu Programmieren und kann die Operator-Tabelle während der Programmlaufzeit konsultieren
-- Verwendet eine Reihenfolge(precedence) für die Operatoren
+-   simpel zu programmieren und kann die Operator-Tabelle während der Programmlaufzeit konsultieren
+- verwendet eine Reihenfolge (precedence) für die Operatoren
 
 ##  Klassische Methode (RD)
 
@@ -345,7 +345,7 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
 
 ```
   compute_expr(min_prec):
-    result = compute_atom()    // Atom is a number or a expression in brackets
+    result = compute_atom()    // Atom is a number or an expression in brackets
     curtoken = next()	
     while curtoken precedence > min_prec:
       prec, assoc = precedence and associativity of current token
@@ -388,7 +388,7 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
    - Verwendet eine Gewichtung (binding Power) statt einer Reihenfolge (precedence)
 
      - lbp = left Binding Power
-     - rbp= Right Binding Power
+     - rbp = right Binding Power
 
 ## Tokenhandler
    - Die Tokenhandler behandeln Notationen unterschiedlich
@@ -442,7 +442,7 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
 
 ## Right Associative TDOP
 
--   Der Parser behandelt die folgende Potenzierungsoperatoren als Unterausdrücke des ersten Unterausdruck
+-   Der Parser behandelt die folgende Potenzierungsoperatoren als Unterausdrücke des ersten Unterausdrucks
 -   Dies wird erreicht, indem wir den Ausdruck im Handler der Potenzierung mit einem rbp aufrufen, der niedriger ist als der lbp der Potenzierung
 
 ```
@@ -463,7 +463,7 @@ class operator_pow_token(object):
     -   RD: Hinzufügen/Ändern von Funktionen im Parser
     -   SY/TDOP/PC: Daten liegen in Tabellenform vor
 -   Mischformen möglich (siehe Shunting Yard in [Parsing Expressions by Recursive Descent](https://www.engr.mun.ca/~theo/Misc/exp_parsing.htm))
--   Shunting Yard verwendet einen Stack anstatt Rekrusive 
+-   Shunting Yard verwendet einen Stack anstatt Rekursion
 -   Precedence Climbing wird am häufigsten eingesetzt
 
 ## Vergleich TDOP vs. Precedence Climbing
@@ -471,19 +471,19 @@ class operator_pow_token(object):
     -   [Pratt Parsing and Precedence Climbing Are the Same Algorithm](https://www.oilshell.org/blog/2016/11/01.html)
     -   [From Precedence Climbing to Pratt Parsing](https://www.engr.mun.ca/~theo/Misc/pratt_parsing.htm) (Norvell)
     -   Eine While Schleife mit rekursiven Aufruf mit Abbruchbedingung (binding Power/precedence)
-    -   Rechts Assoziativität 
-        -   In precedence climbing: next_min_prec = prec + 1 für left Assoziativität 
+    -   Rechts Assoziativität
+        -   In precedence climbing: next_min_prec = prec + 1 für left Assoziativität
         -   In Pratt Parsing: rechte binding power rbp auf lbp-1 gesetzt und der rekursive Aufruf mit ihr durchgeführt
     -   Klammern
-        -   In precedence climbing in der rekursiven Parsing Funktion behandelt 
+        -   In precedence climbing in der rekursiven Parsing Funktion behandelt
         -   In Pratt Parsing können sie als nud-Funktion für das Token ( behandelt werden
 
 ## Anwendung
 
 -   [Haskell](https://en.wikipedia.org/wiki/Haskell_(programming_language))
-    -   Benutzerdefinierte Infix-Operatoren mit individueller
+    -   benutzerdefinierte Infix-Operatoren mit individueller
         Assoziativität und Vorrang-Regeln
-    -   Ein Beispiel für das konsultieren der Operator während der Laufzeit
+    -   Ein Beispiel für das Konultieren der Operator während der Laufzeit
 -   [Raku](https://en.wikipedia.org/wiki/Raku_(programming_language))
     -   im Verbund mit zwei weiteren Parsern (Speed-up beim Parsen von
         arithmetischen Ausdrücken)
@@ -512,8 +512,8 @@ class operator_pow_token(object):
 + High-order Funktion
   + Funktionen als Parameter
   + Funktion als Rückgabewert
-  + Programmiersprachen mit first-class functions
-+ Verwendet mehrere Parser als Input und gibt einen Kombinierten Parser output als Rückgabewert zurück
+  
++ Verwendet mehrere Parser als Input und gibt den Putput des Kombinierten Parser zurück:
   + parse Tree
   + Index der Stelle im String die zum Stoppen des Parsers geführt hat
 + Die Output der verwendeten Parser:
@@ -522,7 +522,7 @@ class operator_pow_token(object):
 
 ## Simple Parser
 
-Simple Parser, die nachher als Inputparameter für einen Kombinierten Parser verwendet werden.
+Simple Parser, die nachher als Inputparameter für einen Kombinierten Parser verwendet werden:
 
 ```
 // Simple Integer Parser
@@ -578,7 +578,7 @@ function apply(func, parsers) {
 }
 ```
 ::: notes
-Nun kann über den Parameter func eine Funktionsweise angegeben werden und über den Parameter parsers kann ein Array an Simpleren Parsern übergeben werden. Die Parser müssen dabei in der richtigen Reihenfolge aufgerufen werden. In der Variable accData werden alle Parser Ergebnisse gespeichert, um sie nachher in der der func zu verwenden. Der currentInput enthält im ersten druchlauf den gesamten Input. Jeder Parser schreibt dann den Rest (der nicht parsbare Teil) in die currentInput für den nächsten Parser. 
+Nun kann über den Parameter "func" eine Funktionalität angegeben werden, und über den Parameter "parsers" kann ein Array an Simplen Parsern übergeben werden. Die Parser müssen dabei in der richtigen Reihenfolge aufgerufen werden. In der Variable accData werden alle Parser-Ergebnisse gespeichert, um sie nachher in der der "func" zu verwenden. Der "currentInput" enthält im ersten Durchlauf den gesamten Input. Jeder Parser schreibt dann den Rest (den nicht parsbaren Teil) in "currentInpu"t" für den nächsten Parser. 
 :::
 
 ## Kombinierte Parser definieren
@@ -593,11 +593,11 @@ const plusExpr = apply((num1, _, num2) => num1 + num2, [
 ]);
 ```
 
-Diese Zusammensetzung der Parser überprüft eine plus expression mit Integern. Wichtig hierbei ist die richtige Reihenfolge der Parser.
+Diese Zusammensetzung der Parser überprüft eine Plus-Expression mit Integern. Wichtig hierbei ist die richtige Reihenfolge der Parser.
 
 ## Verwendung der Parsers
 
-Nun muss noch eine parse Funktion geschrieben werden, um die Kombinierten Parser auszuführen.
+Nun muss noch eine Parse-Funktion geschrieben werden, um die Kombinierten Parser auszuführen.
 
 ```
 // And for our main parsing, we'll invoke this function
@@ -617,7 +617,7 @@ function parse(parser, input) {
 
 ## Ausführung des Kombinierten Parsers
 
-Führt man nun den Parser aus kann es wie folgt aussehen.
+Führt man nun den Parser aus, kann es wie folgt aussehen.
 ```
 parse(plusExpr, "12+34")
   >> {data: 46, rest: ""}
