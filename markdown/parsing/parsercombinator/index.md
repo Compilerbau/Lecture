@@ -66,8 +66,8 @@ PEG:
         - PEGs können als formale Beschreibung eines Top-Down-Parsers betrachtet werden
 
 - Beispiel:
-    - EBNF: $A \rightarrow a\;b\; |\; a$ und $A \rightarrow a\; |\; a\; b$ sind äquivalent
-    - PEG: $A \leftarrow a\;b\; /\; a$ und $A \leftarrow a\; /\; a\; b$ sind verschieden
+    - EBNF: $A \rightarrow a \ b \ | \ a$ und $A \rightarrow a \ | \  a \ b$ sind äquivalent
+    - PEG: $A \leftarrow a \ b \  / \ a$ und $A \leftarrow a \ / \ a \ b$ sind verschieden
 
 ## Definition PEG
 
@@ -244,14 +244,14 @@ Ein klassisches Beispiel einer nicht-CFG Sprache ist $a^n b^n c^n$. Diese Sprach
 
 $G = (\lbrace A,B,S \rbrace, \lbrace a,b,c \rbrace, R, S)$
 
-$A \leftarrow a\;A\;b\; /\; \varepsilon$
+$A \leftarrow a \ A \ b \ /\ \varepsilon$
 
-$B \leftarrow b\;B\;c\; /\; \varepsilon$
+$B \leftarrow b \ B \ c \ /\ \varepsilon$
 
-$S \leftarrow \& (A\; !b)\; a^{\ast}\; B\; !.$
+$S \leftarrow (A \ !b) \ a^{\ast} \ B \ !.$
 
 :::notes
-Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig lange Sequenz von a's ($a^{\ast}$) gefolgt von einer Sequenz, die von Regel B erkannt wird und danach keine weiteren Zeichen hat ($!.$) aber nur dann wenn die Sequenz auch von durch $A\; !b$ erkannt wird. Der erste Teil trifft zu wenn in der Sequenz auf $n$ b's gleich viele c's folgen während der zweite Teil zutrifft wenn $n$ b's auf $n$ a's folgen.
+Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig lange Sequenz von a's ($a^{\ast}$) gefolgt von einer Sequenz, die von Regel B erkannt wird und danach keine weiteren Zeichen hat ($!.$) aber nur dann wenn die Sequenz auch von durch $A \ !b$ erkannt wird. Der erste Teil trifft zu wenn in der Sequenz auf $n$ b's gleich viele c's folgen während der zweite Teil zutrifft wenn $n$ b's auf $n$ a's folgen.
 :::
 
 
