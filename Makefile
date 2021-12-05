@@ -235,6 +235,17 @@ new_assignment: ## Create new assignment
 # File Targets
 #-------------------------------------------------------------------------
 
+## Canned recipe for creating output folder
+define create-folder =
+mkdir -p $(dir $@)
+endef
+
+## Canned recipe for creating output folder and copy output file
+define create-dir-and-copy =
+mkdir -p $(dir $@)
+cp $< $@
+endef
+
 ## Create readings data template
 $(READINGS): $(BIBTEX)
 	$(PANDOC) -s -f biblatex -t markdown $< -o $@
@@ -242,38 +253,34 @@ $(READINGS): $(BIBTEX)
 ## Create images from tex files
 $(TEX_TARGETS): $(IMAGES_OUTPUT_DIR)/%.png: $(SRC_DIR)/%.tex
 	$(LATEX) $(LATEX_ARGS) $(notdir $<)
-	mkdir -p $(dir $@)
+	$(create-folder)
 	mv $(<:.tex=.png) $@
 
 ## Create images from dot files
 $(DOT_TARGETS): $(IMAGES_OUTPUT_DIR)/%.png: $(SRC_DIR)/%.dot
-	mkdir -p $(dir $@)
+	$(create-folder)
 	$(DOT) $(DOT_ARGS) $< -o $@
 
 ## Copy standalone images to $(IMAGES_OUTPUT_DIR)
 $(STANDALONE_TARGETS): $(IMAGES_OUTPUT_DIR)/%: $(SRC_DIR)/%
-	mkdir -p $(dir $@)
-	cp $< $@
+	$(create-dir-and-copy)
 
 ## Copy image files to $(WEB_INTERMEDIATE_DIR)
 $(WEB_IMAGE_TARGETS): $(WEB_INTERMEDIATE_DIR)/%: $(IMAGES_OUTPUT_DIR)/%
-	mkdir -p $(dir $@)
-	cp $< $@
+	$(create-dir-and-copy)
 
 ## Process markdown with pandoc (preprocessing for hugo)
 $(WEB_MARKDOWN_TARGETS): $(WEB_INTERMEDIATE_DIR)/%: $(SRC_DIR)/%
-	mkdir -p $(dir $@)
+	$(create-folder)
 	$(PANDOC) $(PANDOC_DIRS) -d hugo $< -o $@
 
 ## Copy image files to $(SLIDES_INTERMEDIATE_DIR)
 $(SLIDES_IMAGE_TARGETS): $(SLIDES_INTERMEDIATE_DIR)/%: $(IMAGES_OUTPUT_DIR)/%
-	mkdir -p $(dir $@)
-	cp $< $@
+	$(create-dir-and-copy)
 
 ## Copy markdown files to $(SLIDES_INTERMEDIATE_DIR)
 $(SLIDES_MARKDOWN_TARGETS): $(SLIDES_INTERMEDIATE_DIR)/%: $(SRC_DIR)/%
-	mkdir -p $(dir $@)
-	cp $< $@
+	$(create-dir-and-copy)
 
 ## Generate pdf slides
 ## Prerequisites are the lessons 'index.md' and the images in the 'images'
@@ -281,7 +288,7 @@ $(SLIDES_MARKDOWN_TARGETS): $(SLIDES_INTERMEDIATE_DIR)/%: $(SRC_DIR)/%
 ## NOTE: The prerequisites for the images must be added after the 'index.md'
 ## so that '$<' contains the right input file for pandoc.
 $(SLIDES_PDF_TARGETS): $$(patsubst $(SLIDES_OUTPUT_DIR)/%.pdf,$(SLIDES_INTERMEDIATE_DIR)/%/index.md, $$(subst _,/,$$@))
-	mkdir -p $(SLIDES_OUTPUT_DIR)
+	$(create-folder)
 	$(PANDOC) $(PANDOC_DIRS) -d slides $< -o $@
 $(SLIDES_PDF_TARGETS): $$(filter $$(patsubst $(SLIDES_OUTPUT_DIR)/%.pdf,$(SLIDES_INTERMEDIATE_DIR)/%, $$(subst _,/,$$@))%, $(SLIDES_IMAGE_TARGETS))
 
