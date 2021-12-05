@@ -30,9 +30,9 @@ attachments:
     - Parsing Expression Grammar (PEG)
 
 
-## Beispiel:
+## Beispiel
 
-Sprache $L = \lbrace \varepsilon,\, \mathrm{aa},\, \mathrm{aaaa},\, \ldots \rbrace$:
+Sprache $L = \lbrace \varepsilon, \ \mathrm{aa}, \ \mathrm{aaaa}, \ \ldots \rbrace$:
 
 - generativ:   $L =\lbrace s \in \mathrm{a}^{\ast} \mid s = (\mathrm{aa})^{n},\, n \geq 0\rbrace$
 
@@ -126,44 +126,44 @@ Nur das Wissen über Erfolg oder Miserfolg wird gespeichert (siehe Beispiel zu N
 
 ## PEG Eigenschaften
 
-- andere Sprachklasse als CFGs
-
 :::notes
+- andere Sprachklasse als CFGs
     - PEGs können alle deterministischen LR(k)-Sprachen darstellen
     - PEGs können manche nicht-CFG Sprachen darstellen (z.B. $a^n b^n c^n$)
     - ungelöste Frage: Sind alle CFGs durch PEGs darstellbar?
-:::
-
 - parsebar in linearer Zeit mit unbegrenztem Lookahead (Packrat
   Parsing)
     - Nachteil: gesamter zu parsender Text muss im Speicher gehalten werden
-
-:::notes
     - Speicherplatz ist heute aber keine große Einschränkung mehr
     - Quellcode-Dateien sind meist nur im KB-Bereich
-:::
-
 - neue Möglichkeiten für das Syntax-Design von Sprachen
-
-:::notes
     - aber auch neue Möglichkeiten für Fehler durch Unachtsamkeit
-:::
-
 - Syntaxbeschreibung: keine Unterscheidung zwischen Hierarchie und
   lexikalischen Elementen nötig
-
-:::notes
     - für gewöhnlich Hierarchie durch CFG und lex. Elem. durch RE beschrieben
         - CFGs ungeeignet für lex. Elemente (keine Greedy-Matching, keine 'negative' Syntax)
         - REs: keine rekursive Syntax
     - Tokens können hierarchische Eigenschaften haben (verschachtelte Kommentare)
     - beliebige Escape-Sequenzen möglich
-:::
-
 - Herausforderung bei PEGs:
     - sind Alternativen vertauschbar, ohne die Sprache zu ändern?
     - Analog zur Frage der Mehrdeutigkeit bei CFGs
 
+:::
+
+:::slides
+- andere Sprachklasse als CFGs
+- parsebar in linearer Zeit mit unbegrenztem Lookahead (Packrat
+  Parsing)
+    - Nachteil: gesamter zu parsender Text muss im Speicher gehalten werden
+- neue Möglichkeiten für das Syntax-Design von Sprachen
+- Syntaxbeschreibung: keine Unterscheidung zwischen Hierarchie und
+  lexikalischen Elementen nötig
+- Herausforderung bei PEGs:
+    - sind Alternativen vertauschbar, ohne die Sprache zu ändern?
+    - Analog zur Frage der Mehrdeutigkeit bei CFGs
+
+:::
 ## Beispiel: Formeln
 
 ```
