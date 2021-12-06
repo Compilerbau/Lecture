@@ -426,7 +426,7 @@ Berechnung/Ausgabe:
 
 ## Top Down Operator Precedence-Beispiel
 
-```
+```python
      def expression(rbp=0):
          global token
          t = token
