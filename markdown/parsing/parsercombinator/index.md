@@ -488,6 +488,7 @@ class operator_pow_token(object):
     -   Umwandlung Infix-Notation (menschenlesbar) in umgekehrte
         polnische Notation (optimiert für Auswertung)
 
+::: notes
 ## Weitere Links
 
 -   [Introduction to Pratt parsing and its terminology](https://abarker.github.io/typped/pratt_parsing_intro.html) (Python [typped](https://github.com/abarker/typped)
