@@ -390,7 +390,6 @@ Berechnung/Ausgabe:
      - rbp = right Binding Power
 
 ## Tokenhandler
-
 -   Die Tokenhandler behandeln Notationen unterschiedlich
 
     -   infix notation: a = b - c
