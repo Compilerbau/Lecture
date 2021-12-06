@@ -334,7 +334,7 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
             |---------------|   : prec 1
                 |-------|       : prec 2
 
- - Die Operatoren stehen mit Gewicht und Association (left, right) in einer Tabelle
+-   Die Operatoren stehen mit Gewicht und Association (left, right) in einer Tabelle
 
    
 
