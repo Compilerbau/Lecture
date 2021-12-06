@@ -289,8 +289,8 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
 -   siehe [Parsing Expressions by Recursive Descent](https://www.engr.mun.ca/~theo/Misc/exp_parsing.htm)
 -   neues Nicht-Terminal für jeden Precedence-Level
 -   Nachteile:
-	-   Anzahl der Precedence Level bestimmt Größe und Geschwindigkeit des Parsers
-	-   Operatoren und Precedence Levels fest in Grammatik eingebaut
+    -   Anzahl der Precedence Level bestimmt Größe und Geschwindigkeit des Parsers
+    -   Operatoren und Precedence Levels fest in Grammatik eingebaut
 
 ## Dijkstras Shunting Yard Algorithmus (SY)
 
@@ -316,13 +316,13 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
            output.add(token)
          if the token is an operator:
            if operator is a bracket:
-           	if left bracket:
-           		stack.put(token)
-           	else:
-           		check if left bracket is in stack
-           		while stack.top != left bracket:
-           			output.add(stack.pop())
-           		output.add(stack.pop())	 // pop left bracket
+               if left bracket:
+                   stack.put(token)
+               else:
+                   check if left bracket is in stack
+                   while stack.top != left bracket:
+                       output.add(stack.pop())
+                   output.add(stack.pop())     // pop left bracket
            else:
               if token.precedence < stack.top.precedence:
                   output.add(stack.pop())
@@ -363,27 +363,24 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
 ```
 
 ::: notes
+Eingabe: 6 + 3 * 4
 
-Eingabe:
-
-  6 + 3 * 4
-```
 
 Berechnung/Ausgabe:
 
-    * compute_expr(1)
-    	* compute_atom() --> 6
-    	* compute_expr(2) 					# Loop with '+' left assoc
-    		* compute_atom() --> 3
-    		* compute_expr(3)				# Loop with '*' left assoc
-    			* compute_atom() --> 4
-          		* result --> 4	 			# Loop not enterd '+ < *'
-            * result = 3 * 4 --> 12
-        * result = 6 + 12 --> 18
+```
+* compute_expr(1)
+    * compute_atom() --> 6
+    * compute_expr(2)                   # Loop with '+' left assoc
+        * compute_atom() --> 3
+        * compute_expr(3)               # Loop with '*' left assoc
+            * compute_atom() --> 4
+            * result --> 4              # Loop not enterd '+ < *'
+        * result = 3 * 4 --> 12
+    * result = 6 + 12 --> 18
 ```
 
-* Beispiel: [Parsing expressions by precedence climbing](https://eli.thegreenplace.net/2012/08/02/parsing-expressions-by-precedence-climbing) (Python)
-
+Beispiel: [Parsing expressions by precedence climbing](https://eli.thegreenplace.net/2012/08/02/parsing-expressions-by-precedence-climbing) (Python)
 :::
 
 ## Top Down Operator Precedence (TDOP) Pratt Parsing
@@ -613,9 +610,9 @@ function parse(parser, input) {
   const result = parser(input);
   if (result.isFailure) {
     throw new Error("Parse error.
-		expected ${result.expected}.
-		instead found '${result.actual}'
-	");
+        expected ${result.expected}.
+        instead found '${result.actual}'
+    ");
   } else {
     return result;
   }
@@ -632,8 +629,8 @@ parse(plusExpr, "12+34")
 
 parse(plusExpr, "12+34rest")
   >> Uncaught Error: Parse error.
-		expected end of input.
-		instead found 'rest'
+        expected end of input.
+        instead found 'rest'
 ```
 
 
@@ -643,7 +640,7 @@ parse(plusExpr, "12+34rest")
 
 -   [Wiki](https://en.wikipedia.org/wiki/Parser_combinator)
 -   [Parser Combinators: a Walkthrough](https://hasura.io/blog/parser-combinators-walkthrough/)
-- 	[Introduction to parser combinators](https://gist.github.com/yelouafi/556e5159e869952335e01f6b473c4ec1)
+-   [Introduction to parser combinators](https://gist.github.com/yelouafi/556e5159e869952335e01f6b473c4ec1)
 :::
 
 
