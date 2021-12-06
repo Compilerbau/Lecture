@@ -367,7 +367,8 @@ Eingabe:
   6 + 3 * 4
 ```
 
-```
+Berechnung/Ausgabe:
+
     * compute_expr(1)
     	* compute_atom() --> 6
     	* compute_expr(2) 					# Loop with '+' left assoc
