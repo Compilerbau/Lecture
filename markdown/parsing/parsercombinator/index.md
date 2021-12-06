@@ -404,7 +404,7 @@ Berechnung/Ausgabe:
     -   prefix from: a = -b
         -   nud (Null denotation)
 
-```
+```python
   class operator_sub_token(object):
       lbp = 10
       def nud(self):
