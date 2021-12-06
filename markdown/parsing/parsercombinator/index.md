@@ -399,7 +399,7 @@ Berechnung/Ausgabe:
 
     -   infix notation: a = b - c
 
-       - led (left denotation)
+        -   led (left denotation)
 
      - prefix from: a = -b
 
