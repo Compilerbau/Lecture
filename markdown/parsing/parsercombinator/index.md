@@ -397,12 +397,11 @@ Berechnung/Ausgabe:
 
 ## Tokenhandler
 -   Die Tokenhandler behandeln Notationen unterschiedlich
-
     -   infix notation: a = b - c
         -   led (left denotation)
-
     -   prefix from: a = -b
         -   nud (Null denotation)
+
 ```python
   class operator_sub_token(object):
       lbp = 10
@@ -418,10 +417,11 @@ Berechnung/Ausgabe:
 ```
 
 ::: notes
- - hat eine Tokenhandler für jede Operation
-   - operator_add_token, operator_mul_token, operator_sub_token, operator_pow_token
-- operator_lparen_token, operator_rparen_token
+-   hat eine Tokenhandler für jede Operation
+    -   operator_add_token, operator_mul_token, operator_sub_token, operator_pow_token
+-   operator_lparen_token, operator_rparen_token
 :::
+
 
 ## Top Down Operator Precedence-Beispiel
 
