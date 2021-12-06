@@ -219,7 +219,7 @@ TemplateType    <- PrimaryType (LEFTANGLE TemplateType RIGHTANGLE)?
 ShiftExpression <- Expression (ShiftOperator Expression)*
 ShiftOperator   <- LEFTSHIFT / RIGHTSHIFT
 Spacing         <- any number of spaces, tabs, newlines or comments
-        
+
 LEFTANGLE       <- '<' Spacing
 RIGHTANGLE      <- '>' Spacing
 LEFTSHIFT       <- '<<' Spacing
@@ -295,12 +295,18 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
 ## Dijkstras Shunting Yard Algorithmus (SY)
 
 ::: notes
-
 - Verwendet Stacks für Operatoren und Argumente anstatt Rekursion
+:::
 
-::: 
+::: slides
+![](images/shuntingyardStack.png){width="54%"}
+:::
 
-![](images/shuntingyardStack.png){width="50%"}
+::: notes
+![](images/shuntingyardStack.png){width="90%"}
+:::
+
+
 
 ## Dijkstras Shunting Yard Algorithmus-Beispiel
 ```
@@ -315,11 +321,11 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
            	else:
            		check if left bracket is in stack
            		while stack.top != left bracket:
-           			output.add(stack.pop())	
+           			output.add(stack.pop())
            		output.add(stack.pop())	 // pop left bracket
            else:
               if token.precedence < stack.top.precedence:
-                  output.add(stack.pop())        
+                  output.add(stack.pop())
               stack.put(token)
 ```
 
@@ -330,20 +336,20 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
     -   Jeder Unterausdruck enthält das gemeinsame precedence level
 
             2 + 3 * 4 * 5 - 6
-  
+
             |---------------|   : prec 1
                 |-------|       : prec 2
 
 -   Die Operatoren stehen mit Gewicht und Association (left, right) in einer Tabelle
 
-   
+
 
 ## Precedence Climbing-Beispiel
 
 ```
   compute_expr(min_prec):
     result = compute_atom()    // Atom is a number or an expression in brackets
-    curtoken = next()	
+    curtoken = next()
     while curtoken precedence > min_prec:
       prec, assoc = precedence and associativity of current token
       if assoc is left:
@@ -352,7 +358,7 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
         next_min_prec = prec
       rhs = compute_expr(next_min_prec)
       result = compute operator(result, rhs)
-  
+
     return result
 ```
 
@@ -373,7 +379,7 @@ Berechnung/Ausgabe:
     			* compute_atom() --> 4
           		* result --> 4	 			# Loop not enterd '+ < *'
             * result = 3 * 4 --> 12
-        * result = 6 + 12 --> 18 
+        * result = 6 + 12 --> 18
 ```
 
 * Beispiel: [Parsing expressions by precedence climbing](https://eli.thegreenplace.net/2012/08/02/parsing-expressions-by-precedence-climbing) (Python)
@@ -404,7 +410,7 @@ Berechnung/Ausgabe:
           return -expression(100)
       def led(self, left):
           return left - expression(10)
-          
+
   class operator_mul_token(object):
       lbp = 20
       def led(self, left):
@@ -429,7 +435,7 @@ Berechnung/Ausgabe:
              t = token
              token = next()
              left = t.led(left)  # results in recursive call
-         return left     
+         return left
 ```
 
 ::: notes
@@ -506,12 +512,12 @@ class operator_pow_token(object):
 
 # Parser Kombinatoren
 
-## Prinzip 
+## Prinzip
 
 + High-order Funktion
   + Funktionen als Parameter
   + Funktion als Rückgabewert
-  
+
 + Verwendet mehrere Parser als Input und gibt den Putput des Kombinierten Parser zurück:
   + parse Tree
   + Index der Stelle im String die zum Stoppen des Parsers geführt hat
@@ -579,7 +585,7 @@ function apply(func, parsers) {
 ```
 
 ::: notes
-Nun kann über den Parameter "func" eine Funktionalität angegeben werden, und über den Parameter "parsers" kann ein Array an Simplen Parsern übergeben werden. Die Parser müssen dabei in der richtigen Reihenfolge aufgerufen werden. In der Variable accData werden alle Parser-Ergebnisse gespeichert, um sie nachher in der der "func" zu verwenden. Der "currentInput" enthält im ersten Durchlauf den gesamten Input. Jeder Parser schreibt dann den Rest (den nicht parsbaren Teil) in "currentInpu"t" für den nächsten Parser. 
+Nun kann über den Parameter "func" eine Funktionalität angegeben werden, und über den Parameter "parsers" kann ein Array an Simplen Parsern übergeben werden. Die Parser müssen dabei in der richtigen Reihenfolge aufgerufen werden. In der Variable accData werden alle Parser-Ergebnisse gespeichert, um sie nachher in der der "func" zu verwenden. Der "currentInput" enthält im ersten Durchlauf den gesamten Input. Jeder Parser schreibt dann den Rest (den nicht parsbaren Teil) in "currentInpu"t" für den nächsten Parser.
 :::
 
 ## Kombinierte Parser definieren
@@ -623,7 +629,7 @@ Führt man nun den Parser aus, kann es wie folgt aussehen:
 ```ruby
 parse(plusExpr, "12+34")
   >> {data: 46, rest: ""}
-  
+
 parse(plusExpr, "12+34rest")
   >> Uncaught Error: Parse error.
 		expected end of input.
