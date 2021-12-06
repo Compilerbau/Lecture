@@ -295,7 +295,7 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
 
 ::: notes
 
-   - Verwendet Stacks für Operatoren und Argumente anstatt Rekursion
+- Verwendet Stacks für Operatoren und Argumente anstatt Rekursion
 
 ::: 
 
