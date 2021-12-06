@@ -362,7 +362,8 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
 
 ::: notes
 
-```
+Eingabe:
+
   6 + 3 * 4
 ```
 
