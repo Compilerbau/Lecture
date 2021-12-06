@@ -577,12 +577,14 @@ function apply(func, parsers) {
   };
 }
 ```
+
 ::: notes
 Nun kann über den Parameter "func" eine Funktionalität angegeben werden, und über den Parameter "parsers" kann ein Array an Simplen Parsern übergeben werden. Die Parser müssen dabei in der richtigen Reihenfolge aufgerufen werden. In der Variable accData werden alle Parser-Ergebnisse gespeichert, um sie nachher in der der "func" zu verwenden. Der "currentInput" enthält im ersten Durchlauf den gesamten Input. Jeder Parser schreibt dann den Rest (den nicht parsbaren Teil) in "currentInpu"t" für den nächsten Parser. 
 :::
 
 ## Kombinierte Parser definieren
-Der Kombinierte Parser kann nun so definiert werden:
+
+Der kombinierte Parser kann nun so definiert werden:
 
 ```ruby
 const plusExpr = apply((num1, _, num2) => num1 + num2, [
@@ -597,17 +599,17 @@ Diese Zusammensetzung der Parser überprüft eine Plus-Expression mit Integern. 
 
 ## Verwendung der Parsers
 
-Nun muss noch eine Parse-Funktion geschrieben werden, um die Kombinierten Parser auszuführen.
+Nun muss noch eine Parse-Funktion geschrieben werden, um die kombinierten Parser auszuführen.
 
 ```ruby
 // And for our main parsing, we'll invoke this function
 function parse(parser, input) {
   const result = parser(input);
   if (result.isFailure) {
-    throw new Error(`Parse error.
+    throw new Error("Parse error.
 		expected ${result.expected}.
 		instead found '${result.actual}'
-	`);
+	");
   } else {
     return result;
   }
@@ -617,7 +619,7 @@ function parse(parser, input) {
 
 ## Ausführung des Kombinierten Parsers
 
-Führt man nun den Parser aus, kann es wie folgt aussehen.
+Führt man nun den Parser aus, kann es wie folgt aussehen:
 ```ruby
 parse(plusExpr, "12+34")
   >> {data: 46, rest: ""}
@@ -630,11 +632,13 @@ parse(plusExpr, "12+34rest")
 
 
 
+::: notes
 ## Links
 
 -   [Wiki](https://en.wikipedia.org/wiki/Parser_combinator)
 -   [Parser Combinators: a Walkthrough](https://hasura.io/blog/parser-combinators-walkthrough/)
 - 	[Introduction to parser combinators](https://gist.github.com/yelouafi/556e5159e869952335e01f6b473c4ec1)
+:::
 
 
 
