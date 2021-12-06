@@ -164,6 +164,7 @@ Nur das Wissen über Erfolg oder Miserfolg wird gespeichert (siehe Beispiel zu N
     - Analog zur Frage der Mehrdeutigkeit bei CFGs
 
 :::
+
 ## Beispiel: Formeln
 
 ```
