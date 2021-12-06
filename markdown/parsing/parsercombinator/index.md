@@ -528,7 +528,7 @@ class operator_pow_token(object):
 
 Simple Parser, die nachher als Inputparameter f체r einen Kombinierten Parser verwendet werden:
 
-```
+```python
 // Simple Integer Parser
 function integer(input) {
   // note we removed $ from the end of the regular expression
@@ -543,7 +543,7 @@ function integer(input) {
 ```
 
 ::: notes
-```
+```ruby
 // Simple plus operator Parser
 function plus(input) {
   if (input[0] === "+") {
@@ -564,7 +564,7 @@ function eof(input) {
 
 Der Kombinierte Parser sieht wie folgt aus:
 
-```
+```ruby
 // Combined Parser
 function apply(func, parsers) {
   return function applyParser(input) {
@@ -589,7 +589,7 @@ Nun kann 체ber den Parameter "func" eine Funktionalit채t angegeben werden, und �
 ## Kombinierte Parser definieren
 Der Kombinierte Parser kann nun so definiert werden:
 
-```
+```ruby
 const plusExpr = apply((num1, _, num2) => num1 + num2, [
   integer,
   plus,
@@ -604,7 +604,7 @@ Diese Zusammensetzung der Parser 체berpr체ft eine Plus-Expression mit Integern. 
 
 Nun muss noch eine Parse-Funktion geschrieben werden, um die Kombinierten Parser auszuf체hren.
 
-```
+```ruby
 // And for our main parsing, we'll invoke this function
 function parse(parser, input) {
   const result = parser(input);
@@ -623,7 +623,7 @@ function parse(parser, input) {
 ## Ausf체hrung des Kombinierten Parsers
 
 F체hrt man nun den Parser aus, kann es wie folgt aussehen.
-```
+```ruby
 parse(plusExpr, "12+34")
   >> {data: 46, rest: ""}
   
