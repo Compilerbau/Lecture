@@ -334,7 +334,7 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
 ```
   2 + 3 * 4 * 5 - 6
   
-  |---------------|   : prec 1
+            |---------------|   : prec 1
       |-------|       : prec 2
 ```
 
