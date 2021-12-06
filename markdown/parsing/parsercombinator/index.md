@@ -326,7 +326,6 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
 ## Precedence Climbing (PC)
 
 -   Climb **down** the precedence levels (Norvell)
-
    - Behandelt eine Expression wie verschachtelte Unterausdrücke
 
         - Jeder Unterausdruck enthält das gemeinsame precedence level
