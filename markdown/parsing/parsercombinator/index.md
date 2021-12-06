@@ -557,7 +557,7 @@ function eof(input) {
 
 ## Kombinierter Parser
 
-Der Kombinierte Parser sieht wie folgt aus:
+Der kombinierte Parser sieht wie folgt aus:
 
 ```ruby
 // Combined Parser
