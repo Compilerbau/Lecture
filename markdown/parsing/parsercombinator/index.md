@@ -402,7 +402,7 @@ Berechnung/Ausgabe:
         -   led (left denotation)
 
     -   prefix from: a = -b
-       - nud (Null denotation)
+        -   nud (Null denotation)
 
 ```
   class operator_sub_token(object):
