@@ -448,7 +448,7 @@ Berechnung/Ausgabe:
 -   Der Parser behandelt die folgende Potenzierungsoperatoren als Unterausdrücke des ersten Unterausdrucks
 -   Dies wird erreicht, indem wir den Ausdruck im Handler der Potenzierung mit einem rbp aufrufen, der niedriger ist als der lbp der Potenzierung
 
-```
+```python
 class operator_pow_token(object):
     lbp = 30
     def led(self, left):
