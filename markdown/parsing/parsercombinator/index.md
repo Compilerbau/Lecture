@@ -455,7 +455,8 @@ class operator_pow_token(object):
        return left ** expression(30 - 1)  # RECURSIVE CALL
 ```
 
-   - Wenn expression zum nächsten ^ in seiner Schleife gelangt, stellt er fest, dass noch rbp < token.lbp ist und gibt das Ergebnis nicht sofort zurück, sondern sammelt zunächst den Wert des Unterausdrucks.
+-   Wenn expression zum nächsten ^ in seiner Schleife gelangt, stellt er fest, dass noch rbp < token.lbp ist und gibt das Ergebnis nicht sofort zurück, sondern sammelt zunächst den Wert des Unterausdrucks.
+
 
 ## Vergleich
 
