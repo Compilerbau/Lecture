@@ -538,6 +538,7 @@ function integer(input) {
 }
 
 ```
+
 ::: notes
 ```
 // Simple plus operator Parser
