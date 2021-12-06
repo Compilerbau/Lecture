@@ -329,7 +329,6 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
 -   Behandelt eine Expression wie verschachtelte Unterausdrücke
     -   Jeder Unterausdruck enthält das gemeinsame precedence level
 
-```
             2 + 3 * 4 * 5 - 6
   
             |---------------|   : prec 1
