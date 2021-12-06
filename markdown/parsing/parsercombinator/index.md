@@ -335,7 +335,7 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
   2 + 3 * 4 * 5 - 6
   
             |---------------|   : prec 1
-      |-------|       : prec 2
+                |-------|       : prec 2
 ```
 
  - Die Operatoren stehen mit Gewicht und Association (left, right) in einer Tabelle
