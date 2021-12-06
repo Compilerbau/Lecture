@@ -437,6 +437,7 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
              left = t.led(left)  # results in recursive call
          return left     
 ```
+
 ::: notes
 - Beispiel: [Top-Down operator precedence parsing](https://eli.thegreenplace.net/2010/01/02/top-down-operator-precedence-parsing/) (Python)
 :::
