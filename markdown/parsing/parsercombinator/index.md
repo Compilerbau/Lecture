@@ -420,7 +420,6 @@ Berechnung/Ausgabe:
 
 ::: notes
  - hat eine Tokenhandler für jede Operation
-
    - operator_add_token, operator_mul_token, operator_sub_token, operator_pow_token
 - operator_lparen_token, operator_rparen_token
 :::
