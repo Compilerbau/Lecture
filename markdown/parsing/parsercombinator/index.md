@@ -397,7 +397,7 @@ Berechnung/Ausgabe:
 
 -   Die Tokenhandler behandeln Notationen unterschiedlich
 
-     - infix notation: a = b - c
+    -   infix notation: a = b - c
 
        - led (left denotation)
 
