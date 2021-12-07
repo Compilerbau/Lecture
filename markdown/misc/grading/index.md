@@ -10,9 +10,7 @@ hidden: true
 -   Station 6+7: Mündliche Prüfung mit je 30 Minuten Dauer
 -   Station 8: Vortrag mit 45 Minuten Dauer
 
-<!--  -->
-
--   **Gesamtnote: Mittelwert(mdl. Prüfung I, mdl. Prüfung II, Vortrag)**
+**Gesamtnote: Mittelwert(mdl. Prüfung I, mdl. Prüfung II, Vortrag)**
 
 
 ### Parcours-Prüfung: Was ist das?
