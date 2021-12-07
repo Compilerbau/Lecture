@@ -236,12 +236,12 @@ new_assignment: ## Create new assignment
 #-------------------------------------------------------------------------
 
 ## Canned recipe for creating output folder
-define create-folder =
+define create-folder
 mkdir -p $(dir $@)
 endef
 
 ## Canned recipe for creating output folder and copy output file
-define create-dir-and-copy =
+define create-dir-and-copy
 mkdir -p $(dir $@)
 cp $< $@
 endef
