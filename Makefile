@@ -183,11 +183,8 @@ $(SLIDES_SHORT_TARGETS): $$(patsubst %,$(SLIDES_OUTPUT_DIR)/%.pdf,$$@)
 
 ## Create website
 .PHONY: web
-web: $(WEB_MARKDOWN_TARGETS) $(WEB_IMAGE_TARGETS) $(READINGS) ## Create website
+web: $(WEB_MARKDOWN_TARGETS) $(WEB_IMAGE_TARGETS) $(READINGS) $(HUGO_LOCAL) ## Create website
 	$(HUGO) $(HUGO_ARGS)
-ifneq ($(HUGO_LOCAL),"")
-web: $(HUGO_LOCAL)
-endif
 
 ## Build Docker image "alpine-pandoc-hugo"
 .PHONY: docker
