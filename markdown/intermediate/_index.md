@@ -10,4 +10,4 @@ weight: 5
 allgemeine einleitende Worte ...
 
 
-{{< children showhidden="true" >}}
+`{{< children showhidden="true" >}}`{=markdown}
