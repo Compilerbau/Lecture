@@ -205,8 +205,8 @@ clean-temp: ## Clean up all intermediate files and directories
 .PHONY: distclean
 distclean: clean-all ## Same as clean-all
 
-.PHONY: mostlyclean
-mostlyclean: clean-temp ## Same as clean-temp
+.PHONY: clean
+clean: clean-temp ## Same as clean-temp
 
 ##@ New Elements
 
