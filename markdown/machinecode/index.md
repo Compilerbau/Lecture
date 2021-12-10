@@ -17,9 +17,9 @@ fhmedia:
 
 ## Einordnung
 
-![Generierung von Maschinencode](images/mountainmap.png)
+![Generierung von Maschinencode](https://github.com/munificent/craftinginterpreters/blob/master/site/image/a-map-of-the-territory/mountain.png)
 
-[Quelle: [@Nystrom2021], [`Mountain.png`](https://github.com/munificent/craftinginterpreters/blob/master/site/image/a-map-of-the-territory/mountain.png), ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
+[Quelle: ["A Map of the Territory (mountain.png)"](https://github.com/munificent/craftinginterpreters/blob/master/site/image/a-map-of-the-territory/mountain.png) by [Bob Nystrom](https://github.com/munificent), licensed under [MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE)]{.origin}
 
 ::: notes
 Die Erzeugung von Maschinencode ist ein "Parallelweg" zum Erzeugen von Bytecode. Die
@@ -98,7 +98,7 @@ L:  ...
 ## Aufruf von Funktionen: Anlegen eines *Stack-Frames*
 
 ::: center
-![Stack-Frame](images/stackframe_schema.png){height="86%"}
+![Stack-Frame](https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Aufrufstapel_schema.svg/512px-Aufrufstapel_schema.svg.png){height="86%"}
 :::
 
 [Quelle:  [H3xc0d3r](https://commons.wikimedia.org/wiki/User:H3xc0d3r), [Aufrufstapel schema](https://commons.wikimedia.org/wiki/File:Aufrufstapel_schema.svg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/legalcode)]{.origin}
@@ -124,7 +124,7 @@ In der obigen Grafik sind drei Funktionsaufrufe aktiv: Die erste Funktion (türk
 ## Rücksprung aus einer Funktion
 
 ::: center
-![Stack-Frame nach Rücksprung (`return`)](images/stackframe_return.png){height="86%"}
+![Stack-Frame nach Rücksprung (`return`)](https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Aufrufstapellayout_nach_R%C3%BCcksprung.svg/512px-Aufrufstapellayout_nach_R%C3%BCcksprung.svg.png){height="86%"}
 :::
 
 [Quelle:  [H3xc0d3r](https://commons.wikimedia.org/wiki/User:H3xc0d3r), [Aufrufstapellayout nach Rücksprung](https://commons.wikimedia.org/wiki/File:Aufrufstapellayout_nach_R%C3%BCcksprung.svg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/legalcode)]{.origin}
@@ -136,7 +136,7 @@ Beim Rücksprung aus einer Funktion wird der Rückgabewert an die Stelle des ers
 ## Freigabe des Rückgabewertes
 
 ::: center
-![Stack-Frame nach Rücksprung (`return`) und Freigabe](images/stackframe_return_clear.png){height="86%"}
+![Stack-Frame nach Rücksprung (`return`) und Freigabe](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Aufrufstapellayout_nach_Freigabe.svg/512px-Aufrufstapellayout_nach_Freigabe.svg.png){height="86%"}
 :::
 
 [Quelle: [H3xc0d3r](https://commons.wikimedia.org/wiki/User:H3xc0d3r), [Aufrufstapellayout nach Freigabe](https://commons.wikimedia.org/wiki/File:Aufrufstapellayout_nach_Freigabe.svg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/legalcode)]{.origin}
