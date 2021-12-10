@@ -20,28 +20,42 @@ fhmedia:
 
 :::::: columns
 ::: {.column width="45%"}
-```c
+```python
 var a = "first value";
 a = "updated";
 print a;
+
+a = 'first value'
+a = 'updated'
+print(a)
 ```
 :::
 ::: {.column width="45%"}
-```c
+```python
 fun makeClosure() {
-  var a = "data";
+    var a = "data";
 
-  fun f() { print a; }
-  return f;
+    fun f() { print a; }
+    return f;
 }
 
 var closure = makeClosure();
 closure();
+
+def makeClosure():
+    a = 'data'    
+    def f():
+        print(a)
+    return f
+
+closure = makeClosure()
+# GC here
+closure()
 ```
 :::
 ::::::
 
-[Quelle: [@Nystrom2021], Kapitel "Garbage Collection"]{.origin}
+[Quelle nach: [@Nystrom2021], Kapitel "Garbage Collection"]{.origin}
 
 
 ## Erreichbarkeit
@@ -84,17 +98,26 @@ Das führt zu einem zweistufigen Algorithmus:
 :::::: columns
 ::: {.column width="45%"}
 
-```c
+```python
 typedef struct sObj Obj;
 struct sObj {
     ObjType type;
     bool isMarked;
     struct sObj* next;
 };
+
+class Obj():								
+    def __init__(self, type, next):			# ObjType type, Obj next
+        self.type = type
+        self.next = next
+        self.isMarked = false				# bool isMarked
 ```
+[Quelle nach: [@Nystrom2018], [`object.h`](https://github.com/munificent/craftinginterpreters/blob/master/c/object.h#L91), Kapitel "Garbage Collection"]{.origin}
+
 :::
 ::: {.column width="45%"}
-```c
+
+```python
 typedef struct {
     Chunk* chunk;
     ...
@@ -104,7 +127,18 @@ typedef struct {
     int grayCapacity;
     Obj** grayStack;
 } VM;
+
+class VM():
+    def __init__(self):
+        self.chunk = None
+        self.objects = None
+        self.grayCount = 0
+        self.grayCapacity = 0
+        self.grayStack = None
+       
 ```
+[Quelle nach: [@Nystrom2018], [`vm.h`](https://github.com/munificent/craftinginterpreters/blob/master/c/vm.h#L41), Kapitel "Garbage Collection"]{.origin}
+
 :::
 ::::::
 
@@ -114,9 +148,12 @@ typedef struct {
 ```c
 object->isMarked = true;
 vm.grayStack[vm.grayCount++] = object;
+
+obj.isMarked = true
+vm.grayStack[vm.grayCount++] = object; 
 ```
 
-[Quelle: nach [@Nystrom2021], Kapitel "Garbage Collection"]{.origin}
+[Quelle nach: [@Nystrom2021], Kapitel "Garbage Collection"]{.origin}
 
 ::: notes
 Die Strukturen für Objekte und die VM werden ergänzt. Objekte erhalten noch
@@ -146,9 +183,14 @@ void traceReferences() {
         blackenObject(object);
     }
 }
+
+def traceReferences():
+    while vm.grayCount > 0:
+        object = vm.grayStack[--vm.grayCount]; 
+        blackenObject(object);
 ```
 
-[Quelle: [@Nystrom2018], Kapitel "Garbage Collection"]{.origin}
+[Quelle nach: [@Nystrom2018], [`memory.c`](https://github.com/munificent/craftinginterpreters/blob/master/c/memory.c#L264), Kapitel "Garbage Collection"]{.origin}
 
 ::: notes
 Nachdem alle Wurzeln "grau" markiert wurden und auf den `grayStack` der VM
@@ -184,9 +226,26 @@ void sweep() {
         }
     }
 }
+
+def sweep():
+    previous = NULL
+    object = vm.objects;
+    while object != NULL:
+        if object.isMarked:
+            object.isMarked = false
+            previous = object
+            object = object.next;
+        else:
+            unreached = object;
+            object = object.next;
+            if previous != NULL:
+                previous.next = object
+            else:
+                vm.objects = object
+            freeObject(unreached);
 ```
 
-[Quelle: [@Nystrom2018], [`memory.c`](https://github.com/munificent/craftinginterpreters/blob/master/c/memory.c#L272), Kapitel "Garbage Collection"]{.origin}
+[Quelle nach: [@Nystrom2018], [`memory.c`](https://github.com/munificent/craftinginterpreters/blob/master/c/memory.c#L272), Kapitel "Garbage Collection"]{.origin}
 
 ::: notes
 Wann immer für ein Objekt Speicher auf dem Laufzeit-Heap angefordert wird,
