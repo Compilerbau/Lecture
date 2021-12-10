@@ -4,21 +4,13 @@ disableToc: true
 hidden: true
 ---
 
-
-{{% k1 %}}
--   Wuppie
--   Fluppie
-{{% /k1 %}}
-
 {{% k2 %}}
--   foo
--   bar
+-   Einsatz von Modellen bei der Code-Transformation
+
 {{% /k2 %}}
 
 {{% k3 %}}
-hammwanich
-{{% /k3 %}}
 
-{{% k4 %}}
-gibbetsooch
-{{% /k4 %}}
+* Code-Generierung (Maschinencode) erfordert Auflösung von Speicheradressen und -breiten
+
+{{% /k3 %}}
