@@ -150,7 +150,7 @@ object->isMarked = true;
 vm.grayStack[vm.grayCount++] = object;
 
 obj.isMarked = true
-vm.grayStack[vm.grayCount++] = object; 
+vm.grayStack[vm.grayCount++] = object
 ```
 
 [Quelle nach: [@Nystrom2021], Kapitel "Garbage Collection"]{.origin}
@@ -186,8 +186,8 @@ void traceReferences() {
 
 def traceReferences():
     while vm.grayCount > 0:
-        object = vm.grayStack[--vm.grayCount]; 
-        blackenObject(object);
+        object = vm.grayStack[--vm.grayCount]
+        blackenObject(object)
 ```
 
 [Quelle nach: [@Nystrom2018], [`memory.c`](https://github.com/munificent/craftinginterpreters/blob/master/c/memory.c#L264), Kapitel "Garbage Collection"]{.origin}
@@ -229,20 +229,20 @@ void sweep() {
 
 def sweep():
     previous = NULL
-    object = vm.objects;
+    object = vm.objects
     while object != NULL:
         if object.isMarked:
             object.isMarked = false
             previous = object
-            object = object.next;
+            object = object.next
         else:
-            unreached = object;
-            object = object.next;
+            unreached = object
+            object = object.next
             if previous != NULL:
                 previous.next = object
             else:
                 vm.objects = object
-            freeObject(unreached);
+            freeObject(unreached)
 ```
 
 [Quelle nach: [@Nystrom2018], [`memory.c`](https://github.com/munificent/craftinginterpreters/blob/master/c/memory.c#L272), Kapitel "Garbage Collection"]{.origin}
@@ -305,17 +305,6 @@ GC zu starten ...
 
 [[Hinweis: *Nursery*-Theorie]{.bsp}]{.slides}
 
-
-## Alternativen
-
-*   [Boehm Garbage Collector](https://hboehm.info/gc/): konservatives Mark-Sweep;
-    Ersatz für `malloc` und `realloc`, kein `free` mehr nötig
-*   Reference Counting
-*   Inkrementelles GC
-*   Concurrent GC
-*   Generational GC: Markieren der "Generationen" der Lebensdauer, Umsortieren
-    "erwachsener" Objekte in Speicherbereich mit weniger häufigem GC
-
 ::: notes
 **Anmerkung**: Man unterscheidet zusätzlich noch zwischen *konservativem*
 und *präzisem* GC:
@@ -328,6 +317,92 @@ und *präzisem* GC:
 
 Das obige Beispiel aus [@Nystrom2021] ist ein Beispiel für präzises GC.
 :::
+
+## Konservative Garbage Collection
+
+* Von Boehm und Weiser
+* Kann Pointer im Speicher finden ohne die innere Struktur eines Objektes zu kennen
+  * Interpretiert alle Daten in dem Speicherbereich, in dem Pointer gesucht werden, als Pointer
+  * Die Daten werden unsichere Pointer genannt, da der Collector nicht weiß, ob sie Pointer sind.
+  * Prozessorregister, den Stack und alle statischen Daten werden so untersucht, um den Root zu finden.
+
+    
+
+## Allocation
+
+* 4 KB große Blöcke
+  * Aufgeteilt in Objektbereich und Verwaltungsbereich.
+  * Objektbereich
+    * Objekt
+  * Verwaltungsbereich 
+    * die Größe des gespeicherten Objektes
+    * Anzahl an gespeicherten Objekten
+    * Bit-Feld für die Mark-Phase
+* Der Mutator schaut, beim anfordern von Speicherplatz, in der Blockliste und im Verwaltungsbereich des entsprechendem Blockes, ob es ein freies Objekt mit der Größe gibt
+  * Wenn ja, wird die Objektanzahl des Blockes inkrementiert und ein Pointer auf dieses Objekt zurückgegeben
+  * Wenn nein, wird ein neuer Block initialisiert und ein Pointer auf das erste Objekt zurückgegeben
+
+
+
+## Collection
+
+* Inspiziert die Prozessorregister, den Stack und die statischen Objekte
+* Alle Daten werden als Adressen interpretiert und müssen getestet werden, ob sie gültige Pointer sind
+* Es sind keine gültigen Pointer,
+  * Wenn die Adresse höher oder niedriger als die höchste oder niedrigste Adresse im Heap ist
+  * Wenn die Adresse *nicht* innerhalb eines Blockes liegt also die Adresse nicht in der Blockliste vorkommt
+  * Wenn die Adresse in die Mitte und nicht am Anfangen eines Objektes zeigt
+  * Wenn die Adresse auf ein Objekt in der Free-List zeigt
+* Die Objekte auf den ein gültiger Pointer zeigt kann dadurch als erreichbar markiert werden
+* Diese Objekte werden als Root-Objekte inspiziert, also alle Daten werden als Pointer interpretiert, getestet und ggf. die Objekte auf die Pointer zeigen, markiert
+* Die Collection endet, wenn die Objekte inpiziert wurden und alle nicht markierten Objekte in die Free-Liste aufgenommen wurden
+
+ 
+
+## Blacklisting
+
+* Soll Fehlinterpretationen von unsicherer Pointer verringern
+* Mark-Phase
+  * In die Black-List wird jeder unsichere Pointer eingetragen, der sich nach den Test als ungültig erweist
+* Allocation
+  * Es kann kein Objekt an eine Adresse alloziert werden, wenn die Adresse in der Black-List steht
+
+Das ganze wird umgesetzt, indem eine Seite des Heaps nicht verwendet wird, wenn ein Pointer in der Black-List in diese Seite zeigt. Durch die virtuelle Speicherverwaltung wird der Speicher erst zur Verfügung gestellt, wenn auf die Seite zugegriffen wird. Dadurch wird auch kein Speicher verschenkt. Der Aufwand für das Blacklisting liegt bei unter 1% der für Allocation und Collection verbrauchten Laufzeit.
+
+
+
+## Vor- und Nachteile der Konservative Garbage Collection 
+
+Vorteile:
+
+* Keine explizite Kooperation des Mutators nötig
+* Der Mutator muss nur eine Bedingung erfüllen
+  * Jedes benutze Objekt hat ein Pointer auf den Anfang (innerhalb des Zugriffsbereichs des Collectors)
+* Kann mit anderen Speicherverwaltungen koexistieren
+* Explizite Deallocation ist möglich
+* Kann jederzeit abgebrochen werden
+  * Praktisch in Verbindung mit opportunistischer Garbage Collection in interaktiven Applikationen
+
+
+
+Nachteile:
+
+* Mark-Phase dauert durch die zusätzlichen Tests länger
+* Die Möglichkeit einer Fragmentierung des Speichers ist hoch.
+  * In manchen Situationen kann etwa die hälfte des Heaps nicht genutzt werden, da die freien Objekte nicht die vom Mutator benötigte Größe hatten
+* Fehlinterpretationen können dafür sorgen, dass unsichere Pointer nicht freigegeben werden
+* Bei hoch optimierten Compilern ist der Collector nicht zuverlässig, da die Adressen nicht mehr auf die benutzen Objekte zeigt
+
+
+
+
+## Alternativen
+
+*   Reference Counting
+*   Inkrementelles GC
+*   Concurrent GC
+*   Generational GC: Markieren der "Generationen" der Lebensdauer, Umsortieren
+    "erwachsener" Objekte in Speicherbereich mit weniger häufigem GC
 
 ## Wrap-Up
 
@@ -343,10 +418,6 @@ Das obige Beispiel aus [@Nystrom2021] ist ein Beispiel für präzises GC.
 \smallskip
 
 *   Problem: Latenz und Durchsatz, Idee des "self-adjusting" Heaps
-
-
-
-
 
 
 <!-- DO NOT REMOVE - THIS IS A LAST SLIDE TO INDICATE THE LICENSE AND POSSIBLE EXCEPTIONS (IMAGES, ...). -->
