@@ -17,7 +17,7 @@ fhmedia:
 
 ## Einordnung
 
-![Generierung von Maschinencode](https://github.com/munificent/craftinginterpreters/blob/master/site/image/a-map-of-the-territory/mountain.png)
+![Generierung von Maschinencode](https://raw.githubusercontent.com/munificent/craftinginterpreters/master/site/image/a-map-of-the-territory/mountain.png)
 
 [Quelle: ["A Map of the Territory (mountain.png)"](https://github.com/munificent/craftinginterpreters/blob/master/site/image/a-map-of-the-territory/mountain.png) by [Bob Nystrom](https://github.com/munificent), licensed under [MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE)]{.origin}
 
@@ -32,7 +32,6 @@ LLVM IR und lässt die LLVM-Toolchain übernehmen ;-)
 
 Hier der Vollständigkeit halber ein Ausblick ...
 :::
-
 
 
 ## Aufgaben bei der Erzeugung von Maschinen-Code
@@ -116,12 +115,48 @@ Zusammengefasst gibt es für jeden Funktionsaufruf die in der obigen Skizze darg
 *   Rücksprungadresse (d.h. aktueller *PC*)
 *   Lokale Variablen der Funktion (falls vorhanden)
 
-Der *FP* ("Rahmenzeiger" in der Skizze) zeigt dabei auf die Adresse des ersten Parameters, d.h. auf die Adresse *hinter* der Rücksprungadresse.
+Der *FP* ("Rahmenzeiger" in der Skizze) zeigt dabei auf die Adresse des ersten Parameters, d.h. auf die Adresse *hinter* der Rücksprungadresse und dient dazu die Größe des Speichers für lokale Variablen zu bestimmen, wenn diese nicht zur Compile-Zeit bekannt ist.
 
 In der obigen Grafik sind drei Funktionsaufrufe aktiv: Die erste Funktion (türkis) hat Parameter, aber keine lokalen Variablen. Aus dieser Funktion heraus wurde eine zweite Funktion aufgerufen (blau). Diese hat keine Parameter, aber lokale Variablen. Die dort aufgerufene dritte Funktion (hellblau) hat sowohl Parameter als auch lokale Variablen.
 :::
 
-## Rücksprung aus einer Funktion
+
+## Aufruf von Funktionen: Maschinencode
+
+![Funktionsaufruf: Sicht des Aufrufers](images/ViewCaller.png){height="86%"}
+
+
+## Sichern von lokalen Variablen beim Funktionsaufruf
+
+- bei Funtionsaufrufen müssen verwendete Register (lokale Variablen) gesichert werden
+- Register werden in den Speicher (Stack) ausgelagert
+- Sicherung kann durch aufrufende Funktion (Caller-Saves) oder aufgerufene Funktion (Callee-Saves) erfolgen
+- Vorteile:
+  - Caller-Safes: nur "lebende" Register müssen gesichert werden
+  - Callee-Safes: nur tatsächlich verwendete Register müssen gesichert werden
+- Nachteile: unnötiges Sichern von Registern bei beiden Varianten möglich
+- in der Praxis daher meist gemischter Ansatz aus Caller-Saves und Callee-Saves Registern
+
+
+## Übernahme von Parametern (Funktionsprolog)
+
+![Funktionsaufruf Prolog](images/ViewCallee_Prolog.png){height="86%"}
+
+::: notes
+Die Parameter einer Funktion werden vom aufrufenden Kontext auf dem Stack abgelegt und nachdem der Sprung in die Funktion erfolgt ist wieder in Variablen/Register geladen. Dieses Vorgehen ist in der Praxis aber ineffizient, da das Speichern und Laden direkt aufeinander folgen. Daher werden werden oft bestimmte (Caller-Saves) Register für die übergabe von Parametern verwendet.
+:::
+
+## Rücksprung aus einer Funktion (Funktionsepilog)
+
+::: center
+![Funktionsaufruf Epilog](images/ViewCallee_Epilog.png){height="86%"}
+:::
+
+::: notes
+Beim Rücksprung aus einer Funktion wird der Rückgabewert an die Stelle des ersten Parameters geschrieben und der restliche Stack freigegeben (lokale Variablen, Rücksprungadresse). Zusätzlich zum oben gezeigten Ablauf muss auch noch der *FP* für die vorige Funktionsebene gesetzt werden.
+:::
+
+## Stack-Frame nach Rücksprung
 
 ::: center
 ![Stack-Frame nach Rücksprung (`return`)](https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Aufrufstapellayout_nach_R%C3%BCcksprung.svg/512px-Aufrufstapellayout_nach_R%C3%BCcksprung.svg.png){height="86%"}
@@ -129,9 +164,6 @@ In der obigen Grafik sind drei Funktionsaufrufe aktiv: Die erste Funktion (türk
 
 [Quelle:  [H3xc0d3r](https://commons.wikimedia.org/wiki/User:H3xc0d3r), [Aufrufstapellayout nach Rücksprung](https://commons.wikimedia.org/wiki/File:Aufrufstapellayout_nach_R%C3%BCcksprung.svg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/legalcode)]{.origin}
 
-::: notes
-Beim Rücksprung aus einer Funktion wird der Rückgabewert an die Stelle des ersten Parameters geschrieben und der restliche Stack freigegeben (lokale Variablen, Rücksprungadresse). Zusätzlich muss der *FP* für die vorige Funktionsebene gesetzt werden.
-:::
 
 ## Freigabe des Rückgabewertes
 
