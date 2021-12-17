@@ -321,6 +321,9 @@ Das obige Beispiel aus [@Nystrom2021] ist ein Beispiel für präzises GC.
 ## Konservative Garbage Collection
 
 * Von Boehm und Weiser
+
+* Sammelt automatisch die Collection
+
 * Kann Pointer im Speicher finden ohne die innere Struktur eines Objektes zu kennen
   * Interpretiert alle Daten in dem Speicherbereich, in dem Pointer gesucht werden, als Pointer
   * Die Daten werden unsichere Pointer genannt, da der Collector nicht weiß, ob sie Pointer sind.
@@ -338,7 +341,7 @@ Das obige Beispiel aus [@Nystrom2021] ist ein Beispiel für präzises GC.
     * die Größe des gespeicherten Objektes
     * Anzahl an gespeicherten Objekten
     * Bit-Feld für die Mark-Phase
-* Der Mutator schaut, beim anfordern von Speicherplatz, in der Blockliste und im Verwaltungsbereich des entsprechendem Blockes, ob es ein freies Objekt mit der Größe gibt
+* Beim anfordern von Speicherplatz wird geschaut ob in der Blockliste und im Verwaltungsbereich des entsprechendem Blockes  ein freies Objekt mit der Größe gibt
   * Wenn ja, wird die Objektanzahl des Blockes inkrementiert und ein Pointer auf dieses Objekt zurückgegeben
   * Wenn nein, wird ein neuer Block initialisiert und ein Pointer auf das erste Objekt zurückgegeben
 
@@ -375,8 +378,8 @@ Das ganze wird umgesetzt, indem eine Seite des Heaps nicht verwendet wird, wenn 
 
 Vorteile:
 
-* Keine explizite Kooperation des Mutators nötig
-* Der Mutator muss nur eine Bedingung erfüllen
+* Keine explizite Kooperation für die Speicherverwaltung nötig
+* Die Speicherverwaltung muss nur eine Bedingung erfüllen
   * Jedes benutze Objekt hat ein Pointer auf den Anfang (innerhalb des Zugriffsbereichs des Collectors)
 * Kann mit anderen Speicherverwaltungen koexistieren
 * Explizite Deallocation ist möglich
@@ -389,16 +392,100 @@ Nachteile:
 
 * Mark-Phase dauert durch die zusätzlichen Tests länger
 * Die Möglichkeit einer Fragmentierung des Speichers ist hoch.
-  * In manchen Situationen kann etwa die hälfte des Heaps nicht genutzt werden, da die freien Objekte nicht die vom Mutator benötigte Größe hatten
+  * In manchen Situationen kann etwa die hälfte des Heaps nicht genutzt werden, da die freien Objekte nicht die vom der Speicherverwaltung benötigte Größe hatten
 * Fehlinterpretationen können dafür sorgen, dass unsichere Pointer nicht freigegeben werden
 * Bei hoch optimierten Compilern ist der Collector nicht zuverlässig, da die Adressen nicht mehr auf die benutzen Objekte zeigt
 
 
 
+## Reference Counting
 
-## Alternativen
+* Eine Technik zum Speichern von Pointern
+* Kein Tracing Garbage Collector mehr
 
-*   Reference Counting
+* Die Objekte werden freigegeben sobald sie nicht mehr referenziert werden
+
+* Jedes Objekt bekommt einen Referenz-Counter
+  * Zählt die Anzahl der Pointerreferenzen auf jedes zugewiesene Objekt
+  * Wenn der Counter auf 0 gesetzt wird es gelöscht
+* Eine einfache Form der Speicherverwaltung
+* Ohne Collection zyklen zum sammeln der Objekte
+* Probleme mit zyklischen Datenstrukturen
+
+
+
+## Algorithmus
+
+* Erstellen eines Objektes
+  * Speicher zuweisen
+  * Referenz Counter auf 1 setzen
+
+```python
+def new():
+    obj = alloc_memory()
+    obj.set_ref_counter(1)
+    return obj
+```
+
+*new()* wird beim erstellen eines Objektes aufgerufen.
+
+
+
+* Löschen eines Objektes
+  * Referenz-Counter um 1 runter zählen
+  * Wenn der Counter auf 0 ist
+    * Wird für jedes Unterobjekt delete aufgerufen
+    * Der Speicherplaz für das Objekt wird freigegeben
+
+```python
+def delete(obj):
+    obj.dec_ref_counter()
+    if obj.get_ref_counter() == 0:
+        for child in children(obj):
+			delete(child)
+		freeObject(obj)
+```
+
+*delete()* wird aufgerufen, wenn das Objekt nicht weiter vom Programm verwendet wird. Hierbei wird gecheckt, ob auf das Objekt referenziert wird.
+
+::: center
+
+![Beispiel für ein delete](images/delete_example.png)
+
+:::
+
+* Updaten eines Objektes
+  * *target* Referenz-Counter um 1 hoch zählen
+  * Für *source* wird delete aufgerufen
+  * *source* wird mit *target* überschrieben
+
+```python
+def update(source, target):
+	# increment before deleting, source == target case.
+	target.inc_ref_count()   		
+	delete(source)
+	source = target
+```
+
+Update wird aufgerufen, wenn ein Objekt einem neuen Speicherplatz(*target*) zugewiesen wird, der "alte" Speicherplatz(*soruce*) wird freigegeben.
+
+
+
+## Probleme
+
+Das größte Problem beim Referenz Counting ist, der Umgang mit zyklischen Datenstrukturen, wie z.B verkettete Listen oder einfache Graphen. Durch den Algorithmus zum Löschen und freigeben der Objekte kann es dazu kommen, dass sich zyklische Datenstrukturen nicht gelöscht und freigegeben werden können und ein Speicherverlust entsteht.
+
+Das folgende Beispiel erläutert dieses Problem:
+
+::: center 
+
+![Beispiel für ein delete](images/delete_problem.png)
+
+:::
+
+
+##  Alternativen
+
 *   Inkrementelles GC
 *   Concurrent GC
 *   Generational GC: Markieren der "Generationen" der Lebensdauer, Umsortieren
