@@ -163,31 +163,27 @@ In der obigen Grafik sind drei Funktionsaufrufe aktiv: Die erste Funktion (türk
 - in der Praxis daher meist gemischter Ansatz aus Caller-Saves und Callee-Saves Registern
 
 
-## Übernahme von Parametern (Funktionsprolog)
+## Aufruf von Funktionen: Prolog, Epilog und Rücksprung
 
+:::::: columns
+::: {.column width="50%"}
 ![Funktionsaufruf Prolog](images/ViewCallee_Prolog.png){height="86%"}
+
+
+![Funktionsaufruf Epilog](images/ViewCallee_Epilog.png){height="86%"}
+:::
+::: {.column width="30%"}
+![Stack-Frame nach Rücksprung (`return`)](https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Aufrufstapellayout_nach_R%C3%BCcksprung.svg/512px-Aufrufstapellayout_nach_R%C3%BCcksprung.svg.png){height="86%"}
+
+[Quelle:  [H3xc0d3r](https://commons.wikimedia.org/wiki/User:H3xc0d3r), [Aufrufstapellayout nach Rücksprung](https://commons.wikimedia.org/wiki/File:Aufrufstapellayout_nach_R%C3%BCcksprung.svg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/legalcode)]{.origin}
+:::
+::::::
 
 ::: notes
 Die Parameter einer Funktion werden vom aufrufenden Kontext auf dem Stack abgelegt und nachdem der Sprung in die Funktion erfolgt ist wieder in Variablen/Register geladen. Dieses Vorgehen ist in der Praxis aber ineffizient, da das Speichern und Laden direkt aufeinander folgen. Daher werden werden oft bestimmte (Caller-Saves) Register für die übergabe von Parametern verwendet.
-:::
 
-## Rücksprung aus einer Funktion (Funktionsepilog)
-
-::: center
-![Funktionsaufruf Epilog](images/ViewCallee_Epilog.png){height="86%"}
-:::
-
-::: notes
 Beim Rücksprung aus einer Funktion wird der Rückgabewert an die Stelle des ersten Parameters geschrieben und der restliche Stack freigegeben (lokale Variablen, Rücksprungadresse).
 :::
-
-## Stack-Frame nach Rücksprung
-
-::: center
-![Stack-Frame nach Rücksprung (`return`)](https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Aufrufstapellayout_nach_R%C3%BCcksprung.svg/512px-Aufrufstapellayout_nach_R%C3%BCcksprung.svg.png){height="86%"}
-:::
-
-[Quelle:  [H3xc0d3r](https://commons.wikimedia.org/wiki/User:H3xc0d3r), [Aufrufstapellayout nach Rücksprung](https://commons.wikimedia.org/wiki/File:Aufrufstapellayout_nach_R%C3%BCcksprung.svg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/legalcode)]{.origin}
 
 
 ## Freigabe des Rückgabewertes
