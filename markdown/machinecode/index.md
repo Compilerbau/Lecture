@@ -105,7 +105,34 @@ L:  ...
 ::: notes
 Ein Funktionsaufruf entspricht einem Sprung an die Stelle im Textsegment, wo der Funktionscode abgelegt ist. Dies erreicht man, in dem man diese Adresse in den *PC* schreibt. Bei einem `return` muss man wieder zum ursprünglichen Programmcode zurückspringen, weshalb man diese Adresse auf dem Stack hinterlegt.
 
-Zusätzlich müssen Parameter für die Funktion auf dem Stack abgelegt werden, damit die Funktion auf diese zugreifen kann. Im Funktionscode greift man dann statt auf die Variablen auf die konkreten Adressen im Stack-Frame zu, diese sind je Funktion ja konstant (relativ zum *FP*).
+Zusätzlich müssen Parameter für die Funktion auf dem Stack abgelegt
+werden, damit die Funktion auf diese zugreifen kann. Im Funktionscode
+greift man dann statt auf die Variablen auf die konkreten Adressen im
+Stack-Frame zu. Dazu verwendet man den *Framepointer* bzw. *FP*
+("Rahmenzeiger" in der Skizze), der auf die Adresse des ersten
+Parameters, d.h. auf die Adresse *hinter* der Rücksprungadresse,
+zeigt. Die Parameter sind dann je Funktion über konstante Offsets
+relative zum *FP* erreichbar. Ähnlich wie die Rücksprungadresse muss
+der *FP* des aufrufenden Kontexts im Stack-Frame der aufgerufenen
+Funktion gesichert werden (in der Skizze nicht dargestellt) und am
+Ende des Aufrufs wieder hergestellt werde.
+
+Lokale Variablen einer Funktion werden ebenfalls auf dem Stack
+abgelegt, falls nicht genügend Register zur Verfügung stehen, und
+relativ zum *FP* adressiert. Die Größe des dafür verwendeten Speichers
+wird oft als *Framesize* oder *Rahmengröße* bezeichnet. Am Ende eines
+Funktionsaufrufs wird dieser Speicher freigegeben indem der
+*Stackpointer* bzw. *SP* ("Stapelzeiger" in der Skizze) auf den *FP*
+zurückgesetzt wird (oder auf *FP*+4 was den Speicher für die
+Rücksprungadresse mit einschließt).
+
+Die Adressierung von Parametern und Variablen kann auch relativ zum
+*SP* erfolgen, so dass kein *FP* benötigt wird. Der dazu erzeugte
+Maschinencode kann aber deutlich komplexer sein, da Stack und *SP*
+auch für arithmetische Berechnungen verwendet werden und der *FP*
+somit für die Dauer eines Funktionsaufrufs nicht zwingend konstant
+ist. (Die nachfolgenden Code-Beispiele verwenden der Einfachheit
+halber dennoch eine Adressierung relativ zum *SP*)
 
 Falls eine Funktion Rückgabewerte hat, werden diese ebenfalls auf dem Stack abgelegt (Überschreiben der ursprünglichen Parameter).
 
@@ -114,8 +141,6 @@ Zusammengefasst gibt es für jeden Funktionsaufruf die in der obigen Skizze darg
 *   Funktionsparameter (falls vorhanden)
 *   Rücksprungadresse (d.h. aktueller *PC*)
 *   Lokale Variablen der Funktion (falls vorhanden)
-
-Der *FP* ("Rahmenzeiger" in der Skizze) zeigt dabei auf die Adresse des ersten Parameters, d.h. auf die Adresse *hinter* der Rücksprungadresse und dient dazu die Größe des Speichers für lokale Variablen zu bestimmen, wenn diese nicht zur Compile-Zeit bekannt ist.
 
 In der obigen Grafik sind drei Funktionsaufrufe aktiv: Die erste Funktion (türkis) hat Parameter, aber keine lokalen Variablen. Aus dieser Funktion heraus wurde eine zweite Funktion aufgerufen (blau). Diese hat keine Parameter, aber lokale Variablen. Die dort aufgerufene dritte Funktion (hellblau) hat sowohl Parameter als auch lokale Variablen.
 :::
@@ -153,7 +178,7 @@ Die Parameter einer Funktion werden vom aufrufenden Kontext auf dem Stack abgele
 :::
 
 ::: notes
-Beim Rücksprung aus einer Funktion wird der Rückgabewert an die Stelle des ersten Parameters geschrieben und der restliche Stack freigegeben (lokale Variablen, Rücksprungadresse). Zusätzlich zum oben gezeigten Ablauf muss auch noch der *FP* für die vorige Funktionsebene gesetzt werden.
+Beim Rücksprung aus einer Funktion wird der Rückgabewert an die Stelle des ersten Parameters geschrieben und der restliche Stack freigegeben (lokale Variablen, Rücksprungadresse).
 :::
 
 ## Stack-Frame nach Rücksprung
