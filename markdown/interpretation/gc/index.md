@@ -429,6 +429,8 @@ def new():
 
 *new()* wird beim erstellen eines Objektes aufgerufen.
 
+![](images/obj_struct.png)
+
 
 
 * Löschen eines Objektes
@@ -516,6 +518,48 @@ Nachteile:
 *   Concurrent GC
 *   Generational GC: Markieren der "Generationen" der Lebensdauer, Umsortieren
     "erwachsener" Objekte in Speicherbereich mit weniger häufigem GC
+
+
+
+## Lower-Bound-Overhead (LBO)
+
+* GC aufgeteilt in allocation, identification, and reclamation
+
+* Findet den Lower-Bound-Overhead von Produktion GC´s 
+  * stop the world collectors
+    * Serial, Parallel
+    * Alle Mutatoren müssen gestoppt werden beim ausführen
+  * concurrent tracing collector
+    * G1
+    * Die Garbage Identifizierung via trace and mutator
+    * (trace markiert die Objekte als markiert)
+    * (Mutator bezeichnet ein Prozess zur Veränderung von dynamischen Speicherverwaltungen)
+  * concurrent copy collectors
+    * Shenandoah, ZGC
+    * Die Garbage Reklamation via Mutator der Objekte Kopiert
+    * low-pause collectors 
+* empirische Abschätzung
+  * Annäherung an einen zero-cost GC Schema
+  * Im Gegenzug zu Hertz und Berger kann der Overhead auf richtiger/realer Hardware getestet werden
+  * Keine invasiven Laufzeitinstrumente nötig
+* Es kann zur Misinterpretation kommen
+  * nicht kennen von Limitationen von GC´s 
+* Das Ergebnis basiert stark auf das Ideal Schema ( zero-cost)
+
+* wall-clock time, CPU cycles, and application latency werden getestet
+
+
+
+* Costs Tightly Coupled with Application Execution
+  * Schlecht zu messen, da GC Methoden von z.B allocation stark mit dem Code verknüpft sind
+* Indirect Costs/Benefits
+  * teilen des Caches mit Mutator
+* Absolute Overheads of Garbage Collection
+  * Besser als Hertz und Berger. weil echte Hardware
+  * Fokusiert sich auf precise GC und nicht conservative GC
+  * Probleme beim Messen der GC-pauses, da es Außerhalb der pause kosten vom Mutator auftreten können
+
+
 
 ## Wrap-Up
 
