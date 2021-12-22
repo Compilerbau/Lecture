@@ -94,16 +94,37 @@ L:  ...
 
 [Quelle: nach [@Aho2008]]{.origin}
 
-## Aufruf von Funktionen: Anlegen eines *Stack-Frames*
+
+## Aufruf von Funktionen
+
+![](images/ViewCaller.png){height="86%"}
+
+
+## Sichern von lokalen Variablen beim Funktionsaufruf
+
+- bei Funtionsaufrufen müssen verwendete Register (lokale Variablen) gesichert werden
+- Register werden in den Speicher (Stack) ausgelagert
+- Sicherung kann durch aufrufende Funktion (Caller-Saves) oder aufgerufene Funktion (Callee-Saves) erfolgen
+- Vorteile:
+  - Caller-Safes: nur "lebende" Register müssen gesichert werden
+  - Callee-Safes: nur tatsächlich verwendete Register müssen gesichert werden
+- Nachteile: unnötiges Sichern von Registern bei beiden Varianten möglich
+- in der Praxis daher meist gemischter Ansatz aus Caller-Saves und Callee-Saves Registern
+
+## Stack-Frame
 
 ::: center
-![Stack-Frame](https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Aufrufstapel_schema.svg/512px-Aufrufstapel_schema.svg.png){height="86%"}
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Aufrufstapellayout_nach_Freigabe.svg/512px-Aufrufstapellayout_nach_Freigabe.svg.png){height="86%"}
 :::
 
-[Quelle:  [H3xc0d3r](https://commons.wikimedia.org/wiki/User:H3xc0d3r), [Aufrufstapel schema](https://commons.wikimedia.org/wiki/File:Aufrufstapel_schema.svg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/legalcode)]{.origin}
+[Quelle: [H3xc0d3r](https://commons.wikimedia.org/wiki/User:H3xc0d3r), [Aufrufstapellayout nach Freigabe](https://commons.wikimedia.org/wiki/File:Aufrufstapellayout_nach_Freigabe.svg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/legalcode)]{.origin}
 
 ::: notes
-Ein Funktionsaufruf entspricht einem Sprung an die Stelle im Textsegment, wo der Funktionscode abgelegt ist. Dies erreicht man, in dem man diese Adresse in den *PC* schreibt. Bei einem `return` muss man wieder zum ursprünglichen Programmcode zurückspringen, weshalb man diese Adresse auf dem Stack hinterlegt.
+Ein Funktionsaufruf entspricht einem Sprung an die Stelle im
+Textsegment, wo der Funktionscode abgelegt ist. Dies erreicht man, in
+dem man diese Adresse in den *PC* schreibt. Bei einem `return` muss
+man wieder zum ursprünglichen Programmcode zurückspringen, weshalb man
+diese Adresse auf dem Stack hinterlegt.
 
 Zusätzlich müssen Parameter für die Funktion auf dem Stack abgelegt
 werden, damit die Funktion auf diese zugreifen kann. Im Funktionscode
@@ -129,67 +150,63 @@ Rücksprungadresse mit einschließt).
 Die Adressierung von Parametern und Variablen kann auch relativ zum
 *SP* erfolgen, so dass kein *FP* benötigt wird. Der dazu erzeugte
 Maschinencode kann aber deutlich komplexer sein, da Stack und *SP*
-auch für arithmetische Berechnungen verwendet werden und der *FP*
+auch für arithmetische Berechnungen verwendet werden und der *SP*
 somit für die Dauer eines Funktionsaufrufs nicht zwingend konstant
 ist. (Die nachfolgenden Code-Beispiele verwenden der Einfachheit
 halber dennoch eine Adressierung relativ zum *SP*)
 
-Falls eine Funktion Rückgabewerte hat, werden diese ebenfalls auf dem Stack abgelegt (Überschreiben der ursprünglichen Parameter).
+Falls eine Funktion Rückgabewerte hat, werden diese ebenfalls auf dem
+Stack abgelegt (Überschreiben der ursprünglichen Parameter).
 
-Zusammengefasst gibt es für jeden Funktionsaufruf die in der obigen Skizze dargestellte Struktur ("Stack Frame" oder auch "Activation Record" genannt):
+Zusammengefasst gibt es für jeden Funktionsaufruf die in der obigen
+Skizze dargestellte Struktur ("Stack Frame" oder auch "Activation
+Record" genannt):
 
 *   Funktionsparameter (falls vorhanden)
 *   Rücksprungadresse (d.h. aktueller *PC*)
 *   Lokale Variablen der Funktion (falls vorhanden)
-
-In der obigen Grafik sind drei Funktionsaufrufe aktiv: Die erste Funktion (türkis) hat Parameter, aber keine lokalen Variablen. Aus dieser Funktion heraus wurde eine zweite Funktion aufgerufen (blau). Diese hat keine Parameter, aber lokale Variablen. Die dort aufgerufene dritte Funktion (hellblau) hat sowohl Parameter als auch lokale Variablen.
 :::
 
-
-## Aufruf von Funktionen: Maschinencode
-
-![Funktionsaufruf: Sicht des Aufrufers](images/ViewCaller.png){height="86%"}
-
-
-## Sichern von lokalen Variablen beim Funktionsaufruf
-
-- bei Funtionsaufrufen müssen verwendete Register (lokale Variablen) gesichert werden
-- Register werden in den Speicher (Stack) ausgelagert
-- Sicherung kann durch aufrufende Funktion (Caller-Saves) oder aufgerufene Funktion (Callee-Saves) erfolgen
-- Vorteile:
-  - Caller-Safes: nur "lebende" Register müssen gesichert werden
-  - Callee-Safes: nur tatsächlich verwendete Register müssen gesichert werden
-- Nachteile: unnötiges Sichern von Registern bei beiden Varianten möglich
-- in der Praxis daher meist gemischter Ansatz aus Caller-Saves und Callee-Saves Registern
-
-
-## Aufruf von Funktionen: Prolog, Epilog und Rücksprung
+## Funktionsaufruf: Prolog
 
 :::::: columns
-::: {.column width="50%"}
-![Funktionsaufruf Prolog](images/ViewCallee_Prolog.png){height="86%"}
-
-
-![Funktionsaufruf Epilog](images/ViewCallee_Epilog.png){height="86%"}
+::: {.column width="40%"}
+\vspace{2cm}
+![](images/ViewCallee_Prolog.png){height="86%"}
 :::
-::: {.column width="30%"}
-![Stack-Frame nach Rücksprung (`return`)](https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Aufrufstapellayout_nach_R%C3%BCcksprung.svg/512px-Aufrufstapellayout_nach_R%C3%BCcksprung.svg.png){height="86%"}
+::: {.column width="40%"}
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Aufrufstapel_schema.svg/512px-Aufrufstapel_schema.svg.png){height="86%"}
+
+[Quelle:  [H3xc0d3r](https://commons.wikimedia.org/wiki/User:H3xc0d3r), [Aufrufstapel schema](https://commons.wikimedia.org/wiki/File:Aufrufstapel_schema.svg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/legalcode)]{.origin}
+:::
+::::::
+
+::: notes
+Die Parameter einer Funktion werden vom aufrufenden Kontext auf dem Stack abgelegt und nachdem der Sprung in die Funktion erfolgt ist wieder in Variablen/Register geladen. Dieses Vorgehen ist in der Praxis aber ineffizient, da das Speichern und Laden direkt aufeinander folgen. Daher werden werden oft bestimmte (Caller-Saves) Register für die übergabe von Parametern verwendet.
+:::
+
+## Funktionsaufruf: Epilog
+
+:::::: columns
+::: {.column width="40%"}
+\vspace{2cm}
+![](images/ViewCallee_Epilog.png){height="86%"}
+:::
+::: {.column width="40%"}
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Aufrufstapellayout_nach_R%C3%BCcksprung.svg/512px-Aufrufstapellayout_nach_R%C3%BCcksprung.svg.png){height="86%"}
 
 [Quelle:  [H3xc0d3r](https://commons.wikimedia.org/wiki/User:H3xc0d3r), [Aufrufstapellayout nach Rücksprung](https://commons.wikimedia.org/wiki/File:Aufrufstapellayout_nach_R%C3%BCcksprung.svg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/legalcode)]{.origin}
 :::
 ::::::
 
 ::: notes
-Die Parameter einer Funktion werden vom aufrufenden Kontext auf dem Stack abgelegt und nachdem der Sprung in die Funktion erfolgt ist wieder in Variablen/Register geladen. Dieses Vorgehen ist in der Praxis aber ineffizient, da das Speichern und Laden direkt aufeinander folgen. Daher werden werden oft bestimmte (Caller-Saves) Register für die übergabe von Parametern verwendet.
-
 Beim Rücksprung aus einer Funktion wird der Rückgabewert an die Stelle des ersten Parameters geschrieben und der restliche Stack freigegeben (lokale Variablen, Rücksprungadresse).
 :::
-
 
 ## Freigabe des Rückgabewertes
 
 ::: center
-![Stack-Frame nach Rücksprung (`return`) und Freigabe](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Aufrufstapellayout_nach_Freigabe.svg/512px-Aufrufstapellayout_nach_Freigabe.svg.png){height="86%"}
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Aufrufstapellayout_nach_Freigabe.svg/512px-Aufrufstapellayout_nach_Freigabe.svg.png){height="86%"}
 :::
 
 [Quelle: [H3xc0d3r](https://commons.wikimedia.org/wiki/User:H3xc0d3r), [Aufrufstapellayout nach Freigabe](https://commons.wikimedia.org/wiki/File:Aufrufstapellayout_nach_Freigabe.svg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/legalcode)]{.origin}
