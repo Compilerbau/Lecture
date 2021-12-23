@@ -525,9 +525,12 @@ Nachteile:
 
 
 ## Benchmarking
+[Hauptseite](https://ionutbalosin.com/2019/12/jvm-garbage-collectors-benchmarks-report-19-12/)
+
+[Ergebnisse](http://htmlpreview.github.io/?https://github.com/ionutbalosin/jvm-performance-benchmarks-reports/blob/master/19_12_report_openjdk-13/jmh_visualizer_gc/index.html)
+
 
 * Fokusieren die Metriken:
-
   * Effizenz der Rückgewinnung von Objekten
     *	Unterschiedliche Allokationsraten für kleine und gr0ße Objekte
     *	mit und ohne konstante Speicherbelegung im Heap
@@ -539,7 +542,13 @@ Nachteile:
   
 * Um die folgenden Benchmarks an einem Beispiel zu zeigen. Werden die folgenden GCs verwendet: Serial GC, Parallel/ParallelOld GC, Concurrent Mark Sweep (CMS) GC, Garbage First (G1) GC, Shenandoah GC, ZGC und Epsilon GC. Alle Garbage Collectoren sind aus AdoptOpenJDK 64-Bit Server VM version 13
 
-  
+
+
+::: notes
+
+Read-/Writebarrier [ReadWrite](https://stackoverflow.com/questions/1787450/how-do-i-understand-read-memory-barriers-and-volatile)
+
+:::
 
 ## Setup
 
@@ -562,8 +571,6 @@ Nachteile:
   * Just-In-Time Compiler Optimierungen, Bibiliotheken, CPU-Caching usw.
   
     
-
-## Read/Write Barrier
 
 ## Benchmark: BurstHeapMemoryAllocatorBenchmark
 
@@ -591,7 +598,6 @@ void allocate(int sizeInBytes, int numberOfObjects) {
 Ergebnis zum Benchmark mit den bereits genannten Garbage Collectoren
 
 * ZGC und Shenandoah GC haben deutlich bessere Ergebnisse als die anderen Collectoren.
-
 * G1 GC bietet zwar einen schlechteren Durchsatz als ZGC und Shenandoah GC, allerdings mit dem großen Objekten(_4_MB) erziehlte es besser Ergebnisse als CMS GC, ParallelOld GC und Serial GC.
 
   
@@ -611,9 +617,7 @@ void test(Blackhole blackhole) {
 Ergebnis zum Benchmark mit den bereits genannten Garbage Collectoren
 
 * CMS GC gefolgt von G1 GC erziehlen hier die besten Ergebnisse
-
 * ZGC and Shenandoah GC erziehlten die schlechtesten Ergebnisse
-
   * Kosten für die Markierung des gesamten Heaps bei jedem Zyklus
 
     
@@ -629,23 +633,14 @@ byte[] allocate() {
 ```
 
 sizeInBytes
-
 * _4_KB, _4_MB
 
-
-
 Ergebnis zum Benchmark mit den bereits genannten Garbage Collectoren
-
 * Für große Objekte(_4_MB)
-
   * G1 GC bietet den schlechtesten Responsetime 
   * ParallelOld GC ist am effizientesten
-
 * Für kleine Objekte(_4_KB)
-
   * Ungefähr alle gleich, allerdings ist der Shenandoah GC ein wenig effizienter
-
-    
 
 ## Benchmark: ReadWriteBarriersBenchmark
 
@@ -667,7 +662,6 @@ void test() {
 ```
 
 Ergebnis zum Benchmark mit den bereits genannten Garbage Collectoren
-
 * Epsilon GC hat die besten Ergebnisse, da der Collector keine Barrieren verwendet
 * Shenandoah GC hat nach Epsilon GC die besten Ergbnisse
 * G1 GC bietet die schlechtesten Ergebnisse mit 10x-14x langsamer als der Rest der Collectoren (wahrscheinlich wegen den PostWrite Barrier)
@@ -689,16 +683,10 @@ void test(Integer lRefInteger) {
 ```
 
 Ergebnis zum Benchmark mit den bereits genannten Garbage Collectoren
-
 * Epsilon GC hat die besten Ergebnisse, da der Collector keine Barrieren verwendet
-
 * ZGC hat nach Epsilon GC die besten Ergbnisse
-
   * Unterstütz keine Compressed OOPs
-
 * Auch in diesem Benchmark bietet G1 GC die schlechtesten Ergebnisse mit 10x-20x langsamer als der Rest der Collectoren (wahrscheinlich wegen den PostWrite Barrier)
-
-  
 
 ## Benchmark: ReadBarriersLoopingOverArrayBenchmark
 
@@ -720,7 +708,6 @@ int test() {
 ```
 
 Ergebnis zum Benchmark mit den bereits genannten Garbage Collectoren
-
 * ZGC bietet den besten Durchsatz
   * fehlende Möglichkeit, die Überprüfung der Lesebarrieren anzuheben
   * die Abwesenheit von Compressed OOPs, die jetzt umgekehrt auftritt im Vergleich zum vorherigen Benchmark
@@ -762,9 +749,7 @@ class H32 {
 ```
 
 Ergebnis zum Benchmark mit den bereits genannten Garbage Collectoren
-
 * Epsilon GC hat die besten Ergebnisse, da der Collector keine Barrieren verwendet
-
 * Alle anderen Collectoren haben den gleichen Durchsatz
 
   
