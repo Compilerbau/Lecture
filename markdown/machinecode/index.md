@@ -5,9 +5,8 @@ menuTitle: "Maschinencode"
 author: "Carsten Gips (FH Bielefeld)"
 weight: 7
 readings:
-  - key: "Aho2008"
-  - key: "Nystrom2021"
   - key: "Mogensen2017"
+    comment: "Kapitel 7 Machine-Code Generation"
 youtube:
   - id: TODO
 fhmedia:
