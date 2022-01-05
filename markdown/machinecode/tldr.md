@@ -4,12 +4,13 @@ disableToc: true
 hidden: true
 ---
 
+
 Die ist ein Ausblick und soll die Erzeugung von Maschinencode skizzieren.
 
 Die Erzeugung von Maschinencode ist der Erzeugung von Bytecode relativ ähnlich, allerdings muss
 man die Eigenschaften der Zielhardware (Register, Maschinenbefehle, ...) beachten. Insbesondere
 muss man ein Text-Segment erstellen, welches die aus dem Zwischencode übersetzten Maschinenbefehle
-enthält. Ähnlich wie beim Bytecode werden Konstanten und Literalen am Ende vom Text-Segment
+enthält. Ähnlich wie beim Bytecode werden Konstanten und Literale am Ende vom Text-Segment
 gesammelt.
 
 Ein wichtiger (und schwieriger) Schritt ist die Zuordnung von Variablen und Daten zu Registern

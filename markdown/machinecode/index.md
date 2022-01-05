@@ -15,6 +15,7 @@ fhmedia:
     name: "Direktlink FH-Medienportal: CB Maschinencode"
 ---
 
+
 ## Einordnung
 
 ![Generierung von Maschinencode](https://raw.githubusercontent.com/munificent/craftinginterpreters/master/site/image/a-map-of-the-territory/mountain.png)
@@ -212,7 +213,7 @@ Beim Rücksprung aus einer Funktion wird der Rückgabewert an die Stelle des ers
 [Quelle: [H3xc0d3r](https://commons.wikimedia.org/wiki/User:H3xc0d3r), [Aufrufstapellayout nach Freigabe](https://commons.wikimedia.org/wiki/File:Aufrufstapellayout_nach_Freigabe.svg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/legalcode)]{.origin}
 
 ::: notes
-Nach Verarbeiten des Rückgabewertes wird auch dieser vom Stack entfernt (`pop`). 
+Nach Verarbeiten des Rückgabewertes wird auch dieser vom Stack entfernt (`pop`).
 Damit ist der Stack-Frame des letzten Funktionsaufrufs komplett vom Stack entfernt.
 :::
 
