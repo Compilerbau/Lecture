@@ -20,41 +20,45 @@ fhmedia:
 :::::: columns
 ::: {.column width="45%"}
 ```python
-var a = "first value";
-a = "updated";
-print a;
-
-a = 'first value'
-a = 'updated'
-print(a)
+x = 42
+y = 'wuppie'
+y = 'fluppie'
+print(y)
 ```
 :::
 ::: {.column width="45%"}
 ```python
-fun makeClosure() {
-    var a = "data";
-
-    fun f() { print a; }
-    return f;
-}
-
-var closure = makeClosure();
-closure();
-
-def makeClosure():
-    a = 'data'
-    def f():
-        print(a)
+def foo():
+    x = 'wuppie'
+    def bar():
+        print(x)
     return f
 
-closure = makeClosure()
-# GC here
-closure()
+fn = foo()
+fn()
 ```
 :::
 ::::::
 
-[Quelle nach: [@Nystrom2021], Kapitel "Garbage Collection"]{.origin}
+::: notes
+Bei der Erzeugung von Bytecode für eine VM kann man die Konstanten direkt einem
+Konstanten-Array sammeln und im Bytecode mit den entsprechenden Indizes arbeiten.
+Das entspricht dem Vorgehen bei der Maschinencode-Erzeugung, dort sammelt man die
+Konstanten typischerweise am Ende des Text-Segments.
+
+Bei der Abarbeitung des Bytecodes durch die VM legt diese Objekte für globale und
+lokale Variablen, Strings sowie für Funktionen etc. an. Der Speicher dafür wird
+dynamisch auf dem Heap reserviert, und die Adressen beispielsweise im Stack (bei
+lokalen Variablen) oder in Hashtabellen (Funktionsnamen, globale Variablen) o.ä.
+gespeichert.
+
+Wenn Objekte nicht mehr benötigt werden, sollten sie also freigegeben werden, da
+sonst der Heap der VM voll läuft. Im obigen Beispiel wird der Speicher für `wuppie`
+unerreichbar, sobald man die Zuweisung `y = 'fluppie'` ausführt. Andererseits
+darf man aber auch nicht zu großzügig Objekt aufräumen: Die lokale Variable `x`
+in `foo` wird in der beim Aufruf erzeugten Funktion `bar` benötigt (*Closure*) und
+muss deshalb von der Lebensdauer wie eine globale Variable behandelt werden.
+:::
 
 
 ## Erreichbarkeit
