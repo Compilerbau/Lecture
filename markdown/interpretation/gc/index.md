@@ -81,7 +81,7 @@ die VM aktiv freigegeben werden müssen.
 :::
 
 
-## Mark-Sweep Garbage Collection
+## "Präzises GC": Mark-Sweep Garbage Collection
 
 ::: notes
 Das führt zu einem zweistufigen Algorithmus:
@@ -91,81 +91,18 @@ Das führt zu einem zweistufigen Algorithmus:
 2.  **Sweep**: Lösche alle anderen Objekte.
 :::
 
-![Erreichbarkeit von Objekten](images/mark-sweep.png)
+![](https://raw.githubusercontent.com/munificent/craftinginterpreters/master/site/image/garbage-collection/mark-sweep.png)
 
 [Quelle: [@Nystrom2021], [`mark-sweep.png`](https://github.com/munificent/craftinginterpreters/blob/master/site/image/garbage-collection/mark-sweep.png), ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
-
-## Phase "Mark": Wurzeln markieren
-
-:::::: columns
-::: {.column width="45%"}
-
-```python
-typedef struct sObj Obj;
-struct sObj {
-    ObjType type;
-    bool isMarked;
-    struct sObj* next;
-};
-
-class Obj():
-    def __init__(self, type, next):			# ObjType type, Obj next
-        self.type = type
-        self.next = next
-        self.isMarked = false				# bool isMarked
-```
-[Quelle nach: [@Nystrom2021], [`object.h`](https://github.com/munificent/craftinginterpreters/blob/master/c/object.h#L91), Kapitel "Garbage Collection"]{.origin}
-
-:::
-::: {.column width="45%"}
-
-```python
-typedef struct {
-    Chunk* chunk;
-    ...
-    Obj* objects;
-    ...
-    int grayCount;
-    int grayCapacity;
-    Obj** grayStack;
-} VM;
-
-class VM():
-    def __init__(self):
-        self.chunk = None
-        self.objects = None
-        self.grayCount = 0
-        self.grayCapacity = 0
-        self.grayStack = None
-
-```
-[Quelle nach: [@Nystrom2021], [`vm.h`](https://github.com/munificent/craftinginterpreters/blob/master/c/vm.h#L41), Kapitel "Garbage Collection"]{.origin}
-
-:::
-::::::
-
-\bigskip
-\bigskip
-
-```c
-object->isMarked = true;
-vm.grayStack[vm.grayCount++] = object;
-
-obj.isMarked = true
-vm.grayStack[vm.grayCount++] = object
-```
-
-[Quelle nach: [@Nystrom2021], Kapitel "Garbage Collection"]{.origin}
-
 ::: notes
-Die Strukturen für Objekte und die VM werden ergänzt. Objekte erhalten noch
-ein Flag für die Markierung sowie einen `next`-Pointer, mit dem alle Objekte
-in einer verketteten Liste gehalten werden können. Die VM erhält einen Stack
-für die Verwaltung markierter Objekte.
+Die Strukturen für Objekte und die VM werden ergänzt: Objekte erhalten noch
+ein Flag für die Markierung.
 
 Zum Auffinden der erreichbaren Objekte wird mit einem Färbungsalgorithmus
 gearbeitet. Initial sind alle Objekte "weiß" (nicht markiert).
+
+### Phase "Mark": Wurzeln markieren
 
 Im ersten Schritt färbt man alle "Wurzeln" "grau" ein. Dabei werden alle
 Objektreferenzen im Stack der VM, in der Hashtabelle für globale Variablen
@@ -173,29 +110,10 @@ der VM, in der Konstantentabelle des Bytecode-Chunks sowie in den Funktionspoint
 betrachtet: Über diese Datenstrukturen wird iteriert und alle auf dem Heap
 der Laufzeitumgebung allozierten Strukturen/Objekte werden markiert, indem
 ihr Flag gesetzt wird. Zusätzlich werden die Pointer auf diese Objekte in
-den `grayStack` hinzugefügt. Damit sind alle Wurzeln "grau" markiert".
-:::
+einen `grayStack` hinzugefügt. Damit sind alle Wurzeln "grau" markiert".
 
+### Phase "Mark": Trace
 
-## Phase "Mark": Trace
-
-```c
-void traceReferences() {
-    while (vm.grayCount > 0) {
-        Obj* object = vm.grayStack[--vm.grayCount];
-        blackenObject(object);
-    }
-}
-
-def traceReferences():
-    while vm.grayCount > 0:
-        object = vm.grayStack[--vm.grayCount]
-        blackenObject(object)
-```
-
-[Quelle nach: [@Nystrom2021], [`memory.c`](https://github.com/munificent/craftinginterpreters/blob/master/c/memory.c#L264), Kapitel "Garbage Collection"]{.origin}
-
-::: notes
 Nachdem alle Wurzeln "grau" markiert wurden und auf den `grayStack` der VM
 gelegt wurden, müssen nun mögliche Verweise in den Wurzeln verfolgt werden.
 Dazu entfernt man schrittweise die Objekte vom Stack und betrachtet sie damit
@@ -204,61 +122,32 @@ weil sie nicht mehr auf dem `grayStack` der VM liegen.) Sofern das aktuell
 betrachtete Objekt seinerseits wieder Referenzen hat (beispielsweise haben
 Funktionen wieder einen Bytecode-Chunk mit einem Konstanten-Array), werden
 diese Referenz iteriert und alle dabei aufgefundenen Objekte auf den `grayStack`
-der VM gelegt.
+der VM gelegt und ihr Flag gesetzt.
 
-Dieser Prozess wird so lange durchgeführt, bis der Stack leer ist. Dann sind
-alle erreichbaren Objekte markiert.
-:::
+Dieser Prozess wird so lange durchgeführt, bis der `grayStack` leer ist. Dann
+sind alle erreichbaren Objekte markiert.
 
+### Phase "Sweep"
 
-## Phase "Sweep"
+Jetzt sind alle Objekte markiert: Das Flag ist jeweils entweder gesetzt oder
+nicht gesetzt. Objekte, deren Flag nicht gesetzt ist, sind nicht mehr erreichbar
+und können freigegeben werden.
 
-```c
-void sweep() {
-    Obj* previous = NULL;  Obj* object = vm.objects;
-    while (object != NULL) {
-        if (object->isMarked) {
-            object->isMarked = false;
-            previous = object;  object = object->next;
-        } else {
-            Obj* unreached = object;
-            object = object->next;
-            if (previous != NULL) { previous->next = object; }
-            else { vm.objects = object; }
-            freeObject(unreached);
-        }
-    }
-}
+Wenn die Objekte nicht erreichbar sind, wie kommt man dann an diese heran?
 
-def sweep():
-    previous = NULL
-    object = vm.objects
-    while object != NULL:
-        if object.isMarked:
-            object.isMarked = false
-            previous = object
-            object = object.next
-        else:
-            unreached = object
-            object = object.next
-            if previous != NULL:
-                previous.next = object
-            else:
-                vm.objects = object
-            freeObject(unreached)
-```
+Die Strukturen für Objekte und die VM werden ergänzt. Objekte erhalten noch
+einen `next`-Pointer, mit dem *alle* Objekte in einer verketteten Liste gehalten
+werden können.
 
-[Quelle nach: [@Nystrom2021], [`memory.c`](https://github.com/munificent/craftinginterpreters/blob/master/c/memory.c#L272), Kapitel "Garbage Collection"]{.origin}
-
-::: notes
 Wann immer für ein Objekt Speicher auf dem Laufzeit-Heap angefordert wird,
-wird dieses Objekt in eine verkettete Liste aller Objekte der VM eingehängt
-(Feld `vm.objects`). Über diese Liste wird nun iteriert und alle "weissen"
-(nicht markierten) Objekte werden ausgehängt und freigegeben.
+wird dieses Objekt in eine verkettete Liste aller Objekte der VM eingehängt.
+Über diese Liste wird nun iteriert und alle "weißen" (nicht markierten) Objekte
+werden ausgehängt und freigegeben.
 
-Zusätzlich müssen alle verbleibenden Objekte für den nächsten GC-Lauf
-wieder entfärbt werden, d.h. die Markierung muss wieder zurückgesetzt
-werden.
+Zusätzlich müssen alle verbleibenden Objekte für den nächsten GC-Lauf wieder
+entfärbt werden, d.h. die Markierung muss wieder zurückgesetzt werden.
+
+Diese Form von Garbage Collection wird auch "präzise Garbage Collection" genannt.
 :::
 
 
