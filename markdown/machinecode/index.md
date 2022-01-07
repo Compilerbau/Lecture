@@ -22,15 +22,43 @@ fhmedia:
 [Quelle: ["A Map of the Territory (mountain.png)"](https://github.com/munificent/craftinginterpreters/blob/master/site/image/a-map-of-the-territory/mountain.png) by [Bob Nystrom](https://github.com/munificent), licensed under [MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE)]{.origin}
 
 ::: notes
-Die Erzeugung von Maschinencode ist ein "Parallelweg" zum Erzeugen von Bytecode. Die
-Schwierigkeit liegt darin, die technischen Besonderheiten der Zielplattform (Register,
-Maschinenbefehle) gut zu kennen und sinnvoll zu nutzen.
+Die Erzeugung von Maschinencode ist in gewisser Weise ein "Parallelweg" zum Erzeugen von
+Bytecode. Die Schwierigkeit liegt darin, die **technischen Besonderheiten** der
+**Zielplattform** (Register, Maschinenbefehle) gut zu kennen und sinnvoll zu nutzen.
 
-Häufig nutzt man hier den Drei-Adressen-Code als IR, der strukturell dem zu erzeugenden
-Maschinencode bereits recht ähnlich ist. Oder man macht sich die Sache einfach und generiert
-LLVM IR und lässt die LLVM-Toolchain übernehmen ;-)
+Häufig nutzt man als Ausgangsbasis den Drei-Adressen-Code als IR, der strukturell dem zu
+erzeugenden Maschinencode bereits recht ähnlich ist. Oder man macht sich die Sache einfach
+und generiert LLVM IR und lässt die LLVM-Toolchain übernehmen ;-)
 
 Hier der Vollständigkeit halber ein Ausblick ...
+:::
+
+
+## Prozessorarchitektur
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Intel_i80286_arch.svg/1024px-Intel_i80286_arch.svg.png)
+
+[Quelle: ["Intel i80286 arch"](https://commons.wikimedia.org/wiki/File:Intel_i80286_arch.svg) by [Appaloosa](https://commons.wikimedia.org/wiki/User:Appaloosa), licensed under [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0)]{.origin}
+
+::: notes
+Am Beispiel der noch übersichtlichen Struktur des Intel i80286 lassen sich verschiedene
+Grundbausteine eines Prozessors identifizieren.
+
+Zunächst hat man eine Ausführungseinheit (*Execution Unit*), die sich vor allem aus
+verschiedenen Registern und der Recheneinheit (*ALU*) zusammen setzen. Hier kann man
+Adressen berechnen oder eben auch Dinge wie Addition ...
+
+Über die Register wird auch die Adressierung des Speichers vorgenommen. Aus Sicht eines
+Prozesses greift dieser auf einen zusammenhängenden, linearen Speicher zu ("Virtueller
+Speicher", siehe nächste Folie). Dieser setzt sich in der Realität aus verschiedenen
+Segmenten zusammen, die auch auf unterschiedliche Speichertypen (RAM, Cache, SSD, ...)
+verteilt sein können. In der *Address Unit* werden aus *logischen* Adressen die konkreten
+*physikalischen* Adressen berechnet.
+
+Über die *Bus Unit* erfolgt der physikalische Zugriff auf die konkrete Hardware.
+
+In der *Instruction Unit* wird der nächste Befehl geholt und dekodiert und zur Ausführung
+gebracht.
 :::
 
 
@@ -275,4 +303,7 @@ Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
 *   Figure ["A Map of the Territory (mountain.png)"](https://github.com/munificent/craftinginterpreters/blob/master/site/image/a-map-of-the-territory/mountain.png)
     (https://github.com/munificent/craftinginterpreters/blob/master/site/image/a-map-of-the-territory/mountain.png),
     by [Bob Nystrom](https://github.com/munificent), licensed under [MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE)
+*   Figure ["Intel i80286 arch"](https://commons.wikimedia.org/wiki/File:Intel_i80286_arch.svg)
+    (https://commons.wikimedia.org/wiki/File:Intel_i80286_arch.svg), by [Appaloosa](https://commons.wikimedia.org/wiki/User:Appaloosa), licensed
+    under [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0)
 :::
