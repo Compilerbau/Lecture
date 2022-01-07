@@ -63,19 +63,19 @@ muss deshalb von der Lebensdauer wie eine globale Variable behandelt werden.
 
 ## Erreichbarkeit
 
-![Erreichbarkeit von Objekten](images/reachable.png)
+![](https://raw.githubusercontent.com/munificent/craftinginterpreters/master/site/image/garbage-collection/reachable.png)
 
 [Quelle: [@Nystrom2021], [`reachable.png`](https://github.com/munificent/craftinginterpreters/blob/master/site/image/garbage-collection/reachable.png), ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
 
 ::: notes
-Erreichbar sind zunächst alle "Wurzeln", d.h. alle Objekte, die direkt über den
+1. Erreichbar sind zunächst alle "Wurzeln", d.h. alle Objekte, die direkt über den
 Stack oder die Konstanten-Arrays oder die Hashtabelle mit den globalen Variablen
 (und Funktionen) erreichbar sind.
 
-Alle Objekte, die von erreichbaren Objekten aus erreichbar sind, sind ebenfalls
+2. Alle Objekte, die von erreichbaren Objekten aus erreichbar sind, sind ebenfalls
 erreichbar.
 
-"Objekt" meint dabei im Zuge der Bytecodegenerierung oder während der Bearbeitung
+"Objekt" meint dabei im Zuge der Bytecode-Generierung oder während der Bearbeitung
 durch die VM erstellte Werte/Objekte, die auf dem Heap alloziert wurden und durch
 die VM aktiv freigegeben werden müssen.
 :::
