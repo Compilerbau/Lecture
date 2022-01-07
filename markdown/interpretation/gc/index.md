@@ -5,16 +5,15 @@ menuTitle: "Garbage Collection"
 author: "Carsten Gips (FH Bielefeld)"
 weight: 5
 readings:
-  - key: "Aho2008"
-    comment: "Kapitel XYZ"
   - key: "Nystrom2021"
-    comment: "Kapitel Garbage Collection"
+    comment: "Kapitel 26: Garbage Collection"
 youtube:
   - id: TODO
 fhmedia:
-  - link: https://www.fh-bielefeld.de/medienportal/m/27b2648014a692bd4aacbea6cb0b3787a045bc43a0ab2f0b028158c84ec7bcb27ea654d3955836d86bad5bd9e0ee3cd48f6c9ca7ce766a6e744971e0224b4494
+  - link: "TODO"
     name: "Direktlink FH-Medienportal: CB Garbage Collection"
 ---
+
 
 ## Ist das Code oder kann das weg?
 
@@ -43,7 +42,7 @@ var closure = makeClosure();
 closure();
 
 def makeClosure():
-    a = 'data'    
+    a = 'data'
     def f():
         print(a)
     return f
@@ -106,13 +105,13 @@ struct sObj {
     struct sObj* next;
 };
 
-class Obj():								
+class Obj():
     def __init__(self, type, next):			# ObjType type, Obj next
         self.type = type
         self.next = next
         self.isMarked = false				# bool isMarked
 ```
-[Quelle nach: [@Nystrom2018], [`object.h`](https://github.com/munificent/craftinginterpreters/blob/master/c/object.h#L91), Kapitel "Garbage Collection"]{.origin}
+[Quelle nach: [@Nystrom2021], [`object.h`](https://github.com/munificent/craftinginterpreters/blob/master/c/object.h#L91), Kapitel "Garbage Collection"]{.origin}
 
 :::
 ::: {.column width="45%"}
@@ -135,9 +134,9 @@ class VM():
         self.grayCount = 0
         self.grayCapacity = 0
         self.grayStack = None
-       
+
 ```
-[Quelle nach: [@Nystrom2018], [`vm.h`](https://github.com/munificent/craftinginterpreters/blob/master/c/vm.h#L41), Kapitel "Garbage Collection"]{.origin}
+[Quelle nach: [@Nystrom2021], [`vm.h`](https://github.com/munificent/craftinginterpreters/blob/master/c/vm.h#L41), Kapitel "Garbage Collection"]{.origin}
 
 :::
 ::::::
@@ -190,7 +189,7 @@ def traceReferences():
         blackenObject(object)
 ```
 
-[Quelle nach: [@Nystrom2018], [`memory.c`](https://github.com/munificent/craftinginterpreters/blob/master/c/memory.c#L264), Kapitel "Garbage Collection"]{.origin}
+[Quelle nach: [@Nystrom2021], [`memory.c`](https://github.com/munificent/craftinginterpreters/blob/master/c/memory.c#L264), Kapitel "Garbage Collection"]{.origin}
 
 ::: notes
 Nachdem alle Wurzeln "grau" markiert wurden und auf den `grayStack` der VM
@@ -245,7 +244,7 @@ def sweep():
             freeObject(unreached)
 ```
 
-[Quelle nach: [@Nystrom2018], [`memory.c`](https://github.com/munificent/craftinginterpreters/blob/master/c/memory.c#L272), Kapitel "Garbage Collection"]{.origin}
+[Quelle nach: [@Nystrom2021], [`memory.c`](https://github.com/munificent/craftinginterpreters/blob/master/c/memory.c#L272), Kapitel "Garbage Collection"]{.origin}
 
 ::: notes
 Wann immer für ein Objekt Speicher auf dem Laufzeit-Heap angefordert wird,
@@ -329,7 +328,7 @@ Das obige Beispiel aus [@Nystrom2021] ist ein Beispiel für präzises GC.
   * Die Daten werden unsichere Pointer genannt, da der Collector nicht weiß, ob sie Pointer sind.
   * Prozessorregister, den Stack und alle statischen Daten werden so untersucht, um den Root zu finden.
 
-    
+
 
 ## Allocation
 
@@ -337,7 +336,7 @@ Das obige Beispiel aus [@Nystrom2021] ist ein Beispiel für präzises GC.
   * Aufgeteilt in Objektbereich und Verwaltungsbereich.
   * Objektbereich
     * Objekt
-  * Verwaltungsbereich 
+  * Verwaltungsbereich
     * die Größe des gespeicherten Objektes
     * Anzahl an gespeicherten Objekten
     * Bit-Feld für die Mark-Phase
@@ -360,7 +359,7 @@ Das obige Beispiel aus [@Nystrom2021] ist ein Beispiel für präzises GC.
 * Diese Objekte werden als Root-Objekte inspiziert, also alle Daten werden als Pointer interpretiert, getestet und ggf. die Objekte auf die Pointer zeigen, markiert
 * Die Collection endet, wenn die Objekte inpiziert wurden und alle nicht markierten Objekte in die Free-Liste aufgenommen wurden
 
- 
+
 
 ## Blacklisting
 
@@ -374,7 +373,7 @@ Das ganze wird umgesetzt, indem eine Seite des Heaps nicht verwendet wird, wenn 
 
 
 
-## Vor- und Nachteile der Konservative Garbage Collection 
+## Vor- und Nachteile der Konservative Garbage Collection
 
 Vorteile:
 
@@ -464,7 +463,7 @@ def delete(obj):
 ```python
 def update(source, target):
 	# increment before deleting, source == target case.
-	target.inc_ref_count()   		
+	target.inc_ref_count()
 	delete(source)
 	source = target
 ```
@@ -479,7 +478,7 @@ Das größte Problem beim Referenz Counting ist, der Umgang mit zyklischen Daten
 
 Das folgende Beispiel erläutert dieses Problem:
 
-::: center 
+::: center
 
 ![Beispiel für ein delete](images/delete_problem.png)
 
@@ -520,8 +519,8 @@ Nachteile:
 
 *   Generational GC: Markieren der "Generationen" der Lebensdauer, Umsortieren
     "erwachsener" Objekte in Speicherbereich mit weniger häufigem GC
-    
-    
+
+
 
 
 ## Benchmarking
@@ -538,8 +537,8 @@ Nachteile:
     *	jede explizite Zuweisung wird vermieden, wenn sie nicht durch das Ökosystem vorgegen wird
   * *Fußabdruck* der internen GC-Strukturen
 
-  
-  
+
+
 * Um die folgenden Benchmarks an einem Beispiel zu zeigen. Werden die folgenden GCs verwendet: Serial GC, Parallel/ParallelOld GC, Concurrent Mark Sweep (CMS) GC, Garbage First (G1) GC, Shenandoah GC, ZGC und Epsilon GC. Alle Garbage Collectoren sind aus AdoptOpenJDK 64-Bit Server VM version 13
 
 
@@ -569,8 +568,8 @@ Read-/Writebarrier [ReadWrite](https://stackoverflow.com/questions/1787450/how-d
   * CPU-Governor auf performance stellen
 * Hinweis: Die Benchmarks können von anderen Faktoren beeinflusst werden
   * Just-In-Time Compiler Optimierungen, Bibiliotheken, CPU-Caching usw.
-  
-    
+
+
 
 ## Benchmark: BurstHeapMemoryAllocatorBenchmark
 
@@ -600,7 +599,7 @@ Ergebnis zum Benchmark mit den bereits genannten Garbage Collectoren
 * ZGC und Shenandoah GC haben deutlich bessere Ergebnisse als die anderen Collectoren.
 * G1 GC bietet zwar einen schlechteren Durchsatz als ZGC und Shenandoah GC, allerdings mit dem großen Objekten(_4_MB) erziehlte es besser Ergebnisse als CMS GC, ParallelOld GC und Serial GC.
 
-  
+
 
 ## Benchmark: ConstantHeapMemoryOccupancyBenchmark
 
@@ -620,7 +619,7 @@ Ergebnis zum Benchmark mit den bereits genannten Garbage Collectoren
 * ZGC and Shenandoah GC erziehlten die schlechtesten Ergebnisse
   * Kosten für die Markierung des gesamten Heaps bei jedem Zyklus
 
-    
+
 
 ## Benchmark: HeapMemoryBandwidthAllocatorBenchmark
 
@@ -637,7 +636,7 @@ sizeInBytes
 
 Ergebnis zum Benchmark mit den bereits genannten Garbage Collectoren
 * Für große Objekte(_4_MB)
-  * G1 GC bietet den schlechtesten Responsetime 
+  * G1 GC bietet den schlechtesten Responsetime
   * ParallelOld GC ist am effizientesten
 * Für kleine Objekte(_4_KB)
   * Ungefähr alle gleich, allerdings ist der Shenandoah GC ein wenig effizienter
@@ -650,13 +649,13 @@ In diesem Benchmark wird der Overhead von den Lese-/Schreibebarrieren getestet, 
 void test() {
     int lSize = size;
     int mask = lSize - 1;
- 
+
     for (int i = 0; i < lSize; i++) {
         Integer aux = array[i];
         array[i] = array[(i + index) & mask];
         array[(i + index) & mask] = aux;
     }
- 
+
     index++;
 }
 ```
@@ -675,7 +674,7 @@ In diesem Benchmark wird der Overhead von Schreibbarrieren getestet, während si
 ```java
 void test(Integer lRefInteger) {
     int lSize = size;
- 
+
     for (int i = 0; i < lSize; i++) {
         array[i] = lRefInteger;
     }
@@ -697,12 +696,12 @@ Hinweis: Das Durchlaufen einer Schleife über ein Array begünstigt die Algorith
 ```java
 int test() {
     int lSize = size;
- 
+
     int sum = 0;
     for (int i = 0; i < lSize; i++) {
         sum += array[i];
     }
- 
+
     return sum;
 }
 ```
@@ -727,21 +726,21 @@ int test() {
            .h17.h18.h19.h20.h21.h22.h23.h24
            .h25.h26.h27.h28.h29.h30.h31.h32.aValue;
 }
- 
+
 // where:
 class H1 {
     H2 h2;
- 
+
     H1(H2 h2) {
         this.h2 = h2;
     }
 }
- 
+
 // ...
- 
+
 class H32 {
     int aValue;
- 
+
     public H32(int aValue) {
         this.aValue = aValue;
     }
@@ -752,7 +751,7 @@ Ergebnis zum Benchmark mit den bereits genannten Garbage Collectoren
 * Epsilon GC hat die besten Ergebnisse, da der Collector keine Barrieren verwendet
 * Alle anderen Collectoren haben den gleichen Durchsatz
 
-  
+
 
 ## Wrap-Up
 
