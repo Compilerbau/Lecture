@@ -34,6 +34,26 @@ Hier der Vollständigkeit halber ein Ausblick ...
 :::
 
 
+
+<!-- TODO
+Abbildungen:
+
+Prozessorarchitektur:
+https://en.wikipedia.org/wiki/Microarchitecture#/media/File:Intel_i80286_arch.svg
+https://commons.wikimedia.org/w/index.php?curid=5197867
+
+Virtueller Speicher:
+https://commons.wikimedia.org/wiki/File:Virtual_address_space_and_physical_address_space_relationship.svg
+https://commons.wikimedia.org/wiki/File:Virtual_memory.svg
+
+Abarbeitung OP-Codes:
+https://commons.wikimedia.org/wiki/File:AbarbeitMaschinenBefehl8085.svg
+
+Stack-Frames, Funktionsaufrufe:
+https://de.wikipedia.org/wiki/Aufrufstapel
+-->
+
+
 ## Prozessorarchitektur
 
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Intel_i80286_arch.svg/1024px-Intel_i80286_arch.svg.png)
