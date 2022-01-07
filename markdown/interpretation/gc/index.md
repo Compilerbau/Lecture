@@ -198,6 +198,7 @@ GC starten zu müssen ...
 :::
 
 
+::: notes
 ## Generational GC
 
 Die meisten Objekte haben oft eher eine kurze Lebensdauer. Wenn sie aber ein gewisses
@@ -212,6 +213,10 @@ verschoben, wo deutlich seltener eine GC durchgeführt wird.
 :::
 
 [[Hinweis: Generational GC ]{.bsp}]{.slides}
+
+
+
+
 
 ::: notes
 **Anmerkung**: Man unterscheidet zusätzlich noch zwischen *konservativem*
