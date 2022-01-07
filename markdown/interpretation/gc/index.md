@@ -147,7 +147,13 @@ werden ausgehängt und freigegeben.
 Zusätzlich müssen alle verbleibenden Objekte für den nächsten GC-Lauf wieder
 entfärbt werden, d.h. die Markierung muss wieder zurückgesetzt werden.
 
-Diese Form von Garbage Collection wird auch "präzise Garbage Collection" genannt.
+### Hinweise
+
+Die Mark-and-Sweep-GC-Variante wird auch "präzise Garbage Collection" genannt,
+da dabei alle nicht mehr benötigten Objekte entfernt werden.
+
+Da während der Durchführung der GC die Abarbeitung des Programms pausiert wird,
+hat sich deshalb auch die Bezeichnung *stop-the-world GC* eingebürgert.
 :::
 
 
@@ -160,11 +166,11 @@ Diese Form von Garbage Collection wird auch "präzise Garbage Collection" genann
 *   **Durchsatz**: Verhältnis aus Zeit für den User-Code zu Zeit für Garbage Collection
 
     Beispiel: Ein Durchsatz von 90% bedeutet, dass 90% der Rechenzeit für den User
-    zur Verfügung steht und 10% für GC verwendet werden
+    zur Verfügung steht und 10% für GC verwendet werden.
 :::
 
 ::: center
-![Erreichbarkeit von Objekten](images/latency-throughput.png)
+![](https://raw.githubusercontent.com/munificent/craftinginterpreters/master/site/image/garbage-collection/latency-throughput.png)
 
 [Quelle: [@Nystrom2021], [`latency-throughput.png`](https://github.com/munificent/craftinginterpreters/blob/master/site/image/garbage-collection/latency-throughput.png), [MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE)]{.origin}
 :::
@@ -172,7 +178,7 @@ Diese Form von Garbage Collection wird auch "präzise Garbage Collection" genann
 
 ## Self-adjusting Heap
 
-*   GC selten: Hohe Latenz
+*   GC selten: Hohe Latenz (lange Pausen)
 *   GC oft: Geringer Durchsatz
 
 \bigskip
@@ -184,18 +190,28 @@ Diese Form von Garbage Collection wird auch "präzise Garbage Collection" genann
 *   Größe des verbliebenen Speichers mal Faktor \blueArrow neue Grenze
 
 ::: notes
-Hier spielt die *Nursery*-Theorie mit hinein: Die meisten Objekte haben eher eine
-kurze Lebensdauer. Wenn sie aber ein gewisses "Alter" erreicht haben, werden sie
-oft noch weiterhin benötigt.
-
-D.h. die Objekte bzw. der Speicherverbrauch, der nach einem GC-Lauf übrig bleibt,
-ist ein Indikator für den aktuell nötigen. Deshalb setzt man die neue Schwelle, ab
-der der nächste GC-Lauf gestartet wird, etwas auf diesen Speicherverbrauch mal
+Die Objekte bzw. der Speicherverbrauch, der nach einem GC-Lauf übrig bleibt, ist
+ein Indikator für den aktuell nötigen Speicher. Deshalb setzt man die neue Schwelle,
+ab der der nächste GC-Lauf gestartet wird, ungefähr auf diesen Speicherverbrauch mal
 einem gewissen Faktor (beispielsweise den Wert 2), um nicht sofort wieder einen
-GC zu starten ...
+GC starten zu müssen ...
 :::
 
-[[Hinweis: *Nursery*-Theorie]{.bsp}]{.slides}
+
+## Generational GC
+
+Die meisten Objekte haben oft eher eine kurze Lebensdauer. Wenn sie aber ein gewisses
+"Alter" erreicht haben, werden sie oft noch weiterhin benötigt.
+
+Man teilt den Heap in zwei unterschiedlich große Bereiche auf: Die "Kinderstube"
+(*Nursery*) und den Heap für die "Erwachsenen". Neue Objekte kommen zunächst in die
+Kinderstube, und dort wird regelmäßig GC ausgeführt. Bei jedem GC-Lauf wird der
+Generationen-Zähler der "überlebenden" Objekte inkrementiert. Wenn die Objekte eine
+bestimmte Anzahl an Generationen überlebt haben, werden sie in den Erwachsenenbereich
+verschoben, wo deutlich seltener eine GC durchgeführt wird.
+:::
+
+[[Hinweis: Generational GC ]{.bsp}]{.slides}
 
 ::: notes
 **Anmerkung**: Man unterscheidet zusätzlich noch zwischen *konservativem*
@@ -206,8 +222,6 @@ und *präzisem* GC:
     alles, was auch nur so aussieht wie ein Pointer wird entsprechend behandelt.
 *   *Präzises* GC "weiss" dagegen genau, welche Werte Pointer sind und welche
     nicht und handelt entsprechend.
-
-Das obige Beispiel aus [@Nystrom2021] ist ein Beispiel für präzises GC.
 :::
 
 ## Konservative Garbage Collection
