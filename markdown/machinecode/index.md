@@ -62,6 +62,162 @@ gebracht.
 :::
 
 
+
+## Virtueller Speicher
+
+\bigskip
+
+:::::: columns
+::: {.column width="35%"}
+
+![Virtueller Speicher](figs/pointer/VirtuellerSpeicher){height="70%"}\
+
+:::
+::: {.column width="60%"}
+
+\vspace{10mm}
+
+*   Kernel weist jedem Prozess seinen eigenen virtuellen Speicher zu
+    *   Linearer Adressbereich, beginnend mit Adresse 0 bis zu einer
+        maximalen Adresse
+
+    \bigskip
+
+*   Verwaltung durch MMU (*Memory Management Unit*)
+    *   MMU bildet logische Adressen aus virtuellem Speicher auf den
+        physikalischen Speicher ab
+    *   Transparent für den Prozess
+
+:::
+::::::
+
+
+## Segmente des virtuellen Speichers: Text
+
+:::::: columns
+::: {.column width="60%"}
+
+\vspace{10mm}
+
+*   **Text Segment** (read-only)
+    *   Programm Code
+    *   Konstanten, String Literale
+
+\smallskip
+
+*   Bereich initialisierter Daten
+    *   globale und static Variablen (explizit initialisiert)
+
+\smallskip
+
+*   Bereich uninitialisierter Daten
+    *   globale und static Variablen (uninitialisiert) \blueArrow Wert 0
+
+:::::: notes
+**ACHTUNG**: Bereich (un-) initialisierter Daten nicht in Abbildung dargestellt!
+::::::
+
+:::
+::: {.column width="35%"}
+
+![Virtueller Speicher](figs/pointer/VirtuellerSpeicher){height="70%"}\
+
+:::
+::::::
+
+
+## Segmente des virtuellen Speichers: Stack
+
+:::::: columns
+::: {.column width="60%"}
+
+\vspace{10mm}
+
+*   Stackframe je Funktionsaufruf:
+    *   Lokale Variablen ("automatische" Variablen)
+    *   Argumente und Return-Werte
+
+*   Dynamisch wachsend und schrumpfend
+
+*   [Automatische]{.alert} Pflege
+
+    ::: notes
+    *   Nach Funktionsrückkehr wird der Stackpointer ("Top of Stack") weiter gesetzt
+    *   Dadurch "Bereinigung": Speicher der lokalen Variablen wird freigegeben
+    :::
+
+:::
+::: {.column width="35%"}
+
+:::::: slides
+![Virtueller Speicher](figs/pointer/VirtuellerSpeicher){height="70%"}\
+::::::
+
+:::
+::::::
+
+
+## Segmente des virtuellen Speichers: Data (Heap)
+
+:::::: columns
+::: {.column width="60%"}
+
+\vspace{10mm}
+
+*   Bereich für dynamischen Speicher (Allokation während der Laufzeit)
+
+*   Dynamisch wachsend und schrumpfend
+
+*   Zugriff und Verwaltung aus [laufendem]{.alert} Programm \newline
+    \blueArrow\ **Pointer**
+
+    ::: notes
+    *   `malloc()`/`calloc()`/`free()` (C)
+    *   `new`/`delete` (C++)
+    *   typischerweise [**Pointer**]{.alert}
+    :::
+
+:::
+::: {.column width="35%"}
+
+:::::: slides
+![Virtueller Speicher](figs/pointer/VirtuellerSpeicher){height="70%"}\
+::::::
+
+:::
+::::::
+
+
+## Befehlszyklus (von-Neumann-Architektur)
+
+::: center
+![Befehlszyklus](figs/vl10/instructioncycle){width="80%"}
+[Quelle: [MichaelFrey (CC BY-SA 3.0)](https://de.wikipedia.org/wiki/Datei:AbarbeitMaschinenBefehl8085.svg)]{.origin}
+:::
+
+::: notes
+Typischerweise hat man neben dem Stack und dem Heap noch diverse Register auf dem Prozessor,
+die man wie (schnelle Hardware-) Variablen nutzen kann. Es gibt normalerweise einige spezielle
+Register:
+
+*   Program Counter (*PC*): Zeigt auf die Stelle im Textsegment, die gerade ausgeführt wird
+*   Stack Pointer (*SP*): Zeigt auf den nächsten freien Stackeintrag
+*   Frame Pointer (*LR*): Zeigt auf die Rücksprungadresse auf dem Stack (s.u.)
+*   Akkumulator: Speichern von Rechenergebnissen
+
+Der Prozessor holt sich die Maschinenbefehle, auf die der PC aktuell zeigt und dekodiert sie,
+d.h. holt sich die Operanden, und führt die Anweisung aus. Danach wird der PC entsprechend
+erhöht und der *Fetch-Decode-Execute*-Zyklus startet erneut. (OK, diese Darstellung ist stark
+vereinfacht und lässt beispielsweise *Pipelining* außen vor.)
+
+Ein Sprung bzw. Funktionsaufruf kann erreicht werden, in dem der *PC* auf die Startadresse der
+Funktion gesetzt wird.
+
+Je nach Architektur sind die Register, Adressen und Instruktionen 4 Bytes (32 Bit) oder 8 Bytes
+(64 Bit) "breit".
+:::
+
+
 ## Aufgaben bei der Erzeugung von Maschinen-Code
 
 ::: notes
@@ -75,9 +231,12 @@ Relativ ähnlich wie bei der Erzeugung von Bytecode, nur muss diesmal die Zielha
 \smallskip
 
 *   Auflösen von Adressen:
-    *   Sprünge: relativ [(um wieviele Bytes soll gesprungen werden)]{.notes} oder absolut [(Adresse, zu der gesprungen werden soll)]{.notes}
-    *   Strukturen (Arrays, Structs)[ haben ein Speicherlayout]{.notes}: Zugriff auf Elemente/Felder über Adresse [(muss berechnet werden)]{.notes}
-    *   Zugriffe auf Konstanten oder Literalen: [Muss ersetzt werden durch]{.notes} Zugriff auf Text-Segment
+    *   Sprünge: relativ [(um wie viele Bytes soll gesprungen werden)]{.notes} oder
+        absolut [(Adresse, zu der gesprungen werden soll)]{.notes}
+    *   Strukturen (Arrays, Structs)[ haben ein Speicherlayout]{.notes}: Zugriff
+        auf Elemente/Felder über Adresse [(muss berechnet werden)]{.notes}
+    *   Zugriffe auf Konstanten oder Literalen: [Muss ersetzt werden durch]{.notes}
+        Zugriff auf Text-Segment
 
 \smallskip
 
@@ -88,16 +247,31 @@ Relativ ähnlich wie bei der Erzeugung von Bytecode, nur muss diesmal die Zielha
 
 *   Aufbau des Binärformats und Linking auf der Zielmaschine (auch Betriebssystem) beachten
 
+
 ## Übersetzen von Zwischencode in Maschinencode
 
 ::: notes
-Für diese Aufgabe muss man den genauen Befehlssatz für den Zielprozessor kennen. Im einfachsten Fall kann man jede Zeile im Zwischencode mit Hilfe von Tabellen und Pattern Matching direkt in den passenden Maschinencode übertragen. Beispiel vgl. Tabelle 7.1 in [@Mogensen2017, S.162].
+Für diese Aufgabe muss man den genauen Befehlssatz für den Zielprozessor kennen.
+Im einfachsten Fall kann man jede Zeile im Zwischencode mit Hilfe von Tabellen
+und Pattern Matching direkt in den passenden Maschinencode übertragen. Beispiel
+vgl. Tabelle 7.1 in [@Mogensen2017, S.162].
 
-Je nach Architektur sind die Register, Adressen und Instruktionen 4 Bytes (32 Bit) oder 8 Bytes (64 Bit) "breit".
+Je nach Architektur sind die Register, Adressen und Instruktionen 4 Bytes (32 Bit)
+oder 8 Bytes (64 Bit) "breit".
 
-Da in einer Instruktion wie `ldr r0, x` die Adresse von `x` mit codiert ist, hat man hier nur einen eingeschränkten Wertebereich. Üblicherweise ist dies relativ zum *PC* zu betrachten, d.h. beispielsweise `ldr r0, #4[pc]` (4 Byte plus *PC*). Dadurch kann man mit *PC-relativer Adressierung*  dennoch größere Adressbereiche erreichen. Alternativ muss man mit indirekter Adressierung arbeiten und im Textsegment die Adresse der Variablen im Datensegment ablegen: `ldr r0, ax`, wobei `ax` eine mit *PC-relativer Adressierung* erreichbare Adresse im Textsegment ist, wo die Adresse der Variablen `x` im Datensegment hinterlegt ist. Anschließend kann man dann `x` laden: `ldr ro, [ro]`.
+Da in einer Instruktion wie `ldr r0, x` die Adresse von `x` mit codiert werden
+muss, hat man hier nur einen eingeschränkten Wertebereich. Üblicherweise ist dies
+relativ zum *PC* zu betrachten, d.h. beispielsweise `ldr r0, #4[pc]` (4 Byte plus *PC*).
+Dadurch kann man mit *PC-relativer Adressierung*  dennoch größere Adressbereiche
+erreichen. Alternativ muss man mit indirekter Adressierung arbeiten und im Textsegment
+die Adresse der Variablen im Datensegment ablegen: `ldr r0, ax`, wobei `ax` eine
+mit *PC-relativer Adressierung* erreichbare Adresse im Textsegment ist, wo die
+Adresse der Variablen `x` im Datensegment hinterlegt ist. Anschließend kann man
+dann `x` laden: `ldr ro, [ro]`.
 
-Ähnliches gilt für Konstanten: Wenn diese direkt geladen werden sollen, steht quasi nur der "Rest" vom Opcode zur Verfügung. Deshalb sammelt man die Konstanten am Ende vom Text-Segment und ruft sie von dort ab.
+Ähnliches gilt für Konstanten: Wenn diese direkt geladen werden sollen, steht
+quasi nur der "Rest" der Bytes vom Opcode zur Verfügung. Deshalb sammelt man die
+Konstanten am Ende vom Text-Segment und ruft sie von dort ab.
 :::
 
 ```
@@ -110,12 +284,12 @@ L:  ...
 \bigskip
 
 ```
-1000: ...                 // L
+1000: ...                 ;; L
       ...
-1080: LD      R1, t3      // R1 = t3
-1088: LD      R2, v       // R2 = v
-1096: SUB     R1, R1, R2  // R1 = R1-R2
-1104: BLTZ    R1, 1000    // if R1<0 jump to 1000 (L)
+1080: LD      R1, t3      ;; R1 = t3
+1088: LD      R2, v       ;; R2 = v
+1096: SUB     R1, R1, R2  ;; R1 = R1-R2
+1104: BLTZ    R1, 1000    ;; if R1<0 jump to 1000 (L)
 ```
 
 *Anmerkung*: `1000` ist die Adresse, die dem Label `L` entspricht.
@@ -130,7 +304,7 @@ L:  ...
 
 ## Sichern von lokalen Variablen beim Funktionsaufruf
 
-- bei Funtionsaufrufen müssen verwendete Register (lokale Variablen) gesichert werden
+- bei Funktionsaufrufen müssen verwendete Register (lokale Variablen) gesichert werden
 - Register werden in den Speicher (Stack) ausgelagert
 - Sicherung kann durch aufrufende Funktion (Caller-Saves) oder aufgerufene Funktion (Callee-Saves) erfolgen
 - Vorteile:
@@ -138,6 +312,7 @@ L:  ...
   - Callee-Safes: nur tatsächlich verwendete Register müssen gesichert werden
 - Nachteile: unnötiges Sichern von Registern bei beiden Varianten möglich
 - in der Praxis daher meist gemischter Ansatz aus Caller-Saves und Callee-Saves Registern
+
 
 ## Stack-Frame
 
