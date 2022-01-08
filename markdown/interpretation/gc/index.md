@@ -321,25 +321,29 @@ den Block vorn in die Freispeicherliste eingehängt.
 
 ## Reference Counting
 
-* Eine Technik zum Speichern von Pointern
-* Kein Tracing Garbage Collector mehr
+::: notes
+Beim Reference Counting erhält jedes Objekt einen Referenz-Zähler.
 
-* Die Objekte werden freigegeben sobald sie nicht mehr referenziert werden
+Beim Erstellen weiterer Referenzen oder Pointer auf ein Objekt wird der Zähler entsprechend
+inkrementiert.
 
-* Jedes Objekt bekommt einen Referenz-Counter
-  * Zählt die Anzahl der Pointerreferenzen auf jedes zugewiesene Objekt
-  * Wenn der Counter auf 0 gesetzt wird es gelöscht
-* Eine einfache Form der Speicherverwaltung
-* Ohne Collection zyklen zum sammeln der Objekte
-* Probleme mit zyklischen Datenstrukturen
+Sobald ein Objekt seinen Gültigskeitsbereich (Scope) verlässt, wird versucht, das Objekt
+freizugeben. Dazu wird der interne Referenz-Zähler dekrementiert. Erst wenn der Zähler dabei
+den Wert 0 erreicht, bedeutet dies, dass es keine weitere Referenz oder Pointer auf dieses Objekt
+gibt und das Objekt wird vom Heap entfernt (freigegeben). Wenn der Zähler noch größer Null ist,
+wird das Objekt nicht weiter verändert.
+
+Dies ist eine einfach Form des GC, die ohne zyklische Sammelphasen auskommt. Allerdings hat
+diese Form ein Problem mit zyklischen Datenstrukturen.
+
+### Algorithmus (Skizze)
+:::
 
 
+::::::::: columns
+:::::: {.column width="45%"}
 
-## Algorithmus
-
-* Erstellen eines Objektes
-  * Speicher zuweisen
-  * Referenz Counter auf 1 setzen
+\vspace{6mm}
 
 ```python
 def new():
@@ -348,63 +352,58 @@ def new():
     return obj
 ```
 
-*new()* wird beim erstellen eines Objektes aufgerufen.
+::: notes
+`new()` wird beim Erstellen eines Objektes aufgerufen.
+:::
 
-![](images/obj_struct.png)
-
-
-
-* Löschen eines Objektes
-  * Referenz-Counter um 1 runter zählen
-  * Wenn der Counter auf 0 ist
-    * Wird für jedes Unterobjekt delete aufgerufen
-    * Der Speicherplaz für das Objekt wird freigegeben
+\bigskip
 
 ```python
 def delete(obj):
     obj.dec_ref_counter()
     if obj.get_ref_counter() == 0:
         for child in children(obj):
-			delete(child)
-		freeObject(obj)
+            delete(child)
+        free_object(obj)
 ```
 
-*delete()* wird aufgerufen, wenn das Objekt nicht weiter vom Programm verwendet wird. Hierbei wird gecheckt, ob auf das Objekt referenziert wird.
-
-::: center
-
-![Beispiel für ein delete](images/delete_example.png)
-
+::: notes
+`delete()` wird aufgerufen, wenn das Objekt nicht weiter vom Programm verwendet wird, es
+beispielsweise seinen Scope verlässt. Hierbei wird geprüft, ob noch anderweitig auf dieses
+Objekt referenziert wird.
 :::
 
-* Updaten eines Objektes
-  * *target* Referenz-Counter um 1 hoch zählen
-  * Für *source* wird delete aufgerufen
-  * *source* wird mit *target* überschrieben
+::::::
+:::::: {.column width="50%"}
 
-```python
-def update(source, target):
-	# increment before deleting, source == target case.
-	target.inc_ref_count()
-	delete(source)
-	source = target
-```
+\pause
 
-Update wird aufgerufen, wenn ein Objekt einem neuen Speicherplatz(*target*) zugewiesen wird, der "alte" Speicherplatz(*soruce*) wird freigegeben.
+![](images/delete_example.png)
+
+::: notes
+Im Beispiel wird `delete(A)` ausgeführt: Der Referenz-Zähler (*RC*) von A wird dekrementiert,
+und da er den Wert 0 erreicht, werden rekursiv die von A verwiesenen Kinder gelöscht. In B
+wird dabei ebenfalls der Wert 0 erreicht und `delete(D)` aufgerufen. Da dort der RC größer 0
+bleibt, wird dessen Kind E nicht weiter beachtet. Anschließend werden A und B aus dem Speicher
+freigegeben.
+:::
+
+::::::
+:::::::::
 
 
+::: notes
+### Probleme
 
-## Probleme
-
-Das größte Problem beim Referenz Counting ist, der Umgang mit zyklischen Datenstrukturen, wie z.B verkettete Listen oder einfache Graphen. Durch den Algorithmus zum Löschen und freigeben der Objekte kann es dazu kommen, dass sich zyklische Datenstrukturen nicht gelöscht und freigegeben werden können und ein Speicherverlust entsteht.
+Das größte Problem beim Referenz Counting ist der Umgang mit zyklischen Datenstrukturen, wie
+verkettete Listen oder einfache Graphen. Es dazu kommen, dass zyklische Datenstrukturen nicht
+gelöscht und freigegeben werden können und ein Speicherverlust entsteht.
 
 Das folgende Beispiel erläutert dieses Problem:
 
-::: center
-
-![Beispiel für ein delete](images/delete_problem.png)
-
+![](images/delete_problem.png){width="80"}
 :::
+
 
 ## Stop-and-Copy Garbage Collection
 
