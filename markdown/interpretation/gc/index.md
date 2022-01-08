@@ -220,98 +220,97 @@ verschoben, wo deutlich seltener eine GC durchgeführt wird.
 :::
 
 
-
-
+## "Konservatives GC": Boehm GC
 
 ::: notes
 **Anmerkung**: Man unterscheidet zusätzlich noch zwischen *konservativem*
 und *präzisem* GC:
 
-*   *Konservatives* GC geht eher vorsichtig vor: Wenn ein Speicherbereich
+*   *Konservatives GC* geht eher vorsichtig vor: Wenn ein Speicherbereich
     möglicherweise noch benötigt werden *könnte*, wird er nicht angefasst;
     alles, was auch nur so aussieht wie ein Pointer wird entsprechend behandelt.
-*   *Präzises* GC "weiss" dagegen genau, welche Werte Pointer sind und welche
+*   *Präzises GC* "weiss" dagegen genau, welche Werte Pointer sind und welche
     nicht und handelt entsprechend.
 :::
 
-## Konservative Garbage Collection
+![](images/freispeicherverwaltung.png)
 
-* Von Boehm und Weiser
+*   Boehm, Weiser und Demers: ["Boehm GC"](https://hboehm.info/gc/)
+*   Idee: Nutze die interne Verwaltung des Heaps zum Finden von Objekten
 
-* Sammelt automatisch die Collection
+::::::::: notes
+### Ablauf: Variante des Mark-and-Sweep-GC
 
-* Kann Pointer im Speicher finden ohne die innere Struktur eines Objektes zu kennen
-  * Interpretiert alle Daten in dem Speicherbereich, in dem Pointer gesucht werden, als Pointer
-  * Die Daten werden unsichere Pointer genannt, da der Collector nicht weiß, ob sie Pointer sind.
-  * Prozessorregister, den Stack und alle statischen Daten werden so untersucht, um den Root zu finden.
+*   Mark:
+    1.  Suche alle potentiell zu bereinigenden Objekte: Inspiziere Stack, statische
+        Daten, Prozessor-Register, ...
+    2.  Behandle alle gefundenen Adressen zunächst als "unsichere Pointer"
+        *   Es ist noch nicht klar, ob das wirklich gültige Adressen in den Heap sind
+    3.  Prüfe alle unsicheren Pointer:
+        *   Liegt die Adresse tatsächlich *im* Heap?
+        *   Zeigt der Pointer auf den Anfang eines Blockes?
+        *   Ist der Block nicht in der Free-List enthalten?
+        => Ergebnis: gültige Pointer ("Root-Pointer"): markiere diese Objekte als "erreichbar"
+    4.  Wiederhole die Schritte (1) bis (3) durch die Untersuchung der gefundenen Objekte
+*   Sweep: Iteriere über den Heap (Blockweise) und gebe alle belegten Blöcke frei, die nicht
+    als "erreichbar" markiert wurden
 
+### Heap-Verwaltung
 
+Der Heap ist ein zusammenhängender Speicherbereich, der durch die Allokation und Freigabe
+von Blöcken in mehrere Blöcke segmentiert wird. Die freien Blöcke werden dabei in eine
+verkettete Liste "Free-List" (im Bild "freemem") eingehängt. Diese verkettete Liste wird
+direkt im Heap abgebildet.
 
-## Allocation
+Es wird dazu eine Verwaltungsstruktur definiert, die neben Informationen wie der Größe des
+freien Blocks einen Pointer auf den nächsten freien Block aufweist. Jeder Speicherblock im
+Heap beginnt stets mit dieser Struktur, so dass alle freien Blöcke in die Freispeicherliste
+eingehängt werden können:
 
-* 4 KB große Blöcke
-  * Aufgeteilt in Objektbereich und Verwaltungsbereich.
-  * Objektbereich
-    * Objekt
-  * Verwaltungsbereich
-    * die Größe des gespeicherten Objektes
-    * Anzahl an gespeicherten Objekten
-    * Bit-Feld für die Mark-Phase
-* Beim anfordern von Speicherplatz wird geschaut ob in der Blockliste und im Verwaltungsbereich des entsprechendem Blockes  ein freies Objekt mit der Größe gibt
-  * Wenn ja, wird die Objektanzahl des Blockes inkrementiert und ein Pointer auf dieses Objekt zurückgegeben
-  * Wenn nein, wird ein neuer Block initialisiert und ein Pointer auf das erste Objekt zurückgegeben
+```c
+struct memblock {
+    size_t size;
+    uint marked;
+    struct memblock *next;
+};
+```
 
+*   `size` kann die Gesamtgröße des Blockes bedeuten oder aber nur die Größe der Nutzdaten,
+    die sich hinter der Verwaltungsstruktur befinden
+    => letztere Deutung wird in Linux verwendet
+*   In Linux hat man eine doppelt verkettete Liste (statt wie hier nur einfach verkettet)
 
+Bei `malloc` durchsucht man diese Liste im Heap, bis man einen passenden Block gefunden hat.
+Dann setzt man den `next`-Pointer des Vorgängerblocks auf den Wert des eigenen `next`-Pointers
+und hängt damit den gefundenen Block aus der Freispeicherliste aus. Der `next`-Pointer wird
+ungültig gemacht, indem man ihn auf einen vordefinierten (und nur zu diesem Zweck genutzten)
+Wert setzt (alternativ kann man dazu ein weiteres Flag in der Struktur spendieren). Dann
+bestimmt man per Pointerarithmetik die Adresse des ersten Bytes hinter der Verwaltungsstruktur
+und liefert diese Adresse als Ergebnis (Pointer auf den Nutzbereich des Blockes) an den Aufrufer
+zurück. Wenn der gefundene freie Block "viel zu groß" ist, kann man den Block auch splitten:
+Einen Teil gibt man als allozierten Block an den Aufrufer zurück, den anderen Teil (den Rest)
+hängt man als neuen Block in die Freispeicherliste ein.
 
-## Collection
+Bei einem `free` bekommt man den Pointer auf das erste Byte der Nutzdaten eines Speicherblockes
+und muss per Pointerarithmetik den Beginn der Verwaltungsstruktur des Blockes bestimmen. Dann
+setzt man den `next`-Pointer des Blockes auf den Wert des Freispeicherlisten-Pointers, und
+dieser wird auf die Startadresse der Verwaltungsstruktur des Blockes "umgebogen". Damit hat man
+den Block vorn in die Freispeicherliste eingehängt.
 
-* Inspiziert die Prozessorregister, den Stack und die statischen Objekte
-* Alle Daten werden als Adressen interpretiert und müssen getestet werden, ob sie gültige Pointer sind
-* Es sind keine gültigen Pointer,
-  * Wenn die Adresse höher oder niedriger als die höchste oder niedrigste Adresse im Heap ist
-  * Wenn die Adresse *nicht* innerhalb eines Blockes liegt also die Adresse nicht in der Blockliste vorkommt
-  * Wenn die Adresse in die Mitte und nicht am Anfangen eines Objektes zeigt
-  * Wenn die Adresse auf ein Objekt in der Free-List zeigt
-* Die Objekte auf den ein gültiger Pointer zeigt kann dadurch als erreichbar markiert werden
-* Diese Objekte werden als Root-Objekte inspiziert, also alle Daten werden als Pointer interpretiert, getestet und ggf. die Objekte auf die Pointer zeigen, markiert
-* Die Collection endet, wenn die Objekte inpiziert wurden und alle nicht markierten Objekte in die Free-Liste aufgenommen wurden
+### Vor- und Nachteile des konservativen GC
 
-
-
-## Blacklisting
-
-* Soll Fehlinterpretationen von unsicherer Pointer verringern
-* Mark-Phase
-  * In die Black-List wird jeder unsichere Pointer eingetragen, der sich nach den Test als ungültig erweist
-* Allocation
-  * Es kann kein Objekt an eine Adresse alloziert werden, wenn die Adresse in der Black-List steht
-
-Das ganze wird umgesetzt, indem eine Seite des Heaps nicht verwendet wird, wenn ein Pointer in der Black-List in diese Seite zeigt. Durch die virtuelle Speicherverwaltung wird der Speicher erst zur Verfügung gestellt, wenn auf die Seite zugegriffen wird. Dadurch wird auch kein Speicher verschenkt. Der Aufwand für das Blacklisting liegt bei unter 1% der für Allocation und Collection verbrauchten Laufzeit.
-
-
-
-## Vor- und Nachteile der Konservative Garbage Collection
-
-Vorteile:
-
-* Keine explizite Kooperation für die Speicherverwaltung nötig
-* Die Speicherverwaltung muss nur eine Bedingung erfüllen
-  * Jedes benutze Objekt hat ein Pointer auf den Anfang (innerhalb des Zugriffsbereichs des Collectors)
-* Kann mit anderen Speicherverwaltungen koexistieren
-* Explizite Deallocation ist möglich
-* Kann jederzeit abgebrochen werden
-  * Praktisch in Verbindung mit opportunistischer Garbage Collection in interaktiven Applikationen
-
-
-
-Nachteile:
-
-* Mark-Phase dauert durch die zusätzlichen Tests länger
-* Die Möglichkeit einer Fragmentierung des Speichers ist hoch.
-  * In manchen Situationen kann etwa die hälfte des Heaps nicht genutzt werden, da die freien Objekte nicht die vom der Speicherverwaltung benötigte Größe hatten
-* Fehlinterpretationen können dafür sorgen, dass unsichere Pointer nicht freigegeben werden
-* Bei hoch optimierten Compilern ist der Collector nicht zuverlässig, da die Adressen nicht mehr auf die benutzen Objekte zeigt
-
+*   (+) Keine explizite Kooperation mit der Speicherverwaltung nötig \
+    Die Speicherverwaltung muss nur eine Bedingung erfüllen: Jedes benutzte Objekt hat einen
+    Pointer auf den Anfang des Blockes
+*   (+) Explizite Deallocation (`free`) ist möglich
+*   (+) Kann jederzeit abgebrochen werden \
+    Praktisch in Verbindung mit opportunistischer GC in interaktiven Applikationen
+*   (-) Mark-Phase dauert durch die zusätzlichen Tests länger
+*   (-) Die Möglichkeit einer Fragmentierung des Speichers ist hoch.
+*   (-) Fehlinterpretationen können dafür sorgen, dass unsichere Pointer nicht freigegeben werden
+*   (-) Bei hoch optimierten Compilern ist die GC nicht zuverlässig, da die Adressen u.U. nicht
+    mehr auf die benutzen Objekte zeigen
+:::::::::
 
 
 ## Reference Counting
