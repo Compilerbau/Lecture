@@ -203,27 +203,47 @@ quasi nur der "Rest" der Bytes vom Opcode zur Verfügung. Deshalb sammelt man di
 Konstanten am Ende vom Text-Segment und ruft sie von dort ab.
 :::
 
+::::::::: columns
+:::::: {.column width="40%"}
+
+::: notes
+**Beispiel**
+
+In dem kurzen IR-Snippet soll zum Label "L" verweigt werden, wenn ein Wert x kleiner
+ein anderer Wert v ist.
+:::
+
 ```
 L:  ...
     ...
-    if t3 < v goto L
+    if x < v goto L
 ```
 
+::::::
+:::::: {.column width="40%"}
+
 \pause
-\bigskip
+
+::: notes
+Bei der Erzeugung des Maschinencodes wird das Label "L" an einer konkreten Adresse
+im Text-Segment angesiedelt, beispielsweise bei 1000. Für die If-Abfrage müssen
+zunächst die beiden Werte in Register geladen werden und die Register subtrahiert
+werden. Anschließend kann man in dem angenommenen Op-Code `bltz` ("branch if less
+than zero") zur Adresse 1000 springen, wenn der Wert in Register R0 kleiner als Null
+ist. Anderenfalls würde einfach hinter der Adresse 1108 weiter gemacht.
+:::
 
 ```
 1000: ...                 ;; L
       ...
-1080: LD      R1, t3      ;; R1 = t3
-1088: LD      R2, v       ;; R2 = v
-1096: SUB     R1, R1, R2  ;; R1 = R1-R2
-1104: BLTZ    R1, 1000    ;; if R1<0 jump to 1000 (L)
+1080: lrd   r0, x       ;; R0 = x
+1088: ldr   r1, v       ;; R1 = v
+1096: sub   r0, r0, r1  ;; R0 = R0-R1
+1108: bltz  r0, 1000    ;; if R0<0 jump to 1000 (L)
 ```
 
-*Anmerkung*: `1000` ist die Adresse, die dem Label `L` entspricht.
-
-[Quelle: nach [@Aho2008]]{.origin}
+::::::
+:::::::::
 
 
 ## Aufruf von Funktionen
