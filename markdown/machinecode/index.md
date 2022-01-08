@@ -380,9 +380,9 @@ könnte man die Parameter auch in vorhandene Register laden und entsprechend den
 ::: {.column width="40%"}
 
 ```
-    SP = FP-4               ;; Position über Rücksprungadresse auf Stack
-    FP = Stack[FP]          ;; Sichere Rücksprungadresse
-    Stack[SP+4] = Ergebnis  ;; Ergebnis auf Stack
+    SP = FP - 4             ;; Position über Rücksprungadresse auf Stack
+    FP = Stack[FP]          ;; Sichere Rücksprungadresse (R)
+    Stack[SP+4] = Ergebnis  ;; Ergebnis auf Stack (statt Rücksprung-Adresse)
     Goto FP                 ;; Setze den PC auf die Rücksprung-Adresse
 ```
 
