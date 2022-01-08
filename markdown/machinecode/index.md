@@ -34,26 +34,6 @@ Hier der Vollständigkeit halber ein Ausblick ...
 :::
 
 
-
-<!-- TODO
-Abbildungen:
-
-Prozessorarchitektur:
-https://en.wikipedia.org/wiki/Microarchitecture#/media/File:Intel_i80286_arch.svg
-https://commons.wikimedia.org/w/index.php?curid=5197867
-
-Virtueller Speicher:
-https://commons.wikimedia.org/wiki/File:Virtual_address_space_and_physical_address_space_relationship.svg
-https://commons.wikimedia.org/wiki/File:Virtual_memory.svg
-
-Abarbeitung OP-Codes:
-https://commons.wikimedia.org/wiki/File:AbarbeitMaschinenBefehl8085.svg
-
-Stack-Frames, Funktionsaufrufe:
-https://de.wikipedia.org/wiki/Aufrufstapel
--->
-
-
 ## Prozessorarchitektur
 
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Intel_i80286_arch.svg/1024px-Intel_i80286_arch.svg.png)
@@ -82,138 +62,67 @@ gebracht.
 :::
 
 
-
 ## Virtueller Speicher
 
-\bigskip
+![](images/virtueller-speicher.png)
 
-:::::: columns
-::: {.column width="35%"}
+::::::::: notes
+*   Kernel weist jedem Prozess seinen eigenen virtuellen Speicher zu \
+    Linearer Adressbereich, beginnend mit Adresse 0 bis zu einer
+    maximalen Adresse
+*   Verwaltung durch MMU (*Memory Management Unit*) \
+    MMU bildet logische Adressen aus virtuellem Speicher auf den
+    physikalischen Speicher ab (transparent für den Prozess)
 
-![Virtueller Speicher](figs/pointer/VirtuellerSpeicher){height="70%"}\
-
-:::
-::: {.column width="60%"}
-
-\vspace{10mm}
-
-*   Kernel weist jedem Prozess seinen eigenen virtuellen Speicher zu
-    *   Linearer Adressbereich, beginnend mit Adresse 0 bis zu einer
-        maximalen Adresse
-
-    \bigskip
-
-*   Verwaltung durch MMU (*Memory Management Unit*)
-    *   MMU bildet logische Adressen aus virtuellem Speicher auf den
-        physikalischen Speicher ab
-    *   Transparent für den Prozess
-
-:::
-::::::
-
-
-## Segmente des virtuellen Speichers: Text
-
-:::::: columns
-::: {.column width="60%"}
-
-\vspace{10mm}
+### Segmente des virtuellen Speichers: Text
 
 *   **Text Segment** (read-only)
     *   Programm Code
     *   Konstanten, String Literale
-
-\smallskip
-
 *   Bereich initialisierter Daten
     *   globale und static Variablen (explizit initialisiert)
-
-\smallskip
-
 *   Bereich uninitialisierter Daten
-    *   globale und static Variablen (uninitialisiert) \blueArrow Wert 0
+    *   globale und static Variablen (uninitialisiert) => Wert 0
 
-:::::: notes
 **ACHTUNG**: Bereich (un-) initialisierter Daten nicht in Abbildung dargestellt!
-::::::
 
-:::
-::: {.column width="35%"}
-
-![Virtueller Speicher](figs/pointer/VirtuellerSpeicher){height="70%"}\
-
-:::
-::::::
-
-
-## Segmente des virtuellen Speichers: Stack
-
-:::::: columns
-::: {.column width="60%"}
-
-\vspace{10mm}
+### Segmente des virtuellen Speichers: Stack
 
 *   Stackframe je Funktionsaufruf:
     *   Lokale Variablen ("automatische" Variablen)
     *   Argumente und Return-Werte
-
 *   Dynamisch wachsend und schrumpfend
-
 *   [Automatische]{.alert} Pflege
-
-    ::: notes
     *   Nach Funktionsrückkehr wird der Stackpointer ("Top of Stack") weiter gesetzt
     *   Dadurch "Bereinigung": Speicher der lokalen Variablen wird freigegeben
-    :::
 
-:::
-::: {.column width="35%"}
-
-:::::: slides
-![Virtueller Speicher](figs/pointer/VirtuellerSpeicher){height="70%"}\
-::::::
-
-:::
-::::::
-
-
-## Segmente des virtuellen Speichers: Data (Heap)
-
-:::::: columns
-::: {.column width="60%"}
-
-\vspace{10mm}
+### Segmente des virtuellen Speichers: Data (Heap)
 
 *   Bereich für dynamischen Speicher (Allokation während der Laufzeit)
-
 *   Dynamisch wachsend und schrumpfend
+*   Zugriff und Verwaltung aus [laufendem]{.alert} Programm \
+    => **Pointer**
 
-*   Zugriff und Verwaltung aus [laufendem]{.alert} Programm \newline
-    \blueArrow\ **Pointer**
-
-    ::: notes
     *   `malloc()`/`calloc()`/`free()` (C)
     *   `new`/`delete` (C++)
     *   typischerweise [**Pointer**]{.alert}
-    :::
-
-:::
-::: {.column width="35%"}
-
-:::::: slides
-![Virtueller Speicher](figs/pointer/VirtuellerSpeicher){height="70%"}\
-::::::
-
-:::
-::::::
+:::::::::
 
 
 ## Befehlszyklus (von-Neumann-Architektur)
 
-::: center
-![Befehlszyklus](figs/vl10/instructioncycle){width="80%"}
-[Quelle: [MichaelFrey (CC BY-SA 3.0)](https://de.wikipedia.org/wiki/Datei:AbarbeitMaschinenBefehl8085.svg)]{.origin}
-:::
+```python
+op = read_next_op(pc)
+decode(op)
+pc += 1
+
+args = nil
+if operands_needed(op):
+    args = read_operands(pc)
+    pc +=1
+
+execute(op, args)
+```
 
 ::: notes
 Typischerweise hat man neben dem Stack und dem Heap noch diverse Register auf dem Prozessor,
@@ -222,13 +131,13 @@ Register:
 
 *   Program Counter (*PC*): Zeigt auf die Stelle im Textsegment, die gerade ausgeführt wird
 *   Stack Pointer (*SP*): Zeigt auf den nächsten freien Stackeintrag
-*   Frame Pointer (*LR*): Zeigt auf die Rücksprungadresse auf dem Stack (s.u.)
+*   Frame Pointer (*FP*): Zeigt auf die Rücksprungadresse auf dem Stack
 *   Akkumulator: Speichern von Rechenergebnissen
 
 Der Prozessor holt sich die Maschinenbefehle, auf die der PC aktuell zeigt und dekodiert sie,
 d.h. holt sich die Operanden, und führt die Anweisung aus. Danach wird der PC entsprechend
 erhöht und der *Fetch-Decode-Execute*-Zyklus startet erneut. (OK, diese Darstellung ist stark
-vereinfacht und lässt beispielsweise *Pipelining* außen vor.)
+vereinfacht und lässt beispielsweise *Pipelining* außen vor ...)
 
 Ein Sprung bzw. Funktionsaufruf kann erreicht werden, in dem der *PC* auf die Startadresse der
 Funktion gesetzt wird.
@@ -495,10 +404,10 @@ Skizze zur Erzeugung von Assembler-Code
 Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
 
 ### Exceptions
-*   Figure ["A Map of the Territory (mountain.png)"](https://github.com/munificent/craftinginterpreters/blob/master/site/image/a-map-of-the-territory/mountain.png)
+*   Image ["A Map of the Territory (mountain.png)"](https://github.com/munificent/craftinginterpreters/blob/master/site/image/a-map-of-the-territory/mountain.png)
     (https://github.com/munificent/craftinginterpreters/blob/master/site/image/a-map-of-the-territory/mountain.png),
     by [Bob Nystrom](https://github.com/munificent), licensed under [MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE)
-*   Figure ["Intel i80286 arch"](https://commons.wikimedia.org/wiki/File:Intel_i80286_arch.svg)
+*   Image ["Intel i80286 arch"](https://commons.wikimedia.org/wiki/File:Intel_i80286_arch.svg)
     (https://commons.wikimedia.org/wiki/File:Intel_i80286_arch.svg), by [Appaloosa](https://commons.wikimedia.org/wiki/User:Appaloosa), licensed
     under [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0)
 :::
