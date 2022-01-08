@@ -278,7 +278,12 @@ R:  x = Stack[SP+4]     ;; Hole Rückgabewert
 :::
 ::: {.column width="40%"}
 
+::: slides
 ![](images/f-stackframe.png)
+:::
+::: notes
+![](images/f-stackframe.png){width="40%"}
+:::
 
 :::
 ::::::
@@ -378,7 +383,12 @@ könnte man die Parameter auch in vorhandene Register laden und entsprechend den
 :::
 ::: {.column width="40%"}
 
+::: slides
 ![](images/f-epilog.png)
+:::
+::: notes
+![](images/f-epilog.png){width="40%"}
+:::
 
 :::
 ::::::
