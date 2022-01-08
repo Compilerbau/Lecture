@@ -64,9 +64,15 @@ gebracht.
 
 ## Virtueller Speicher
 
-::: center
-![](images/virtueller-speicher.png){width="60%"}
+:::::: center
+::: slides
+![](images/virtueller-speicher.png)
 :::
+::: notes
+![](images/virtueller-speicher.png){width="40%"}
+:::
+::::::
+
 
 ::::::::: notes
 *   Kernel weist jedem Prozess seinen eigenen virtuellen Speicher zu \
@@ -282,7 +288,7 @@ R:  x = Stack[SP+4]     ;; Hole Rückgabewert
 ![](images/f-stackframe.png)
 :::
 ::: notes
-![](images/f-stackframe.png){width="40%"}
+![](images/f-stackframe.png){width="30%"}
 :::
 
 :::
@@ -387,7 +393,7 @@ könnte man die Parameter auch in vorhandene Register laden und entsprechend den
 ![](images/f-epilog.png)
 :::
 ::: notes
-![](images/f-epilog.png){width="40%"}
+![](images/f-epilog.png){width="30%"}
 :::
 
 :::
