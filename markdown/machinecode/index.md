@@ -1,6 +1,6 @@
 ---
 type: lecture-cg
-title: "Generierung von Maschinencode"
+title: "Generierung von Maschinencode (Skizze)"
 menuTitle: "Maschinencode"
 author: "Carsten Gips (FH Bielefeld)"
 weight: 7
@@ -36,7 +36,7 @@ Hier der Vollständigkeit halber ein Ausblick ...
 
 ## Prozessorarchitektur
 
-![](https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Intel_i80286_arch.svg/1024px-Intel_i80286_arch.svg.png)
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Intel_i80286_arch.svg/1024px-Intel_i80286_arch.svg.png){width="80%"}
 
 [Quelle: ["Intel i80286 arch"](https://commons.wikimedia.org/wiki/File:Intel_i80286_arch.svg) by [Appaloosa](https://commons.wikimedia.org/wiki/User:Appaloosa), licensed under [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0)]{.origin}
 
@@ -65,12 +65,7 @@ gebracht.
 ## Virtueller Speicher
 
 :::::: center
-::: slides
-![](images/virtueller-speicher.png)
-:::
-::: notes
 ![](images/virtueller-speicher.png){width="40%"}
-:::
 ::::::
 
 
@@ -210,7 +205,7 @@ Konstanten am Ende vom Text-Segment und ruft sie von dort ab.
 :::
 
 ::::::::: columns
-:::::: {.column width="40%"}
+:::::: {.column width="30%"}
 
 ::: notes
 **Beispiel**
@@ -226,7 +221,7 @@ L:  ...
 ```
 
 ::::::
-:::::: {.column width="40%"}
+:::::: {.column width="65%"}
 
 \pause
 
@@ -267,9 +262,9 @@ Dies könnte sich ungefähr in folgenden (fiktiven) Assembler-Code übersetzen l
 :::
 
 :::::: columns
-::: {.column width="40%"}
+::: {.column width="80%"}
 
-```
+```{size="footnotesize"}
     FP = SP             ;; Framepointer auf aktuellen Stackpointer setzen
     Stack[SP] = R       ;; Rücksprungadresse auf Stack
     Stack[SP-4] = p1    ;; Parameter p1 auf Stack
@@ -282,7 +277,7 @@ R:  x = Stack[SP+4]     ;; Hole Rückgabewert
 ```
 
 :::
-::: {.column width="40%"}
+::: {.column width="20%"}
 
 ::: slides
 ![](images/f-stackframe.png)
@@ -377,9 +372,9 @@ könnte man die Parameter auch in vorhandene Register laden und entsprechend den
 
 
 :::::: columns
-::: {.column width="40%"}
+::: {.column width="80%"}
 
-```
+```{size="footnotesize"}
     SP = FP - 4             ;; Position über Rücksprungadresse auf Stack
     FP = Stack[FP]          ;; Sichere Rücksprungadresse (R)
     Stack[SP+4] = Ergebnis  ;; Ergebnis auf Stack (statt Rücksprung-Adresse)
@@ -387,7 +382,7 @@ könnte man die Parameter auch in vorhandene Register laden und entsprechend den
 ```
 
 :::
-::: {.column width="40%"}
+::: {.column width="20%"}
 
 ::: slides
 ![](images/f-epilog.png)
@@ -411,6 +406,8 @@ Der Rückgabewert wird dann vom Aufrufer an der Stelle `Stack[SP+4]` abgerufen u
 ## Wrap-Up
 
 Skizze zur Erzeugung von Assembler-Code
+
+\bigskip
 
 *   Relativ ähnlich wie die Erzeugung von Bytecode
 *   Beachtung der Eigenschaften der Zielhardware (Register, Maschinenbefehle, ...)
