@@ -183,6 +183,7 @@ hat sich deshalb auch die Bezeichnung *stop-the-world GC* eingebürgert.
 *   GC oft: Geringer Durchsatz
 
 \bigskip
+\bigskip
 
 **Heuristik**
 
