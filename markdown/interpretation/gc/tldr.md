@@ -20,4 +20,4 @@ Wenn man GC zu oft durchführt, dauert ein einzelner Lauf zwar nur recht kurz, a
 von Zeit im "User-Modus" vs. Zeit im "GC-Modus" wird ebenfalls schlecht: niedriger Durchsatz. Hier
 kann man mit der Heuristik des "self-adjusting" Heaps arbeiten: Wenn die Gesamtgröße der allozierten
 Objekte einen Schwellwert überschreitet, führt man GC durch und vergrößert den Schwellwert: Größe der
-verbleibenden Objekte mal einem Faktor.
+verbleibenden Objekte multipliziert mit einem Faktor.
