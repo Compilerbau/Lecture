@@ -7,6 +7,7 @@ weight: 5
 readings:
   - key: "Nystrom2021"
     comment: "Kapitel 26: Garbage Collection"
+  - key: "GCHandbook2011"
 youtube:
   - id: TODO
 fhmedia:
