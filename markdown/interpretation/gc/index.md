@@ -429,7 +429,7 @@ Das folgende Beispiel erläutert dieses Problem:
 
 ## Wrap-Up
 
-*   Pflege verkette Liste alle Objekte in der VM
+*   Pflege verkette Liste aller Objekte in der VM
 
 \smallskip
 
@@ -440,7 +440,11 @@ Das folgende Beispiel erläutert dieses Problem:
 
 \smallskip
 
-*   Problem: Latenz und Durchsatz, Idee des "self-adjusting" Heaps
+*   Problem: Latenz und Durchsatz => Idee des "self-adjusting" Heaps
+
+\smallskip
+
+*   Varianten/Alternativen: Generational GC, Boehm-GC, Reference Counting, Stop-and-Copy GC, ...
 
 
 
