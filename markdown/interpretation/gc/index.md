@@ -42,7 +42,7 @@ fn()
 ::::::
 
 ::: notes
-Bei der Erzeugung von Bytecode für eine VM kann man die Konstanten direkt einem
+Bei der Erzeugung von Bytecode für eine VM kann man die Konstanten direkt in einem
 Konstanten-Array sammeln und im Bytecode mit den entsprechenden Indizes arbeiten.
 Das entspricht dem Vorgehen bei der Maschinencode-Erzeugung, dort sammelt man die
 Konstanten typischerweise am Ende des Text-Segments.
@@ -53,12 +53,13 @@ dynamisch auf dem Heap reserviert, und die Adressen beispielsweise im Stack (bei
 lokalen Variablen) oder in Hashtabellen (Funktionsnamen, globale Variablen) o.ä.
 gespeichert.
 
-Wenn Objekte nicht mehr benötigt werden, sollten sie also freigegeben werden, da
-sonst der Heap der VM voll läuft. Im obigen Beispiel wird der Speicher für `wuppie`
-unerreichbar, sobald man die Zuweisung `y = 'fluppie'` ausführt. Andererseits
-darf man aber auch nicht zu großzügig Objekt aufräumen: Die lokale Variable `x`
-in `foo` wird in der beim Aufruf erzeugten Funktion `bar` benötigt (*Closure*) und
-muss deshalb von der Lebensdauer wie eine globale Variable behandelt werden.
+Wenn Objekte nicht mehr benötigt werden, sollten sie entsprechend wieder freigegeben
+werden, da sonst der Heap der VM voll läuft. Im obigen Beispiel wird der Speicher
+für `wuppie` unerreichbar, sobald man die Zuweisung `y = 'fluppie'` ausführt.
+Andererseits darf man aber auch nicht zu großzügig Objekt aufräumen: Die lokale
+Variable `x` in `foo` wird in der beim Aufruf erzeugten Funktion `bar` benötigt
+(*Closure*) und muss deshalb von der Lebensdauer wie eine globale Variable behandelt
+werden.
 :::
 
 
@@ -111,47 +112,46 @@ der VM, in der Konstantentabelle des Bytecode-Chunks sowie in den Funktionspoint
 betrachtet: Über diese Datenstrukturen wird iteriert und alle auf dem Heap
 der Laufzeitumgebung allozierten Strukturen/Objekte werden markiert, indem
 ihr Flag gesetzt wird. Zusätzlich werden die Pointer auf diese Objekte in
-einen `grayStack` hinzugefügt. Damit sind alle Wurzeln "grau" markiert".
+einen "`grayStack`" hinzugefügt. Damit sind alle Wurzeln "grau" markiert".
 
 ### Phase "Mark": Trace
 
 Nachdem alle Wurzeln "grau" markiert wurden und auf den `grayStack` der VM
 gelegt wurden, müssen nun mögliche Verweise in den Wurzeln verfolgt werden.
 Dazu entfernt man schrittweise die Objekte vom Stack und betrachtet sie damit
-als "schwarz". (Das Markierungs-Flag bleibt gesetzt, "schwarz" sind die Objekte,
-weil sie nicht mehr auf dem `grayStack` der VM liegen.) Sofern das aktuell
-betrachtete Objekt seinerseits wieder Referenzen hat (beispielsweise haben
-Funktionen wieder einen Bytecode-Chunk mit einem Konstanten-Array), werden
-diese Referenz iteriert und alle dabei aufgefundenen Objekte auf den `grayStack`
-der VM gelegt und ihr Flag gesetzt.
+als "schwarz". (Das Markierungs-Flag bleibt gesetzt, "schwarz" sind die "grau"
+markierten Objekte, weil sie nicht mehr auf dem `grayStack` der VM liegen.)
+Sofern das aktuell betrachtete Objekt seinerseits wieder Referenzen hat
+(beispielsweise haben Funktionen wieder einen Bytecode-Chunk mit einem
+Konstanten-Array), werden diese Referenzen iteriert und alle dabei aufgefundenen
+Objekte auf den `grayStack` der VM gelegt und ihr Flag gesetzt.
 
 Dieser Prozess wird so lange durchgeführt, bis der `grayStack` leer ist. Dann
 sind alle erreichbaren Objekte markiert.
 
 ### Phase "Sweep"
 
-Jetzt sind alle Objekte markiert: Das Flag ist jeweils entweder gesetzt oder
-nicht gesetzt. Objekte, deren Flag nicht gesetzt ist, sind nicht mehr erreichbar
-und können freigegeben werden.
+Jetzt sind alle erreichbaren Objekte markiert. Objekte, deren Flag nicht gesetzt
+ist, sind nicht mehr erreichbar und können freigegeben werden.
 
 Wenn die Objekte nicht erreichbar sind, wie kommt man dann an diese heran?
 
-Die Strukturen für Objekte und die VM werden ergänzt. Objekte erhalten noch
+Die Strukturen für Objekte und die VM werden erneut ergänzt: Objekte erhalten noch
 einen `next`-Pointer, mit dem *alle* Objekte in einer verketteten Liste gehalten
 werden können.
 
 Wann immer für ein Objekt Speicher auf dem Laufzeit-Heap angefordert wird,
 wird dieses Objekt in eine verkettete Liste aller Objekte der VM eingehängt.
-Über diese Liste wird nun iteriert und alle "weißen" (nicht markierten) Objekte
-werden ausgehängt und freigegeben.
+Über diese Liste wird nun iteriert und dabei werden alle "weißen" (nicht markierten)
+Objekte ausgehängt und freigegeben.
 
 Zusätzlich müssen alle verbleibenden Objekte für den nächsten GC-Lauf wieder
 entfärbt werden, d.h. die Markierung muss wieder zurückgesetzt werden.
 
 ### Hinweise
 
-Die Mark-and-Sweep-GC-Variante wird auch "präzise Garbage Collection" genannt,
-da dabei alle nicht mehr benötigten Objekte entfernt werden.
+Die Mark-and-Sweep-GC-Variante wird auch "präzises Garbage Collection" genannt,
+da dabei *alle* nicht mehr benötigten Objekte entfernt werden.
 
 Da während der Durchführung der GC die Abarbeitung des Programms pausiert wird,
 hat sich deshalb auch die Bezeichnung *stop-the-world GC* eingebürgert.
@@ -177,7 +177,7 @@ hat sich deshalb auch die Bezeichnung *stop-the-world GC* eingebürgert.
 :::
 
 
-## Self-adjusting Heap
+## Heuristik: Self-adjusting Heap
 
 *   GC selten: Hohe Latenz (lange Pausen)
 *   GC oft: Geringer Durchsatz
@@ -188,7 +188,7 @@ hat sich deshalb auch die Bezeichnung *stop-the-world GC* eingebürgert.
 
 *   Beobachte den allozierten Speicher der VM
 *   Wenn [vorher festgelegte (willkürliche)]{.notes} Grenze überschritten: GC
-*   Größe des verbliebenen Speichers mal Faktor \blueArrow neue Grenze
+*   Größe des verbliebenen [belegten]{.notes} Speichers mal Faktor \blueArrow neue Grenze
 
 ::: notes
 Die Objekte bzw. der Speicherverbrauch, der nach einem GC-Lauf übrig bleibt, ist
@@ -199,9 +199,15 @@ GC starten zu müssen ...
 :::
 
 
-::: notes
 ## Generational GC
 
+*   Teile Heap in zwei Bereiche: Kinderstube und Erwachsenenbereich
+*   Neue Objekte werden in der Kinderstube angelegt
+*   Häufiges GC in Kinderstube
+*   Überlebende Objekte werden nach $N$ Generation in den Erwachsenenbereich verschoben
+*   Deutlich selteneres GC im Erwachsenenbereich
+
+::: notes
 Die meisten Objekte haben oft eher eine kurze Lebensdauer. Wenn sie aber ein gewisses
 "Alter" erreicht haben, werden sie oft noch weiterhin benötigt.
 
@@ -212,8 +218,6 @@ Generationen-Zähler der "überlebenden" Objekte inkrementiert. Wenn die Objekte
 bestimmte Anzahl an Generationen überlebt haben, werden sie in den Erwachsenenbereich
 verschoben, wo deutlich seltener eine GC durchgeführt wird.
 :::
-
-[[Hinweis: Generational GC ]{.bsp}]{.slides}
 
 
 
