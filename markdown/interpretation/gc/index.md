@@ -223,39 +223,45 @@ verschoben, wo deutlich seltener eine GC durchgeführt wird.
 ## "Konservatives GC": Boehm GC
 
 ::: notes
-**Anmerkung**: Man unterscheidet zusätzlich noch zwischen *konservativem*
-und *präzisem* GC:
+Man unterscheidet zusätzlich noch zwischen *konservativem* und *präzisem* GC:
 
 *   *Konservatives GC* geht eher vorsichtig vor: Wenn ein Speicherbereich
     möglicherweise noch benötigt werden *könnte*, wird er nicht angefasst;
     alles, was auch nur so aussieht wie ein Pointer wird entsprechend behandelt.
 *   *Präzises GC* "weiss" dagegen genau, welche Werte Pointer sind und welche
     nicht und handelt entsprechend.
+
+
+Boehm, Weiser und Demers: ["**Boehm GC**"](https://hboehm.info/gc/)
+=> Konservativer GC (Variante des Mark-and-Sweep-GC)
 :::
 
-![](images/freispeicherverwaltung.png)
+::: center
+![](images/freispeicherverwaltung.png){width="80%"}
+:::
 
-*   Boehm, Weiser und Demers: ["Boehm GC"](https://hboehm.info/gc/)
+\bigskip
+
 *   Idee: Nutze die interne Verwaltung des Heaps zum Finden von Objekten
 
 ::::::::: notes
-### Ablauf: Variante des Mark-and-Sweep-GC
+### Ablauf
 
-*   Mark:
+*   **Mark**:
     1.  Suche alle potentiell zu bereinigenden Objekte: Inspiziere Stack, statische
         Daten, Prozessor-Register, ...
-    2.  Behandle alle gefundenen Adressen zunächst als "unsichere Pointer"
-        *   Es ist noch nicht klar, ob das wirklich gültige Adressen in den Heap sind
+    2.  Behandle alle gefundenen Adressen zunächst als "unsichere Pointer" \
+        Es ist noch nicht klar, ob das wirklich gültige Adressen in den Heap sind ...
     3.  Prüfe alle unsicheren Pointer:
         *   Liegt die Adresse tatsächlich *im* Heap?
         *   Zeigt der Pointer auf den Anfang eines Blockes?
         *   Ist der Block nicht in der Free-List enthalten?
         => Ergebnis: gültige Pointer ("Root-Pointer"): markiere diese Objekte als "erreichbar"
     4.  Wiederhole die Schritte (1) bis (3) durch die Untersuchung der gefundenen Objekte
-*   Sweep: Iteriere über den Heap (Blockweise) und gebe alle belegten Blöcke frei, die nicht
-    als "erreichbar" markiert wurden
+*   **Sweep**: Iteriere über den Heap (blockweise) und gebe alle belegten Blöcke frei, die
+    nicht als "erreichbar" markiert wurden
 
-### Heap-Verwaltung
+### Exkurs Heap-Verwaltung
 
 Der Heap ist ein zusammenhängender Speicherbereich, der durch die Allokation und Freigabe
 von Blöcken in mehrere Blöcke segmentiert wird. Die freien Blöcke werden dabei in eine
@@ -306,9 +312,9 @@ den Block vorn in die Freispeicherliste eingehängt.
 *   (+) Kann jederzeit abgebrochen werden \
     Praktisch in Verbindung mit opportunistischer GC in interaktiven Applikationen
 *   (-) Mark-Phase dauert durch die zusätzlichen Tests länger
-*   (-) Die Möglichkeit einer Fragmentierung des Speichers ist hoch.
+*   (-) Die Möglichkeit einer Fragmentierung des Speichers ist hoch
 *   (-) Fehlinterpretationen können dafür sorgen, dass unsichere Pointer nicht freigegeben werden
-*   (-) Bei hoch optimierten Compilern ist die GC nicht zuverlässig, da die Adressen u.U. nicht
+*   (-) Bei hoch optimierenden Compilern ist die GC nicht zuverlässig, da die Adressen u.U. nicht
     mehr auf die benutzen Objekte zeigen
 :::::::::
 
