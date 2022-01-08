@@ -248,64 +248,80 @@ ist. Anderenfalls würde einfach hinter der Adresse 1108 weiter gemacht.
 
 ## Aufruf von Funktionen
 
-![](images/ViewCaller.png){height="86%"}
-
-
-## Sichern von lokalen Variablen beim Funktionsaufruf
-
-- bei Funktionsaufrufen müssen verwendete Register (lokale Variablen) gesichert werden
-- Register werden in den Speicher (Stack) ausgelagert
-- Sicherung kann durch aufrufende Funktion (Caller-Saves) oder aufgerufene Funktion (Callee-Saves) erfolgen
-- Vorteile:
-  - Caller-Safes: nur "lebende" Register müssen gesichert werden
-  - Callee-Safes: nur tatsächlich verwendete Register müssen gesichert werden
-- Nachteile: unnötiges Sichern von Registern bei beiden Varianten möglich
-- in der Praxis daher meist gemischter Ansatz aus Caller-Saves und Callee-Saves Registern
-
-
-## Stack-Frame
-
-::: center
-![](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Aufrufstapellayout_nach_Freigabe.svg/512px-Aufrufstapellayout_nach_Freigabe.svg.png){height="86%"}
+::: notes
+Es soll Maschinencode für den folgenden Funktionsaufruf erzeugt werden:
 :::
 
-[Quelle: [H3xc0d3r](https://commons.wikimedia.org/wiki/User:H3xc0d3r), [Aufrufstapellayout nach Freigabe](https://commons.wikimedia.org/wiki/File:Aufrufstapellayout_nach_Freigabe.svg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/legalcode)]{.origin}
+```
+x = f(p1, ..., pn)
+```
 
 ::: notes
+Dies könnte sich ungefähr in folgenden (fiktiven) Assembler-Code übersetzen lassen:
+:::
+
+:::::: columns
+::: {.column width="40%"}
+
+```
+    FP = SP             ;; Framepointer auf aktuellen Stackpointer setzen
+    Stack[SP] = R       ;; Rücksprungadresse auf Stack
+    Stack[SP-4] = p1    ;; Parameter p1 auf Stack
+    ...
+    Stack[SP-4*n] = pn  ;; Parameter pn auf Stack
+    SP = SP - 4*(n+1)   ;; Stackpointer auf nächste freie Stelle
+    Goto f              ;; Setze den PC auf die Adresse von f im Textsegment
+R:  x = Stack[SP+4]     ;; Hole Rückgabewert
+    SP = SP + 4         ;; Stackpointer auf nächste freie Stelle
+```
+
+:::
+::: {.column width="40%"}
+
+![](images/f-stackframe.png)
+
+:::
+::::::
+
+::: notes
+### Funktionsaufruf
+
 Ein Funktionsaufruf entspricht einem Sprung an die Stelle im
 Textsegment, wo der Funktionscode abgelegt ist. Dies erreicht man, in
 dem man diese Adresse in den *PC* schreibt. Bei einem `return` muss
 man wieder zum ursprünglichen Programmcode zurückspringen, weshalb man
 diese Adresse auf dem Stack hinterlegt.
 
+### Parameter
+
 Zusätzlich müssen Parameter für die Funktion auf dem Stack abgelegt
 werden, damit die Funktion auf diese zugreifen kann. Im Funktionscode
 greift man dann statt auf die Variablen auf die konkreten Adressen im
-Stack-Frame zu. Dazu verwendet man den *Framepointer* bzw. *FP*
-("Rahmenzeiger" in der Skizze), der auf die Adresse des ersten
-Parameters, d.h. auf die Adresse *hinter* der Rücksprungadresse,
-zeigt. Die Parameter sind dann je Funktion über konstante Offsets
-relative zum *FP* erreichbar. Ähnlich wie die Rücksprungadresse muss
-der *FP* des aufrufenden Kontexts im Stack-Frame der aufgerufenen
-Funktion gesichert werden (in der Skizze nicht dargestellt) und am
-Ende des Aufrufs wieder hergestellt werde.
+Stack-Frame zu. Dazu verwendet man den *Framepointer* bzw. *FP*, der
+auf die Adresse des ersten Parameters, d.h. auf die Adresse *hinter*
+der Rücksprungadresse, zeigt. Die Parameter sind dann je Funktion über
+konstante Offsets relativ zum *FP* erreichbar. Ähnlich wie die
+Rücksprungadresse muss der *FP* des aufrufenden Kontexts im Stack-Frame
+der aufgerufenen Funktion gesichert werden (in der Skizze nicht dargestellt)
+und am Ende des Aufrufs wieder hergestellt werden.
+
+### Lokale Variablen
 
 Lokale Variablen einer Funktion werden ebenfalls auf dem Stack
-abgelegt, falls nicht genügend Register zur Verfügung stehen, und
+angelegt, falls nicht genügend Register zur Verfügung stehen, und
 relativ zum *FP* adressiert. Die Größe des dafür verwendeten Speichers
 wird oft als *Framesize* oder *Rahmengröße* bezeichnet. Am Ende eines
 Funktionsaufrufs wird dieser Speicher freigegeben indem der
-*Stackpointer* bzw. *SP* ("Stapelzeiger" in der Skizze) auf den *FP*
-zurückgesetzt wird (oder auf *FP*+4 was den Speicher für die
-Rücksprungadresse mit einschließt).
+*Stackpointer* bzw. *SP* auf den *FP* zurückgesetzt wird.
 
 Die Adressierung von Parametern und Variablen kann auch relativ zum
 *SP* erfolgen, so dass kein *FP* benötigt wird. Der dazu erzeugte
 Maschinencode kann aber deutlich komplexer sein, da Stack und *SP*
 auch für arithmetische Berechnungen verwendet werden und der *SP*
 somit für die Dauer eines Funktionsaufrufs nicht zwingend konstant
-ist. (Die nachfolgenden Code-Beispiele verwenden der Einfachheit
-halber dennoch eine Adressierung relativ zum *SP*)
+ist.
+
+### Rückgabewerte
 
 Falls eine Funktion Rückgabewerte hat, werden diese ebenfalls auf dem
 Stack abgelegt (Überschreiben der ursprünglichen Parameter).
@@ -317,55 +333,73 @@ Record" genannt):
 *   Funktionsparameter (falls vorhanden)
 *   Rücksprungadresse (d.h. aktueller *PC*)
 *   Lokale Variablen der Funktion (falls vorhanden)
+
+### Sichern von lokalen Variablen der "alten" Funktion
+
+-   Vor Funktionsaufrufen müssen aktuell verwendete Register (lokale Variablen) gesichert werden
+-   Register werden in den Speicher (Stack) ausgelagert
+-   Sicherung kann durch aufrufende Funktion (*Caller-Saves*) oder aufgerufene Funktion (*Callee-Saves*) erfolgen
+    -   Caller-Safes: nur "lebende" Register müssen gesichert werden
+    -   Callee-Safes: nur tatsächlich verwendete Register müssen gesichert werden
+-   Nachteile: unnötiges Sichern von Registern bei beiden Varianten möglich
+-   In der Praxis daher meist gemischter Ansatz aus Caller-Saves und Callee-Saves Registern
 :::
+
 
 ## Funktionsaufruf: Prolog
 
 :::::: columns
 ::: {.column width="40%"}
-\vspace{2cm}
-![](images/ViewCallee_Prolog.png){height="86%"}
+
+```
+f:  ...                 ;; Label f: hier startet die Funktion
+    p1 = Stack[SP+4*n]  ;; Zugriff auf p1 (per SP)
+    p1 = Stack[FP-4]    ;; Zugriff auf p1 (per FP)
+    ...                 ;; hier Funktionskram
+```
+
 :::
 ::: {.column width="40%"}
-![](https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Aufrufstapel_schema.svg/512px-Aufrufstapel_schema.svg.png){height="86%"}
 
-[Quelle:  [H3xc0d3r](https://commons.wikimedia.org/wiki/User:H3xc0d3r), [Aufrufstapel schema](https://commons.wikimedia.org/wiki/File:Aufrufstapel_schema.svg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/legalcode)]{.origin}
+![](images/f-prolog.png)
+
 :::
 ::::::
 
 ::: notes
-Die Parameter einer Funktion werden vom aufrufenden Kontext auf dem Stack abgelegt und nachdem der Sprung in die Funktion erfolgt ist wieder in Variablen/Register geladen. Dieses Vorgehen ist in der Praxis aber ineffizient, da das Speichern und Laden direkt aufeinander folgen. Daher werden werden oft bestimmte (Caller-Saves) Register für die übergabe von Parametern verwendet.
+Die Parameter einer Funktion werden vom aufrufenden Kontext auf dem Stack abgelegt. Nach dem Sprung
+in die Funktion kann über den Stack-Pointer oder den Frame-Pointer darauf zugegriffen werden. Alternativ
+könnte man die Parameter auch in vorhandene Register laden und entsprechend den *SP* hochzählen.
 :::
+
 
 ## Funktionsaufruf: Epilog
 
+
 :::::: columns
 ::: {.column width="40%"}
-\vspace{2cm}
-![](images/ViewCallee_Epilog.png){height="86%"}
+
+```
+    SP = FP-4               ;; Position über Rücksprungadresse auf Stack
+    FP = Stack[FP]          ;; Sichere Rücksprungadresse
+    Stack[SP+4] = Ergebnis  ;; Ergebnis auf Stack
+    Goto FP                 ;; Setze den PC auf die Rücksprung-Adresse
+```
+
 :::
 ::: {.column width="40%"}
-![](https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Aufrufstapellayout_nach_R%C3%BCcksprung.svg/512px-Aufrufstapellayout_nach_R%C3%BCcksprung.svg.png){height="86%"}
 
-[Quelle:  [H3xc0d3r](https://commons.wikimedia.org/wiki/User:H3xc0d3r), [Aufrufstapellayout nach Rücksprung](https://commons.wikimedia.org/wiki/File:Aufrufstapellayout_nach_R%C3%BCcksprung.svg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/legalcode)]{.origin}
+![](images/f-epilog.png)
+
 :::
 ::::::
 
 ::: notes
-Beim Rücksprung aus einer Funktion wird der Rückgabewert an die Stelle des ersten Parameters geschrieben und der restliche Stack freigegeben (lokale Variablen, Rücksprungadresse).
-:::
+Beim Rücksprung aus einer Funktion wird der Rückgabewert an die Stelle der Rücksprungadresse
+geschrieben und der restliche Stack freigegeben.
 
-## Freigabe des Rückgabewertes
-
-::: center
-![](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Aufrufstapellayout_nach_Freigabe.svg/512px-Aufrufstapellayout_nach_Freigabe.svg.png){height="86%"}
-:::
-
-[Quelle: [H3xc0d3r](https://commons.wikimedia.org/wiki/User:H3xc0d3r), [Aufrufstapellayout nach Freigabe](https://commons.wikimedia.org/wiki/File:Aufrufstapellayout_nach_Freigabe.svg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/legalcode)]{.origin}
-
-::: notes
-Nach Verarbeiten des Rückgabewertes wird auch dieser vom Stack entfernt (`pop`).
-Damit ist der Stack-Frame des letzten Funktionsaufrufs komplett vom Stack entfernt.
+Der Rückgabewert wird dann vom Aufrufer an der Stelle `Stack[SP+4]` abgerufen und freigegeben
+(siehe Beispiel oben).
 :::
 
 
