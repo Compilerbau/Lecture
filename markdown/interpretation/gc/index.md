@@ -407,29 +407,24 @@ Das folgende Beispiel erläutert dieses Problem:
 
 ## Stop-and-Copy Garbage Collection
 
-* teile Heap in zwei Bereiche (A und B)
-* alloziere nur Speicher aus A bis der Bereich voll ist
-* stoppe Programmausführung und kopiere alle erreichbaren Objekte von A nach B
-* gesamten Speicher aus Bereich A freigeben
-* setze Programmausführung mit vertauschten Rollen von A und B fort
+*   Teile Heap in zwei Bereiche (A und B)
+*   Alloziere nur Speicher aus A (bis der Bereich voll ist)
+*   Stoppe Programmausführung und kopiere alle erreichbaren Objekte von A nach B
+*   Gebe gesamten Speicher in A frei
+*   Setze Programmausführung mit vertauschten Rollen von A und B fort
 
 
-## Vor- und Nachteile von Stop-and-Copy GC
+::: notes
+### Vor- und Nachteile von Stop-and-Copy GC
 
-Vorteile:
-
-* nur ein Lauf über Daten nötig
-* automatische Speicherdefragmentierung
-* Aufwand proportional zur Menge der erreichbaren Objekte und nicht zur Größe des Speichers
-* zyklische Referenzen sind kein Problem
-
-
-
-Nachteile:
-
-* benötigt doppelten Speicherplatz für gegebene Heapgröße
-* Objekte werden im Speicher bewegt (Update von Referenzen nötig)
-* Programm muss für GC angehalten werden
+*   (+) Nur ein Lauf über Daten nötig
+*   (+) Automatische Speicherdefragmentierung
+*   (+) Aufwand proportional zur Menge der erreichbaren Objekte und nicht zur Größe des Speichers
+*   (+) Zyklische Referenzen sind kein Problem
+*   (-) Benötigt doppelten Speicherplatz für gegebene Heap-Größe
+*   (-) Objekte werden im Speicher bewegt (Update von Referenzen nötig)
+*   (-) Programm muss für GC angehalten werden
+:::
 
 
 ## Weitere Alternativen
