@@ -64,7 +64,9 @@ gebracht.
 
 ## Virtueller Speicher
 
-![](images/virtueller-speicher.png)
+::: center
+![](images/virtueller-speicher.png){width="60%"}
+:::
 
 ::::::::: notes
 *   Kernel weist jedem Prozess seinen eigenen virtuellen Speicher zu \
@@ -100,9 +102,7 @@ gebracht.
 
 *   Bereich für dynamischen Speicher (Allokation während der Laufzeit)
 *   Dynamisch wachsend und schrumpfend
-*   Zugriff und Verwaltung aus [laufendem]{.alert} Programm \
-    => **Pointer**
-
+*   Zugriff und Verwaltung aus [laufendem]{.alert} Programm  => **Pointer**
     *   `malloc()`/`calloc()`/`free()` (C)
     *   `new`/`delete` (C++)
     *   typischerweise [**Pointer**]{.alert}
@@ -348,38 +348,6 @@ Nach Verarbeiten des Rückgabewertes wird auch dieser vom Stack entfernt (`pop`)
 Damit ist der Stack-Frame des letzten Funktionsaufrufs komplett vom Stack entfernt.
 :::
 
-## Beispiel: Modell-gesteuerte Übersetzung
-
-```{.python size="scriptsize"}
-class CodeGenerator(LucyVisitor):
-    def __init__(self):
-        self.types = { 'Void': ir.VoidType(), 'Int':  ir.IntType(32), }
-        self.module  = ir.Module()
-        self.symbols = SymbolTable()
-
-    def new_block(self):
-        block = self.func.append_basic_block(name='.entry')
-        self.builder = ir.IRBuilder(block)
-
-    def new_func(self, typ, ide):
-        self.func = ir.Function(self.module, typ, name=ide)
-        self.symbols.bind(ide, self.func)
-
-    def new_var(self, typ, ide, val=None):
-        ptr = self.builder.alloca(typ, name=ide)
-        self.symbols.bind(ide, ptr)
-        if val is not None: self.builder.store(val, ptr)
-    ...
-
-if __name__ == '__main__':
-    print CodeGenerator().visit(parser.program()).module
-```
-
-::: notes
-In diesem Beispiel wird die manuelle Erzeugung von Maschinencode vermieden. Stattdessen nutzt der Autor ein durch das Python-Modul `llvmlite` bereitgestelltes Modell, welches bei der Traversierung des AST mit Informationen befüllt wird und welches anschließend die Ausgabe des Zielcodes übernimmt.
-:::
-
-[Quelle: nach Andrea Orru (BSD 2, [github.com/AndreaOrru/Lucy](https://github.com/AndreaOrru/Lucy), [`lucyc.py`](https://github.com/AndreaOrru/Lucy/blob/master/compiler/lucyc.py#L34))]{.origin}
 
 ## Wrap-Up
 
@@ -391,7 +359,8 @@ Skizze zur Erzeugung von Assembler-Code
     *   Sammeln von Konstanten und Literalen am Ende vom Text-Segment
     *   Auflösen von Adressen
     *   Zuordnung der Variablen und Daten zu Registern oder Adressen
-    *   Aufruf von Funktionen: Anlegen der *Stack-Frames*
+    *   Aufruf von Funktionen: Op-Codes zum Anlegen der *Stack-Frames*
+
 
 
 
