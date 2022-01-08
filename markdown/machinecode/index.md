@@ -348,23 +348,12 @@ Record" genannt):
 
 ## Funktionsaufruf: Prolog
 
-:::::: columns
-::: {.column width="40%"}
-
 ```
 f:  ...                 ;; Label f: hier startet die Funktion
     p1 = Stack[SP+4*n]  ;; Zugriff auf p1 (per SP)
     p1 = Stack[FP-4]    ;; Zugriff auf p1 (per FP)
     ...                 ;; hier Funktionskram
 ```
-
-:::
-::: {.column width="40%"}
-
-![](images/f-prolog.png)
-
-:::
-::::::
 
 ::: notes
 Die Parameter einer Funktion werden vom aufrufenden Kontext auf dem Stack abgelegt. Nach dem Sprung
