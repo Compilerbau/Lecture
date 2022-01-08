@@ -67,7 +67,7 @@ werden.
 
 ![](https://raw.githubusercontent.com/munificent/craftinginterpreters/master/site/image/garbage-collection/reachable.png)
 
-[Quelle: [@Nystrom2021], [`reachable.png`](https://github.com/munificent/craftinginterpreters/blob/master/site/image/garbage-collection/reachable.png), ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
+[Quelle: [`reachable.png`](https://github.com/munificent/craftinginterpreters/blob/master/site/image/garbage-collection/reachable.png) by [Bob Nystrom](https://github.com/munificent), licensed under [MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE)]{.origin}
 
 ::: notes
 1. Erreichbar sind zunächst alle "Wurzeln", d.h. alle Objekte, die direkt über den
@@ -95,7 +95,7 @@ Das führt zu einem zweistufigen Algorithmus:
 
 ![](https://raw.githubusercontent.com/munificent/craftinginterpreters/master/site/image/garbage-collection/mark-sweep.png)
 
-[Quelle: [@Nystrom2021], [`mark-sweep.png`](https://github.com/munificent/craftinginterpreters/blob/master/site/image/garbage-collection/mark-sweep.png), ([MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE))]{.origin}
+[Quelle: [`mark-sweep.png`](https://github.com/munificent/craftinginterpreters/blob/master/site/image/garbage-collection/mark-sweep.png) by [Bob Nystrom](https://github.com/munificent), licensed under [MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE)]{.origin}
 
 ::: notes
 Die Strukturen für Objekte und die VM werden ergänzt: Objekte erhalten noch
@@ -173,7 +173,7 @@ hat sich deshalb auch die Bezeichnung *stop-the-world GC* eingebürgert.
 ::: center
 ![](https://raw.githubusercontent.com/munificent/craftinginterpreters/master/site/image/garbage-collection/latency-throughput.png){width="80%"}
 
-[Quelle: [@Nystrom2021], [`latency-throughput.png`](https://github.com/munificent/craftinginterpreters/blob/master/site/image/garbage-collection/latency-throughput.png), [MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE)]{.origin}
+[Quelle: [`latency-throughput.png`](https://github.com/munificent/craftinginterpreters/blob/master/site/image/garbage-collection/latency-throughput.png) by [Bob Nystrom](https://github.com/munificent), licensed under [MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE)]{.origin}
 :::
 
 
@@ -685,6 +685,9 @@ Ergebnis zum Benchmark mit den bereits genannten Garbage Collectoren
 *   Problem: Latenz und Durchsatz, Idee des "self-adjusting" Heaps
 
 
+
+
+
 <!-- DO NOT REMOVE - THIS IS A LAST SLIDE TO INDICATE THE LICENSE AND POSSIBLE EXCEPTIONS (IMAGES, ...). -->
 ::: slides
 ## LICENSE
@@ -693,5 +696,13 @@ Ergebnis zum Benchmark mit den bereits genannten Garbage Collectoren
 Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
 
 ### Exceptions
-*   TODO (what, where, license)
+*   Image [`reachable.png`](https://github.com/munificent/craftinginterpreters/blob/master/site/image/garbage-collection/reachable.png)
+    (https://github.com/munificent/craftinginterpreters/blob/master/site/image/garbage-collection/reachable.png),
+    by [Bob Nystrom](https://github.com/munificent), licensed under [MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE)
+*   Image [`mark-sweep.png`](https://github.com/munificent/craftinginterpreters/blob/master/site/image/garbage-collection/mark-sweep.png)
+    (https://github.com/munificent/craftinginterpreters/blob/master/site/image/garbage-collection/mark-sweep.png),
+    by [Bob Nystrom](https://github.com/munificent), licensed under [MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE)
+*   Image [`latency-throughput.png`](https://github.com/munificent/craftinginterpreters/blob/master/site/image/garbage-collection/latency-throughput.png)
+    (https://github.com/munificent/craftinginterpreters/blob/master/site/image/garbage-collection/latency-throughput.png),
+    by [Bob Nystrom](https://github.com/munificent), licensed under [MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE)
 :::
