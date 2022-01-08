@@ -171,7 +171,7 @@ hat sich deshalb auch die Bezeichnung *stop-the-world GC* eingebürgert.
 :::
 
 ::: center
-![](https://raw.githubusercontent.com/munificent/craftinginterpreters/master/site/image/garbage-collection/latency-throughput.png)
+![](https://raw.githubusercontent.com/munificent/craftinginterpreters/master/site/image/garbage-collection/latency-throughput.png){width="80%"}
 
 [Quelle: [@Nystrom2021], [`latency-throughput.png`](https://github.com/munificent/craftinginterpreters/blob/master/site/image/garbage-collection/latency-throughput.png), [MIT](https://github.com/munificent/craftinginterpreters/blob/master/LICENSE)]{.origin}
 :::
@@ -201,7 +201,7 @@ GC starten zu müssen ...
 
 ## Generational GC
 
-*   Teile Heap in zwei Bereiche: Kinderstube und Erwachsenenbereich
+*   Teile Heap in zwei Bereiche: "*Kinderstube*" und "*Erwachsenenbereich*"
 *   Neue Objekte werden in der Kinderstube angelegt
 *   Häufiges GC in Kinderstube
 *   Überlebende Objekte werden nach $N$ Generation in den Erwachsenenbereich verschoben
@@ -212,10 +212,10 @@ Die meisten Objekte haben oft eher eine kurze Lebensdauer. Wenn sie aber ein gew
 "Alter" erreicht haben, werden sie oft noch weiterhin benötigt.
 
 Man teilt den Heap in zwei unterschiedlich große Bereiche auf: Die "Kinderstube"
-(*Nursery*) und den Heap für die "Erwachsenen". Neue Objekte kommen zunächst in die
-Kinderstube, und dort wird regelmäßig GC ausgeführt. Bei jedem GC-Lauf wird der
-Generationen-Zähler der "überlebenden" Objekte inkrementiert. Wenn die Objekte eine
-bestimmte Anzahl an Generationen überlebt haben, werden sie in den Erwachsenenbereich
+(*Nursery*) und den größeren Heap-Bereich für die "Erwachsenen". Neue Objekte kommen
+zunächst in die Kinderstube, und dort wird regelmäßig GC ausgeführt. Bei jedem GC-Lauf
+wird der Generationen-Zähler der "überlebenden" Objekte inkrementiert. Wenn die Objekte
+eine bestimmte Anzahl an Generationen überlebt haben, werden sie in den Erwachsenenbereich
 verschoben, wo deutlich seltener eine GC durchgeführt wird.
 :::
 
