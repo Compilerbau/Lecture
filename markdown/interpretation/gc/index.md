@@ -9,9 +9,9 @@ readings:
     comment: "Kapitel 26: Garbage Collection"
   - key: "GCHandbook2011"
 youtube:
-  - id: TODO
+  - id: Loo3Ver5pyc
 fhmedia:
-  - link: "TODO"
+  - link: "https://www.fh-bielefeld.de/medienportal/m/6f634388ae21b10f85827208a3a00606fef9550c5ab1fb94fd750ff0f6ebf24f9e1873213cb14c93406b2512041a49bc3bede5a995750d82ce6299669476b4b3"
     name: "Direktlink FH-Medienportal: CB Garbage Collection"
 ---
 
