@@ -312,6 +312,7 @@ den Block vorn in die Freispeicherliste eingehängt.
 *   (+) Explizite Deallocation (`free`) ist möglich
 *   (+) Kann jederzeit abgebrochen werden \
     Praktisch in Verbindung mit opportunistischer GC in interaktiven Applikationen
+*   (+) Keine separate Buchführung über alle in der VM erzeugten Objekte nötig
 *   (-) Mark-Phase dauert durch die zusätzlichen Tests länger
 *   (-) Die Möglichkeit einer Fragmentierung des Speichers ist hoch
 *   (-) Fehlinterpretationen können dafür sorgen, dass unsichere Pointer nicht freigegeben werden
