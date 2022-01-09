@@ -120,7 +120,7 @@ pc += 1
 args = nil
 if operands_needed(op):
     args = read_operands(pc)
-    pc +=1
+    pc += 1
 
 execute(op, args)
 ```
@@ -139,6 +139,11 @@ Der Prozessor holt sich die Maschinenbefehle, auf die der PC aktuell zeigt und d
 d.h. holt sich die Operanden, und führt die Anweisung aus. Danach wird der PC entsprechend
 erhöht und der *Fetch-Decode-Execute*-Zyklus startet erneut. (OK, diese Darstellung ist stark
 vereinfacht und lässt beispielsweise *Pipelining* außen vor ...)
+
+*Anmerkung*: In der obigen Skizze wird der *PC* für jede Instruktion oder jeden Operanden
+um 1 erhöht. Dies soll andeuten, dass man die nächste Instruktion lesen möchte. In der Realität
+muss hier auf die nächste relevante Speicheradresse gezeigt werden, d.h. das Inkrement muss
+die Breite eines Op-Codes etc. berücksichtigen.
 
 Ein Sprung bzw. Funktionsaufruf kann erreicht werden, in dem der *PC* auf die Startadresse der
 Funktion gesetzt wird.
@@ -235,13 +240,23 @@ ist. Anderenfalls würde einfach hinter der Adresse 1108 weiter gemacht.
 :::
 
 ```
-1000: ...                 ;; L
+1000: ...               ;; L
       ...
-1080: lrd   r0, x       ;; R0 = x
+1080: ldr   r0, x       ;; R0 = x
 1088: ldr   r1, v       ;; R1 = v
 1096: sub   r0, r0, r1  ;; R0 = R0-R1
 1108: bltz  r0, 1000    ;; if R0<0 jump to 1000 (L)
 ```
+
+::: notes
+*Anmerkungen*: In der Skizze hier stehen `x` und `v` für die Adressen, wo die
+Werte von `x` und `v` gespeichert werden. D.h. im Maschinencode steht nicht
+`x`, sondern die Adresse von `x`.
+
+Beachten Sie auch die unterschiedlichen Adressen: Im Beispiel wurde für `ldr r0`
+ein 4 Byte großer Op-Code angenommen plus 4 Byte für die Adresse `x`. Für das `sub`
+wurden dagegen 3x 4 Byte gebraucht (Op-Code, R0, R1).
+:::
 
 ::::::
 :::::::::
@@ -400,6 +415,10 @@ geschrieben und der restliche Stack freigegeben.
 
 Der Rückgabewert wird dann vom Aufrufer an der Stelle `Stack[SP+4]` abgerufen und freigegeben
 (siehe Beispiel oben).
+
+*Anmerkung*: Das Handling des *FP* ist im obigen Beispiel nicht konsistent bzw. vollständig.
+Nach dem Rücksprung in den Aufrufer muss der *FP* auf die Speicheradresse im Stack zeigen, wo
+die Rücksprungadresse dessen Aufrufers steht ...
 :::
 
 
