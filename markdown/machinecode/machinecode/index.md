@@ -3,7 +3,7 @@ type: lecture-cg
 title: "Generierung von Maschinencode (Skizze)"
 menuTitle: "Maschinencode"
 author: "Carsten Gips (FH Bielefeld)"
-weight: 7
+weight: 1
 readings:
   - key: "Mogensen2017"
     comment: "Kapitel 7 Machine-Code Generation"
