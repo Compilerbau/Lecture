@@ -8,9 +8,9 @@ readings:
   - key: "Mogensen2017"
     comment: "Kapitel 7 Machine-Code Generation"
 youtube:
-  - id: TODO
+  - id: R2anlIWZqGY
 fhmedia:
-  - link: https://www.fh-bielefeld.de/medienportal/m/47d7c8fdb987cefc82f49fce22697f3928c70de91d914605eb1377b662aa1b24da40d9169ddc80bef9e01ef495d6be85061589b334b4e8c6634fe1c21d9f42ae
+  - link: "https://www.fh-bielefeld.de/medienportal/m/3321732b51dab72206dd0f6ee1d07449b80c37c2e0880192b38f1e835d10e2c7aea5e75632ea174d44d4d5dbb6864910990cfef160dedd06213ee8ffdf0c9a36"
     name: "Direktlink FH-Medienportal: CB Maschinencode"
 ---
 
