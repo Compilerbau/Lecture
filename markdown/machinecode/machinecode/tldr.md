@@ -5,7 +5,7 @@ hidden: true
 ---
 
 
-Die ist ein Ausblick und soll die Erzeugung von Maschinencode skizzieren.
+Dies ist ein Ausblick und soll die Erzeugung von Maschinencode skizzieren.
 
 Die Erzeugung von Maschinencode ist der Erzeugung von Bytecode relativ ähnlich, allerdings muss
 man die Eigenschaften der Zielhardware (Register, Maschinenbefehle, ...) beachten. Insbesondere
