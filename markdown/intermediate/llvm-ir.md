@@ -19,7 +19,8 @@ attachments:
 # Motivation
 
 Es ist ein neuer Prozessor entwickelt worden mit einem neuen Befehlssatz, und es
-sollen für zwei Programmiersprachen Compiler entwickelt werden.
+sollen für zwei Programmiersprachen Compiler entwickelt werden, die diesen Befehlssatz
+als Ziel haben.
 Was tun?
 
 
@@ -32,24 +33,23 @@ Was tun?
 # LLVM - die Idee
 
 
-## Was will LLVM?
+## Was ist das Ziel von LLVM?
 
-LLVM ist ein Open-Source-Framework, eine nahezu komplette Infrastruktur, mit der
-man modular Compiler und ähnliche sprachorientierte Programme modular entwickeln
-kann. Kernstücke sind LLVM IR, eine streng typisierte Zwischensprache, und ein
-Optimierer, der zur Compilezeit, Linkzeit und Laufzeit eingesetzt werden kann
-und sehr flexibel zu konfigurieren ist. Ein Codegenerator für zahlreiche
-Architekturen ist nahtlos damit verbunden.
+LLVM ist ein Open-Source-Framework, welches die
+modulare Entwicklung von Compilern und ähnlichen sprachorientierten Programmen
+ermöglicht. Kernstücke sind LLVM IR (eine streng typisierte Zwischensprache), ein
+flexibel konfigurierbarer Optimierer, der zur Compilezeit, Linkzeit und Laufzeit eingesetzt werden kann
+und ein Codegenerator für zahlreiche Architekturen.
 
-Mit LLVM lassen sich sowohl AOT- als auch JIT-Compiler entwickeln. Der Zweck ist,
-(mit Generatoren) ein Frontend zu entwickeln, das Programme  über einen AST in
+Mit LLVM lassen sich sowohl AOT- als auch JIT-Compiler entwickeln. Die Idee ist,
+(mit Generatoren) ein Frontend zu entwickeln, das Programme über einen AST in
 LLVM IR übersetzt, und dann mit Hilfe der LLVM-Bibliotheken Maschinencode oder
-VM-Code zu generieren. Die Komponenten des Compilers kommunizieren über APIs (Unabhängigkeit).
+VM-Code zu generieren. Die Komponenten des Compilers sind entkoppelt und
+kommunizieren über APIs (Unabhängigkeit).
 
 Der Vorteil: Um *n* Sprachen für *m* Architekturen zu übersetzen, muss man
 bestenfalls *n* Frontends und *m* Codegeneratoren entwickeln,
 statt *n x m* Compiler zu schreiben.
-
 
 
 # Die LLVM-Pipeline
