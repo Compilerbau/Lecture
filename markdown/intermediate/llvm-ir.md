@@ -15,6 +15,9 @@ attachments:
     name: "Extra Material, e.g. annotated slides"
 ---
 
+<!-- TODO: Darstellung von CFGs zwischen Basic Blocks? -->
+<!-- TODO: LLVM IR Hierarchie (Module, Funktionen, Basic Blocks)? -->
+
 
 # Motivation
 
@@ -146,6 +149,9 @@ z. B. die Konvertierung von double nach int 64 auf einer 32-Bit-Architektur.
 
 ## Die Sanitizer in compiler-rt
 
+<!-- TODO: Dieses Kapitle ist evtl. etwas zu groß, dafür, dass es für die Studenten -->
+<!-- relativ wenig praktische Relevanz hat -->
+
 Sanitizer sind eine Methode zur Instrumentierung (Code der in das kompilierte Programm eingebettet wird),
 um die Lokalisierung und Analyse von verschiedensten Fehlerquellen zu erleichtern.
 
@@ -253,6 +259,7 @@ Vgl. auch: [LLVM Dev Conference](https://www.youtube.com/watch?v=J5xExRGaIIY&t=2
 Jeder Variablen / jedem Register wird nur einmal ein Wert zugewiesen (\blueArrow Datenflussanalyse)
 
 
+<!-- TODO: Was hiermit machen, was will diese Folie? -->
 ## Was passiert jetzt in SSA?
 
 ```cpp
@@ -291,6 +298,9 @@ opt -S -mem2reg -instnamer ssa.ll -o ssa_before_opt.ll
 
 ## Daraus ergibt sich:
 
+<!-- TODO: hier wird man aktuell direkt mit IR erschlagen, ohne vorher mal Basic Blocks in -->
+<!-- einem Diagramm gesehen zu haben -->
+
 ```llvm
 define dso_local i64 @f(i64 %arg, i64 %arg1) #0 {
 bb:
@@ -314,6 +324,7 @@ bb6:                                              ; preds = %bb4, %bb2
 
 ## SSA und Optimierung
 
+<!-- TODO: inwiefern? -->
 Der Optimierer profitiert stark von SSA.
 
 \medskip
@@ -362,6 +373,7 @@ double 6.62606957e-34 ;     double precision
 <8 x double> ;              Vector of 8 double
 ```
 
+<!-- TODO: konkrete IR Beispiele nach hinten schieben -->
 ## Clang generiert LLVM IR:
 
 ```cpp
@@ -482,6 +494,7 @@ main:                                   # @main
 
 *   läuft in einzelnen Pässen über den Code. Jeder Pass kann einzeln aufgerufen und konfiguriert werden.
 
+<!-- TODO: zu allgemein/pauschal? -->
 *   generiert in der Regel sehr schnellen Code
 
 *   arbeitet auf Basic Blocks und DAGs
