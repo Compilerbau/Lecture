@@ -140,6 +140,14 @@ z. B. die Konvertierung von double nach int 64 auf einer 32-Bit-Architektur.
 
 *   **BlocksRuntime**: implementiert maschinenunabhängig die Runtime-Schnittstellen von Apple Blocks
 
+*   **Sanitizer Runtimes**: Laufzeitbibliotheken, welche für die Einbettung und
+	Verwendung von Sanitizern benötigt werden
+
+
+## Die Sanitizer in compiler-rt
+
+Sanitizer sind eine Methode zur Instrumentierung (Code der in das kompilierte Programm eingebettet wird),
+um die Lokalisierung und Analyse von verschiedensten Fehlerquellen zu erleichtern.
 
 ## Die Sanitizer in compiler-rt
 
@@ -147,7 +155,8 @@ z. B. die Konvertierung von double nach int 64 auf einer 32-Bit-Architektur.
 
 *   **ThreadSanitizer**: entdeckt race conditions
 
-*   **UndefinedBehaviorSanitizer**: fügt Code in das Programm ein, um zur Laufzeit undefiniertes Verhalten zu erkennen, z. B.
+*   **UndefinedBehaviorSanitizer**: fügt Code in das Programm ein, um zur Laufzeit
+	undefiniertes Verhalten zu erkennen, z. B.
 	*   Benutzung von Null-Pointern
 	*   Overflow von Signed-Integer-Variablen
 	*   Float-Konvertierungen, die zu einem Overflow führen können
@@ -159,11 +168,12 @@ z. B. die Konvertierung von double nach int 64 auf einer 32-Bit-Architektur.
 
 *   **LeakSanitizer** entdeckt Speicherlöcher
 
-*   **DataFlowSanitizer** liefert dem Compilerbauer Informationen über den Datenfluss in einem zu übersetzenden Programm
+*   **DataFlowSanitizer** liefert dem Compilerbauer Informationen über den
+	Datenfluss in einem zu übersetzenden Programm
 
 \bigskip
 
-Die Benutzung der Sanitizer kann die Laufzeit stark verlangsamen und ist speicherintensiv.
+Die Benutzung der Sanitizer kann die Laufzeit stark erhöhen und ist speicherintensiv.
 Die Sanitizer sind auch in Clang enthalten.
 Nicht alle Sanitizer sind für alle Betriebssysteme verfügbar.
 
@@ -172,7 +182,8 @@ Nicht alle Sanitizer sind für alle Betriebssysteme verfügbar.
 
 **LLDB**: Debugger innerhalb des LLVM-Systems
 
-**libc++ und libc++ABI**: hochperformante Implementierungen der C++-Standardbibliothek, auch für C++11 und C++14.
+**libc++ und libc++ABI**: hochperformante Implementierungen der C++-Standardbibliothek,
+auch für C++11 und C++14
 
 **OpenMP**: eine zu linkende OpenMP-Bibliothek für Shared-Memory-Programmierung (Multiprozessorcomputer)
 
@@ -182,19 +193,14 @@ Nicht alle Sanitizer sind für alle Betriebssysteme verfügbar.
 
 **klee**: zur automatischen Testgenerierung
 
-**LLD**: ein schneller Linker
+**LLD**: ein Linker
 
 \bigskip
 
 und viele weitere Tools, z. B. zum Testen von Compilern.
 
 
-## Einige externe LLVM-Projekte
-
-Siehe [Projects built with LLVM](https://llvm.org/ProjectsWithLLVM/)
-
-
-## LLVM-Compiler
+## Externe LLVM-Projekte
 
 Für folgende Sprachen gibt es Compiler oder Anbindungen an LLVM (neben Clang):
 \bigskip
@@ -203,10 +209,11 @@ Cuda\   \   \   Go\ \   \   Haskell\    \   \   Java\   \   \   Julia\  \   \   
 
 Lua\    \   \   Numba\  \   \   Python\ \   \   Ruby\   \   \   Rust\   \   \   Swift\  \   \   ...
 
+\bigskip
 
+Für weiter Projekte siehe [Projects built with LLVM](https://llvm.org/ProjectsWithLLVM/)
 
 # LLVM IR
-
 
 ## RISC-Architektur von Prozessoren
 
