@@ -123,6 +123,11 @@ Samsung\  \   \   \ ...
 
 *   **Clang tidy**:  analysiert ebenfalls Code statisch, einzelne Checks konfigurierbar
 
+## Clang Toolchain ##
+
+<!-- eigene Abbildung in Anlehnung an: https://llvm.org/devmtg/2019-04/slides/Tutorial-Bridgers-LLVM_IR_tutorial.pdf -->
+![](./images/opt_chain.png)
+
 
 ## Die Compiler-Runtime-Bibliothek
 
