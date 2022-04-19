@@ -18,7 +18,8 @@ attachments:
 
 # Motivation
 
-Es ist ein neuer Prozessor entwickelt worden mit einem neuen Befehlssatz, und es sollen für zwei Programmiersprachen Compiler entwickelt werden.
+Es ist ein neuer Prozessor entwickelt worden mit einem neuen Befehlssatz, und es
+sollen für zwei Programmiersprachen Compiler entwickelt werden.
 Was tun?
 
 
@@ -33,12 +34,21 @@ Was tun?
 
 ## Was will LLVM?
 
-LLVM ist ein Open-Source-Framework, eine nahezu komplette Infrastruktur, mit der man modular Compiler und ähnliche sprachorientierte Programme modular entwickeln kann. Kernstücke sind LLVM IR, eine streng typisierte Zwischensprache, und ein Optimierer, der zur Compilezeit, Linkzeit und Laufzeit eingesetzt werden kann und sehr flexibel zu konfigurieren ist. Ein Codegenerator für zahlreiche Architekturen ist nahtlos damit verbunden.
+LLVM ist ein Open-Source-Framework, eine nahezu komplette Infrastruktur, mit der
+man modular Compiler und ähnliche sprachorientierte Programme modular entwickeln
+kann. Kernstücke sind LLVM IR, eine streng typisierte Zwischensprache, und ein
+Optimierer, der zur Compilezeit, Linkzeit und Laufzeit eingesetzt werden kann
+und sehr flexibel zu konfigurieren ist. Ein Codegenerator für zahlreiche
+Architekturen ist nahtlos damit verbunden.
 
-Mit LLVM lassen sich sowohl AOT- als auch JIT-Compiler entwickeln. Der Zweck ist, (mit Generatoren) ein Frontend zu entwickeln, das Programme  über einen AST in LLVM IR übersetzt, und dann mit Hilfe der LLVM-Bibliotheken Maschinencode oder VM-Code zu generieren. Die Komponenten des Compilers kommunizieren über APIs (Unabhängigkeit).
+Mit LLVM lassen sich sowohl AOT- als auch JIT-Compiler entwickeln. Der Zweck ist,
+(mit Generatoren) ein Frontend zu entwickeln, das Programme  über einen AST in
+LLVM IR übersetzt, und dann mit Hilfe der LLVM-Bibliotheken Maschinencode oder
+VM-Code zu generieren. Die Komponenten des Compilers kommunizieren über APIs (Unabhängigkeit).
 
-
-Der Vorteil: Um *n* Sprachen für *m* Architekturen zu übersetzen, muss man bestenfalls *n* Frontends und *m* Codegeneratoren entwickeln, statt *n x m* Compiler zu schreiben.
+Der Vorteil: Um *n* Sprachen für *m* Architekturen zu übersetzen, muss man
+bestenfalls *n* Frontends und *m* Codegeneratoren entwickeln,
+statt *n x m* Compiler zu schreiben.
 
 
 
@@ -76,7 +86,8 @@ Open Source - Framework (in C++ geschrieben) für die Entwicklung von
 *   etc.
 
 
-Für das LLVM-Projekt haben 2012 Vikram Adve, Chris Lattner und Evan Chang den ACM Software System Award bekommen.
+Für das LLVM-Projekt haben 2012 Vikram Adve, Chris Lattner und Evan Chang den
+ACM Software System Award bekommen.
 
 
 ## Wer setzt es ein?
@@ -95,7 +106,7 @@ Samsung\  \   \   \ ...
 
 **LLVM Core**: Optimierer und Codegenerierer für viele CPUs und auch GPUs
 
-*   benutzt LLVM  IR
+*   benutzt LLVM IR
 *   arbeitet unabhängig von der Zielarchitektur
 *   sehr gut dokumentiert
 *   Optimierungspässe fein konfigurierbar
@@ -117,7 +128,8 @@ Samsung\  \   \   \ ...
 
 **compiler-rt**: generiert Code, der zur Laufzeit benötigt wird:
 
-*   **built-ins**: eine Bibliothek optimierter Implementierungen von Low-Level-Funktionen. z. B. die Konvertierung von double nach int 64 auf einer 32-Bit-Architektur.
+*   **built-ins**: eine Bibliothek optimierter Implementierungen von Low-Level-Funktionen.
+z. B. die Konvertierung von double nach int 64 auf einer 32-Bit-Architektur.
 
 *   **profile**: eine Bibliothek, die Informationen über Reichweiten erfasst
 
@@ -159,7 +171,7 @@ Nicht alle Sanitizer sind für alle Betriebssysteme verfügbar.
 
 **OpenMP**: eine zu linkende OpenMP-Bibliothek für Shared-Memory-Programmierung (Multiprozessorcomputer)
 
-**polly**:s pezielle Schleifenoptimierungen auf Polyeder-Basis
+**polly**: spezielle Schleifenoptimierungen auf Polyeder-Basis
 
 **libclc**: eine Bibliothek für OpenCl, um nichtgrafische Anwendungen auf Grafikprozessoren zu nutzen
 
@@ -332,7 +344,8 @@ Folgende Optimierungen arbeiten mit SSA:
 
 ## Darstellungsformen von LLVM IR
 
-LLVM IR als Text in Dateien, als Code im Hauptspeicher und als Bitcode (Assembler) sind äquivalente Darstellungen, die sich ineinander überführen lassen.
+LLVM IR als Text in Dateien, als Code im Hauptspeicher und als Bitcode (Assembler)
+sind äquivalente Darstellungen, die sich ineinander überführen lassen.
 
 (Die clang-Option -S gibt den menschenlesbaren LLVM IR aus.)
 
@@ -406,11 +419,15 @@ define i32 @main() #0 {
   ret i32 0
 ```
 
-Es werden drei “virtuelle Register” (Variablen) %1, %2 und %3 auf dem Stack angelegt (32-bit Integer; align 4: alle Adressen sind Vielfache von 4).
+Es werden drei “virtuelle Register” (Variablen) %1, %2 und %3 auf dem Stack
+angelegt (32-bit Integer; align 4: alle Adressen sind Vielfache von 4).
 
-Mit store i32 0, ... wird in %1 der Wert 0 geschrieben (vergleichbar mit *p = 0). In %2 wird analog der Wert 7 geschrieben (x=7).
+Mit store i32 0, ... wird in %1 der Wert 0 geschrieben (vergleichbar mit *p = 0).
+In %2 wird analog der Wert 7 geschrieben (x=7).
 
-Dann wird der Wert aus %2 in eine neue Variable %4 geladen und das Ergebnis der Addition aus %4 und dem Wert 35 in eine weitere neue Variable %5 geschrieben. Der Wert dieser Variablen wird dann auf dem Stack in %3 gespeichert (y = x+35).
+Dann wird der Wert aus %2 in eine neue Variable %4 geladen und das Ergebnis der
+Addition aus %4 und dem Wert 35 in eine weitere neue Variable %5 geschrieben.
+Der Wert dieser Variablen wird dann auf dem Stack in %3 gespeichert (y = x+35).
 
 
 ## So sieht der Assembler-Code dafür aus:
@@ -538,7 +555,9 @@ MSP430\ \   \   System z\   \   \   XMOS\   \   \   Xcore\  \   \   ...
 
 ## Wrap-Up
 
-*   LLVM ist eine (fast) komplette Infrastruktur zur Entwicklung Von Compilern und compilerähnlichen Programmen. Die wichtigsten Bestandteile sind der Zwischencode LLVM IR und der LLVM Optimierer.
+*   LLVM ist eine (fast) komplette Infrastruktur zur Entwicklung Von Compilern
+und compilerähnlichen Programmen. Die wichtigsten Bestandteile sind der Zwischencode
+LLVM IR und der LLVM Optimierer.
 
 
 
