@@ -215,25 +215,31 @@ Für weiter Projekte siehe [Projects built with LLVM](https://llvm.org/ProjectsW
 
 # LLVM IR
 
-## RISC-Architektur von Prozessoren
+## LLVM IR
 
-**Reduced Instruction Set Computer**
+*   menschenlesbarer Zwischencode
 
-*   reduzierter Befehlssatz mit geringer Komplexität
+*   generische Maschinensprache
 
-*   Befehle fester Länge und wenige Befehlsformate
+*   Speicherung von Variablen stackbasiert oder in Registern
 
-*   schnell, meist ein Taktzyklus pro Befehl (\blueArrow höhere Taktfrequenzen) möglich
+*   Register können entweder nummeriert werden oder explizite Namen bekommen
 
-*   viele Register
+*   Register-Referenz: %1, Variablen-Referenz: \@1
 
-*   meist auch 3-Adresscode
+## LLVM IR
 
-*   gut für den Compilerbau geeignet (Optimierung)
+*   Instruktionsumfang der IR an RISC-Befehlssatz angelehnt (**R**educed **I**nstruction **S**et **C**omputer)
 
-*   (weniger gut für Assemblerprogrammierer)
+*   IR ist immer in **S**ingle **S**tatic **A**ssignment-Form
 
+*   streng typisiert
 
+*   keine Vorgaben bzgl. grundlegender Sprachkonzepte, wie z.B. Speichermanagement, Error Handling
+
+*   Durchgängige Verwendung von Kontrollflussgraphen zur Unterstützung des Optimierers
+
+Vgl. auch: [LLVM Dev Conference](https://www.youtube.com/watch?v=J5xExRGaIIY&t=215s)
 
 ## SSA-Form (Static single assignment)
 
@@ -259,28 +265,6 @@ long f(long a, long b){
     return x;
 }
 ```
-
-
-## LLVM IR
-
-*   menschenlesbarer Zwischencode
-
-*   in SSA-Form bis zur Registerzuweisung
-
-*   Register können entweder nummeriert werden oder explizite Namen bekommen
-
-*   auf RISC-Architektur aufbauend
-
-*   streng typisiert
-
-*   keine Vorgaben bzgl. grundlegender Sprachkonzepte, wie z.B. Speichermanagement, Error Handling
-
-*   stackbasiert oder 3-Adresscode
-
-*   Register: %1, Variablen: \@1
-
-Vgl. auch: [LLVM Dev Conference](https://www.youtube.com/watch?v=J5xExRGaIIY&t=215s)
-
 
 ## LLVM IR und SSA
 
