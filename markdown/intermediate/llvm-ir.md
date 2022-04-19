@@ -66,11 +66,11 @@ statt *n x m* Compiler zu schreiben.
 
 	* Siehe auch: [LattnerMSThesis](http://llvm.org/pubs/2002-12-LattnerMSThesis.html)
 
-*   Kern des Projekts: LLVM IR, Zwischencode komplette! Infrastruktur
+*   Kern des Projekts: LLVM IR und Infrastruktur
 
-*   ursprünglich **L**ow **L**evel **V**irtual **M**achine, wird aber nicht mehr als Akronym gesehen.
+*   ursprünglich **L**ow **L**evel **V**irtual **M**achine, wird aber nicht mehr als Akronym gesehen
 
-*   Chris Lattner (jetzt bei Google) ist weiterhin der führende Kopf bei dem LLVM-Projekt
+*   Chris Lattner ist weiterhin der führende Kopf des LLVM-Projekts
 
 
 ## Was ist daraus geworden?
