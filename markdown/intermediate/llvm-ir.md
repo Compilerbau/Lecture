@@ -104,20 +104,20 @@ Samsung\  \   \   \ ...
 
 ## Der LLVM-Kern
 
-**LLVM Core**: Optimierer und Codegenerierer für viele CPUs und auch GPUs
+**LLVM Core**: Optimierer und Codegenerator für viele CPU- und auch GPU-Architekturen
 
-*   benutzt LLVM IR
-*   arbeitet unabhängig von der Zielarchitektur
+*   Optimierer arbeitet unabhängig von der Zielarchitektur (nur auf der LLVM IR)
 *   sehr gut dokumentiert
-*   Optimierungspässe fein konfigurierbar
+*   verwendete Optimierungspässe fein konfigurierbar
+*   Optimierer auch einzeln als Tool `opt` aufrufbar
 *   wird für eigene Sprachen als Optimierer und Codegenerator eingesetzt
-
 
 ## Der Compiler Clang
 
-**Clang**: schneller C/C++/Objective-C - Compiler auf Basis von LLVM mit aussagekräftigen Fehlermeldungen und Warnungen.
+**Clang**: C/C++/Objective-C - Compiler auf Basis von LLVM mit aussagekräftigen
+Fehlermeldungen und Warnungen
 
-*   Plattform zur Entwicklung von Source Level Tools.
+*   Plattform zur Entwicklung von Source Level Tools
 
 *   **Clang Static Analyzer**: Teil von Clang, aber auch separat zu benutzen
 
