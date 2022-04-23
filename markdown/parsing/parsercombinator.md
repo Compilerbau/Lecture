@@ -350,19 +350,30 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
 ## Precedence Climbing-Beispiel
 
 ```
-  compute_expr(min_prec):
-    result = compute_atom()    // Atom is a number or an expression in brackets
-    curtoken = next()
-    while curtoken precedence > min_prec:
-      prec, assoc = precedence and associativity of current token
-      if assoc is left:
-        next_min_prec = prec + 1
-      else:
-        next_min_prec = prec
-      rhs = compute_expr(next_min_prec)
-      result = compute operator(result, rhs)
+  fn expr(prec_bound) {
+    result = atom() // number or an expression in braces
+
+    loop {
+      operator = nextToken()
+      (prec, assoc) = lookup(operator)
+
+      if (prec <= prec_bound) {
+        break;
+      }
+
+      next_bound = if (Assoc.Left) {
+          prec + 1
+        } else {
+          prec
+        }
+
+      rhs = expr(next_bound)
+
+      result = compute(operator, result, rhs)
+    }
 
     return result
+  }
 ```
 
 ::: notes
@@ -372,12 +383,12 @@ Eingabe: 6 + 3 * 4
 Berechnung/Ausgabe:
 
 ```
-* compute_expr(1)
-    * compute_atom() --> 6
-    * compute_expr(2)                   # Loop with '+' left assoc
-        * compute_atom() --> 3
-        * compute_expr(3)               # Loop with '*' left assoc
-            * compute_atom() --> 4
+* expr(1)
+    * atom() --> 6
+    * expr(2)                           # Loop with '+' left assoc
+        * atom() --> 3
+        * expr(3)                       # Loop with '*' left assoc
+            * atom() --> 4
             * result --> 4              # Loop not enterd '+ < *'
         * result = 3 * 4 --> 12
     * result = 6 + 12 --> 18
