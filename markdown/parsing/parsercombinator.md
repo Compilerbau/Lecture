@@ -540,34 +540,31 @@ class operator_pow_token(object):
 
 Simple Parser, die nachher als Inputparameter für einen Kombinierten Parser verwendet werden:
 
-```python
-// Simple Integer Parser
-function integer(input) {
-  // note we removed $ from the end of the regular expression
-  const match = /^\d+/.exec(input);
-  if (match != null) {
-    const matchedText = match[0];
-    return success(+matchedText, input.slice(matchedText.length));
+```
+fn integer(input) {
+  match = /^\d+/.applyTo(input)
+  if (match) {
+    matchedText = match.first
+    return Ok({data: matchedText, rest: input.skip(len(matchedText))})
   }
-  return failure("an integer", input);
+  return Err({dataDesc: "an integer", input: input})
 }
-
 ```
 
 ::: notes
-```ruby
-// Simple plus operator Parser
-function plus(input) {
-  if (input[0] === "+") {
-    return success("+", input.slice(1));
+```
+fn plus(input) {
+  if (input.first == '+') {
+    return Ok({data: "+", rest: input.skip(1)})
   }
-  return failure("'+'", input);
+  return Err({dataDesc: "'+'", input: input})
 }
 
-// Simple endofLine Parser
-function eof(input) {
-  if (input.length === 0) return success(null, input);
-  return failure("end of input", input);
+fn eof(input) {
+  if (len(input) == 0) {
+    return Ok({data: none, rest: input})
+  }
+  return Err({dataDesc: "end of input", input: input});
 }
 ```
 :::
@@ -576,40 +573,46 @@ function eof(input) {
 
 Der kombinierte Parser sieht wie folgt aus:
 
-```ruby
-// Combined Parser
-function apply(func, parsers) {
-  return function applyParser(input) {
-    const accData = [];
-    let currentInput = input;
+```
+fn apply(func, parsers) {
+  return lambda applyParser(input) {
+    accData = []
+    currentInput = input
 
-    for (const parser of parsers) {
-      const result = parser(currentInput);
-      if (result.isFailure) return result;
-      accData.push(result.data);
-      currentInput = result.rest;
-    }
+    parsers.each(|parser| {
+      result = parser(currentInput)
+      case result {
+        Err:
+            return result
+        Ok(data, rest):
+          accData.append(data)
+          currentInput = rest
+      }
+    })
 
-    return success(func(...accData), currentInput);
-  };
+    return Ok({data: func(accData), rest: currentInput})
+  }
 }
 ```
 
 ::: notes
-Nun kann über den Parameter "func" eine Funktionalität angegeben werden, und über den Parameter "parsers" kann ein Array an Simplen Parsern übergeben werden. Die Parser müssen dabei in der richtigen Reihenfolge aufgerufen werden. In der Variable accData werden alle Parser-Ergebnisse gespeichert, um sie nachher in der der "func" zu verwenden. Der "currentInput" enthält im ersten Durchlauf den gesamten Input. Jeder Parser schreibt dann den Rest (den nicht parsbaren Teil) in "currentInpu"t" für den nächsten Parser.
+Nun kann über den Parameter "func" eine Funktionalität angegeben werden, und über den Parameter "parsers" kann ein Array an Simplen Parsern übergeben werden. Die Parser müssen dabei in der richtigen Reihenfolge aufgerufen werden. In der Variable accData werden alle Parser-Ergebnisse gespeichert, um sie nachher in der der "func" zu verwenden. Der "currentInput" enthält im ersten Durchlauf den gesamten Input. Jeder Parser schreibt dann den Rest (den nicht parsbaren Teil) in "currentInput" für den nächsten Parser.
 :::
 
 ## Kombinierte Parser definieren
 
 Der kombinierte Parser kann nun so definiert werden:
 
-```ruby
-const plusExpr = apply((num1, _, num2) => num1 + num2, [
-  integer,
-  plus,
-  integer,
-  eof
-]);
+```
+fn plusExpr(input) {
+  // `.data` of plus/eof is not needed for calculation
+  return apply(lambda sum(num1, _, num2, _) { num1 + num2 }, [
+      integer,
+      plus,
+      integer,
+      eof
+    ])
+}
 ```
 
 Diese Zusammensetzung der Parser überprüft eine Plus-Expression mit Integern. Wichtig hierbei ist die richtige Reihenfolge der Parser.
@@ -618,33 +621,32 @@ Diese Zusammensetzung der Parser überprüft eine Plus-Expression mit Integern. 
 
 Nun muss noch eine Parse-Funktion geschrieben werden, um die kombinierten Parser auszuführen.
 
-```ruby
-// And for our main parsing, we'll invoke this function
-function parse(parser, input) {
-  const result = parser(input);
-  if (result.isFailure) {
-    throw new Error("Parse error.
-        expected ${result.expected}.
-        instead found '${result.actual}'
-    ");
-  } else {
-    return result;
+```
+fn parse(parser, input) {
+  result = parser(input)
+  case result {
+    Err(dataDesc, input):
+      raise "Parse error!
+          expected: '${dataDesc}'
+          got: '${input}'
+        "
+    Ok:
+      return result
   }
 }
-
 ```
 
 ## Ausführung des Kombinierten Parsers
 
 Führt man nun den Parser aus, kann es wie folgt aussehen:
-```ruby
-parse(plusExpr, "12+34")
-  >> {data: 46, rest: ""}
+```
+# parse(plusExpr, "12+34")
+-> {data: 46, rest: ""}
 
-parse(plusExpr, "12+34rest")
-  >> Uncaught Error: Parse error.
-        expected end of input.
-        instead found 'rest'
+# parse(plusExpr, "12+34rest")
+-> Uncaught: Parse error!
+        expected: 'end of input'
+        got: 'rest'
 ```
 
 
