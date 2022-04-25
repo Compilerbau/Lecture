@@ -227,14 +227,21 @@ Vgl. auch: [LLVM Dev Conference](https://www.youtube.com/watch?v=J5xExRGaIIY&t=2
 
 ## SSA-Form (Static single assignment)
 
+*   bestimmte Form der Intermediate Representation
+*   jede Variable muss definiert sein, bevor sie verwendet wird
+*   jeder Variablen wird nur **einmal** ein Wert zugewiesen
+*   anschließend wird nur noch lesend auf die Variable zugegriffen
+*   erleichtert die Realisierung vieler Optimierungsverfahren
+
+## SSA-Form (Static single assignment)
+
+Ein Beispiel:
 ```
+ // nicht SSA			// SSA
  y := 1                 y1 := 1
  y := 2         =>      y2 := 2
  x := y                 x1 := y2
 ```
-
-
-Jeder Variablen / jedem Register wird nur einmal ein Wert zugewiesen (\blueArrow Datenflussanalyse)
 
 
 <!-- TODO: Was hiermit machen, was will diese Folie? -->
