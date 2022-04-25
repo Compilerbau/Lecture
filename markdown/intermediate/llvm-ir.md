@@ -243,19 +243,10 @@ Ein Beispiel:
  x := y                 x1 := y2
 ```
 
+<!-- TODO: LLVM IR Hierarchie -->
 
-<!-- TODO: Was hiermit machen, was will diese Folie? -->
-## Was passiert jetzt in SSA?
+## Hierarchie der LLVM IR ##
 
-```cpp
-long f(long a, long b){
-  long x = 1;
-    if (a > b)
-      x += 20;
-    else
-      x += b;
-    return x;
-}
 Die LLVM IR ist hierarchisch aufgebaut:
 
 ![](./images/Hierarchy.png)
@@ -365,6 +356,20 @@ Ausgabe des Kontrollflussgraphen im `.dot` Format:
 opt -dot-cfg func_mem2reg.ll > /dev/null
 ```
 
+## Kontrollflussgraph ##
+
+![](./images/func_cfg.png)
+
+## Essentiell: die Phi-Instruktion ##
+
+TODO
+
+## Module ##
+
+TODO
+
+
+<!-- TODO: in Optimierungskapitel verschieben -->
 ## SSA und Optimierung
 
 <!-- TODO: inwiefern? -->
