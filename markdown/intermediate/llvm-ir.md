@@ -256,11 +256,61 @@ long f(long a, long b){
       x += b;
     return x;
 }
+Die LLVM IR ist hierarchisch aufgebaut:
+
+![](./images/Hierarchy.png)
+
+## Instruktionen ##
+
+Operationen:
+* arithmetische Operationen
+* Vergleichsoperationen
+* Kontrollflussoperationen
+* Block-Terminatoren
+
+Instruktionen haben keinen oder einen Rückgabewert
+* Das Ergebnis hat ein eindeutiges Label (SSA)
+
+Beispiel für eine `add`-Instruktion:
+
+```llvm
+%3 = add nsw i32 %3, 10
 ```
 
-## LLVM IR und SSA
+## Basic Blocks ##
+
+Aufbau von Basic Blocks:
+* Label (erforderlich)
+* Phi Instruktionen
+* Instruktionen
+* Terminator (erforderlich)
+	* (bedingte) Sprunginstruktion
+	* Returninstruktion
+
+
+## Basic Blocks ##
+
+Beispiel für einen Basic Block:
+
+``` llvm
+2:                              ; label
+  %3 = add nsw i32 2, 20        ; instruktion
+  %4 = icmp sgt i32 %3, 10      ; instruktion
+  br i1 %4, label %5, label %7	; terminator
+```
+
+## Funktionen ##
+
+Aufbau von Funktionen:
+* Argumente
+* Entry Block (erforderlich): erster Basic Block, der immer ausgeführt wird
+* weitere Basic Blocks
+
+## Funktionen: Beispiel ##
 
 ```cpp
+// func.c
+
 long f(long a, long b){
   long x = 1;
     if (a > b)
@@ -271,41 +321,49 @@ long f(long a, long b){
 }
 ```
 
+Ausgabe von entsprechender LLVM IR:
 ```
 clang -O3 -opt -Xclang -disable-llvm-passes
+    -S -emit-llvm func.c -o func.ll
 
-    -S -emit-llvm ssa.c -o ssa.ll
-
-opt -S -mem2reg -instnamer ssa.ll -o ssa_before_opt.ll
-
+opt -S -mem2reg -instnamer func.ll -o func_mem2reg.ll
 ```
 
-
-## Daraus ergibt sich
-
-<!-- TODO: hier wird man aktuell direkt mit IR erschlagen, ohne vorher mal Basic Blocks in -->
-<!-- einem Diagramm gesehen zu haben -->
+## Funktionen: Beispiel in IR ##
 
 ```llvm
+; llvm_mem2reg.ll
+
 define dso_local i64 @f(i64 %arg, i64 %arg1) #0 {
-bb:
-  %tmp = icmp sgt i64 %arg, %arg1
-  br i1 %tmp, label %bb2, label %bb4
+bb:                                               ; entry-block
+  %i = icmp sgt i64 %arg, %arg1
+  br i1 %i, label %bb2, label %bb4
 
 bb2:                                              ; preds = %bb
-  %tmp3 = add nsw i64 1, 20
+  %i3 = add nsw i64 1, 20
   br label %bb6
 
 bb4:                                              ; preds = %bb
-  %tmp5 = add nsw i64 1, %arg1
+  %i5 = add nsw i64 1, %arg1
   br label %bb6
 
 bb6:                                              ; preds = %bb4, %bb2
-  %.0 = phi i64 [ %tmp3, %bb2 ], [ %tmp5, %bb4 ]
+  %.0 = phi i64 [ %i3, %bb2 ], [ %i5, %bb4 ]
   ret i64 %.0
 }
 ```
 
+## Kontrollflussgraph ##
+
+* Die Basic Blocks einer Funktion sind durch Sprunginstruktionen verbunden
+* Basic Blocks haben Vorgänger und Nachfolger
+* Der so entstehende Kontrollfluss wird von LLVM ständig durch
+einen Kontrollflussgraphen modelliert
+
+Ausgabe des Kontrollflussgraphen im `.dot` Format:
+```
+opt -dot-cfg func_mem2reg.ll > /dev/null
+```
 
 ## SSA und Optimierung
 
