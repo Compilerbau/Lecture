@@ -327,10 +327,13 @@ Folgende Optimierungen arbeiten mit SSA:
 
 ## Darstellungsformen von LLVM IR
 
-LLVM IR als Text in Dateien, als Code im Hauptspeicher und als Bitcode (Assembler)
-sind äquivalente Darstellungen, die sich ineinander überführen lassen.
+LLVM IR existiert in drei Formen, die äquivalent sind und ineinander überführt
+werden können:
+*   menschenlesbar als Text (`.ll`)
+*   Bitcode (`.bc`)
+*   In-Memory Representation zur Programmlaufzeit des Compilers
 
-(Die clang-Option -S gibt den menschenlesbaren LLVM IR aus.)
+(Die clang-Option -S gibt die menschenlesbaren LLVM IR aus.)
 
 
 ## Typen in LLVM IR
@@ -403,20 +406,20 @@ define i32 @main() #0 {
   ret i32 0
 ```
 
-Es werden drei “virtuelle Register” (Variablen) %1, %2 und %3 auf dem Stack
-angelegt (32-bit Integer; align 4: alle Adressen sind Vielfache von 4).
+Es werden drei “virtuelle Register” %1, %2 und %3 definiert
+(32-bit Integer; align 4: alle Adressen sind Vielfache von 4).
 
 Mit store i32 0, ... wird in %1 der Wert 0 geschrieben (vergleichbar mit *p = 0).
 In %2 wird analog der Wert 7 geschrieben (x=7).
 
-Dann wird der Wert aus %2 in eine neue Variable %4 geladen und das Ergebnis der
-Addition aus %4 und dem Wert 35 in eine weitere neue Variable %5 geschrieben.
-Der Wert dieser Variablen wird dann auf dem Stack in %3 gespeichert (y = x+35).
+Dann wird der Wert aus %2 in eine neues Register %4 geladen und das Ergebnis der
+Addition aus %4 und dem Wert 35 in ein weiteres neues Register %5 geschrieben.
+Der Wert dieser Variablen wird dann in dem Register %3 gespeichert (y = x+35).
 
 
 ## So sieht der Assembler-Code dafür aus
 
-(Ausgabe ohne -S)
+(Ausgabe ohne `-emit-llvm -S` Optionen)
 ```as
 	.text
 	.file	"hello.c"
