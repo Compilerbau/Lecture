@@ -296,7 +296,7 @@ opt -S -mem2reg -instnamer ssa.ll -o ssa_before_opt.ll
 ```
 
 
-## Daraus ergibt sich:
+## Daraus ergibt sich
 
 <!-- TODO: hier wird man aktuell direkt mit IR erschlagen, ohne vorher mal Basic Blocks in -->
 <!-- einem Diagramm gesehen zu haben -->
@@ -374,7 +374,7 @@ double 6.62606957e-34 ;     double precision
 ```
 
 <!-- TODO: konkrete IR Beispiele nach hinten schieben -->
-## Clang generiert LLVM IR:
+## Clang generiert LLVM IR
 
 ```cpp
 int main() {
@@ -390,7 +390,7 @@ clang -emit-llvm -S hello.c
 ```
 
 
-## So sieht LLVM IR dafür aus:
+## So sieht LLVM IR dafür aus
 
 ```llvm
 ; ModuleID = 'hello.c'
@@ -413,7 +413,7 @@ define i32 @main() #0 {
 ```
 
 
-## So sieht LLVM IR dafür aus:
+## So sieht LLVM IR dafür aus
 
 ```llvm
   %1 = alloca i32, align 4
@@ -438,7 +438,7 @@ Addition aus %4 und dem Wert 35 in eine weitere neue Variable %5 geschrieben.
 Der Wert dieser Variablen wird dann auf dem Stack in %3 gespeichert (y = x+35).
 
 
-## So sieht der Assembler-Code dafür aus:
+## So sieht der Assembler-Code dafür aus
 
 (Ausgabe ohne -S)
 ```as
@@ -458,7 +458,7 @@ main:                                   # @main
 ```
 
 
-## Assembler-Code Teil 2:
+## Assembler-Code Teil 2
 
 ```as
     xorl	%eax, %eax
@@ -500,7 +500,7 @@ main:                                   # @main
 *   arbeitet auf Basic Blocks und DAGs
 
 
-## Arten von Pässen:
+## Arten von Pässen
 
 **Analysis passes** sammeln Informationen für andere Pässe, z. B. zum Debuggen oder Visualisieren
 
