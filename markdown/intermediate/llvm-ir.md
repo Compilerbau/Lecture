@@ -63,16 +63,11 @@ statt *n x m* Compiler zu schreiben.
 ## Der Werdegang von LLVM
 
 *   ab 2000 Forschungsprojekt zur Untersuchung dynamischer Kompilierung und Optimierungen von Prof. Vikram Adve an der University of Illinois
-
 *   2002 Masterarbeit von Chris Lattner;
     "LLVM: An Infrastructure for Multi-Stage Optimization"
-
 	* Siehe auch: [LattnerMSThesis](http://llvm.org/pubs/2002-12-LattnerMSThesis.html)
-
 *   Kern des Projekts: LLVM IR und Infrastruktur
-
 *   ursprünglich **L**ow **L**evel **V**irtual **M**achine, wird aber nicht mehr als Akronym gesehen
-
 *   Chris Lattner ist weiterhin der führende Kopf des LLVM-Projekts
 
 
@@ -121,9 +116,7 @@ Samsung\  \   \   \ ...
 Fehlermeldungen und Warnungen
 
 *   Plattform zur Entwicklung von Source Level Tools
-
 *   **Clang Static Analyzer**: Teil von Clang, aber auch separat zu benutzen
-
 *   **Clang tidy**:  analysiert ebenfalls Code statisch, einzelne Checks konfigurierbar
 
 ## Clang Toolchain ##
@@ -138,11 +131,8 @@ Fehlermeldungen und Warnungen
 
 *   **built-ins**: eine Bibliothek optimierter Implementierungen von Low-Level-Funktionen.
 z. B. die Konvertierung von double nach int 64 auf einer 32-Bit-Architektur.
-
 *   **profile**: eine Bibliothek, die Informationen über Reichweiten erfasst
-
 *   **BlocksRuntime**: implementiert maschinenunabhängig die Runtime-Schnittstellen von Apple Blocks
-
 *   **Sanitizer Runtimes**: Laufzeitbibliotheken, welche für die Einbettung und
 	Verwendung von Sanitizern benötigt werden
 
@@ -158,9 +148,7 @@ um die Lokalisierung und Analyse von verschiedensten Fehlerquellen zu erleichter
 ## Die Sanitizer in compiler-rt
 
 *   **AdressSanitizer**: entdeckt Speicherfehler, z. B. use-after-free
-
 *   **ThreadSanitizer**: entdeckt race conditions
-
 *   **UndefinedBehaviorSanitizer**: fügt Code in das Programm ein, um zur Laufzeit
 	undefiniertes Verhalten zu erkennen, z. B.
 	*   Benutzung von Null-Pointern
@@ -171,9 +159,7 @@ um die Lokalisierung und Analyse von verschiedensten Fehlerquellen zu erleichter
 ## Die Sanitizer in compiler-rt
 
 *   **MemorySanitizer** entdeckt die Benutzung von nicht-initialisierten Variablen
-
 *   **LeakSanitizer** entdeckt Speicherlöcher
-
 *   **DataFlowSanitizer** liefert dem Compilerbauer Informationen über den
 	Datenfluss in einem zu übersetzenden Programm
 
@@ -224,25 +210,17 @@ Für weiter Projekte siehe [Projects built with LLVM](https://llvm.org/ProjectsW
 ## LLVM IR
 
 *   menschenlesbarer Zwischencode
-
 *   generische Maschinensprache
-
 *   Speicherung von Variablen stackbasiert oder in Registern
-
 *   Register können entweder nummeriert werden oder explizite Namen bekommen
-
 *   Register-Referenz: %1, Variablen-Referenz: \@1
 
 ## LLVM IR
 
 *   Instruktionsumfang der IR an RISC-Befehlssatz angelehnt (**R**educed **I**nstruction **S**et **C**omputer)
-
 *   IR ist immer in **S**ingle **S**tatic **A**ssignment-Form
-
 *   streng typisiert
-
 *   keine Vorgaben bzgl. grundlegender Sprachkonzepte, wie z.B. Speichermanagement, Error Handling
-
 *   Durchgängige Verwendung von Kontrollflussgraphen zur Unterstützung des Optimierers
 
 Vgl. auch: [LLVM Dev Conference](https://www.youtube.com/watch?v=J5xExRGaIIY&t=215s)
@@ -331,23 +309,14 @@ Der Optimierer profitiert stark von SSA.
 
 Folgende Optimierungen arbeiten mit SSA:
 
-
 *   Constant propagation
-
 *   Value range propagation
-
 *   Sparse conditional constant propagation
-
 *   Dead code elimination
-
 *   Global value numbering
-
 *   Partial redundancy elimination
-
 *   Strength reduction
-
 *   Register allocation
-
 
 ## Darstellungsformen von LLVM IR
 
@@ -487,16 +456,11 @@ main:                                   # @main
 ## Allgegenwärtig in LLVM: Der Optimierer
 
 *   Teil von LLVM Core
-
 *   kann zur Laufzeit, Compilezeit und Linkzeit eingesetzt werden
-
 *   nutzt auch Leerlaufzeit des Prozessors
-
 *   läuft in einzelnen Pässen über den Code. Jeder Pass kann einzeln aufgerufen und konfiguriert werden.
-
 <!-- TODO: zu allgemein/pauschal? -->
 *   generiert in der Regel sehr schnellen Code
-
 *   arbeitet auf Basic Blocks und DAGs
 
 
@@ -515,38 +479,27 @@ Vgl. auch: [LLVM’s Analysis and Transform Passes](http://releases.llvm.org/9.0
 ## Einige Optimierungen in LLVM
 
 *   Dead Code Elimination
-
 *   Aggressive Dead Code Elimination
-
 *   Dead Argument Elimination
-
 *   Dead Type Elimination
-
 *   Dead Instruction Elimination
-
 *   Dead Store Elimination
-
 *   Dead Global Elimination
 
 Vgl. auch: [LLVM’s Analysis and Transform Passes](http://releases.llvm.org/9.0.0/docs/Passes.html)
-
-
 
 # Die Codegenerierung
 
 ## Struktur der Codegenerierung
 
 *   übersetzt LLVM IR in Maschinencode
-
 *   läuft in Pässen:
-
 	*   Built-In-Pässe, die defaultmäßig laufen
 	*   Instruction Selection
 	*   Register Allocation
 	*   Scheduling
 	*   Code Layout Optimization
 	*   Assembly Emission
-
 
 ## Unterstützte Prozessorarchitekturen
 
