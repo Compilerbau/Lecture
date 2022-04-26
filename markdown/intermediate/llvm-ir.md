@@ -225,6 +225,32 @@ Für weiter Projekte siehe [Projects built with LLVM](https://llvm.org/ProjectsW
 
 Vgl. auch: [LLVM Dev Conference](https://www.youtube.com/watch?v=J5xExRGaIIY&t=215s)
 
+## Darstellungsformen von LLVM IR
+
+LLVM IR existiert in drei Formen, die äquivalent sind und ineinander überführt
+werden können:
+*   menschenlesbar als Text (`.ll`)
+*   Bitcode (`.bc`)
+*   In-Memory Representation zur Programmlaufzeit des Compilers
+
+(Die clang-Option -S gibt die menschenlesbaren LLVM IR aus.)
+
+## Typen in LLVM IR
+
+LLVM IR-Typen sind plattformunabhängig und lassen sich direkt in optimalen Maschinencode übersetzen.
+
+\bigskip
+
+```
+i1 1  ;                     boolean bit
+i32 299792458 ;             integer
+float 7.29735257e-3 ;       single precision
+double 6.62606957e-34 ;     double precision
+[10 x float] ;              Array of 10 floats
+[10 x [20 x i32]] ;         Array of 10 arrays of 20 integers
+<8 x double> ;              Vector of 8 double
+```
+
 ## SSA-Form (Static single assignment)
 
 *   bestimmte Form der Intermediate Representation
@@ -397,54 +423,9 @@ Inhalt:
 
 Module werden vom Linker zum lauffähigen Programm zusammengefügt
 
-<!-- TODO: in Optimierungskapitel verschieben -->
-## SSA und Optimierung
-
-<!-- TODO: inwiefern? -->
-Der Optimierer profitiert stark von SSA.
-
-\medskip
-
-Folgende Optimierungen arbeiten mit SSA:
-
-*   Constant propagation
-*   Value range propagation
-*   Sparse conditional constant propagation
-*   Dead code elimination
-*   Global value numbering
-*   Partial redundancy elimination
-*   Strength reduction
-*   Register allocation
-
-## Darstellungsformen von LLVM IR
-
-LLVM IR existiert in drei Formen, die äquivalent sind und ineinander überführt
-werden können:
-*   menschenlesbar als Text (`.ll`)
-*   Bitcode (`.bc`)
-*   In-Memory Representation zur Programmlaufzeit des Compilers
-
-(Die clang-Option -S gibt die menschenlesbaren LLVM IR aus.)
-
-
-## Typen in LLVM IR
-
-LLVM IR-Typen sind plattformunabhängig und lassen sich direkt in optimalen Maschinencode übersetzen.
-
-\bigskip
-
-```
-i1 1  ;                     boolean bit
-i32 299792458 ;             integer
-float 7.29735257e-3 ;       single precision
-double 6.62606957e-34 ;     double precision
-[10 x float] ;              Array of 10 floats
-[10 x [20 x i32]] ;         Array of 10 arrays of 20 integers
-<8 x double> ;              Vector of 8 double
-```
 
 <!-- TODO: konkrete IR Beispiele nach hinten schieben -->
-## Clang generiert LLVM IR
+## Ein weiteres Beispiel
 
 ```cpp
 int main() {
@@ -482,7 +463,6 @@ define i32 @main() #0 {
 }
 ```
 
-
 ## So sieht LLVM IR dafür aus
 
 ```llvm
@@ -508,7 +488,7 @@ Addition aus %4 und dem Wert 35 in ein weiteres neues Register %5 geschrieben.
 Der Wert dieser Variablen wird dann in dem Register %3 gespeichert (y = x+35).
 
 
-## So sieht der Assembler-Code dafür aus
+## Assembler-Code Teil 1
 
 (Ausgabe ohne `-emit-llvm -S` Optionen)
 ```as
@@ -550,8 +530,6 @@ main:                                   # @main
 	.addrsig
 ```
 
-
-
 # Der LLVM-Optimierer
 
 ## Allgegenwärtig in LLVM: Der Optimierer
@@ -588,6 +566,25 @@ Vgl. auch: [LLVM’s Analysis and Transform Passes](http://releases.llvm.org/9.0
 *   Dead Global Elimination
 
 Vgl. auch: [LLVM’s Analysis and Transform Passes](http://releases.llvm.org/9.0.0/docs/Passes.html)
+
+
+## SSA und Optimierung
+
+<!-- TODO: inwiefern? -->
+Der Optimierer profitiert stark von SSA.
+
+\medskip
+
+Folgende Optimierungen arbeiten mit SSA:
+
+*   Constant propagation
+*   Value range propagation
+*   Sparse conditional constant propagation
+*   Dead code elimination
+*   Global value numbering
+*   Partial redundancy elimination
+*   Strength reduction
+*   Register allocation
 
 # Die Codegenerierung
 
