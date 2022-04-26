@@ -15,9 +15,7 @@ attachments:
     name: "Extra Material, e.g. annotated slides"
 ---
 
-<!-- TODO: Darstellung von CFGs zwischen Basic Blocks? -->
-<!-- TODO: LLVM IR Hierarchie (Module, Funktionen, Basic Blocks)? -->
-
+<!-- TODO: Quellen -->
 
 # Motivation
 
@@ -138,9 +136,6 @@ z. B. die Konvertierung von double nach int 64 auf einer 32-Bit-Architektur.
 
 
 ## Die Sanitizer in compiler-rt
-
-<!-- TODO: Dieses Kapitle ist evtl. etwas zu groß, dafür, dass es für die Studenten -->
-<!-- relativ wenig praktische Relevanz hat -->
 
 Sanitizer sind eine Methode zur Instrumentierung (Code der in das kompilierte Programm eingebettet wird),
 um die Lokalisierung und Analyse von verschiedensten Fehlerquellen zu erleichtern.
@@ -269,8 +264,6 @@ Ein Beispiel:
  x := y                 x1 := y2
 ```
 
-<!-- TODO: LLVM IR Hierarchie -->
-
 ## Hierarchie der LLVM IR ##
 
 Die LLVM IR ist hierarchisch aufgebaut:
@@ -351,6 +344,7 @@ opt -S -mem2reg -instnamer func.ll -o func_mem2reg.ll
 ```llvm
 ; llvm_mem2reg.ll
 
+...
 define dso_local i64 @f(i64 %arg, i64 %arg1) #0 {
 bb:                                               ; entry-block
   %i = icmp sgt i64 %arg, %arg1
@@ -368,6 +362,7 @@ bb6:                                              ; preds = %bb4, %bb2
   %.0 = phi i64 [ %i3, %bb2 ], [ %i5, %bb4 ]
   ret i64 %.0
 }
+...
 ```
 
 ## Kontrollflussgraph ##
@@ -424,7 +419,6 @@ Inhalt:
 Module werden vom Linker zum lauffähigen Programm zusammengefügt
 
 
-<!-- TODO: konkrete IR Beispiele nach hinten schieben -->
 ## Ein weiteres Beispiel
 
 ```cpp
@@ -439,7 +433,6 @@ int main() {
 ```
 clang -emit-llvm -S hello.c
 ```
-
 
 ## So sieht LLVM IR dafür aus
 
@@ -538,7 +531,6 @@ main:                                   # @main
 *   kann zur Laufzeit, Compilezeit und Linkzeit eingesetzt werden
 *   nutzt auch Leerlaufzeit des Prozessors
 *   läuft in einzelnen Pässen über den Code. Jeder Pass kann einzeln aufgerufen und konfiguriert werden.
-<!-- TODO: zu allgemein/pauschal? -->
 *   generiert in der Regel sehr schnellen Code
 *   arbeitet auf Basic Blocks und DAGs
 
@@ -570,7 +562,6 @@ Vgl. auch: [LLVM’s Analysis and Transform Passes](http://releases.llvm.org/9.0
 
 ## SSA und Optimierung
 
-<!-- TODO: inwiefern? -->
 Der Optimierer profitiert stark von SSA.
 
 \medskip
