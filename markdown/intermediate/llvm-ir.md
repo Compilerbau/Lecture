@@ -362,7 +362,26 @@ opt -dot-cfg func_mem2reg.ll > /dev/null
 
 ## Essentiell: die Phi-Instruktion ##
 
-TODO
+* Basierend auf dem Programmfluss können einer Variablen unterschiedliche Werte zugewiesen werden (`x` im vorherigen Beispiel)
+* SSA: jeder Variablen / jedem Register wird nur einmal ein Wert zugewiesen
+* Daher: virtuelle Register entsprechen nicht 1:1 den Variablen des
+kompilierten Progamms
+* Der Wert einer konditionell zugewiesenen Variablen kann daher in zwei unterschiedlichen
+virtuellen Registern stehen (je nach durchlaufenem Programmzweig)
+* Problem: welches Register soll gelesen werden, um den Wert der Variablen weiter zu verwenden?
+* Lösung: Phi-Instruktion speichert Werte in einem neuen Register abhängig vom
+Vorgängerblock
+
+## Phi-Instruktion: Beispiel ##
+
+```
+bb6:                                              ; preds = %bb4, %bb2
+  %.0 = phi i64 [ %i3, %bb2 ], [ %i5, %bb4 ]
+  ret i64 %.0
+```
+
+Effekt: Speichert den Wert aus Register `%i3` in Register `%.0`, falls wir aus
+Block `%bb2` kommen, sonst wird der Wert aus Register `%i5` gespeichert
 
 ## Module ##
 
