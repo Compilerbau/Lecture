@@ -385,8 +385,17 @@ Block `%bb2` kommen, sonst wird der Wert aus Register `%i5` gespeichert
 
 ## Module ##
 
-TODO
+Bildet eine Übersetzungseinheit eines Programms ab
 
+Inhalt:
+* Ziel Informationen (erforderlich)
+	* Datenlayout (Endianess, native Integergrößen, etc.)
+	* Ziel-Triplet (Zielarchitektur, ABI, etc.)
+* Globale Variable
+* Funktionsdeklarationen
+* Funktionsdefinitionen
+
+Module werden vom Linker zum lauffähigen Programm zusammengefügt
 
 <!-- TODO: in Optimierungskapitel verschieben -->
 ## SSA und Optimierung
