@@ -27,11 +27,11 @@ Was tun?
 
 ## Themen für heute: Letzte Phase in Compiler-Pipeline
 
-![Compiler-Pipeline](images/architektur_cb.png)\
+![Compiler-Pipeline](images/architektur_cb.png)
 
 
 
-# LLVM - die Idee
+# LLVM - Ein Überblick
 
 
 ## Was ist das Ziel von LLVM?
@@ -51,11 +51,6 @@ kommunizieren über APIs (Unabhängigkeit).
 Der Vorteil: Um *n* Sprachen für *m* Architekturen zu übersetzen, muss man
 bestenfalls *n* Frontends und *m* Codegeneratoren entwickeln,
 statt *n x m* Compiler zu schreiben.
-
-
-# Die LLVM-Pipeline
-
-## Die LLVM-Pipeline
 
 
 ## Der Werdegang von LLVM
@@ -140,7 +135,9 @@ z. B. die Konvertierung von double nach int 64 auf einer 32-Bit-Architektur.
 Sanitizer sind eine Methode zur Instrumentierung (Code der in das kompilierte Programm eingebettet wird),
 um die Lokalisierung und Analyse von verschiedensten Fehlerquellen zu erleichtern.
 
+::: slides
 ## Die Sanitizer in compiler-rt
+:::
 
 *   **AdressSanitizer**: entdeckt Speicherfehler, z. B. use-after-free
 *   **ThreadSanitizer**: entdeckt race conditions
@@ -149,10 +146,6 @@ um die Lokalisierung und Analyse von verschiedensten Fehlerquellen zu erleichter
 	*   Benutzung von Null-Pointern
 	*   Overflow von Signed-Integer-Variablen
 	*   Float-Konvertierungen, die zu einem Overflow führen können
-
-
-## Die Sanitizer in compiler-rt
-
 *   **MemorySanitizer** entdeckt die Benutzung von nicht-initialisierten Variablen
 *   **LeakSanitizer** entdeckt Speicherlöcher
 *   **DataFlowSanitizer** liefert dem Compilerbauer Informationen über den
@@ -209,9 +202,6 @@ Für weiter Projekte siehe [Projects built with LLVM](https://llvm.org/ProjectsW
 *   Speicherung von Variablen stackbasiert oder in Registern
 *   Register können entweder nummeriert werden oder explizite Namen bekommen
 *   Register-Referenz: %1, Variablen-Referenz: \@1
-
-## LLVM IR
-
 *   Instruktionsumfang der IR an RISC-Befehlssatz angelehnt (**R**educed **I**nstruction **S**et **C**omputer)
 *   IR ist immer in **S**ingle **S**tatic **A**ssignment-Form
 *   streng typisiert
@@ -254,7 +244,9 @@ double 6.62606957e-34 ;     double precision
 *   anschließend wird nur noch lesend auf die Variable zugegriffen
 *   erleichtert die Realisierung vieler Optimierungsverfahren
 
+::: slides
 ## SSA-Form (Static single assignment)
+:::
 
 Ein Beispiel:
 ```
@@ -297,8 +289,9 @@ Aufbau von Basic Blocks:
 	* (bedingte) Sprunginstruktion
 	* Returninstruktion
 
-
+::: slides
 ## Basic Blocks ##
+:::
 
 Beispiel für einen Basic Block:
 
@@ -342,9 +335,7 @@ opt -S -mem2reg -instnamer func.ll -o func_mem2reg.ll
 ## Funktionen: Beispiel in IR ##
 
 ```llvm
-; llvm_mem2reg.ll
-
-...
+; func_mem2reg.ll
 define dso_local i64 @f(i64 %arg, i64 %arg1) #0 {
 bb:                                               ; entry-block
   %i = icmp sgt i64 %arg, %arg1
@@ -362,7 +353,6 @@ bb6:                                              ; preds = %bb4, %bb2
   %.0 = phi i64 [ %i3, %bb2 ], [ %i5, %bb4 ]
   ret i64 %.0
 }
-...
 ```
 
 ## Kontrollflussgraph ##
@@ -377,9 +367,11 @@ Ausgabe des Kontrollflussgraphen im `.dot` Format:
 opt -dot-cfg func_mem2reg.ll > /dev/null
 ```
 
+::: slides
 ## Kontrollflussgraph ##
+:::
 
-![](./images/func_cfg.png)
+![](./images/func_cfg.png){width="60%"}
 
 ## Essentiell: die Phi-Instruktion ##
 
@@ -456,6 +448,7 @@ define i32 @main() #0 {
 }
 ```
 
+::: slides
 ## So sieht LLVM IR dafür aus
 
 ```llvm
@@ -469,6 +462,7 @@ define i32 @main() #0 {
   store i32 %5, i32* %3, align 4
   ret i32 0
 ```
+:::
 
 Es werden drei “virtuelle Register” %1, %2 und %3 definiert
 (32-bit Integer; align 4: alle Adressen sind Vielfache von 4).
@@ -481,7 +475,13 @@ Addition aus %4 und dem Wert 35 in ein weiteres neues Register %5 geschrieben.
 Der Wert dieser Variablen wird dann in dem Register %3 gespeichert (y = x+35).
 
 
-## Assembler-Code Teil 1
+::: slides
+## Entsprechender Assembler-Code Teil 1
+:::
+
+::: notes
+## Entsprechender Assembler-Code
+:::
 
 (Ausgabe ohne `-emit-llvm -S` Optionen)
 ```as
@@ -500,8 +500,9 @@ main:                                   # @main
 	.cfi_def_cfa_register %rbp
 ```
 
-
-## Assembler-Code Teil 2
+::: slides
+## Entsprechender Assembler-Code Teil 2
+:::
 
 ```as
     xorl	%eax, %eax
