@@ -413,18 +413,29 @@ Beispiel: [Parsing expressions by precedence climbing](https://eli.thegreenplace
     -   prefix from: a = -b
         -   nud (Null denotation)
 
-```python
-  class operator_sub_token(object):
-      lbp = 10
-      def nud(self):
-          return -expression(100)
-      def led(self, left):
-          return left - expression(10)
-
-  class operator_mul_token(object):
-      lbp = 20
-      def led(self, left):
-          return left * expression(20)
+```javascript
+  op_token_sub = {
+    lbp: 10,
+    // '-' fulfills 2 roles:
+    // 1: prefix notation -> negation
+    prefix: () => {
+      -expression(100)
+    },
+    // '-' fulfills 2 roles:
+    // 2: infix form -> subtraction
+    infix: (left) => {
+        left - expression(10)
+    },
+  }
+  op_token_mul = {
+    lbp: 20,
+    // '*' has only one role
+    prefix: none,
+    // 1. infix form -> multiplication
+    infix: (left) => {
+        left * expression(20)
+    },
+  }
 ```
 
 ::: notes
@@ -436,21 +447,44 @@ Beispiel: [Parsing expressions by precedence climbing](https://eli.thegreenplace
 
 ## Top Down Operator Precedence-Beispiel
 
-```python
-     def expression(rbp=0):
-         global token
-         t = token
-         token = next()
-         left = t.nud()
-         while rbp < token.lbp:  # TERMINATION CONDITION
-             t = token
-             token = next()
-             left = t.led(left)  # results in recursive call
-         return left
+```javascript
+  fn expression(rbp = 0) {
+    token = tokens.next()
+    left = token.prefix()
+    while rbp < tokens.current().lbp {
+      token = tokens.next()
+      left = token.infix(left)
+    }
+
+    return left
+  }
 ```
 
 ::: notes
-- Beispiel: [Top-Down operator precedence parsing](https://eli.thegreenplace.net/2010/01/02/top-down-operator-precedence-parsing/) (Python)
+Eingabe: 6 - 3 * 4
+
+```
+* expression()
+  * token = op_token_val(6)
+  * left = 6
+  * token = op_token_sub # Loop entered (0 < 10)
+  * left = token.infix(6)
+    * expression(10)
+      * token = op_token_val(3)
+      * left = 3
+      * token = op_token_mul # Loop entered (10 < 20)
+      * left = token.infix(3)
+        * expression(20)
+          * token = op_token_val(4)
+          * left = 4
+        --> 4 # Loop not entered (20 < 0)
+      --> 4 * 3
+    --> 6 - 12
+   --> 6 # Loop not entered (0 < 0)
+```
+
+
+Beispiel: [Top-Down operator precedence parsing](https://eli.thegreenplace.net/2010/01/02/top-down-operator-precedence-parsing/) (Python)
 :::
 
 ## Right Associative TDOP
@@ -458,11 +492,13 @@ Beispiel: [Parsing expressions by precedence climbing](https://eli.thegreenplace
 -   Der Parser behandelt die folgende Potenzierungsoperatoren als Unterausdrücke des ersten Unterausdrucks
 -   Dies wird erreicht, indem wir den Ausdruck im Handler der Potenzierung mit einem rbp aufrufen, der niedriger ist als der lbp der Potenzierung
 
-```python
-class operator_pow_token(object):
-    lbp = 30
-    def led(self, left):
-       return left ** expression(30 - 1)  # RECURSIVE CALL
+```javascript
+  op_token_pow = {
+    lbp: 30,
+    infix: left => {
+      left ** expression(30 - 1) # RECURSIVE CALL
+    },
+  }
 ```
 
 -   Wenn expression zum nächsten ^ in seiner Schleife gelangt, stellt er fest, dass noch rbp < token.lbp ist und gibt das Ergebnis nicht sofort zurück, sondern sammelt zunächst den Wert des Unterausdrucks.
