@@ -349,24 +349,16 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
 
 ## Precedence Climbing-Beispiel
 
-```
+```rust
   fn expr(prec_bound) {
     result = atom() // number or an expression in braces
 
     loop {
       operator = nextToken()
       (prec, assoc) = lookup(operator)
+      if (prec <= prec_bound) { break; }
 
-      if (prec <= prec_bound) {
-        break;
-      }
-
-      next_bound = if (Assoc.Left) {
-          prec + 1
-        } else {
-          prec
-        }
-
+      next_bound = if (Assoc.Left) { prec + 1 } else { prec }
       rhs = expr(next_bound)
 
       result = compute(operator, result, rhs)
@@ -413,41 +405,30 @@ Beispiel: [Parsing expressions by precedence climbing](https://eli.thegreenplace
     -   prefix from: a = -b
         -   nud (Null denotation)
 
-```javascript
+```rust
   op_token_sub = {
     lbp: 10,
-    // '-' fulfills 2 roles:
-    // 1: prefix notation -> negation
-    prefix: () => {
-      -expression(100)
-    },
-    // '-' fulfills 2 roles:
-    // 2: infix form -> subtraction
-    infix: (left) => {
-        left - expression(10)
-    },
+    // '-' has two roles
+    prefix: () => { -expression(100) }, // negation
+    infix: (left) => { left - expression(10) }, // subtraction
   }
   op_token_mul = {
     lbp: 20,
-    // '*' has only one role
-    prefix: none,
-    // 1. infix form -> multiplication
-    infix: (left) => {
-        left * expression(20)
-    },
+    prefix: none, // '*' has only one role
+    infix: (left) => { left * expression(20) }, // multiplication
   }
 ```
 
 ::: notes
 -   hat eine Tokenhandler für jede Operation
-    -   operator_add_token, operator_mul_token, operator_sub_token, operator_pow_token
--   operator_lparen_token, operator_rparen_token
+    -   op_token_add, op_token_mul, op_token_sub, op_token_pow
+-   op_token_lparen, op_token_rparen
 :::
 
 
 ## Top Down Operator Precedence-Beispiel
 
-```javascript
+```rust
   fn expression(rbp = 0) {
     token = tokens.next()
     left = token.prefix()
@@ -492,16 +473,16 @@ Beispiel: [Top-Down operator precedence parsing](https://eli.thegreenplace.net/2
 -   Der Parser behandelt die folgende Potenzierungsoperatoren als Unterausdrücke des ersten Unterausdrucks
 -   Dies wird erreicht, indem wir den Ausdruck im Handler der Potenzierung mit einem rbp aufrufen, der niedriger ist als der lbp der Potenzierung
 
-```javascript
+```rust
   op_token_pow = {
     lbp: 30,
     infix: left => {
-      left ** expression(30 - 1) # RECURSIVE CALL
+      left ** expression(30 - 1) // RECURSIVE CALL
     },
   }
 ```
 
--   Wenn expression zum nächsten ^ in seiner Schleife gelangt, stellt er fest, dass noch rbp < token.lbp ist und gibt das Ergebnis nicht sofort zurück, sondern sammelt zunächst den Wert des Unterausdrucks.
+-   Wenn expression zum nächsten ^ in seiner Schleife gelangt, stellt er fest, dass noch `rbp < tokens.current().lbp` ist und gibt das Ergebnis nicht sofort zurück, sondern sammelt zunächst den Wert des Unterausdrucks.
 
 
 ## Vergleich
@@ -547,7 +528,7 @@ Beispiel: [Top-Down operator precedence parsing](https://eli.thegreenplace.net/2
 -   [Introduction to Pratt parsing and its terminology](https://abarker.github.io/typped/pratt_parsing_intro.html) (Python [typped](https://github.com/abarker/typped)
     Dokumentation)
 -   [Pratt Parsers: Expression Parsing Made Easy](http://journal.stuffwithstuff.com/2011/03/19/pratt-parsers-expression-parsing-made-easy/) (Java)
--   [Top Down Operator Precedence](http://crockford.com/javascript/tdop/tdop.html) (JavaScript)
+-   [Top Down Operator Precedence](http://crockford.com/rust/tdop/tdop.html) (JavaScript)
 -   [Operator-precedence parser](https://en.wikipedia.org/wiki/Operator-precedence_parser) (Wikipedia)
 -   [Pratt Parsing Index and Updates](https://www.oilshell.org/blog/2017/03/31.html) (Sammlung von Artikeln/Posts)
 -   [Simple but Powerful Pratt Parsing](https://matklad.github.io/2020/04/13/simple-but-powerful-pratt-parsing.html) (Rust)
@@ -576,7 +557,7 @@ Beispiel: [Top-Down operator precedence parsing](https://eli.thegreenplace.net/2
 
 Simple Parser, die nachher als Inputparameter für einen Kombinierten Parser verwendet werden:
 
-```
+```rust
 fn integer(input) {
   match = /^\d+/.applyTo(input)
   if (match) {
@@ -588,7 +569,7 @@ fn integer(input) {
 ```
 
 ::: notes
-```
+```rust
 fn plus(input) {
   if (input.first == '+') {
     return Ok({data: "+", rest: input.skip(1)})
@@ -609,23 +590,20 @@ fn eof(input) {
 
 Der kombinierte Parser sieht wie folgt aus:
 
-```
+```rust
 fn apply(func, parsers) {
-  return lambda applyParser(input) {
+  return (input) => {
     accData = []
     currentInput = input
-
-    parsers.each(|parser| {
+    parsers.each((parser) => {
       result = parser(currentInput)
       case result {
-        Err:
-            return result
+        Err: return result
         Ok(data, rest):
           accData.append(data)
           currentInput = rest
       }
     })
-
     return Ok({data: func(accData), rest: currentInput})
   }
 }
@@ -639,10 +617,10 @@ Nun kann über den Parameter "func" eine Funktionalität angegeben werden, und �
 
 Der kombinierte Parser kann nun so definiert werden:
 
-```
+```rust
 fn plusExpr(input) {
-  // `.data` of plus/eof is not needed for calculation
-  return apply(lambda sum(num1, _, num2, _) { num1 + num2 }, [
+  // `_` because data of plus/eof is not needed for calculation
+  return apply((num1, _, num2, _) => { num1 + num2 }, [
       integer,
       plus,
       integer,
@@ -657,7 +635,7 @@ Diese Zusammensetzung der Parser überprüft eine Plus-Expression mit Integern. 
 
 Nun muss noch eine Parse-Funktion geschrieben werden, um die kombinierten Parser auszuführen.
 
-```
+```rust
 fn parse(parser, input) {
   result = parser(input)
   case result {
