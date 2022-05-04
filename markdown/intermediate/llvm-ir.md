@@ -137,7 +137,28 @@ um die Lokalisierung und Analyse von verschiedensten Fehlerquellen zu erleichter
 
 ::: slides
 ## Die Sanitizer in compiler-rt
+
+*   **AdressSanitizer**: entdeckt Speicherfehler, z. B. use-after-free
+*   **ThreadSanitizer**: entdeckt race conditions
+*   **UndefinedBehaviorSanitizer**: fügt Code in das Programm ein, um zur Laufzeit
+	undefiniertes Verhalten zu erkennen, z. B.
+	*   Benutzung von Null-Pointern
+	*   Overflow von Signed-Integer-Variablen
+	*   Float-Konvertierungen, die zu einem Overflow führen können
+
+## Die Sanitizer in compiler-rt
+
+*   **MemorySanitizer** entdeckt die Benutzung von nicht-initialisierten Variablen
+*   **LeakSanitizer** entdeckt Speicherlöcher
+*   **DataFlowSanitizer** liefert dem Compilerbauer Informationen über den
+	Datenfluss in einem zu übersetzenden Programm
+
+Die Benutzung der Sanitizer kann die Laufzeit stark erhöhen und ist speicherintensiv.
+Die Sanitizer sind auch in Clang enthalten.
+Nicht alle Sanitizer sind für alle Betriebssysteme verfügbar.
 :::
+
+::: notes
 
 *   **AdressSanitizer**: entdeckt Speicherfehler, z. B. use-after-free
 *   **ThreadSanitizer**: entdeckt race conditions
@@ -151,12 +172,11 @@ um die Lokalisierung und Analyse von verschiedensten Fehlerquellen zu erleichter
 *   **DataFlowSanitizer** liefert dem Compilerbauer Informationen über den
 	Datenfluss in einem zu übersetzenden Programm
 
-\bigskip
-
 Die Benutzung der Sanitizer kann die Laufzeit stark erhöhen und ist speicherintensiv.
 Die Sanitizer sind auch in Clang enthalten.
 Nicht alle Sanitizer sind für alle Betriebssysteme verfügbar.
 
+:::
 
 ## Weitere Komponenten von LLVM
 
