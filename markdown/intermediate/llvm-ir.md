@@ -122,8 +122,8 @@ Fehlermeldungen und Warnungen
 
 **compiler-rt**: generiert Code, der zur Laufzeit benötigt wird:
 
-*   **built-ins**: eine Bibliothek optimierter Implementierungen von Low-Level-Funktionen.
-z. B. die Konvertierung von double nach int 64 auf einer 32-Bit-Architektur.
+*   **built-ins**: eine Bibliothek optimierter Implementierungen von Low-Level-Funktionen
+	* z. B. die Konvertierung von double nach int 64 auf einer 32-Bit-Architektur
 *   **profile**: eine Bibliothek, die Informationen über Reichweiten erfasst
 *   **BlocksRuntime**: implementiert maschinenunabhängig die Runtime-Schnittstellen von Apple Blocks
 *   **Sanitizer Runtimes**: Laufzeitbibliotheken, welche für die Einbettung und
