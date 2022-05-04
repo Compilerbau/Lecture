@@ -135,30 +135,15 @@ Sanitizer sind eine Methode zur Instrumentierung (Code der in das kompilierte Pr
 um die Lokalisierung und Analyse von verschiedensten Fehlerquellen zu erleichtern.
 
 ::: slides
-## Die Sanitizer in compiler-rt
 
-*   **AdressSanitizer**: entdeckt Speicherfehler, z. B. use-after-free
-*   **ThreadSanitizer**: entdeckt race conditions
-*   **UndefinedBehaviorSanitizer**: fügt Code in das Programm ein, um zur Laufzeit
-	undefiniertes Verhalten zu erkennen, z. B.
-	*   Benutzung von Null-Pointern
-	*   Overflow von Signed-Integer-Variablen
-	*   Float-Konvertierungen, die zu einem Overflow führen können
+Mithilfe der Sanitizer in der compiler-rt können z. B. Speicherfehler, Race Conditions,
+Speicherlecks und viele weitere Fehlerquellen gefunden und analysiert werden.
 
-## Die Sanitizer in compiler-rt
-
-*   **MemorySanitizer** entdeckt die Benutzung von nicht-initialisierten Variablen
-*   **LeakSanitizer** entdeckt Speicherlöcher
-*   **DataFlowSanitizer** liefert dem Compilerbauer Informationen über den
-	Datenfluss in einem zu übersetzenden Programm
-
-Die Benutzung der Sanitizer kann die Laufzeit stark erhöhen und ist speicherintensiv.
-Die Sanitizer sind auch in Clang enthalten.
-Nicht alle Sanitizer sind für alle Betriebssysteme verfügbar.
 :::
 
 ::: notes
 
+Im Folgenden einige der verfügbaren Sanitizer:
 *   **AdressSanitizer**: entdeckt Speicherfehler, z. B. use-after-free
 *   **ThreadSanitizer**: entdeckt race conditions
 *   **UndefinedBehaviorSanitizer**: fügt Code in das Programm ein, um zur Laufzeit
