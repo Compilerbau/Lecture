@@ -124,11 +124,10 @@ Fehlermeldungen und Warnungen
 
 *   **built-ins**: eine Bibliothek optimierter Implementierungen von Low-Level-Funktionen
 	* z. B. die Konvertierung von double nach int 64 auf einer 32-Bit-Architektur
-*   **profile**: eine Bibliothek, die Informationen über Reichweiten erfasst
-*   **BlocksRuntime**: implementiert maschinenunabhängig die Runtime-Schnittstellen von Apple Blocks
+*   **profile**: eine Bibliothek, die Informationen über Reichweiten (coverage information) erfasst
+*   **BlocksRuntime**: implementiert maschinenunabhängig die Runtime-Schnittstellen von Apple "Blocks" (Objective-C)
 *   **Sanitizer Runtimes**: Laufzeitbibliotheken, welche für die Einbettung und
 	Verwendung von Sanitizern benötigt werden
-
 
 ## Die Sanitizer in compiler-rt
 
