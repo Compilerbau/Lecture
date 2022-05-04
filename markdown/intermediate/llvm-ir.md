@@ -199,6 +199,26 @@ Für weiter Projekte siehe [Projects built with LLVM](https://llvm.org/ProjectsW
 
 # LLVM IR
 
+::: slides
+## LLVM IR
+
+*   menschenlesbarer Zwischencode
+*   generische Maschinensprache
+*   Speicherung von Variablen stackbasiert oder in Registern
+*   Register können entweder nummeriert werden oder explizite Namen bekommen
+*   Register-Referenz: %1, Variablen-Referenz: \@1
+
+## LLVM IR
+
+*   Instruktionsumfang der IR an RISC-Befehlssatz angelehnt (**R**educed **I**nstruction **S**et **C**omputer)
+*   IR ist immer in **S**ingle **S**tatic **A**ssignment-Form
+*   streng typisiert
+*   keine Vorgaben bzgl. grundlegender Sprachkonzepte, wie z.B. Speichermanagement, Error Handling
+*   Durchgängige Verwendung von Kontrollflussgraphen zur Unterstützung des Optimierers
+
+:::
+
+::: notes
 ## LLVM IR
 
 *   menschenlesbarer Zwischencode
@@ -211,6 +231,7 @@ Für weiter Projekte siehe [Projects built with LLVM](https://llvm.org/ProjectsW
 *   streng typisiert
 *   keine Vorgaben bzgl. grundlegender Sprachkonzepte, wie z.B. Speichermanagement, Error Handling
 *   Durchgängige Verwendung von Kontrollflussgraphen zur Unterstützung des Optimierers
+:::
 
 Vgl. auch: [LLVM Dev Conference](https://www.youtube.com/watch?v=J5xExRGaIIY&t=215s)
 
