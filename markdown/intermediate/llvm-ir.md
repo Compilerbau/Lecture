@@ -4,6 +4,8 @@ title: "LLVM als IR"
 author: "BC George (FH Bielefeld)"
 weight: 2
 readings:
+  - key: "LLVM-org"
+  - key: "LLVM-doc"
 outcomes:
   - k1: "Konzept von LLVM"
   - k1: "Module von LLVM"
@@ -15,7 +17,8 @@ attachments:
     name: "Extra Material, e.g. annotated slides"
 ---
 
-<!-- TODO: Quellen -->
+<!-- Danach: wie Folien aussortieren? -->
+<!-- Commitweise Folien rauswerfen -> Branch pro Veranstaltung -->
 
 # Motivation
 
