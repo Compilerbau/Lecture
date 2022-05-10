@@ -592,19 +592,28 @@ Vgl. auch: [LLVM’s Analysis and Transform Passes](http://releases.llvm.org/9.0
 ## SSA und Optimierung
 
 Der Optimierer profitiert stark von SSA.
+Der Wert einer Variablen wird nicht überschrieben,
+sodass sie niemals in der $kill$-Menge der Datenflussanalyse vorkommt, wodurch
+die Datenflussanalyse in vielen Punkten erleichtert wird.
 
 \medskip
 
-Folgende Optimierungen arbeiten mit SSA:
-
+::: notes
+Einige Beispiele für Optimierungen, die von SSA profitieren:
 *   Constant propagation
-*   Value range propagation
+	* Nutzt Reaching Definition Analysis, welche durch die SSA-Form vereinfacht wird
+	(keine konkurrierenden Zuweisungen)
 *   Sparse conditional constant propagation
-*   Dead code elimination
+	* Propagiert Konstanten in Bedingungen von Programmabzweigungen
+	* Markiert Programmzweige basierend auf Konstanten als ausführbar oder nicht ausführbar
+	* Löscht die Argumente der Phi-Instruktion, welche mit nicht ausführbaren Zweigen zusammenhängen
+	* Auch diese Form der Constant Propagation profitiert von SSA
 *   Global value numbering
-*   Partial redundancy elimination
-*   Strength reduction
-*   Register allocation
+	* Hilft bei der Identifikation von äquivalenten Berechnungen
+	* Nummerierung von Variablen und Werten, sodass gleichwertige Ausdrücke die gleiche Nummer erhalten
+	* Vereinfacht durch SSA-Form, da keine erneute Zuweisung einer Variablen möglich ist
+
+:::
 
 # Die Codegenerierung
 
