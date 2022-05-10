@@ -255,7 +255,7 @@ $B \leftarrow b \ B \ c \ /\ \varepsilon$
 $S \leftarrow (A \ !b) \ a^{\ast} \ B \ !.$
 
 :::notes
-Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig lange Sequenz von a's ($a^{\ast}$) gefolgt von einer Sequenz, die von Regel B erkannt wird und danach keine weiteren Zeichen hat ($!.$) aber nur dann wenn die Sequenz auch von durch $A \ !b$ erkannt wird. Der erste Teil trifft zu wenn in der Sequenz auf $n$ b's gleich viele c's folgen während der zweite Teil zutrifft wenn $n$ b's auf $n$ a's folgen.
+Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig lange Sequenz von a's ($a^{\ast}$) gefolgt von einer Sequenz, die von Regel B erkannt wird und danach keine weiteren Zeichen hat ($!.$) aber nur dann wenn die Sequenz auch von $A \ !b$ erkannt wird. Der erste Teil trifft zu wenn in der Sequenz auf $n$ b's gleich viele c's folgen während der zweite Teil zutrifft wenn $n$ b's auf $n$ a's folgen.
 :::
 
 
@@ -327,7 +327,7 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
                        output.add(stack.pop())
                    output.add(stack.pop())     // pop left bracket
            else:
-              if token.precedence < stack.top.precedence:
+              while token.precedence < stack.top.precedence:
                   output.add(stack.pop())
               stack.put(token)
 ```
@@ -358,7 +358,7 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
       (prec, assoc) = lookup(operator)
       if (prec <= prec_bound) { break; }
 
-      next_bound = if (Assoc.Left) { prec + 1 } else { prec }
+      next_bound = if (assoc.left?()) { prec + 1 } else { prec }
       rhs = expr(next_bound)
 
       result = compute(operator, result, rhs)
@@ -546,7 +546,7 @@ Beispiel: [Top-Down operator precedence parsing](https://eli.thegreenplace.net/2
   + Funktionen als Parameter
   + Funktion als Rückgabewert
 
-+ Verwendet mehrere Parser als Input und gibt den Putput des Kombinierten Parser zurück:
++ Verwendet mehrere Parser als Input und gibt den Output des kombinierten Parser zurück:
   + parse Tree
   + Index der Stelle im String die zum Stoppen des Parsers geführt hat
 + Die Output der verwendeten Parser:
@@ -610,7 +610,7 @@ fn apply(func, parsers) {
 ```
 
 ::: notes
-Nun kann über den Parameter "func" eine Funktionalität angegeben werden, und über den Parameter "parsers" kann ein Array an Simplen Parsern übergeben werden. Die Parser müssen dabei in der richtigen Reihenfolge aufgerufen werden. In der Variable accData werden alle Parser-Ergebnisse gespeichert, um sie nachher in der der "func" zu verwenden. Der "currentInput" enthält im ersten Durchlauf den gesamten Input. Jeder Parser schreibt dann den Rest (den nicht parsbaren Teil) in "currentInput" für den nächsten Parser.
+Nun kann über den Parameter `func` eine Funktionalität angegeben werden, und über den Parameter `parsers` kann ein Array an Simplen Parsern übergeben werden. Die Parser müssen dabei in der richtigen Reihenfolge aufgerufen werden. In der Variable accData werden alle Parser-Ergebnisse gespeichert, um sie nachher in der der `func` zu verwenden. Der `currentInput` enthält im ersten Durchlauf den gesamten Input. Jeder Parser schreibt dann den Rest (den nicht parsbaren Teil) in `currentInput` für den nächsten Parser.
 :::
 
 ## Kombinierte Parser definieren
