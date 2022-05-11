@@ -450,246 +450,48 @@ Das folgende Beispiel erläutert dieses Problem:
 
 
 
+## Benchmarking
 
+**Ziel**
+* Vergleich von verschiedenen GC-Algorithmen
+* Wahl des optimalen Algorithmus für konkreten Anwendungsfall
+* Overhead durch GC möglichst gering halten
 
-
-
-<!-- TODO Material von Fabian zusammengetragen, überarbeiten? -->
+::: slides
 
 ## Benchmarking
-[Hauptseite](https://ionutbalosin.com/2019/12/jvm-garbage-collectors-benchmarks-report-19-12/)
-
-[Ergebnisse](http://htmlpreview.github.io/?https://github.com/ionutbalosin/jvm-performance-benchmarks-reports/blob/master/19_12_report_openjdk-13/jmh_visualizer_gc/index.html)
-
-
-* Fokusieren die Metriken:
-  * Effizenz der Rückgewinnung von Objekten
-    *	Unterschiedliche Allokationsraten für kleine und gr0ße Objekte
-    *	mit und ohne konstante Speicherbelegung im Heap
-  * Auswirkung auf Lese-/Schreibebarrieren oder das Aktualisieren der Heap-Datenstruktur während der Laufzeit
-    *	jede explizite Zuweisung wird vermieden, wenn sie nicht durch das Ökosystem vorgegen wird
-  * *Fußabdruck* der internen GC-Strukturen
-
-
-
-* Um die folgenden Benchmarks an einem Beispiel zu zeigen. Werden die folgenden GCs verwendet: Serial GC, Parallel/ParallelOld GC, Concurrent Mark Sweep (CMS) GC, Garbage First (G1) GC, Shenandoah GC, ZGC und Epsilon GC. Alle Garbage Collectoren sind aus AdoptOpenJDK 64-Bit Server VM version 13
-
-
-
-::: notes
-
-Read-/Writebarrier [ReadWrite](https://stackoverflow.com/questions/1787450/how-do-i-understand-read-memory-barriers-and-volatile)
 
 :::
 
-## Setup
+**Setup**
+* "Warm up": einige Iterationen des Benchmarks ohne Messung vorlaufen lassen,
+um bspw. Just-in-Time Kompilierung und Initialisierung aller Laufzeitkomponenten abzuschließen
+* Anpassung der Heap-Größe an den Benchmark (falls Heap zu bestimmter Rate gefüllt werden soll)
+* Überprüfung und Eliminierung von externen Faktoren, die das Ergebnis beeinflussen können
+	* andere Prozesse
+	* dynamische Frequenzskalierung der CPU
+	* Vermeidung von Lese- und Schreibzugriffen, sofern diese nicht durch Test-Infrastruktur vorgegeben sind
 
-* Alle Benchmarks werden in der selben Programmiersprache entwickelt z.B ( Java mit JMH v1.22)
-* Jeder Benchmark verwendet:
-  * 5x10s warm up Iteration
-  * 5X10s measurement iteration
-  * 3 JVM forks
-  * Single Thread
-    * Sorgt allerdings dafür, dass concurrent GC besser als Stop-the-World GCś laufen, da diese die Arbeit auf die ungenutzen Kerne auslagert
-* Die gleiche Hardware und Software Vorraussetzungen
-* Für Benchmarks die auf die hohe Objektzuweisungensrate abzielen
-  * Wird die anfängliche Heap-Größe auf das maximum gesetzt
-  * Verwendet PreTouch um Größenanpassung und Speicherübergabe zu vermeiden
-  * z.B *-Xms4g -Xmx4g -XX:+AlwaysPreTouch*
-* Auswirkungen der dynamischen Frequenzskalierung zu eliminieren
-  * intel_pstate-Treiber deaktivieren
-  * CPU-Governor auf performance stellen
-* Hinweis: Die Benchmarks können von anderen Faktoren beeinflusst werden
-  * Just-In-Time Compiler Optimierungen, Bibiliotheken, CPU-Caching usw.
+::: slides
 
+## Benchmarking
 
+:::
 
-## Benchmark: BurstHeapMemoryAllocatorBenchmark
+**Relevante Metriken für Tests**
+* Durchsatz (welchen Anteil hat GC an der Laufzeit?)
+* Latenz (welche Verzögerung erzeugt GC?)
 
-Dieser Benchmark erstellt eine Menge an temporärer Objekten. Dabei werden die Objekte mit einer ArrayList stark Referenziert. Wenn ein bestimmter Prozentsatz des heaps belegt ist, werden die Objekte mit *blackhole.consume(junk);* frei gegeben. Damit wird die Menge an Objekte nahezu gleichzeitig für den Garbage Collector freigegeben.
+**Szenarien** (stark vom getesteten GC-Algorithmus abhängig)
+* konstant gefüllter Heap/leerer Heap
+* Erzeugen und Löschen von stark referenzierten Objekten/temporären Objekten
+* Für Generational GC: Testen von Overhead von Schreib- und Lesebarrieren durch Objektreferenzierung
 
-```java
-void allocate(int sizeInBytes, int numberOfObjects) {
-    for (int iter = 0; iter < 4; iter++) {
-        List<byte[]> junk = new ArrayList<>(numberOfObjects);
-        for (int j = 0; j < numberOfObjects; j++) {
-            junk.add(new byte[sizeInBytes]);
-        }
-        blackhole.consume(junk);
-    }
-}
-```
+::: notes
 
-* sizeInBytes
-  * _4_KB, _4_MB
-* numberofObjects
-  * WIrd automatisch berechnet so, dass 60 % des verfügbaren Heapspeicherplatz verbrauchen werden
+[Beispiele für GC-Benchmarks der JVM](https://ionutbalosin.com/2019/12/jvm-garbage-collectors-benchmarks-report-19-12/)
 
-
-
-Ergebnis zum Benchmark mit den bereits genannten Garbage Collectoren
-
-* ZGC und Shenandoah GC haben deutlich bessere Ergebnisse als die anderen Collectoren.
-* G1 GC bietet zwar einen schlechteren Durchsatz als ZGC und Shenandoah GC, allerdings mit dem großen Objekten(_4_MB) erziehlte es besser Ergebnisse als CMS GC, ParallelOld GC und Serial GC.
-
-
-
-## Benchmark: ConstantHeapMemoryOccupancyBenchmark
-
-Für diesen Benchmark wird während des Setups eine Menge von Objekten mit starken Verweisen vorab zugeweisen. Diese Menge sollte den Heap bis ca. 70% belegen. Die Objekte können dabei eine große Kette aus zusammengesetzten Klassen sein. Dies kann sich auf die Traversierung der GC-Roots auswirken (z. B. während der "parallelen" Markierungsphase), da der Grad der Zeigerumlenkung (d. h. der Referenzverarbeitung) während der Traversierung des Objektgraphen nicht zu vernachlässigen ist.
-
-In der Benchmark selbst werden temporäre Objekte mit einer Größe von 8MB zugewiesen und direkt freigegeben. Da diese Objekt so groß ist folgt sie die *slow path allocation*. Außerdem kommt das Objekt in die Tenured Generation (im Falle von Generational Collectors)
-
-```java
-void test(Blackhole blackhole) {
-    blackhole.consume(new byte[_8_MB]);
-}
-```
-
-Ergebnis zum Benchmark mit den bereits genannten Garbage Collectoren
-
-* CMS GC gefolgt von G1 GC erziehlen hier die besten Ergebnisse
-* ZGC and Shenandoah GC erziehlten die schlechtesten Ergebnisse
-  * Kosten für die Markierung des gesamten Heaps bei jedem Zyklus
-
-
-
-## Benchmark: HeapMemoryBandwidthAllocatorBenchmark
-
-Dieser Benchmark testet die Zuweisungrate für verschiedene Zuweisungsgrößen. Im Vergleich zum vorherigen Benchmark (ConstantHeapMemoryOccupancyBenchmark) werden hier nur temporäre Objekte zugewiesen und sofort wieder freigegeben, ohne dass vorher zugewiesene Objekte aufbewahrt werden.
-
-```java
-byte[] allocate() {
-    return new byte[sizeInBytes];
-}
-```
-
-sizeInBytes
-* _4_KB, _4_MB
-
-Ergebnis zum Benchmark mit den bereits genannten Garbage Collectoren
-* Für große Objekte(_4_MB)
-  * G1 GC bietet den schlechtesten Responsetime
-  * ParallelOld GC ist am effizientesten
-* Für kleine Objekte(_4_KB)
-  * Ungefähr alle gleich, allerdings ist der Shenandoah GC ein wenig effizienter
-
-## Benchmark: ReadWriteBarriersBenchmark
-
-In diesem Benchmark wird der Overhead von den Lese-/Schreibebarrieren getestet, während sie durch ein Array von Integers iterieren und die Werte zwischen zwei Arrays austauschen. Das Array wird während des Setups initialisiert, so dass beim Benchmark fast keine Zuweisungen entstehen.
-
-```java
-void test() {
-    int lSize = size;
-    int mask = lSize - 1;
-
-    for (int i = 0; i < lSize; i++) {
-        Integer aux = array[i];
-        array[i] = array[(i + index) & mask];
-        array[(i + index) & mask] = aux;
-    }
-
-    index++;
-}
-```
-
-Ergebnis zum Benchmark mit den bereits genannten Garbage Collectoren
-* Epsilon GC hat die besten Ergebnisse, da der Collector keine Barrieren verwendet
-* Shenandoah GC hat nach Epsilon GC die besten Ergbnisse
-* G1 GC bietet die schlechtesten Ergebnisse mit 10x-14x langsamer als der Rest der Collectoren (wahrscheinlich wegen den PostWrite Barrier)
-
-
-
-## Benchmark: WriteBarriersLoopingOverArrayBenchmark
-
-In diesem Benchmark wird der Overhead von Schreibbarrieren getestet, während sie durch die Elemente eines Arrays von Integers iterieren und jedes Element davon aktualisieren. Hierbei werden keine Zuweisungen verwendet.
-
-```java
-void test(Integer lRefInteger) {
-    int lSize = size;
-
-    for (int i = 0; i < lSize; i++) {
-        array[i] = lRefInteger;
-    }
-}
-```
-
-Ergebnis zum Benchmark mit den bereits genannten Garbage Collectoren
-* Epsilon GC hat die besten Ergebnisse, da der Collector keine Barrieren verwendet
-* ZGC hat nach Epsilon GC die besten Ergbnisse
-  * Unterstütz keine Compressed OOPs
-* Auch in diesem Benchmark bietet G1 GC die schlechtesten Ergebnisse mit 10x-20x langsamer als der Rest der Collectoren (wahrscheinlich wegen den PostWrite Barrier)
-
-## Benchmark: ReadBarriersLoopingOverArrayBenchmark
-
-Dieser Benchmark testet den Overhead von Lesebarrieren, während sie durch die Elemente eines Arrays von Integers iterieren und jedes Element davon lesen.
-
-Hinweis: Das Durchlaufen einer Schleife über ein Array begünstigt die Algorithmen, die die Barriere aufheben können, ohne die Kosten für die Barriere selbst zu berücksichtigen.
-
-```java
-int test() {
-    int lSize = size;
-
-    int sum = 0;
-    for (int i = 0; i < lSize; i++) {
-        sum += array[i];
-    }
-
-    return sum;
-}
-```
-
-Ergebnis zum Benchmark mit den bereits genannten Garbage Collectoren
-* ZGC bietet den besten Durchsatz
-  * fehlende Möglichkeit, die Überprüfung der Lesebarrieren anzuheben
-  * die Abwesenheit von Compressed OOPs, die jetzt umgekehrt auftritt im Vergleich zum vorherigen Benchmark
-* Alle anderen haben einen recht ähnlich Durchsatz
-  * Hinweis: Serial GC, ParallelOld GC, CMS GC, G1 GC, Epsilon GC verwenden keine Lesebarriere
-
-
-
-## Benchmark: ReadBarriersChainOfClassesBenchmark
-
-Dieser Benchmark testet den Overhead von Lesebarrieren bei der Iteration durch große Ketten von vorab zugewiesenen Klasseninstanzen.
-
-```java
-int test() {
-    return  h1.h2.h3.h4.h5.h6.h7.h8
-           .h9.h10.h11.h12.h13.h14.h15.h16
-           .h17.h18.h19.h20.h21.h22.h23.h24
-           .h25.h26.h27.h28.h29.h30.h31.h32.aValue;
-}
-
-// where:
-class H1 {
-    H2 h2;
-
-    H1(H2 h2) {
-        this.h2 = h2;
-    }
-}
-
-// ...
-
-class H32 {
-    int aValue;
-
-    public H32(int aValue) {
-        this.aValue = aValue;
-    }
-}
-```
-
-Ergebnis zum Benchmark mit den bereits genannten Garbage Collectoren
-* Epsilon GC hat die besten Ergebnisse, da der Collector keine Barrieren verwendet
-* Alle anderen Collectoren haben den gleichen Durchsatz
-
-<!-- TODO Material von Fabian zusammengetragen, überarbeiten? -->
-
-
-
-
-
+:::
 
 
 ## Wrap-Up
