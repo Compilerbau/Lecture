@@ -61,7 +61,7 @@ statt *n x m* Compiler zu schreiben.
 *   ab 2000 Forschungsprojekt zur Untersuchung dynamischer Kompilierung und Optimierungen von Prof. Vikram Adve an der University of Illinois
 *   2002 Masterarbeit von Chris Lattner;
     "LLVM: An Infrastructure for Multi-Stage Optimization"
-	* Siehe auch: [LattnerMSThesis](http://llvm.org/pubs/2002-12-LattnerMSThesis.html)
+    * Siehe auch: [LattnerMSThesis](http://llvm.org/pubs/2002-12-LattnerMSThesis.html)
 *   Kern des Projekts: LLVM IR und Infrastruktur
 *   ursprünglich **L**ow **L**evel **V**irtual **M**achine, wird aber nicht mehr als Akronym gesehen
 *   Chris Lattner ist weiterhin der führende Kopf des LLVM-Projekts
@@ -126,11 +126,11 @@ Fehlermeldungen und Warnungen
 **compiler-rt**: generiert Code, der zur Laufzeit benötigt wird:
 
 *   **built-ins**: eine Bibliothek optimierter Implementierungen von Low-Level-Funktionen
-	* z. B. die Konvertierung von double nach int 64 auf einer 32-Bit-Architektur
+    * z. B. die Konvertierung von double nach int 64 auf einer 32-Bit-Architektur
 *   **profile**: eine Bibliothek, die Informationen über Reichweiten (coverage information) erfasst
 *   **BlocksRuntime**: implementiert maschinenunabhängig die Runtime-Schnittstellen von Apple "Blocks" (Objective-C)
 *   **Sanitizer Runtimes**: Laufzeitbibliotheken, welche für die Einbettung und
-	Verwendung von Sanitizern benötigt werden
+    Verwendung von Sanitizern benötigt werden
 
 ## Die Sanitizer in compiler-rt
 
@@ -150,14 +150,14 @@ Im Folgenden einige der verfügbaren Sanitizer:
 *   **AdressSanitizer**: entdeckt Speicherfehler, z. B. use-after-free
 *   **ThreadSanitizer**: entdeckt race conditions
 *   **UndefinedBehaviorSanitizer**: fügt Code in das Programm ein, um zur Laufzeit
-	undefiniertes Verhalten zu erkennen, z. B.
-	*   Benutzung von Null-Pointern
-	*   Overflow von Signed-Integer-Variablen
-	*   Float-Konvertierungen, die zu einem Overflow führen können
+    undefiniertes Verhalten zu erkennen, z. B.
+    *   Benutzung von Null-Pointern
+    *   Overflow von Signed-Integer-Variablen
+    *   Float-Konvertierungen, die zu einem Overflow führen können
 *   **MemorySanitizer** entdeckt die Benutzung von nicht-initialisierten Variablen
 *   **LeakSanitizer** entdeckt Speicherlöcher
 *   **DataFlowSanitizer** liefert dem Compilerbauer Informationen über den
-	Datenfluss in einem zu übersetzenden Programm
+    Datenfluss in einem zu übersetzenden Programm
 
 Die Benutzung der Sanitizer kann die Laufzeit stark erhöhen und ist speicherintensiv.
 Die Sanitizer sind auch in Clang enthalten.
@@ -278,7 +278,7 @@ double 6.62606957e-34 ;     double precision
 
 Ein Beispiel:
 ```
- // nicht SSA			// SSA
+ // nicht SSA           // SSA
  y := 1                 y1 := 1
  y := 2         =>      y2 := 2
  x := y                 x1 := y2
@@ -314,8 +314,8 @@ Aufbau von Basic Blocks:
 * Phi Instruktionen
 * Instruktionen
 * Terminator (erforderlich)
-	* (bedingte) Sprunginstruktion
-	* Returninstruktion
+    * (bedingte) Sprunginstruktion
+    * Returninstruktion
 
 ::: slides
 ## Basic Blocks ##
@@ -327,7 +327,7 @@ Beispiel für einen Basic Block:
 2:                              ; label
   %3 = add nsw i32 2, 20        ; instruktion
   %4 = icmp sgt i32 %3, 10      ; instruktion
-  br i1 %4, label %5, label %7	; terminator
+  br i1 %4, label %5, label %7    ; terminator
 ```
 
 ## Funktionen ##
@@ -430,8 +430,8 @@ Bildet eine Übersetzungseinheit eines Programms ab
 
 Inhalt:
 * Ziel Informationen (erforderlich)
-	* Datenlayout (Endianess, native Integergrößen, etc.)
-	* Ziel-Triplet (Zielarchitektur, ABI, etc.)
+    * Datenlayout (Endianess, native Integergrößen, etc.)
+    * Ziel-Triplet (Zielarchitektur, ABI, etc.)
 * Globale Variable
 * Funktionsdeklarationen
 * Funktionsdefinitionen
@@ -513,19 +513,19 @@ Der Wert dieser Variablen wird dann in dem Register %3 gespeichert (y = x+35).
 
 (Ausgabe ohne `-emit-llvm -S` Optionen)
 ```as
-	.text
-	.file	"hello.c"
-	.globl	main                    # -- Begin function main
-	.p2align	4, 0x90
-	.type	main,@function
+    .text
+    .file    "hello.c"
+    .globl    main                    # -- Begin function main
+    .p2align    4, 0x90
+    .type    main,@function
 main:                                   # @main
-	.cfi_startproc
+    .cfi_startproc
 # %bb.0:
-	pushq	%rbp
-	.cfi_def_cfa_offset 16
-	.cfi_offset %rbp, -16
-	movq	%rsp, %rbp
-	.cfi_def_cfa_register %rbp
+    pushq    %rbp
+    .cfi_def_cfa_offset 16
+    .cfi_offset %rbp, -16
+    movq    %rsp, %rbp
+    .cfi_def_cfa_register %rbp
 ```
 
 ::: slides
@@ -533,23 +533,23 @@ main:                                   # @main
 :::
 
 ```as
-    xorl	%eax, %eax
-	movl	$0, -4(%rbp)
-	movl	$7, -8(%rbp)
-	movl	-8(%rbp), %ecx
-	addl	$35, %ecx
-	movl	%ecx, -12(%rbp)
-	popq	%rbp
-	.cfi_def_cfa %rsp, 8
-	retq
+    xorl    %eax, %eax
+    movl    $0, -4(%rbp)
+    movl    $7, -8(%rbp)
+    movl    -8(%rbp), %ecx
+    addl    $35, %ecx
+    movl    %ecx, -12(%rbp)
+    popq    %rbp
+    .cfi_def_cfa %rsp, 8
+    retq
 .Lfunc_end0:
-	.size	main, .Lfunc_end0-main
-	.cfi_endproc
+    .size    main, .Lfunc_end0-main
+    .cfi_endproc
                                         # -- End function
 
-	.ident	"clang version 9.0.1 "
-	.section	".note.GNU-stack","",@progbits
-	.addrsig
+    .ident    "clang version 9.0.1 "
+    .section    ".note.GNU-stack","",@progbits
+    .addrsig
 ```
 
 # Der LLVM-Optimierer
@@ -601,17 +601,17 @@ die Datenflussanalyse in vielen Punkten erleichtert wird.
 ::: notes
 Einige Beispiele für Optimierungen, die von SSA profitieren:
 *   Constant propagation
-	* Nutzt Reaching Definition Analysis, welche durch die SSA-Form vereinfacht wird
-	(keine konkurrierenden Zuweisungen)
+    * Nutzt Reaching Definition Analysis, welche durch die SSA-Form vereinfacht wird
+    (keine konkurrierenden Zuweisungen)
 *   Sparse conditional constant propagation
-	* Propagiert Konstanten in Bedingungen von Programmabzweigungen
-	* Markiert Programmzweige basierend auf Konstanten als ausführbar oder nicht ausführbar
-	* Löscht die Argumente der Phi-Instruktion, welche mit nicht ausführbaren Zweigen zusammenhängen
-	* Auch diese Form der Constant Propagation profitiert von SSA
+    * Propagiert Konstanten in Bedingungen von Programmabzweigungen
+    * Markiert Programmzweige basierend auf Konstanten als ausführbar oder nicht ausführbar
+    * Löscht die Argumente der Phi-Instruktion, welche mit nicht ausführbaren Zweigen zusammenhängen
+    * Auch diese Form der Constant Propagation profitiert von SSA
 *   Global value numbering
-	* Hilft bei der Identifikation von äquivalenten Berechnungen
-	* Nummerierung von Variablen und Werten, sodass gleichwertige Ausdrücke die gleiche Nummer erhalten
-	* Vereinfacht durch SSA-Form, da keine erneute Zuweisung einer Variablen möglich ist
+    * Hilft bei der Identifikation von äquivalenten Berechnungen
+    * Nummerierung von Variablen und Werten, sodass gleichwertige Ausdrücke die gleiche Nummer erhalten
+    * Vereinfacht durch SSA-Form, da keine erneute Zuweisung einer Variablen möglich ist
 
 :::
 
@@ -621,12 +621,12 @@ Einige Beispiele für Optimierungen, die von SSA profitieren:
 
 *   übersetzt LLVM IR in Maschinencode
 *   läuft in Pässen:
-	*   Built-In-Pässe, die defaultmäßig laufen
-	*   Instruction Selection
-	*   Register Allocation
-	*   Scheduling
-	*   Code Layout Optimization
-	*   Assembly Emission
+    *   Built-In-Pässe, die defaultmäßig laufen
+    *   Instruction Selection
+    *   Register Allocation
+    *   Scheduling
+    *   Code Layout Optimization
+    *   Assembly Emission
 
 ## Unterstützte Prozessorarchitekturen
 
