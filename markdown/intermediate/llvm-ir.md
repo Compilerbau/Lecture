@@ -288,7 +288,7 @@ Ein Beispiel:
 
 Die LLVM IR ist hierarchisch aufgebaut:
 
-![](./images/Hierarchy.png)
+![](./images/hierarchy.png)
 
 ## Instruktionen ##
 
