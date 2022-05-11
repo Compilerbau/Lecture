@@ -14,87 +14,89 @@ readings:
 #  - link: "https://www.fh-bielefeld.de"
 ---
 
+
 # PEG Parser
 
-## Generative Systeme vs Recognition basierte Systeme
+## Generative Systeme vs. Recognition basierte Systeme
 
-- Generative Systeme:
-    - formale Definition von Sprachen durch Regeln, die rekursiv
-      angewendet Sätze/Strings der Sprache generieren
-    - Sprachen aus der Chomsky Hierarchie definiert durch
-      kontextfreie Grammatiken (CFGs) und reguläre Ausdrücke (REs)
+-   Generative Systeme:
+    -   formale Definition von Sprachen durch Regeln, die rekursiv
+        angewendet Sätze/Strings der Sprache generieren
+    -   Sprachen aus der Chomsky Hierarchie definiert durch
+        kontextfreie Grammatiken (CFGs) und reguläre Ausdrücke (REs)
 
-- Recognition-basierte Systeme:
-    - Sprachen definiert in Form von Regeln/Prädikaten, die
-      entscheiden, ob ein gegebener String Teil der Sprache ist
-    - Parsing Expression Grammar (PEG)
+-   Recognition-basierte Systeme:
+    -   Sprachen definiert in Form von Regeln/Prädikaten, die
+        entscheiden, ob ein gegebener String Teil der Sprache ist
+    -   Parsing Expression Grammar (PEG)
 
 
 ## Beispiel
 
 Sprache $L = \lbrace \varepsilon, \ \mathrm{aa}, \ \mathrm{aaaa}, \ \ldots \rbrace$:
 
-- generativ:   $L =\lbrace s \in \mathrm{a}^{\ast} \mid s = (\mathrm{aa})^{n},\, n \geq 0\rbrace$
+-   generativ:   $L =\lbrace s \in \mathrm{a}^{\ast} \mid s = (\mathrm{aa})^{n},\, n \geq 0\rbrace$
+-   recognition: $L = \lbrace s \in \mathrm{a}^{\ast} \mid \left| s \right| \mod 2 = 0 \rbrace$
 
-- recognition: $L = \lbrace s \in \mathrm{a}^{\ast} \mid \left| s \right| \mod 2 = 0 \rbrace$
+
+## Motivation: Chomsky (CFGs + REs)
+
+-   ursprünglich für natürliche Sprachen
+-   adaptiert für maschinenorientierte Sprachen (Eleganz, Ausdrucksstärke)
+-   Nachteile:
+    -   maschinenorientierte Sprachen sollten präzise und eindeutig sein
+    -   CFGs erlauben mehrdeutige Syntax (gut für natürliche Sprachen)
+    -   Mehrdeutigkeiten schwer oder gar nicht zu verhindern
+        -   C++ Syntax
+        -   Lambda abstractions, `let` expressions und conditionals in Haskell
+    -   generelles Parsen nur in super-linearer Zeit
 
 
-## Motivation (1/2)
+## Motivation: PEG
 
-Chomsky (CFGs + REs):
+-   stilistisch ähnlich zu CFGs mit REs (EBNF)
 
-- ursprünglich für natürliche Sprachen
-- adaptiert für maschinenorientierte Sprachen (Eleganz, Ausdrucksstärke)
-- Nachteile:
-    - maschinenorientierte Sprachen sollten präzise und eindeutig sein
-    - CFGs erlauben mehrdeutige Syntax (gut für natürliche Sprachen)
-    - Mehrdeutigkeiten schwer oder gar nicht zu verhindern
-        - C++ Syntax
-        - Lambda abstractions, `let` expressions und conditionals in Haskell
-    - generelles Parsen nur in super-linearer Zeit
+-   **Kernunterschied**: priorisierender Auswahloperator (`/` statt `|`)
+    -   alternative Muster werden der Reihe nach getestet
+    -   erste passende Alternative wird verwendet
+    -   Mehrdeutigkeiten werden dadurch unmöglich
+    -   nahe an der Funktionsweise von Parsern (Erkennen von Eingaben)
+        -   PEGs können als formale Beschreibung eines Top-Down-Parsers betrachtet werden
 
-## Motivation (2/2)
-PEG:
+-   Beispiel:
+    -   EBNF: $A \rightarrow a \ b \ | \ a$ und $A \rightarrow a \ | \  a \ b$ sind äquivalent
+    -   PEG: $A \leftarrow a \ b \  / \ a$ und $A \leftarrow a \ / \ a \ b$ sind verschieden
 
-- stilistisch ähnlich zu CFGs mit REs (EBNF)
-
-- **Kernunterschied**: priorisierender Auswahloperator (`/` statt `|`)
-    - alternative Muster werden der Reihe nach getestet
-    - erste passende Alternative wird verwendet
-    - Mehrdeutigkeiten werden dadurch unmöglich
-    - nahe an der Funktionsweise von Parsern (Erkennen von Eingaben)
-        - PEGs können als formale Beschreibung eines Top-Down-Parsers betrachtet werden
-
-- Beispiel:
-    - EBNF: $A \rightarrow a \ b \ | \ a$ und $A \rightarrow a \ | \  a \ b$ sind äquivalent
-    - PEG: $A \leftarrow a \ b \  / \ a$ und $A \leftarrow a \ / \ a \ b$ sind verschieden
 
 ## Definition PEG
 
 Eine Parsing Expression Grammar (PEG) ist ein 4-Tuple $G = (V_N, V_T, R, e_S)$ mit
 
-- $V_N$ eine endliche Menge von Nicht-Terminalen
-- $V_T$ eine endliche Menge von Terminalen
-- $R$ eine endliche Menge von Regeln
-- $e_S$ eine *Parsing Expression*, die als *Start Expression*
-  bezeichnet wird.
+-   $V_N$ eine endliche Menge von Nicht-Terminalen
+-   $V_T$ eine endliche Menge von Terminalen
+-   $R$ eine endliche Menge von Regeln
+-   $e_S$ eine *Parsing Expression*, die als *Start Expression*
+    bezeichnet wird.
 
 Weiterhin gilt:
 
-- $V_N \cap V_T = \emptyset$.
-- jede Regel $e \in R$ ist ein Paar $(A,e)$, geschrieben als $A \leftarrow e$ mit $A \in V_N$, und $e$ eine **Parsing Expression**
-- für jedes Nicht-Terminal $A$ existierte genau ein $e$ mit $A \leftarrow e \in R$.
+-   $V_N \cap V_T = \emptyset$.
+-   jede Regel $e \in R$ ist ein Paar $(A,e)$, geschrieben als $A \leftarrow e$ mit $A \in V_N$, und $e$ eine **Parsing Expression**
+-   für jedes Nicht-Terminal $A$ existierte genau ein $e$ mit $A \leftarrow e \in R$.
+
 
 ## Definition Parsing Expression
+
 **Parsing Expressions** werden rekursiv definiert: Seien $e$, $e_1$ und $e_2$ Parsing Expressions, dann gilt dies auch für
 
-- den leeren String $\varepsilon$
-- jedes Terminal $a \in V_T$
-- jedes Nicht-Terminal $A \in V_N$
-- die Sequenz $e_1 e_2$
-- die priorisierende Option $e_1 / e_2$
-- beliebige Wiederholungen $e^{\ast}$
-- Nicht-Pradikate $!e$
+-   den leeren String $\varepsilon$
+-   jedes Terminal $a \in V_T$
+-   jedes Nicht-Terminal $A \in V_N$
+-   die Sequenz $e_1 e_2$
+-   die priorisierende Option $e_1 / e_2$
+-   beliebige Wiederholungen $e^{\ast}$
+-   Nicht-Prädikate $!e$
+
 
 ## Operatoren für Parsing Expression
 
@@ -102,27 +104,28 @@ Folgende Operatoren sind für die Konstruktion von **Parsing Expressions** erlau
 
 | Operator | Priorität | Beschreibung           |
 |:--------:|:---------:|:-----------------------|
-| ' '      |     5     | String-Literal         |
-| " "      |     5     | String-Literal         |
-| [ ]      |     5     | Zeichenklasse          |
-| .        |     5     | beliebiges Zeichen     |
-| (e)      |     5     | Gruppierung            |
-| e?       |     4     | Optional               |
-| e*       |     4     | Kein-oder-mehr         |
-| e+       |     4     | Ein-oder-mehr          |
-| &e       |     3     | Und-Prädikat           |
-| !e       |     3     | Nicht-Prädikat         |
-| e1 e2    |     2     | Sequenz                |
+|   ' '    |     5     | String-Literal         |
+|   " "    |     5     | String-Literal         |
+|   [ ]    |     5     | Zeichenklasse          |
+|    .     |     5     | beliebiges Zeichen     |
+|   (e)    |     5     | Gruppierung            |
+|    e?    |     4     | Optional               |
+|    e*    |     4     | Kein-oder-mehr         |
+|    e+    |     4     | Ein-oder-mehr          |
+|    &e    |     3     | Und-Prädikat           |
+|    !e    |     3     | Nicht-Prädikat         |
+|  e1 e2   |     2     | Sequenz                |
 | e1 / e2  |     1     | priorisierende Auswahl |
 
 :::notes
 Die Operatoren `.`, `+`, `?` und `&` sind syntaktischer Zucker und lassen sich auf ander Operatoren zurückführen.
 
-Die Operatoren `!` und `&` sind zentral für die Ausdrücksstärke von PEGs
+Die Operatoren `!` und `&` sind zentral für die Ausdrucksstärke von PEGs.
 
 Beispiel: `&e` versucht das Muster `e` zu erkennen und kehrt dann an den Anfangspunkt zurück ohne Zeichen aus dem Eingabestrom zu verbrauchen.
-Nur das Wissen über Erfolg oder Miserfolg wird gespeichert (siehe Beispiel zu Nicht-CFG-Sprachen).
+Nur das Wissen über Erfolg oder Misserfolg wird gespeichert (siehe Beispiel zu Nicht-CFG-Sprachen).
 :::
+
 
 ## PEG Eigenschaften
 
@@ -134,9 +137,8 @@ Nur das Wissen über Erfolg oder Miserfolg wird gespeichert (siehe Beispiel zu N
     -   ungelöste Frage: Sind alle CFGs durch PEGs darstellbar?
     :::
 
--   parsebar in linearer Zeit mit unbegrenztem Lookahead (Packrat
+-   parsierbar in linearer Zeit mit unbegrenztem Lookahead (Packrat
     Parsing)
-
     -   Nachteil: gesamter zu parsender Text muss im Speicher gehalten werden
 
     \smallskip
@@ -178,6 +180,7 @@ Factor <- '(' Expr ')' / [0-9]+
 
 Achtung: Grammatik ist rechtsassoziativ
 
+
 ## Beispiel: Verschachtelte Kommentare
 
 Verschachtelte Kommentare sind möglich, da die lexikalische Syntax von PEGs nicht auf REs beschränkt ist:
@@ -196,7 +199,9 @@ oder in Kurzform
 Comment <- '/*' (Comment / !'*/' .)* '*/'
 ```
 
+
 ## Beispiel: Beliebige Escape-Sequenzen
+
 Escape-Sequenzen haben meist nur eine stark eingeschränkte Syntax. Eine PEG kann beliebige Ausdrücke in eine Escape-Sequenz erlauben:
 
 ```
@@ -208,14 +213,17 @@ EscSequence <- '\\(' Expression ')'
 
 Zum Beispiel könnte man dadurch in einer Escape-Sequenz auf Variablen zugreifen (`\(var)`) oder arithmetische Ausdrücke verarbeiten (`\(1+2)`).
 
+
 ## Beispiel: Verschachtelte Template Typen in C++
 
 Bekanntes Problem mit Template-Definitionen in C++: Leerzeichen zwischen Winkelklammern nötig um Interpretation als Pipe-Operator (`>>`) zu verhindern:
+
 ```
 TypeA<TypeB<TypeC> > MyVar;
 ```
 
 PEG erlaubt kontextsensitive Interpretation:
+
 ```
 Expression      <- ...
 TemplateType    <- PrimaryType (LEFTANGLE TemplateType RIGHTANGLE)?
@@ -229,6 +237,7 @@ LEFTSHIFT       <- '<<' Spacing
 RIGHTSHIFT      <- '>>' Spacing
 ```
 
+
 ## Beispiel: Dangling-Else
 
 In CFGs sind verschachtelte if-then(-else) Ausdrücke mehrdeutig
@@ -241,6 +250,7 @@ Statement <- IF Cond Statement ELSE Statement
            / IF Cond Statement
            / ...
 ```
+
 
 ## Beispiel: Nicht-CFG-Sprachen
 
@@ -257,6 +267,7 @@ $S \leftarrow (A \ !b) \ a^{\ast} \ B \ !.$
 :::notes
 Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig lange Sequenz von a's ($a^{\ast}$) gefolgt von einer Sequenz, die von Regel B erkannt wird und danach keine weiteren Zeichen hat ($!.$) aber nur dann wenn die Sequenz auch von $A \ !b$ erkannt wird. Der erste Teil trifft zu wenn in der Sequenz auf $n$ b's gleich viele c's folgen während der zweite Teil zutrifft wenn $n$ b's auf $n$ a's folgen.
 :::
+
 
 
 # Operator Precedence Parsing
@@ -276,6 +287,7 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
         von Operatoren
     -   Effizienz (Backtracking)
 
+
 ## Eigenschaften
 
 -   Recognition-basiert (insofern als der Parser nicht aus einer
@@ -287,6 +299,7 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
 -   simpel zu programmieren und kann die Operator-Tabelle während der Programmlaufzeit konsultieren
 - verwendet eine Reihenfolge (precedence) für die Operatoren
 
+
 ##  Klassische Methode (RD)
 
 -   siehe [Parsing Expressions by Recursive Descent](https://www.engr.mun.ca/~theo/Misc/exp_parsing.htm)
@@ -294,6 +307,7 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
 -   Nachteile:
     -   Anzahl der Precedence Level bestimmt Größe und Geschwindigkeit des Parsers
     -   Operatoren und Precedence Levels fest in Grammatik eingebaut
+
 
 ## Dijkstras Shunting Yard Algorithmus (SY)
 
@@ -310,27 +324,28 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
 :::
 
 
-
 ## Dijkstras Shunting Yard Algorithmus-Beispiel
+
 ```
-    while there are tokens to be read:
-         read a token
-         if the token is a number:
-           output.add(token)
-         if the token is an operator:
-           if operator is a bracket:
-               if left bracket:
-                   stack.put(token)
-               else:
-                   check if left bracket is in stack
-                   while stack.top != left bracket:
-                       output.add(stack.pop())
-                   output.add(stack.pop())     // pop left bracket
-           else:
-              while token.precedence < stack.top.precedence:
-                  output.add(stack.pop())
-              stack.put(token)
+while there are tokens to be read:
+        read a token
+        if the token is a number:
+        output.add(token)
+        if the token is an operator:
+        if operator is a bracket:
+            if left bracket:
+                stack.put(token)
+            else:
+                check if left bracket is in stack
+                while stack.top != left bracket:
+                    output.add(stack.pop())
+                output.add(stack.pop())     // pop left bracket
+        else:
+            while token.precedence < stack.top.precedence:
+                output.add(stack.pop())
+            stack.put(token)
 ```
+
 
 ## Precedence Climbing (PC)
 
@@ -344,7 +359,6 @@ Regel S lässt sich dabei wie folgt lesen: Erkenne und Verbrauche eine beliebig 
                 |-------|       : prec 2
 
 -   Die Operatoren stehen mit Gewicht und Association (left, right) in einer Tabelle
-
 
 
 ## Precedence Climbing-Beispiel
@@ -389,16 +403,17 @@ Berechnung/Ausgabe:
 Beispiel: [Parsing expressions by precedence climbing](https://eli.thegreenplace.net/2012/08/02/parsing-expressions-by-precedence-climbing) (Python)
 :::
 
+
 ## Top Down Operator Precedence (TDOP) Pratt Parsing
 
-   - Generalisierung von Precedence Climbing
+-   Generalisierung von Precedence Climbing
+-   Verwendet eine Gewichtung (binding Power) statt einer Reihenfolge (precedence)
+    -   lbp = left Binding Power
+    -   rbp = right Binding Power
 
-   - Verwendet eine Gewichtung (binding Power) statt einer Reihenfolge (precedence)
-
-     - lbp = left Binding Power
-     - rbp = right Binding Power
 
 ## Tokenhandler
+
 -   Die Tokenhandler behandeln Notationen unterschiedlich
     -   infix notation: a = b - c
         -   led (left denotation)
@@ -464,7 +479,6 @@ Eingabe: 6 - 3 * 4
    --> 6 # Loop not entered (0 < 0)
 ```
 
-
 Beispiel: [Top-Down operator precedence parsing](https://eli.thegreenplace.net/2010/01/02/top-down-operator-precedence-parsing/) (Python)
 :::
 
@@ -497,7 +511,9 @@ Beispiel: [Top-Down operator precedence parsing](https://eli.thegreenplace.net/2
 -   Shunting Yard verwendet einen Stack anstatt Rekursion
 -   Precedence Climbing wird am häufigsten eingesetzt
 
+
 ## Vergleich TDOP vs. Precedence Climbing
+
 -   TDOP(Pratt Parsing) vs. Precedence Climbing
     -   [Pratt Parsing and Precedence Climbing Are the Same Algorithm](https://www.oilshell.org/blog/2016/11/01.html)
     -   [From Precedence Climbing to Pratt Parsing](https://www.engr.mun.ca/~theo/Misc/pratt_parsing.htm) (Norvell)
@@ -538,20 +554,23 @@ Beispiel: [Top-Down operator precedence parsing](https://eli.thegreenplace.net/2
 -   Beispiel: [A recursive descent parser with an infix expression evaluator](https://eli.thegreenplace.net/2009/03/20/a-recursive-descent-parser-with-an-infix-expression-evaluator) (Python)
 :::
 
+
+
 # Parser Kombinatoren
 
 ## Prinzip
 
-+ High-order Funktion
-  + Funktionen als Parameter
-  + Funktion als Rückgabewert
+*   High-order Funktion
+    *   Funktionen als Parameter
+    *   Funktion als Rückgabewert
 
-+ Verwendet mehrere Parser als Input und gibt den Output des kombinierten Parser zurück:
-  + parse Tree
-  + Index der Stelle im String die zum Stoppen des Parsers geführt hat
-+ Die Output der verwendeten Parser:
-  + Success: {result, restString}
-  + failure: Error Message und Position
+*   Verwendet mehrere Parser als Input und gibt den Output des kombinierten Parser zurück:
+    *   Parse Tree
+    *   Index der Stelle im String die zum Stoppen des Parsers geführt hat
+*   Die Output der verwendeten Parser:
+    *   Success: {result, restString}
+    *   Failure: Error Message und Position
+
 
 ## Simple Parser
 
@@ -586,6 +605,7 @@ fn eof(input) {
 ```
 :::
 
+
 ## Kombinierter Parser
 
 Der kombinierte Parser sieht wie folgt aus:
@@ -613,6 +633,7 @@ fn apply(func, parsers) {
 Nun kann über den Parameter `func` eine Funktionalität angegeben werden, und über den Parameter `parsers` kann ein Array an Simplen Parsern übergeben werden. Die Parser müssen dabei in der richtigen Reihenfolge aufgerufen werden. In der Variable accData werden alle Parser-Ergebnisse gespeichert, um sie nachher in der der `func` zu verwenden. Der `currentInput` enthält im ersten Durchlauf den gesamten Input. Jeder Parser schreibt dann den Rest (den nicht parsbaren Teil) in `currentInput` für den nächsten Parser.
 :::
 
+
 ## Kombinierte Parser definieren
 
 Der kombinierte Parser kann nun so definiert werden:
@@ -630,6 +651,7 @@ fn plusExpr(input) {
 ```
 
 Diese Zusammensetzung der Parser überprüft eine Plus-Expression mit Integern. Wichtig hierbei ist die richtige Reihenfolge der Parser.
+
 
 ## Verwendung des Parsers
 
@@ -650,9 +672,11 @@ fn parse(parser, input) {
 }
 ```
 
+
 ## Ausführung des Kombinierten Parsers
 
 Führt man nun den Parser aus, kann es wie folgt aussehen:
+
 ```
 # parse(plusExpr, "12+34")
 -> {data: 46, rest: ""}
@@ -662,7 +686,6 @@ Führt man nun den Parser aus, kann es wie folgt aussehen:
         expected: 'end of input'
         got: 'rest'
 ```
-
 
 
 ::: notes
@@ -675,13 +698,14 @@ Führt man nun den Parser aus, kann es wie folgt aussehen:
 
 
 
+
+
+
+
 <!-- DO NOT REMOVE - THIS IS A LAST SLIDE TO INDICATE THE LICENSE AND POSSIBLE EXCEPTIONS (IMAGES, ...). -->
 ::: slides
 ## LICENSE
 ![](https://licensebuttons.net/l/by-sa/4.0/88x31.png)
 
 Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
-
-### Exceptions
-*   TODO (what, where, license)
 :::
