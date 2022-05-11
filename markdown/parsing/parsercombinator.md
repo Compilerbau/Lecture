@@ -631,7 +631,7 @@ fn plusExpr(input) {
 
 Diese Zusammensetzung der Parser überprüft eine Plus-Expression mit Integern. Wichtig hierbei ist die richtige Reihenfolge der Parser.
 
-## Verwendung der Parsers
+## Verwendung des Parsers
 
 Nun muss noch eine Parse-Funktion geschrieben werden, um die kombinierten Parser auszuführen.
 
