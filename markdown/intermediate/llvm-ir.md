@@ -17,10 +17,12 @@ attachments:
     name: "Extra Material, e.g. annotated slides"
 ---
 
-<!-- Danach: wie Folien aussortieren? -->
-<!-- Commitweise Folien rauswerfen -> Branch pro Veranstaltung -->
 
 # Motivation
+
+::: slides
+## Motivation
+:::
 
 Es ist ein neuer Prozessor entwickelt worden mit einem neuen Befehlssatz, und es
 sollen für zwei Programmiersprachen Compiler entwickelt werden, die diesen Befehlssatz
@@ -35,7 +37,6 @@ Was tun?
 
 
 # LLVM - Ein Überblick
-
 
 ## Was ist das Ziel von LLVM?
 
@@ -79,7 +80,6 @@ Open Source - Framework (in C++ geschrieben) für die Entwicklung von
 *   Systemen zur statischen Analyse
 *   etc.
 
-
 Für das LLVM-Projekt haben 2012 Vikram Adve, Chris Lattner und Evan Chang den
 ACM Software System Award bekommen.
 
@@ -115,9 +115,9 @@ Fehlermeldungen und Warnungen
 *   **Clang Static Analyzer**: Teil von Clang, aber auch separat zu benutzen
 *   **Clang tidy**:  analysiert ebenfalls Code statisch, einzelne Checks konfigurierbar
 
+
 ## Clang Toolchain ##
 
-<!-- eigene Abbildung in Anlehnung an: https://llvm.org/devmtg/2019-04/slides/Tutorial-Bridgers-LLVM_IR_tutorial.pdf -->
 ![](./images/opt_chain.png)
 
 
@@ -126,11 +126,12 @@ Fehlermeldungen und Warnungen
 **compiler-rt**: generiert Code, der zur Laufzeit benötigt wird:
 
 *   **built-ins**: eine Bibliothek optimierter Implementierungen von Low-Level-Funktionen
-    * z. B. die Konvertierung von double nach int 64 auf einer 32-Bit-Architektur
+    *   z.B. die Konvertierung von double nach int 64 auf einer 32-Bit-Architektur
 *   **profile**: eine Bibliothek, die Informationen über Reichweiten (coverage information) erfasst
 *   **BlocksRuntime**: implementiert maschinenunabhängig die Runtime-Schnittstellen von Apple "Blocks" (Objective-C)
 *   **Sanitizer Runtimes**: Laufzeitbibliotheken, welche für die Einbettung und
     Verwendung von Sanitizern benötigt werden
+
 
 ## Die Sanitizer in compiler-rt
 
@@ -138,15 +139,13 @@ Sanitizer sind eine Methode zur Instrumentierung (Code der in das kompilierte Pr
 um die Lokalisierung und Analyse von verschiedensten Fehlerquellen zu erleichtern.
 
 ::: slides
-
 Mithilfe der Sanitizer in der compiler-rt können z. B. Speicherfehler, Race Conditions,
 Speicherlecks und viele weitere Fehlerquellen gefunden und analysiert werden.
-
 :::
 
 ::: notes
-
 Im Folgenden einige der verfügbaren Sanitizer:
+
 *   **AdressSanitizer**: entdeckt Speicherfehler, z. B. use-after-free
 *   **ThreadSanitizer**: entdeckt race conditions
 *   **UndefinedBehaviorSanitizer**: fügt Code in das Programm ein, um zur Laufzeit
@@ -162,8 +161,8 @@ Im Folgenden einige der verfügbaren Sanitizer:
 Die Benutzung der Sanitizer kann die Laufzeit stark erhöhen und ist speicherintensiv.
 Die Sanitizer sind auch in Clang enthalten.
 Nicht alle Sanitizer sind für alle Betriebssysteme verfügbar.
-
 :::
+
 
 ## Weitere Komponenten von LLVM
 
@@ -200,6 +199,8 @@ Lua\    \   \   Numba\  \   \   Python\ \   \   Ruby\   \   \   Rust\   \   \   
 
 Für weiter Projekte siehe [Projects built with LLVM](https://llvm.org/ProjectsWithLLVM/)
 
+
+
 # LLVM IR
 
 ::: slides
@@ -211,14 +212,14 @@ Für weiter Projekte siehe [Projects built with LLVM](https://llvm.org/ProjectsW
 *   Register können entweder nummeriert werden oder explizite Namen bekommen
 *   Register-Referenz: %1, Variablen-Referenz: \@1
 
-## LLVM IR
+
+## LLVM IR (cnt.)
 
 *   Instruktionsumfang der IR an RISC-Befehlssatz angelehnt (**R**educed **I**nstruction **S**et **C**omputer)
 *   IR ist immer in **S**ingle **S**tatic **A**ssignment-Form
 *   streng typisiert
 *   keine Vorgaben bzgl. grundlegender Sprachkonzepte, wie z.B. Speichermanagement, Error Handling
 *   Durchgängige Verwendung von Kontrollflussgraphen zur Unterstützung des Optimierers
-
 :::
 
 ::: notes
@@ -238,15 +239,18 @@ Für weiter Projekte siehe [Projects built with LLVM](https://llvm.org/ProjectsW
 
 Vgl. auch: [LLVM Dev Conference](https://www.youtube.com/watch?v=J5xExRGaIIY&t=215s)
 
+
 ## Darstellungsformen von LLVM IR
 
 LLVM IR existiert in drei Formen, die äquivalent sind und ineinander überführt
 werden können:
+
 *   menschenlesbar als Text (`.ll`)
 *   Bitcode (`.bc`)
 *   In-Memory Representation zur Programmlaufzeit des Compilers
 
 (Die clang-Option -S gibt die menschenlesbaren LLVM IR aus.)
+
 
 ## Typen in LLVM IR
 
@@ -264,6 +268,7 @@ double 6.62606957e-34 ;     double precision
 <8 x double> ;              Vector of 8 double
 ```
 
+
 ## SSA-Form (Static single assignment)
 
 *   bestimmte Form der Intermediate Representation
@@ -272,8 +277,9 @@ double 6.62606957e-34 ;     double precision
 *   anschließend wird nur noch lesend auf die Variable zugegriffen
 *   erleichtert die Realisierung vieler Optimierungsverfahren
 
+
 ::: slides
-## SSA-Form (Static single assignment)
+## SSA-Form (Beispiel)
 :::
 
 Ein Beispiel:
@@ -284,22 +290,26 @@ Ein Beispiel:
  x := y                 x1 := y2
 ```
 
-## Hierarchie der LLVM IR ##
+
+## Hierarchie der LLVM IR
 
 Die LLVM IR ist hierarchisch aufgebaut:
 
 ![](./images/hierarchy.png)
 
-## Instruktionen ##
+
+## Instruktionen
 
 Operationen:
-* arithmetische Operationen
-* Vergleichsoperationen
-* Kontrollflussoperationen
-* Block-Terminatoren
+
+*   arithmetische Operationen
+*   Vergleichsoperationen
+*   Kontrollflussoperationen
+*   Block-Terminatoren
 
 Instruktionen haben keinen oder einen Rückgabewert
-* Das Ergebnis hat ein eindeutiges Label (SSA)
+
+*   Das Ergebnis hat ein eindeutiges Label (SSA)
 
 Beispiel für eine `add`-Instruktion:
 
@@ -307,18 +317,21 @@ Beispiel für eine `add`-Instruktion:
 %3 = add nsw i32 %3, 10
 ```
 
-## Basic Blocks ##
+
+## Basic Blocks
 
 Aufbau von Basic Blocks:
-* Label (erforderlich)
-* Phi Instruktionen
-* Instruktionen
-* Terminator (erforderlich)
-    * (bedingte) Sprunginstruktion
-    * Returninstruktion
+
+*   Label (erforderlich)
+*   Phi Instruktionen
+*   Instruktionen
+*   Terminator (erforderlich)
+    *   (bedingte) Sprunginstruktion
+    *   Returninstruktion
+
 
 ::: slides
-## Basic Blocks ##
+## Basic Blocks (Beispiel)
 :::
 
 Beispiel für einen Basic Block:
@@ -330,14 +343,17 @@ Beispiel für einen Basic Block:
   br i1 %4, label %5, label %7    ; terminator
 ```
 
-## Funktionen ##
+
+## Funktionen
 
 Aufbau von Funktionen:
-* Argumente
-* Entry Block (erforderlich): erster Basic Block, der immer ausgeführt wird
-* weitere Basic Blocks
 
-## Funktionen: Beispiel ##
+*   Argumente
+*   Entry Block (erforderlich): erster Basic Block, der immer ausgeführt wird
+*   weitere Basic Blocks
+
+
+## Funktionen: Beispiel
 
 ```cpp
 // func.c
@@ -353,6 +369,7 @@ long f(long a, long b){
 ```
 
 Ausgabe von entsprechender LLVM IR:
+
 ```
 clang -O3 -opt -Xclang -disable-llvm-passes
     -S -emit-llvm func.c -o func.ll
@@ -360,7 +377,8 @@ clang -O3 -opt -Xclang -disable-llvm-passes
 opt -S -mem2reg -instnamer func.ll -o func_mem2reg.ll
 ```
 
-## Funktionen: Beispiel in IR ##
+
+## Funktionen: Beispiel in IR
 
 ```llvm
 ; func_mem2reg.ll
@@ -383,37 +401,42 @@ bb6:                                              ; preds = %bb4, %bb2
 }
 ```
 
-## Kontrollflussgraph ##
 
-* Die Basic Blocks einer Funktion sind durch Sprunginstruktionen verbunden
-* Basic Blocks haben Vorgänger und Nachfolger
-* Der so entstehende Kontrollfluss wird von LLVM ständig durch
-einen Kontrollflussgraphen modelliert
+## Kontrollflussgraph
+
+*   Die Basic Blocks einer Funktion sind durch Sprunginstruktionen verbunden
+*   Basic Blocks haben Vorgänger und Nachfolger
+*   Der so entstehende Kontrollfluss wird von LLVM ständig durch
+    einen Kontrollflussgraphen modelliert
 
 Ausgabe des Kontrollflussgraphen im `.dot` Format:
+
 ```
 opt -dot-cfg func_mem2reg.ll > /dev/null
 ```
 
+
 ::: slides
-## Kontrollflussgraph ##
+## Kontrollflussgraph (Ergebnis)
 :::
 
 ![](./images/func_cfg.png){width="60%"}
 
-## Essentiell: die Phi-Instruktion ##
 
-* Basierend auf dem Programmfluss können einer Variablen unterschiedliche Werte zugewiesen werden (`x` im vorherigen Beispiel)
-* SSA: jeder Variablen / jedem Register wird nur einmal ein Wert zugewiesen
-* Daher: virtuelle Register entsprechen nicht 1:1 den Variablen des
-kompilierten Progamms
-* Der Wert einer konditionell zugewiesenen Variablen kann daher in zwei unterschiedlichen
-virtuellen Registern stehen (je nach durchlaufenem Programmzweig)
-* Problem: welches Register soll gelesen werden, um den Wert der Variablen weiter zu verwenden?
-* Lösung: Phi-Instruktion speichert Werte in einem neuen Register abhängig vom
-Vorgängerblock
+## Essentiell: die Phi-Instruktion
 
-## Phi-Instruktion: Beispiel ##
+*   Basierend auf dem Programmfluss können einer Variablen unterschiedliche Werte zugewiesen werden (`x` im vorherigen Beispiel)
+*   SSA: jeder Variablen / jedem Register wird nur einmal ein Wert zugewiesen
+*   Daher: virtuelle Register entsprechen nicht 1:1 den Variablen des
+    kompilierten Progamms
+*   Der Wert einer konditionell zugewiesenen Variablen kann daher in zwei unterschiedlichen
+    virtuellen Registern stehen (je nach durchlaufenem Programmzweig)
+*   Problem: welches Register soll gelesen werden, um den Wert der Variablen weiter zu verwenden?
+*   Lösung: Phi-Instruktion speichert Werte in einem neuen Register abhängig vom
+    Vorgängerblock
+
+
+## Phi-Instruktion: Beispiel
 
 ```
 bb6:                                              ; preds = %bb4, %bb2
@@ -424,17 +447,19 @@ bb6:                                              ; preds = %bb4, %bb2
 Effekt: Speichert den Wert aus Register `%i3` in Register `%.0`, falls wir aus
 Block `%bb2` kommen, sonst wird der Wert aus Register `%i5` gespeichert
 
-## Module ##
+
+## Module
 
 Bildet eine Übersetzungseinheit eines Programms ab
 
 Inhalt:
-* Ziel Informationen (erforderlich)
-    * Datenlayout (Endianess, native Integergrößen, etc.)
-    * Ziel-Triplet (Zielarchitektur, ABI, etc.)
-* Globale Variable
-* Funktionsdeklarationen
-* Funktionsdefinitionen
+
+*   Ziel Informationen (erforderlich)
+    *   Datenlayout (Endianess, native Integergrößen, etc.)
+    *   Ziel-Triplet (Zielarchitektur, ABI, etc.)
+*   Globale Variable
+*   Funktionsdeklarationen
+*   Funktionsdefinitionen
 
 Module werden vom Linker zum lauffähigen Programm zusammengefügt
 
@@ -454,8 +479,10 @@ int main() {
 clang -emit-llvm -S hello.c
 ```
 
+
 ## So sieht LLVM IR dafür aus
 
+::: notes
 ```llvm
 ; ModuleID = 'hello.c'
 source_filename = "hello.c"
@@ -475,10 +502,9 @@ define i32 @main() #0 {
   ret i32 0
 }
 ```
+:::
 
 ::: slides
-## So sieht LLVM IR dafür aus
-
 ```llvm
   %1 = alloca i32, align 4
   %2 = alloca i32, align 4
@@ -492,6 +518,7 @@ define i32 @main() #0 {
 ```
 :::
 
+::: notes
 Es werden drei “virtuelle Register” %1, %2 und %3 definiert
 (32-bit Integer; align 4: alle Adressen sind Vielfache von 4).
 
@@ -501,6 +528,7 @@ In %2 wird analog der Wert 7 geschrieben (x=7).
 Dann wird der Wert aus %2 in eine neues Register %4 geladen und das Ergebnis der
 Addition aus %4 und dem Wert 35 in ein weiteres neues Register %5 geschrieben.
 Der Wert dieser Variablen wird dann in dem Register %3 gespeichert (y = x+35).
+:::
 
 
 ::: slides
@@ -528,6 +556,7 @@ main:                                   # @main
     .cfi_def_cfa_register %rbp
 ```
 
+
 ::: slides
 ## Entsprechender Assembler-Code Teil 2
 :::
@@ -552,6 +581,8 @@ main:                                   # @main
     .addrsig
 ```
 
+
+
 # Der LLVM-Optimierer
 
 ## Allgegenwärtig in LLVM: Der Optimierer
@@ -571,7 +602,6 @@ main:                                   # @main
 **Transform passes** verändern das Programm auf irgendeine Art und Weise
 
 **Utility passes** sind Hilfspässe, z. B. die Umformung des IR in Bitcode
-
 
 Vgl. auch: [LLVM’s Analysis and Transform Passes](http://releases.llvm.org/9.0.0/docs/Passes.html)
 
@@ -601,19 +631,20 @@ die Datenflussanalyse in vielen Punkten erleichtert wird.
 ::: notes
 Einige Beispiele für Optimierungen, die von SSA profitieren:
 *   Constant propagation
-    * Nutzt Reaching Definition Analysis, welche durch die SSA-Form vereinfacht wird
-    (keine konkurrierenden Zuweisungen)
+    *   Nutzt Reaching Definition Analysis, welche durch die SSA-Form vereinfacht wird
+        (keine konkurrierenden Zuweisungen)
 *   Sparse conditional constant propagation
-    * Propagiert Konstanten in Bedingungen von Programmabzweigungen
-    * Markiert Programmzweige basierend auf Konstanten als ausführbar oder nicht ausführbar
-    * Löscht die Argumente der Phi-Instruktion, welche mit nicht ausführbaren Zweigen zusammenhängen
-    * Auch diese Form der Constant Propagation profitiert von SSA
+    *   Propagiert Konstanten in Bedingungen von Programmabzweigungen
+    *   Markiert Programmzweige basierend auf Konstanten als ausführbar oder nicht ausführbar
+    *   Löscht die Argumente der Phi-Instruktion, welche mit nicht ausführbaren Zweigen zusammenhängen
+    *   Auch diese Form der Constant Propagation profitiert von SSA
 *   Global value numbering
-    * Hilft bei der Identifikation von äquivalenten Berechnungen
-    * Nummerierung von Variablen und Werten, sodass gleichwertige Ausdrücke die gleiche Nummer erhalten
-    * Vereinfacht durch SSA-Form, da keine erneute Zuweisung einer Variablen möglich ist
-
+    *   Hilft bei der Identifikation von äquivalenten Berechnungen
+    *   Nummerierung von Variablen und Werten, sodass gleichwertige Ausdrücke die gleiche Nummer erhalten
+    *   Vereinfacht durch SSA-Form, da keine erneute Zuweisung einer Variablen möglich ist
 :::
+
+
 
 # Die Codegenerierung
 
@@ -627,6 +658,7 @@ Einige Beispiele für Optimierungen, die von SSA profitieren:
     *   Scheduling
     *   Code Layout Optimization
     *   Assembly Emission
+
 
 ## Unterstützte Prozessorarchitekturen
 
@@ -642,7 +674,9 @@ MSP430\ \   \   System z\   \   \   XMOS\   \   \   Xcore\  \   \   ...
 
 # Wrap-Up
 
+::: slides
 ## Wrap-Up
+:::
 
 *   LLVM ist eine (fast) komplette Infrastruktur zur Entwicklung Von Compilern
 und compilerähnlichen Programmen. Die wichtigsten Bestandteile sind der Zwischencode
@@ -660,7 +694,4 @@ LLVM IR und der LLVM Optimierer.
 ![](https://licensebuttons.net/l/by-sa/4.0/88x31.png)
 
 Unless otherwise noted, this work is licensed under CC BY-SA 4.0.
-
-### Exceptions
-*   TODO (what, where, license)
 :::
